@@ -10,9 +10,7 @@ def home():
     st.title("🌍 Streamlit Components Gallery!")
     st.write(
         """
-Welcome to the Streamlit Components Gallery.
-
-Here, you will find fun Streamlit re-usable pieces of code to customize your apps. Have fun!
+Welcome to the Streamlit Components Gallery!
 """
     )
 
