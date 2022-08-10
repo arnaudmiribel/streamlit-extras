@@ -7,10 +7,10 @@ import streamlit_patches as st
 
 
 def home():
-    st.title("🌍 Streamlit Hub!")
+    st.title("🌍 Streamlit Components Gallery!")
     st.write(
         """
-Welcome to the Streamlit Hub.
+Welcome to the Streamlit Components Gallery.
 
 Here, you will find fun Streamlit re-usable pieces of code to customize your apps. Have fun!
 """
