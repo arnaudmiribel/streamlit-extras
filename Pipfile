@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 streamlit = "1.11.1"
 htbuilder = "*"
+opencv-python-headless = "*"
 sahi = ">=0.8.12"
 
 [dev-packages]
