@@ -5,3 +5,4 @@ __title__ = "Dataframe explorer UI"
 __desc__ = "Let your viewers explore dataframes themselves!"
 __icon__ = "🔭"
 __examples__ = [main.example]
+__inputs__ = dict(df=main.dataframe)

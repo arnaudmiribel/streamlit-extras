@@ -41,15 +41,25 @@ for component in component_names:
     icon = mod.__icon__
     func = mod.__func__
     examples = mod.__examples__
+    if hasattr(mod, "__inputs__"):
+        inputs = mod.__inputs__
+    else:
+        inputs = dict()
 
-    def get_page_content(icon: str, title: str, examples: List[Callable]) -> Callable:
+    def get_page_content(
+        icon: str,
+        title: str,
+        examples: List[Callable],
+        func: Callable,
+        inputs: dict,
+    ) -> Callable:
         def page_content():
             st.title(icon + " " + title)
             st.write("## Example")
 
             for example in examples:
                 st.code(inspect.getsource(example))
-                example()
+                example(**inputs)
 
             st.write("## Docstring")
             st.help(func)
@@ -62,7 +72,7 @@ for component in component_names:
         return page_content
 
     settings[component] = dict(
-        path=get_page_content(icon, title, examples),
+        path=get_page_content(icon, title, examples, func, inputs),
         name=title,
         icon=icon,
     )

@@ -18,7 +18,7 @@ def dataframe_explorer(df: pd.DataFrame) -> pd.DataFrame:
     Returns:
         pd.DataFrame: Filtered dataframe
     """
-    modify = st.checkbox("Add filters")
+    modify = st.checkbox("🔭 I want to explore this dataframe")
 
     if not modify:
         return df
@@ -80,7 +80,6 @@ def dataframe_explorer(df: pd.DataFrame) -> pd.DataFrame:
                     key=f"{random_key_base}_{column}",
                 )
                 if len(filters[column]) == 2:
-                    st.write(filters[column])
                     filters[column] = tuple(
                         map(pd.to_datetime, filters[column])
                     )
@@ -254,8 +253,11 @@ def generate_fake_dataframe(
     return df
 
 
-def example():
-    df = generate_fake_dataframe(
-        size=500, cols="dfc", col_names=("date", "income", "person")
-    )
-    dataframe_explorer(df)
+dataframe = generate_fake_dataframe(
+    size=500, cols="dfc", col_names=("date", "income", "person"), seed=1
+)
+
+
+def example(df: pd.DataFrame):
+    filtered_df = dataframe_explorer(df)
+    st.dataframe(filtered_df)
