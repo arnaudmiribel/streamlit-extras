@@ -1,11 +1,11 @@
 import sys
 from pathlib import Path
 from time import sleep
-from typing import Callable, Optional, Union
+from typing import Any, Callable, Dict, List, Optional, Union
 
 import requests
 from streamlit import *
-from streamlit import __version__, _get_script_run_ctx, source_util
+from streamlit import __version__, _get_script_run_ctx, set_page_config, source_util
 from streamlit.commands.page_config import get_random_emoji
 from streamlit.scriptrunner.script_runner import (
     LOGGER,
@@ -26,8 +26,6 @@ from streamlit.scriptrunner.script_runner import (
 )
 from streamlit.source_util import _on_pages_changed, get_pages
 from streamlit.util import calc_md5
-
-set_page_config
 
 
 @experimental_singleton
@@ -271,9 +269,7 @@ def _run_script(self, rerun_data: RerunData) -> None:
         with modified_sys_path(self._session_data), self._set_execing_flag():
             # Run callbacks for widgets whose values have changed.
             if rerun_data.widget_states is not None:
-                self._session_state.on_script_will_rerun(
-                    rerun_data.widget_states
-                )
+                self._session_state.on_script_will_rerun(rerun_data.widget_states)
 
             ctx.on_script_start()
             # write(code)
@@ -295,7 +291,11 @@ def _run_script(self, rerun_data: RerunData) -> None:
         handle_uncaught_app_exception(e)
 
     finally:
-        self._on_script_finished(ctx)
+        if rerun_exception_data:
+            finished_event = ScriptRunnerEvent.SCRIPT_STOPPED_FOR_RERUN
+        else:
+            finished_event = ScriptRunnerEvent.SCRIPT_STOPPED_WITH_SUCCESS
+        self._on_script_finished(ctx, finished_event)
 
     # Use _log_if_error() to make sure we never ever ever stop running the
     # script without meaning to.

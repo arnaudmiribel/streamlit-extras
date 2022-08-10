@@ -1,7 +1,7 @@
 import inspect
-import time
-from glob import glob
 from importlib import import_module
+from pathlib import Path
+from typing import Callable, List
 
 import streamlit_patches as st
 
@@ -31,40 +31,38 @@ def empty():
 
 st.page(empty, "―――――――――――――――――", " ")
 
-components_names = [
-    path.split("/")[-2]
-    for path in glob("./components/*/")
-    if "__pycache__" not in path
-]
+component_names = [folder.name for folder in Path("components").glob("*")]
 
 settings = dict()
 
-for component in components_names:
+for component in component_names:
     mod = import_module(f"components.{component}")
     title = mod.__title__
     icon = mod.__icon__
     func = mod.__func__
     examples = mod.__examples__
 
-    def page_content():
-        st.title(icon + " " + title)
-        st.write("## Example")
+    def get_page_content(icon: str, title: str, examples: List[Callable]) -> Callable:
+        def page_content():
+            st.title(icon + " " + title)
+            st.write("## Example")
 
-        for example in examples:
-            st.code(inspect.getsource(example))
-            example()
+            for example in examples:
+                st.code(inspect.getsource(example))
+                example()
 
-        st.write("## Docstring")
-        st.help(func)
+            st.write("## Docstring")
+            st.help(func)
 
-        st.write("## Source code")
-        st.code(inspect.getsource(func))
+            st.write("## Source code")
+            st.code(inspect.getsource(func))
 
-    # Making sure the page function has a different name so it doesn't get cached
-    page_content.__name__ = title
+        page_content.__name__ = title
+
+        return page_content
 
     settings[component] = dict(
-        path=page_content,
+        path=get_page_content(icon, title, examples),
         name=title,
         icon=icon,
     )
