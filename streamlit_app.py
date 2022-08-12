@@ -1,4 +1,5 @@
 import inspect
+import typing
 from importlib import import_module
 from pathlib import Path
 from typing import Callable, List
@@ -59,6 +60,7 @@ for component in component_names:
                 st.code(inspect.getsource(example))
                 example(**inputs)
 
+            st.write("")
             st.write("## Docstring")
             st.help(func)
 
