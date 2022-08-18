@@ -90,8 +90,30 @@ If you are having troubles, reach out to discuss.streamlit.io and we can help yo
     )
 
 
+def waiting_list():
+    st.write(
+        """
+Here is a list of crafts we want to add in here:
+- https://github.com/randyzwitch/streamlit-embedcode/blob/master/streamlit_embedcode/__init__.py
+- https://github.com/explosion/spacy-streamlit/blob/master/spacy_streamlit/__init__.py
+- https://github.com/tvst/plost
+- https://github.com/tvst/st-annotated-text
+- Gist static component from https://blog.streamlit.io/introducing-streamlit-components/
+- Chart explorer from https://release-1-12-0.streamlitapp.com/#chart-builder
+- Keyboard trigger from https://github.com/streamlit/corp/blob/main/dashboard_utils/widgets.py#L71
+- Button style css from https://github.com/streamlit/data_sources_app/blob/main/utils/ui.py#L29-L51
+- Johannes gui (palette, colored header) https://github.com/streamlit/corp/blob/main/dashboard_utils/gui.py
+    """
+    )
+
+
 st.page(home, "Home", "🪢")
 st.page(contribute, "Contribute", "🙋")
+st.page(
+    waiting_list,
+    "Waiting list",
+    "⌛",
+)
 
 
 def empty():
@@ -103,8 +125,6 @@ def get_empty():
 
 
 st.page(get_empty, "  ", " ")
-st.page(get_empty, "   ", " ")
-st.page(get_empty, "Crafts:", " ")
 
 component_names = [folder.name for folder in Path("components").glob("*")]
 
