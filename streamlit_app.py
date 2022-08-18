@@ -1,4 +1,5 @@
 import inspect
+import time
 from importlib import import_module
 from itertools import cycle, dropwhile
 from pathlib import Path
@@ -226,6 +227,8 @@ for component in component_names:
 
     st.page(**settings[component])
 
+
+time.sleep(0.5)
 st.page(
     waiting_list,
     "Soon... ⌛",
