@@ -107,6 +107,8 @@ Here is a list of extras we want to add in here:
 - pyLDAvis https://discuss.streamlit.io/t/showing-a-pyldavis-html/1296
 - Triage those that don't have `frontend/` in https://discuss.streamlit.io/t/streamlit-components-community-tracker/4634
 - DF to grid https://github.com/streamlit/app-frontpage/blob/main/utils/ui.py#L263-L264
+- Top left logo from Zachary
+- Button that changes page in MPA from Zachary
     """
     )
 
