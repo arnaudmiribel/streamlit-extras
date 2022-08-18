@@ -111,6 +111,7 @@ Here is a list of extras we want to add in here:
 - DF to grid https://github.com/streamlit/app-frontpage/blob/main/utils/ui.py#L263-L264
 - Top left logo from Zachary
 - Button that changes page in MPA from Zachary
+- Bar chart race https://github.com/streamlit/corp/blob/e22ec94bc18a46504f3053853af220cea2a97dd6/tools/parse_requirements_script.py#L79-L103
     """
     )
 
