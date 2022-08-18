@@ -1,5 +1,5 @@
-import streamlit as st
 import streamlit.components.v1 as components
+import validators
 
 
 def _clean_link(link):
@@ -228,6 +228,8 @@ def embed_code(
     width: int = 950,
     scrolling: bool = True,
 ):
+
+    validators.url(link)
 
     return _SUPPORTED_PLATORMS[platform](
         link=link, height=height, width=width, scrolling=scrolling
