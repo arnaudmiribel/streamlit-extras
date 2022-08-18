@@ -176,16 +176,17 @@ for component in component_names:
             st.write(desc)
 
             # Social badges
-            columns = cycle(st.columns(6))
-            if github_repo:
-                with next(columns):
-                    badges.main.badge("github", name=github_repo)
-            if pypi_name:
-                with next(columns):
-                    badges.main.badge("pypi", name=pypi_name)
-            if streamlit_cloud_url:
-                with next(columns):
-                    badges.main.badge("streamlit", url=streamlit_cloud_url)
+            if any(github_repo, streamlit_cloud_url, pypi_name):
+                columns = cycle(st.columns(6))
+                if github_repo:
+                    with next(columns):
+                        badges.main.badge("github", name=github_repo)
+                if pypi_name:
+                    with next(columns):
+                        badges.main.badge("pypi", name=pypi_name)
+                if streamlit_cloud_url:
+                    with next(columns):
+                        badges.main.badge("streamlit", url=streamlit_cloud_url)
 
             st.write("## Example")
 
