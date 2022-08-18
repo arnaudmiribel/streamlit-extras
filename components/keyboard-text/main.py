@@ -33,6 +33,11 @@ def key(text: str, write: bool = True) -> str:
     Returns:
         str: HTML of the text, styled as a key
     """
+
+    if "loaded_key_css" not in st.session_state:
+        load_key_css()
+        st.session_state["loaded_key_css"] = True
+
     key_html = str(span(_class="keyx")(text))
     if write:
         st.write(key_html, unsafe_allow_html=True)
@@ -40,7 +45,6 @@ def key(text: str, write: bool = True) -> str:
 
 
 def example_default():
-    load_key_css()
     key("⌘+K")
 
 
