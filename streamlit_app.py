@@ -30,32 +30,32 @@ def get_function_body(func):
 
 
 def home():
-    st.title("🪢 Streamlit Crafts Hub")
+    st.title("🪢 Streamlit extras Hub")
     st.write(
         """
 Want to give a special touch to your [Streamlit](https://www.streamlit.io) apps?
 
-In this hub, we feature creative usages of Streamlit we call _crafts_! Go ahead and
+In this hub, we feature creative usages of Streamlit we call _extras_! Go ahead and
 discover them!
 """
     )
 
     stoggle.main.stoggle(
-        "Crafts & Streamlit Components? 🤔",
-        """Crafts are useful pieces of code which are built upon Streamlit and simple Python
+        "extras & Streamlit Components? 🤔",
+        """extras are useful pieces of code which are built upon Streamlit and simple Python
 or HTML/JS without requiring an additional server. If you've heard of Streamlit
 Components <a href="https://blog.streamlit.io/introducing-streamlit-components/">[launch blog]</a>
-before, this might sound familiar! Crafts are indeed a certain
+before, this might sound familiar! extras are indeed a certain
 category within Streamlit Components also known as as <strong>static</strong> components. We thought
 it would be useful to give them a hub considering they're much easier to build and share!""",
     )
 
     stoggle.main.stoggle(
-        "Wait, how can I use these crafts in my app ?! 🤩",
-        """It's so easy! Either copy paste the original code which is given for each craft in the
+        "Wait, how can I use these extras in my app ?! 🤩",
+        """It's so easy! Either copy paste the original code which is given for each extra in the
         "Source code" section, or if you want them all at once, simply install `stx` library using
-        <code>pip install stx</code> and then call the crafts you like e.g. <pre><code>import stx
-stx.crafts.stoggle()
+        <code>pip install stx</code> and then call the extras you like e.g. <pre><code>import stx
+stx.extras.stoggle()
 </code></pre>
         to use the exact <a href="Toggle button">Toggle</a> component we are using here.
     """,
@@ -67,19 +67,19 @@ def contribute():
     st.write(
         """
 Head over to our public [repository](https://github.com/arnaudmiribel/st-hub) and:
-- Create an empty directory for your craft in the `crafts/` directory
-- Add useful files for your craft in there! We usually put everything in a `main.py`
-- Add a `__init__.py` file to give in some metadata so we can automatically showcase your craft in the hub! Here's an example:
+- Create an empty directory for your extra in the `extras/` directory
+- Add useful files for your extra in there! We usually put everything in a `main.py`
+- Add a `__init__.py` file to give in some metadata so we can automatically showcase your extra in the hub! Here's an example:
 
 ```
 # __init__.py
 from . import main
 
-__func__ = main.dataframe_explorer  # main function of your craft!
-__title__ = "Dataframe explorer UI"  # title of your craft!
-__desc__ = "Let your viewers explore dataframes themselves!"  # description of your craft!
-__icon__ = "🔭"  # give your craft an icon!
-__examples__ = [main.example]  # create some examples to show how cool your craft is!
+__func__ = main.dataframe_explorer  # main function of your extra!
+__title__ = "Dataframe explorer UI"  # title of your extra!
+__desc__ = "Let your viewers explore dataframes themselves!"  # description of your extra!
+__icon__ = "🔭"  # give your extra an icon!
+__examples__ = [main.example]  # create some examples to show how cool your extra is!
 
 ```
 - Submit a PR!
@@ -93,7 +93,7 @@ If you are having troubles, reach out to discuss.streamlit.io and we can help yo
 def waiting_list():
     st.write(
         """
-Here is a list of crafts we want to add in here:
+Here is a list of extras we want to add in here:
 - https://github.com/randyzwitch/streamlit-embedcode/blob/master/streamlit_embedcode/__init__.py
 - https://github.com/explosion/spacy-streamlit/blob/master/spacy_streamlit/__init__.py
 - https://github.com/tvst/plost
