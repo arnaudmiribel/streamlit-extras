@@ -181,7 +181,7 @@ for component in component_names:
             st.write(desc)
 
             # Social badges
-            if any(github_repo, streamlit_cloud_url, pypi_name):
+            if any([github_repo, streamlit_cloud_url, pypi_name]):
                 columns = cycle(st.columns(6))
                 if github_repo:
                     with next(columns):
