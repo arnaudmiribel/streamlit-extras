@@ -30,7 +30,7 @@ def get_function_body(func):
 
 
 def home():
-    st.title("🪢 Streamlit extras Hub")
+    st.title("🪢 Streamlit-Extras Hub")
     st.write(
         """
 Want to give a special touch to your [Streamlit](https://www.streamlit.io) apps?
@@ -41,11 +41,11 @@ discover them!
     )
 
     stoggle.main.stoggle(
-        "extras & Streamlit Components? 🤔",
-        """extras are useful pieces of code which are built upon Streamlit and simple Python
+        "Extras & Streamlit Components? 🤔",
+        """Extras are useful pieces of code which are built upon Streamlit and simple Python
 or HTML/JS without requiring an additional server. If you've heard of Streamlit
 Components <a href="https://blog.streamlit.io/introducing-streamlit-components/">[launch blog]</a>
-before, this might sound familiar! extras are indeed a certain
+before, this might sound familiar! Extras are indeed a certain
 category within Streamlit Components also known as as <strong>static</strong> components. We thought
 it would be useful to give them a hub considering they're much easier to build and share!""",
     )
