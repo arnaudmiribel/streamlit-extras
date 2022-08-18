@@ -8,19 +8,49 @@ import streamlit_patches as st
 
 
 def home():
-    st.title("🌍 Streamlit Components Gallery!")
+    st.title("🪢 Streamlit Crafts Hub")
     st.write(
         """
-Welcome to the Streamlit Components Gallery!
+Want to give a special touch to your [Streamlit](https://www.streamlit.io) app? In 
+this hub, we feature creative usages of Streamlit! Browse them, use them 
+and if you feel like sharing your special crafts, head over to the 🙋 **Contribute** page!
 """
     )
+    
+    st.caption(
+        """
+Crafts are Streamlit Components that do not require JS.
+"""
+    )
+    
+    
 
 
 def contribute():
     st.title("🙋 Contribute")
+    st.write(
+        """
+Head over to our public [repository](https://github.com/arnaudmiribel/st-hub) and:
+- Create an empty directory for your craft in the `crafts/` directory
+- Add useful files for your craft in there! We usually put everything in a `main.py`
+- Add a `__init__.py` file to give in some metadata so we can automatically feature 
+your craft in the hub! Here's an example
 
+```
+# __init__.py
+from . import main
 
-st.page(home, "Home", "🌎")
+__func__ = main.dataframe_explorer  # main function of your craft!
+__title__ = "Dataframe explorer UI"  # title of your craft!
+__desc__ = "Let your viewers explore dataframes themselves!"  # description of your craft!
+__icon__ = "🔭"  # give your craft an icon!
+__examples__ = [main.example]  # create some examples to show how cool your craft is!
+
+```
+"""
+    )
+        
+st.page(home, "Home", "🪢")
 st.page(contribute, "Contribute", "🙋")
 
 
