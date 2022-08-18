@@ -34,13 +34,15 @@ def key(text: str, write: bool = True) -> str:
         str: HTML of the text, styled as a key
     """
 
+    key_html = str(span(_class="keyx")(text))
+
     if "loaded_key_css" not in st.session_state:
         load_key_css()
         st.session_state["loaded_key_css"] = True
 
-    key_html = str(span(_class="keyx")(text))
     if write:
         st.write(key_html, unsafe_allow_html=True)
+
     return key_html
 
 
