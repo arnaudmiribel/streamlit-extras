@@ -13,7 +13,7 @@ def home():
         """
 Want to give a special touch to your [Streamlit](https://www.streamlit.io) app? In 
 this hub, we feature creative usages of Streamlit! Browse them, use them 
-and if you feel like sharing your special crafts, head over to the 🙋 **Contribute** page!
+and if you feel like sharing your special crafts, head over to the 🙋 **[Contribute]("/Contribute")** page!
 """
     )
     
