@@ -36,10 +36,6 @@ def key(text: str, write: bool = True) -> str:
 
     key_html = str(span(_class="keyx")(text))
 
-    if "loaded_key_css" not in st.session_state:
-        load_key_css()
-        st.session_state["loaded_key_css"] = True
-
     if write:
         st.write(key_html, unsafe_allow_html=True)
 
@@ -47,10 +43,12 @@ def key(text: str, write: bool = True) -> str:
 
 
 def example_default():
+    load_key_css()
     key("⌘+K")
 
 
 def example_inline():
+    load_key_css()
     st.write(
         f"Also works inline! Example: {key('⌘+K', write=False)}",
         unsafe_allow_html=True,
