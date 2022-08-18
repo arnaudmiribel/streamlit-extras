@@ -54,6 +54,7 @@ def table_with_images(df: pd.DataFrame, url_columns: Iterable):
 df = get_dataframe()
 
 
+@st.experimental_memo
 def example(df: pd.DataFrame):
     st.caption("Input dataframe (notice 'Flag' column is full of URLs)")
     st.write(df)
