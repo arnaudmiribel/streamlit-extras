@@ -1,11 +1,11 @@
 import inspect
 from importlib import import_module
-from itertools import dropwhile
+from itertools import cycle, dropwhile
 from pathlib import Path
 from typing import Callable, List
 
 import streamlit_patches as st
-from components import stoggle
+from components import badges, stoggle
 
 
 def get_function_body(func):
@@ -106,6 +106,7 @@ Here is a list of crafts we want to add in here:
 - Shap https://github.com/snehankekre/streamlit-shap
 - pyLDAvis https://discuss.streamlit.io/t/showing-a-pyldavis-html/1296
 - Triage those that don't have `frontend/` in https://discuss.streamlit.io/t/streamlit-components-community-tracker/4634
+- DF to grid https://github.com/streamlit/app-frontpage/blob/main/utils/ui.py#L263-L264
     """
     )
 
@@ -138,6 +139,22 @@ for component in component_names:
         inputs = mod.__inputs__
     else:
         inputs = dict()
+    # __author__ = "Arnaud Miribel"
+    # __github_url__ = "https://www.github.com/arnaudmiribel/stodo"
+    # __streamlit_cloud_url__ = "http://stodoo.streamlitapp.com"
+    # __pypi_name__ = None
+    desc = mod.__desc__ if hasattr(mod, "__desc__") else dict()
+    inputs = mod.__inputs__ if hasattr(mod, "__inputs__") else dict()
+    author = mod.__author__ if hasattr(mod, "__author__") else None
+    github_repo = (
+        mod.__github_repo__ if hasattr(mod, "__github_repo__") else None
+    )
+    streamlit_cloud_url = (
+        mod.__streamlit_cloud_url__
+        if hasattr(mod, "__streamlit_cloud_url__")
+        else None
+    )
+    pypi_name = mod.__pypi_name__ if hasattr(mod, "__pypi_name__") else None
 
     def get_page_content(
         icon: str,
@@ -145,9 +162,31 @@ for component in component_names:
         examples: List[Callable],
         func: Callable,
         inputs: dict,
+        desc: str,
+        author: str,
+        github_repo: str,
+        streamlit_cloud_url: str,
+        pypi_name: str,
     ) -> Callable:
         def page_content():
             st.title(icon + " " + title)
+
+            if author:
+                st.caption(f"By: {author}")
+            st.write(desc)
+
+            # Social badges
+            columns = cycle(st.columns(6))
+            if github_repo:
+                with next(columns):
+                    badges.main.badge("github", name=github_repo)
+            if pypi_name:
+                with next(columns):
+                    badges.main.badge("pypi", name=pypi_name)
+            if streamlit_cloud_url:
+                with next(columns):
+                    badges.main.badge("streamlit", url=streamlit_cloud_url)
+
             st.write("## Example")
 
             for example in examples:
@@ -166,7 +205,18 @@ for component in component_names:
         return page_content
 
     settings[component] = dict(
-        path=get_page_content(icon, title, examples, func, inputs),
+        path=get_page_content(
+            icon,
+            title,
+            examples,
+            func,
+            inputs,
+            desc,
+            author,
+            github_repo,
+            streamlit_cloud_url,
+            pypi_name,
+        ),
         name=title,
         icon=icon,
     )
