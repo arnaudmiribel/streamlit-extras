@@ -193,7 +193,7 @@ for component in component_names:
                     with next(columns):
                         badges.main.badge("streamlit", url=streamlit_cloud_url)
 
-            st.write("## Example")
+            st.write("## Example usage")
 
             for example in examples:
                 st.code(get_function_body(example))
@@ -203,8 +203,8 @@ for component in component_names:
             st.write("## Docstring")
             st.help(func)
 
-            st.write("## Source code")
-            st.code(inspect.getsource(func))
+            with st.expander("Show me the full code!"):
+                st.code(inspect.getsource(func))
 
         page_content.__name__ = title
 
