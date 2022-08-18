@@ -112,11 +112,6 @@ Here is a list of crafts we want to add in here:
 
 st.page(home, "Home", "🪢")
 st.page(contribute, "Contribute", "🙋")
-st.page(
-    waiting_list,
-    "Waiting list",
-    "⌛",
-)
 
 
 def empty():
@@ -177,3 +172,9 @@ for component in component_names:
     )
 
     st.page(**settings[component])
+
+st.page(
+    waiting_list,
+    "Soon... ⌛",
+    " ",
+)
