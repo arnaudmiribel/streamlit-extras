@@ -53,11 +53,13 @@ it would be useful to give them a hub considering they're much easier to build a
     stoggle.main.stoggle(
         "Wait, how can I use these extras in my app ?! 🤩",
         """It's so easy! Either copy paste the original code which is given for each extra in the
-        "Source code" section, or if you want them all at once, simply install `stx` library using
-        <code>pip install stx</code> and then call the extras you like e.g. <pre><code>import stx
-stx.extras.stoggle()
+        "Source code" section, or if you want them all at once, simply use
+        <code>pip install streamlit-extras</code> and then call the extras you like e.g. the
+        <a href="Toggle button">Toggle</a> component we are using here with:
+<pre><code>
+import stx
+stx.stoggle()
 </code></pre>
-        to use the exact <a href="Toggle button">Toggle</a> component we are using here.
     """,
     )
 
