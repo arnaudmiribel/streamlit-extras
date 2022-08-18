@@ -1,5 +1,3 @@
-from nturl2path import url2pathname
-
 from . import main
 
 __func__ = main.table_with_images

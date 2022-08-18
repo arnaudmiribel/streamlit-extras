@@ -1,29 +1,65 @@
 import inspect
-import typing
 from importlib import import_module
+from itertools import dropwhile
 from pathlib import Path
 from typing import Callable, List
 
 import streamlit_patches as st
+from components import stoggle
+
+
+def get_function_body(func):
+    source_lines = inspect.getsourcelines(func)[0]
+    source_lines = dropwhile(lambda x: x.startswith("@"), source_lines)
+    line = next(source_lines).strip()
+    if not line.startswith("def "):
+        return line.rsplit(":")[-1].strip()
+    elif not line.endswith(":"):
+        for line in source_lines:
+            line = line.strip()
+            if line.endswith(":"):
+                break
+    # Handle functions that are not one-liners
+    first_line = next(source_lines)
+    # Find the indentation of the first line
+    indentation = len(first_line) - len(first_line.lstrip())
+    return "".join(
+        [first_line[indentation:]]
+        + [line[indentation:] for line in source_lines]
+    )
 
 
 def home():
     st.title("🪢 Streamlit Crafts Hub")
     st.write(
         """
-Want to give a special touch to your [Streamlit](https://www.streamlit.io) app? In 
-this hub, we feature creative usages of Streamlit! Browse them, use them 
-and if you feel like sharing your special crafts, head over to the 🙋 **[Contribute]("/Contribute")** page!
+Want to give a special touch to your [Streamlit](https://www.streamlit.io) apps?
+
+In this hub, we feature creative usages of Streamlit we call _crafts_! Go ahead and
+discover them!
 """
     )
-    
-    st.caption(
-        """
-Crafts are Streamlit Components that do not require JS.
-"""
+
+    stoggle.main.stoggle(
+        "Crafts & Streamlit Components? 🤔",
+        """Crafts are useful pieces of code which are built upon Streamlit and simple Python
+or HTML/JS without requiring an additional server. If you've heard of Streamlit
+Components <a href="https://blog.streamlit.io/introducing-streamlit-components/">[launch blog]</a>
+before, this might sound familiar! Crafts are indeed a certain
+category within Streamlit Components also known as as <strong>static</strong> components. We thought
+it would be useful to give them a hub considering they're much easier to build and share!""",
     )
-    
-    
+
+    stoggle.main.stoggle(
+        "Wait, how can I use these crafts in my app ?! 🤩",
+        """It's so easy! Either copy paste the original code which is given for each craft in the
+        "Source code" section, or if you want them all at once, simply install `stx` library using
+        <code>pip install stx</code> and then call the crafts you like e.g. <pre><code>import stx
+stx.crafts.stoggle()
+</code></pre>
+        to use the exact <a href="Toggle button">Toggle</a> component we are using here.
+    """,
+    )
 
 
 def contribute():
@@ -33,8 +69,7 @@ def contribute():
 Head over to our public [repository](https://github.com/arnaudmiribel/st-hub) and:
 - Create an empty directory for your craft in the `crafts/` directory
 - Add useful files for your craft in there! We usually put everything in a `main.py`
-- Add a `__init__.py` file to give in some metadata so we can automatically feature 
-your craft in the hub! Here's an example
+- Add a `__init__.py` file to give in some metadata so we can automatically showcase your craft in the hub! Here's an example:
 
 ```
 # __init__.py
@@ -47,9 +82,14 @@ __icon__ = "🔭"  # give your craft an icon!
 __examples__ = [main.example]  # create some examples to show how cool your craft is!
 
 ```
+- Submit a PR!
+
+
+If you are having troubles, reach out to discuss.streamlit.io and we can help you do it!
 """
     )
-        
+
+
 st.page(home, "Home", "🪢")
 st.page(contribute, "Contribute", "🙋")
 
@@ -58,7 +98,13 @@ def empty():
     pass
 
 
-st.page(empty, "―――――――――――――――――", " ")
+def get_empty():
+    return empty()
+
+
+st.page(get_empty, "  ", " ")
+st.page(get_empty, "   ", " ")
+st.page(get_empty, "Crafts:", " ")
 
 component_names = [folder.name for folder in Path("components").glob("*")]
 
@@ -87,7 +133,7 @@ for component in component_names:
             st.write("## Example")
 
             for example in examples:
-                st.code(inspect.getsource(example))
+                st.code(get_function_body(example))
                 example(**inputs)
 
             st.write("")
