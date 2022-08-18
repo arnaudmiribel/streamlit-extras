@@ -1,3 +1,4 @@
 streamlit
 Unidecode
 opencv-python-headless
+opencv-python
