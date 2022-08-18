@@ -7,3 +7,4 @@ __desc__ = (
 )
 __icon__ = "🌧️"
 __examples__ = [main.example]
+__author__ = "Arnaud Miribel"
