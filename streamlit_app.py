@@ -102,9 +102,9 @@ Here is a list of extras we want to add in here:
 - ✅ https://github.com/tvst/st-annotated-text
 - ✅ Gist static component from https://blog.streamlit.io/introducing-streamlit-components/
 - Chart explorer from https://release-1-12-0.streamlitapp.com/#chart-builder
-- Keyboard trigger from https://github.com/streamlit/corp/blob/main/dashboard_utils/widgets.py#L71
+- ✅ Keyboard trigger from https://github.com/streamlit/corp/blob/main/dashboard_utils/widgets.py#L71
 - ✅ Button style css from https://github.com/streamlit/data_sources_app/blob/main/utils/ui.py#L29-L51
-- Johannes gui (palette, colored header) https://github.com/streamlit/corp/blob/main/dashboard_utils/gui.py
+- ✅ Johannes gui (palette, colored header) https://github.com/streamlit/corp/blob/main/dashboard_utils/gui.py
 - Shap https://github.com/snehankekre/streamlit-shap
 - pyLDAvis https://discuss.streamlit.io/t/showing-a-pyldavis-html/1296
 - Triage those that don't have `frontend/` in https://discuss.streamlit.io/t/streamlit-components-community-tracker/4634
