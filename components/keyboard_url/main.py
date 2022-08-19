@@ -1,7 +1,7 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
-from ..keyboard_text.main import key
+from ..keyboard_text.main import key, load_key_css
 
 
 def keyboard_to_url(
@@ -60,7 +60,10 @@ def keyboard_to_url(
 
 
 def example():
+    # Main function
     keyboard_to_url(key="S", url="https://www.github.com/streamlit/streamlit")
+
+    load_key_css()
     st.write(
         f"""Now hit {key("S", False)} on your keyboard...!""",
         unsafe_allow_html=True,
