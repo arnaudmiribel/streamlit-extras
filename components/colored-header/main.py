@@ -1,9 +1,6 @@
 """Utility functions to handle repeated GUI tasks for the dashboard."""
 import itertools
-from datetime import date, timedelta
-from io import StringIO
 
-import pandas as pd
 import streamlit as st
 from pandas._libs.tslibs.timestamps import Timestamp
 
