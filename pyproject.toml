@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "streamlit_extras"
+version = "0.0.2"
+authors = [
+  { name="Arnaud Miribel", email="arnaudmiribel@gmail.com" },
+]
+description = "A library to discover, try, install and share Streamlit extras"
+readme = "README.md"
+license = { file="LICENSE" }
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+]
+keywords = [
+    "python",
+    "streamlit",
+    "ui",
+    "data",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/arnaudmiribel/streamlit-extras"
+"Bug Tracker" = "https://github.com/arnaudmiribel/streamlit-extras/issues"
