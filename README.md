@@ -55,9 +55,9 @@ pip install streamlit-extras
 
 Here's an example with one of the easiest extras around, <a href="https://extras.streamlitapp.com/Toggle%20button">stoggle</a>
 ```python
-import streamlit_extras as stx
+from streamlit_extras.stoggle import stoggle
 
-stx.stoggle("Summary", "More content that's hidden by default!")
+stoggle("Summary", "More content that's hidden by default!")
 ```
 
 ## Documentation
