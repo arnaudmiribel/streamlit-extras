@@ -12,6 +12,7 @@
     <a href="https://extras.streamlitapp.com" title="Python Version"><img src="https://static.streamlit.io/badges/streamlit_badge_black_white.svg"></a><br>
     <a href="https://github.com/arnaudmiribel/streamlit-extras/" title="Python Version"><img src="https://img.shields.io/badge/Python-3.9%2B-blue&style=flat"></a>
     <a href="https://badge.fury.io/py/streamlit-extras"><img src="https://badge.fury.io/py/streamlit-extras.svg" alt="PyPI version" height="18"></a>
+    <a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Farnaudmiribel%2Fstreamlit-extras&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=visits&edge_flat=false"/></a>
 </p>
 
 <p align="center">
