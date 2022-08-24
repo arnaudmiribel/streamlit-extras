@@ -1,4 +1,4 @@
-<!-- markdownlint-disable MD033 MD041 -->
+
 <h1 align="center">
     🪢 streamlit-extras
 </h1>
@@ -16,7 +16,6 @@
 <p align="center">
   <a href="#getting-started">Getting Started</a> •
   <a href="#documentation">Documentation</a> •
-  <!-- <a href="#support--feedback">Support</a> • -->
   <a href="https://github.com/arnaudmiribel/streamlit-extras/issues/new?labels=bug&template=01_bug-report.md">Report a Bug</a> •
   <a href="#contribution">Contribution</a> •
 </p>
@@ -29,14 +28,14 @@
 ---
 
 <p align="center">
-     Try out and explore various examples in our playgrounds at <a href="extras.streamlitapp.com">extras.streamlitapp.com</a>.
+     Try out and explore various examples in our playgrounds at <a href="https://extras.streamlitapp.com">extras.streamlitapp.com</a>.
 </p>
 
 ---
 
 ## Highlights
 
-- 📙&nbsp; <b>Discover:</b> Visit <a href="extras.streamlitapp.com">extras.streamlitapp.com</a> to discover all extras in their natural habitat
+- 📙&nbsp; <b>Discover:</b> Visit <a href="https://extras.streamlitapp.com">extras.streamlitapp.com</a> to discover all extras in their natural habitat
 - 🛝&nbsp; <b>Try:</b> Our gallery gives a Streamlit-based playground for some extras. Try it before you <strike>buy</strike> install it!
 - ⬇️&nbsp; <b>Install:</b> `streamlit-extras` is a PyPI package with all extras included. Catch them all using pip!
 - 🫴&nbsp; <b>Share:</b> Go ahead and share your own extras, it's just a PR away!
@@ -51,7 +50,7 @@ pip install streamlit-extras
 
 ### Usage
 
-Here's an example with one of the easiest extras around, <a href="extras.streamlitapp.com/Stoggle">Stoggle</a>
+Here's an example with one of the easiest extras around, <a href="https://extras.streamlitapp.com/Stoggle">Stoggle</a>
 ```python
 import streamlit_extras as stx
 
@@ -60,8 +59,10 @@ stx.stoggle("Summary", "More content that's hidden by default!")
 
 ## Documentation
 
-Visit <a href="extras.streamlitapp.com">extras.streamlitapp.com</a>
+Visit <a href="https://extras.streamlitapp.com">extras.streamlitapp.com</a>
 
 ## Contribution
 
-PRs are welcome! Guidelines here at <a href="extras.streamlitapp.com/Contribute">extras.streamlitapp.com/Contribute</a>
+PRs are welcome! Guidelines here at <a href="https://extras.streamlitapp.com/Contribute">extras.streamlitapp.com/Contribute</a>
+
+<sup>README template taken from <a href="https://github.com/LukasMasuch/streamlit-pydantic">streamlit-pydantic</a></sup>
