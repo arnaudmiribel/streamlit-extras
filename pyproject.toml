@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=61.0", "streamlit==1.11.1", "htbuilder"]
 build-backend = "setuptools.build_meta"
 
 [project]
