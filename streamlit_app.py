@@ -1,13 +1,15 @@
 import inspect
+import random
 from importlib import import_module
 from itertools import cycle, dropwhile
 from pathlib import Path
 from typing import Callable, List
 
 import streamlit_patches as st
-from extras import badges
-from extras import function_explorer as fx
-from extras import stoggle
+from streamlit_extras.badges import badge
+from streamlit_extras.function_explorer import function_explorer
+from streamlit_extras.stoggle import stoggle
+from streamlit_extras.switch_page_button import switch_page
 
 
 def get_function_body(func):
@@ -32,58 +34,71 @@ def get_function_body(func):
 
 
 def home():
+    badge("github", "arnaudmiribel/streamlit-extras")
     st.title("🪢 streamlit-extras")
     st.write(
         """
 Want to give a special touch to your [Streamlit](https://www.streamlit.io) apps?
 
-In this hub, we feature creative usages of Streamlit we call _extras_! Go ahead and
+You're at the right place! Here in the **🪢 streamlit-extras** gallery, we feature creative usages of Streamlit we call _extras_! Go ahead and
 discover them!
 """
     )
 
-    stoggle.main.stoggle(
+    random_extra = st.button("👀 Show me a random extra now!")
+
+    stoggle(
         "Extras & Streamlit Components? 🤔",
-        """Extras are useful pieces of code which are built upon Streamlit and simple Python
+        """Extras currently are useful pieces of code which are built upon Streamlit and simple Python
 or HTML/JS without requiring an additional server. If you've heard of Streamlit
 Components <a href="https://blog.streamlit.io/introducing-streamlit-components/">[launch blog]</a>
 before, this might sound familiar! Extras are indeed a certain
 category within Streamlit Components also known as as <strong>static</strong> components. We thought
-it would be useful to give them a hub considering they're much easier to build and share!""",
+it would be useful to give them a central location considering they're much easier to build and share!""",
     )
 
-    stoggle.main.stoggle(
+    stoggle(
         "Wait, how can I use these extras in my app ?! 🤩",
-        """It's so easy! Either copy paste the original code which is given for each extra in the
-        "Source code" section, or if you want them all at once, simply use
-        <code>pip install streamlit-extras</code> and then call the extras you like e.g. the
-        <a href="Toggle button">Toggle</a> component we are using here with:
-<pre><code>
-import stx
-stx.stoggle()
-</code></pre>
+        """Go ahead and <a href="https://github.com/arnaudmiribel/streamlit-extras#getting-started">get started!</a>
     """,
     )
+
+    if random_extra:
+        switch_page(
+            random.choice(
+                [
+                    "Toggle button",
+                    "Dataframe explorer UI",
+                    "App logo",
+                    "To-do items",
+                    "Annotated text",
+                ]
+            )
+        )
 
 
 def contribute():
     st.title("🙋 Contribute")
     st.write(
         """
-Head over to our public [repository](https://github.com/arnaudmiribel/st-hub) and:
+Head over to our public [repository](https://github.com/arnaudmiribel/streamlit-extras) and:
 - Create an empty directory for your extra in the `extras/` directory
-- Add useful files for your extra in there! We usually put everything in a `main.py`
 - Add a `__init__.py` file to give in some metadata so we can automatically showcase your extra in the hub! Here's an example:
 
 ```
 # __init__.py
-from . import main
 
-__func__ = main.dataframe_explorer  # main function of your extra!
-__title__ = "Dataframe explorer UI"  # title of your extra!
-__desc__ = "Let your viewers explore dataframes themselves!"  # description of your extra!
+def my_main_function():
+    pass
+
+def example():
+    pass
+
+__func__ = my_main_function  # main function of your extra!
+__title__ = "Great title!"  # title of your extra!
+__desc__ = "Great description"  # description of your extra!
 __icon__ = "🔭"  # give your extra an icon!
-__examples__ = [main.example]  # create some examples to show how cool your extra is!
+__examples__ = [example]  # create some examples to show how cool your extra is!
 __author__ = "Eva Jensen"
 __github_repo__ = "evajensen/my-repo"
 __streamlit_cloud_url__ = "http://my-super-app.streamlitapp.com"
@@ -94,7 +109,7 @@ __experimental_playground__ = False
 - Submit a PR!
 
 
-If you are having troubles, reach out to discuss.streamlit.io and we can help you do it!
+If you are having troubles, create an issue on the repo or [DM me on Twitter](https://twitter.com/arnaudmiribel)!
 """
     )
 
@@ -138,12 +153,13 @@ def get_empty():
 
 st.page(get_empty, "  ", " ")
 
-component_names = [folder.name for folder in Path("extras").glob("*")]
+PATH_TO_EXTRAS = "streamlit_extras"
+extra_names = [folder.name for folder in Path(PATH_TO_EXTRAS).glob("*")]
 
 settings = dict()
 
-for component in component_names:
-    mod = import_module(f"extras.{component}")
+for extra_name in extra_names:
+    mod = import_module(f"{PATH_TO_EXTRAS}.{extra_name}")
     title = mod.__title__
     icon = mod.__icon__
     func = mod.__func__
@@ -197,13 +213,13 @@ for component in component_names:
                 columns = cycle(st.columns(6))
                 if github_repo:
                     with next(columns):
-                        badges.main.badge("github", name=github_repo)
+                        badge("github", name=github_repo)
                 if pypi_name:
                     with next(columns):
-                        badges.main.badge("pypi", name=pypi_name)
+                        badge("pypi", name=pypi_name)
                 if streamlit_cloud_url:
                     with next(columns):
-                        badges.main.badge("streamlit", url=streamlit_cloud_url)
+                        badge("streamlit", url=streamlit_cloud_url)
 
             st.write("## Example usage")
 
@@ -222,13 +238,13 @@ for component in component_names:
                 st.write("")
                 st.write(f"## Playground 🛝 [experimental]")
                 st.caption("In this section, you can test the function live!")
-                fx.function_explorer(func=func)
+                function_explorer(func=func)
 
         page_content.__name__ = title
 
         return page_content
 
-    settings[component] = dict(
+    settings[extra_name] = dict(
         path=get_page_content(
             icon,
             title,
@@ -246,7 +262,7 @@ for component in component_names:
         icon=icon,
     )
 
-    st.page(**settings[component])
+    st.page(**settings[extra_name])
 
 
 st.page(
