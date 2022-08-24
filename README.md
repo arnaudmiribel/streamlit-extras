@@ -36,8 +36,8 @@
 
 ## Highlights
 
-- 📙&nbsp; <b>Discover:</b> `stx` comes with a nice Streamlit app to showcase all the extras in their natural habitat. It's <a href="extras.streamlitapp.com">here</a>!
-- 🛝&nbsp; <b>Try:</b> Our gallery gives a small Streamlit-based playground for some extras. Try it before you <strike>buy</strike> install it!
+- 📙&nbsp; <b>Discover:</b> Visit <a href="extras.streamlitapp.com">extras.streamlitapp.com</a> to discover all extras in their natural habitat
+- 🛝&nbsp; <b>Try:</b> Our gallery gives a Streamlit-based playground for some extras. Try it before you <strike>buy</strike> install it!
 - ⬇️&nbsp; <b>Install:</b> `streamlit-extras` is a PyPI package with all extras included. Catch them all using pip!
 - 🫴&nbsp; <b>Share:</b> Go ahead and share your own extras, it's just a PR away!
 
@@ -51,6 +51,7 @@ pip install streamlit-extras
 
 ### Usage
 
+<sup>Visit <a href="extras.streamlitapp.com/Stoggle">extras.streamlitapp.com</a></sup>
 ```python
 import streamlit_extras as stx
 
