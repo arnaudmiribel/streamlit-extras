@@ -265,8 +265,14 @@ def example(df: pd.DataFrame):
 
 __func__ = dataframe_explorer
 __title__ = "Dataframe explorer UI"
-__desc__ = "Let your viewers explore dataframes themselves!"
+__desc__ = (
+    "Let your viewers explore dataframes themselves! Learn more about it on"
+    " this [blog"
+    " post](https://blog.streamlit.io/auto-generate-a-dataframe-filtering-ui-in-streamlit-with-filter_dataframe/)"
+)
 __icon__ = "🔭"
 __examples__ = [example]
 __inputs__ = dict(df=dataframe)
 __author__ = "Streamlit Data Team!"
+__streamlit_cloud_url__ = "https://st-filter-dataframe.streamlitapp.com/"
+__github_repo__ = "tylerjrichards/st-filter-dataframe"

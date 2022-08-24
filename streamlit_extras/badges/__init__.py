@@ -8,7 +8,7 @@ def badge(type: str, name: str = None, url: str = None):
     """Easily create a badge!
 
     Args:
-        type (str): Badge type. Can be "pypi" or "streamlit"
+        type (str): Badge type. Can be "pypi", "github" or "streamlit"
         name (str): Name of the PyPI package or GitHub repository. Mandatory when using type="pypi"
         url (str): URL of the Streamlit Cloud app. Mandatory when using type="streamlit"
     """
@@ -16,7 +16,7 @@ def badge(type: str, name: str = None, url: str = None):
     assert type, "Type must be given!"
 
     assert type in _SUPPORTED_TYPES, (
-        f"This type {type} is not supported! Supported types are"
+        f"Input type '{type}' is not supported! Supported types are"
         f" {_SUPPORTED_TYPES}"
     )
 

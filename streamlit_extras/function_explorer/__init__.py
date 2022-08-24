@@ -20,7 +20,8 @@ def is_empty(argument_attribute):
 
 def get_arg_from_session_state(func_name: str, argument: str):
     if func_name in st.session_state:
-        return st.session_state[func_name].inputs[argument]
+        if "inputs" in st.session_state[func_name]:
+            return st.session_state[func_name]["inputs"][argument]
 
 
 def function_explorer(func: Callable):

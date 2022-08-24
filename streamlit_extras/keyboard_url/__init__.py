@@ -1,7 +1,7 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
-from ..keyboard_text.main import key, load_key_css
+from ..keyboard_text import key, load_key_css
 
 
 def keyboard_to_url(
