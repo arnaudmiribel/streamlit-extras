@@ -11,6 +11,7 @@
 <p align="center">
     <a href="https://extras.streamlitapp.com" title="Python Version"><img src="https://static.streamlit.io/badges/streamlit_badge_black_white.svg"></a><br>
     <a href="https://github.com/arnaudmiribel/streamlit-extras/" title="Python Version"><img src="https://img.shields.io/badge/Python-3.9%2B-blue&style=flat"></a>
+    <a href="https://badge.fury.io/py/streamlit-extras"><img src="https://badge.fury.io/py/streamlit-extras.svg" alt="PyPI version" height="18"></a>
 </p>
 
 <p align="center">
