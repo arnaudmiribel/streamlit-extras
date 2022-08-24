@@ -6,7 +6,14 @@ import streamlit as st
 
 def color(name):
     """Returns a color from the streamlit color palette, e.g. red-100, as hex."""
-    hue, intensity = name.rsplit("-", 1)
+    try:
+        hue, intensity = name.rsplit("-", 1)
+    except ValueError or KeyError:
+        st.exception(
+            "Input color_name must contain a name (red, orange, ...) and"
+            " intensity (10, 20, ... 100) e.g. 'red-70'"
+        )
+        st.stop()
     return ST_COLOR_PALETTE[hue][intensity]
 
 
@@ -136,7 +143,11 @@ HEADER_COLOR_CYCLE = itertools.cycle(
 )
 
 
-def colored_header(label: str, description: str = None, color_name: str = None):
+def colored_header(
+    label: str = "Nice title",
+    description: str = "Cool description",
+    color_name: str = "red-70",
+):
     """
     Shows a header with a colored underline and an optional description.
     """
@@ -144,7 +155,8 @@ def colored_header(label: str, description: str = None, color_name: str = None):
         color_name = next(HEADER_COLOR_CYCLE)
     st.subheader(label)
     st.write(
-        f'<hr style="background-color: {color(color_name)}; margin-top: 0; margin-bottom: 0; height: 3px; border: none; border-radius: 3px;">',
+        f'<hr style="background-color: {color(color_name)}; margin-top: 0;'
+        ' margin-bottom: 0; height: 3px; border: none; border-radius: 3px;">',
         unsafe_allow_html=True,
     )
     if description:

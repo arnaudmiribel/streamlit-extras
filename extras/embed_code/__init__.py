@@ -1,3 +1,5 @@
+from typing import Literal
+
 import streamlit.components.v1 as components
 import validators
 
@@ -222,7 +224,7 @@ _SUPPORTED_PLATORMS = {
 
 
 def embed_code(
-    platform: str,
+    platform: Literal["github", "gitlab", "codepen", "ideone", "tagmycode"],
     link: str,
     height: int = 600,
     width: int = 950,
@@ -262,3 +264,4 @@ __examples__ = [example_github, example_tagmycode]
 __author__ = "randyzwitch"
 __github_repo__ = "randyzwitch/streamlit-embedcode"
 __pypi_name__ = "streamlit-embedcode"
+__experimental_playground__ = False

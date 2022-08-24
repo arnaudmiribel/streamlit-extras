@@ -6,3 +6,4 @@ __desc__ = "Create a keyboard styled text"
 __icon__ = "⌨️"
 __examples__ = [main.example_default, main.example_inline]
 __author__ = "Arnaud Miribel"
+__experimental_playground__ = True

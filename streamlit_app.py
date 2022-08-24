@@ -5,7 +5,9 @@ from pathlib import Path
 from typing import Callable, List
 
 import streamlit_patches as st
-from components import badges, stoggle
+from extras import badges
+from extras import function_explorer as fx
+from extras import stoggle
 
 
 def get_function_body(func):
@@ -82,6 +84,11 @@ __title__ = "Dataframe explorer UI"  # title of your extra!
 __desc__ = "Let your viewers explore dataframes themselves!"  # description of your extra!
 __icon__ = "🔭"  # give your extra an icon!
 __examples__ = [main.example]  # create some examples to show how cool your extra is!
+__author__ = "Eva Jensen"
+__github_repo__ = "evajensen/my-repo"
+__streamlit_cloud_url__ = "http://my-super-app.streamlitapp.com"
+__pypi_name__ = ...
+__experimental_playground__ = False
 
 ```
 - Submit a PR!
@@ -131,12 +138,12 @@ def get_empty():
 
 st.page(get_empty, "  ", " ")
 
-component_names = [folder.name for folder in Path("components").glob("*")]
+component_names = [folder.name for folder in Path("extras").glob("*")]
 
 settings = dict()
 
 for component in component_names:
-    mod = import_module(f"components.{component}")
+    mod = import_module(f"extras.{component}")
     title = mod.__title__
     icon = mod.__icon__
     func = mod.__func__
@@ -158,6 +165,11 @@ for component in component_names:
         else None
     )
     pypi_name = mod.__pypi_name__ if hasattr(mod, "__pypi_name__") else None
+    experimental_playground = (
+        mod.__experimental_playground__
+        if hasattr(mod, "__experimental_playground__")
+        else False
+    )
 
     def get_page_content(
         icon: str,
@@ -170,12 +182,14 @@ for component in component_names:
         github_repo: str,
         streamlit_cloud_url: str,
         pypi_name: str,
+        experimental_playground: bool,
     ) -> Callable:
         def page_content():
             st.title(icon + " " + title)
 
             if author:
                 st.caption(f"By: {author}")
+
             st.write(desc)
 
             # Social badges
@@ -204,6 +218,12 @@ for component in component_names:
             with st.expander("Show me the full code!"):
                 st.code(inspect.getsource(func))
 
+            if experimental_playground:
+                st.write("")
+                st.write(f"## Playground 🛝 [experimental]")
+                st.caption("In this section, you can test the function live!")
+                fx.function_explorer(func=func)
+
         page_content.__name__ = title
 
         return page_content
@@ -220,6 +240,7 @@ for component in component_names:
             github_repo,
             streamlit_cloud_url,
             pypi_name,
+            experimental_playground,
         ),
         name=title,
         icon=icon,

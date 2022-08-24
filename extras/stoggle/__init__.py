@@ -9,3 +9,4 @@ __author__ = "Arnaud Miribel"
 __github_repo__ = "arnaudmiribel/stoggle"
 __streamlit_cloud_url__ = "http://stoggle.streamlitapp.com"
 __pypi_name__ = None
+__experimental_playground__ = True
