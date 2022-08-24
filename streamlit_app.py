@@ -32,7 +32,7 @@ def get_function_body(func):
 
 
 def home():
-    st.title("🪢 Streamlit-Extras Hub")
+    st.title("🪢 streamlit-extras")
     st.write(
         """
 Want to give a special touch to your [Streamlit](https://www.streamlit.io) apps?
