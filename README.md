@@ -1,6 +1,6 @@
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://extras.streamlitapp.com)
 
 <h1 align="center">
+    <a href="https://extras.streamlitapp.com" title="Python Version"><img src="https://static.streamlit.io/badges/streamlit_badge_black_white.svg"></a><br>
     🪢 streamlit-extras
 </h1>
 
