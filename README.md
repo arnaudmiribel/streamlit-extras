@@ -9,7 +9,7 @@
 
 
 <p align="center">
-    <a href="https://github.com/streamlit-extras/" title="Python Version"><img src="https://img.shields.io/badge/Python-3.9%2B-blue&style=flat"></a>
+    <a href="https://github.com/arnaudmiribel/streamlit-extras/" title="Python Version"><img src="https://img.shields.io/badge/Python-3.9%2B-blue&style=flat"></a>
     <a href="https://twitter.com/arnaudmiribel" title="Follow on Twitter"><img src="https://img.shields.io/twitter/follow/arnaudmiribel.svg?style=social&label=Follow"></a>
 </p>
 
@@ -20,7 +20,7 @@
   <a href="#contribution">Contribution</a> •
 </p>
 
-`streamlit-extras` is a place for you to discover, try, install and share Streamlit re-usable bits we call <i>extras</i>. Head over to <a href="extras.streamlitapp.com">extras.streamlitapp.com</a> to discover available extras and if you're seduced and want to use them, go ahead and <a href="#getting-started">get started</a>!
+`streamlit-extras` is a place for you to discover, try, install and share Streamlit re-usable bits we call <b><i>extras</i></b> Head over to <a href="extras.streamlitapp.com">extras.streamlitapp.com</a> to discover them extras and if you're seduced... go ahead and <a href="#getting-started">get started</a>!
 
 <sup>Beta Version: Only suggested for experimental usage.</sup>
 
@@ -65,4 +65,4 @@ Visit <a href="https://extras.streamlitapp.com">extras.streamlitapp.com</a>
 
 PRs are welcome! Guidelines here at <a href="https://extras.streamlitapp.com/Contribute">extras.streamlitapp.com/Contribute</a>
 
-<sup>README template taken from <a href="https://github.com/LukasMasuch/streamlit-pydantic">streamlit-pydantic</a></sup>
+<sup>README template taken from <a href="https://github.com/LukasMasuch/streamlit-pydantic">LukasMasuch/streamlit-pydantic</a></sup>
