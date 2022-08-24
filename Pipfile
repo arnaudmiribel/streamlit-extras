@@ -7,8 +7,6 @@ name = "pypi"
 streamlit = "1.11.1"
 htbuilder = "*"
 silly = "*"
-markdown = "*"
-pydantic = "*"
 
 [dev-packages]
 

@@ -4,7 +4,6 @@ from typing import Callable
 
 import pandas as pd
 import streamlit as st
-from pydantic import HttpUrl
 
 
 def get_args(func):
@@ -88,14 +87,6 @@ def function_explorer(func: Callable):
                 inputs[argument] = get_arg_from_session_state(
                     func.__name__, argument
                 ) or pd.DataFrame(["abcde"])
-            elif type_hint == HttpUrl:
-                default = (
-                    get_arg_from_session_state(func.__name__, argument)
-                    or default
-                    if not is_empty(default)
-                    else "http://placekitten.com/120/120"
-                )
-                inputs[argument] = st.text_input(label, value=default)
             else:
                 st.warning(
                     f"`function_explorer` does not support type {type_hint}"
@@ -109,7 +100,9 @@ def function_explorer(func: Callable):
 
 
 def example():
-    def foo(age: int, name: str, image_url: HttpUrl):
+    def foo(
+        age: int, name: str, image_url: str = "http://placekitten.com/120/120"
+    ):
         st.write(f"Hey! My name is {name} and I'm {age} years old")
         st.write("Here's a picture")
         st.image(image_url)

@@ -1,9 +1,8 @@
 import streamlit as st
 import validators
-from pydantic import HttpUrl
 
 
-def add_logo(logo_url: HttpUrl):
+def add_logo(logo_url: str):
     """Add a logo (from logo_url) on the top of the navigation page of a multipage app.
     Taken from https://discuss.streamlit.io/t/put-logo-and-title-above-on-top-of-page-navigation-in-sidebar-of-multipage-app/28213/6
 
