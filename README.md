@@ -18,7 +18,7 @@
   <a href="#getting-started">Getting Started</a> •
   <a href="#documentation">Documentation</a> •
   <a href="https://github.com/arnaudmiribel/streamlit-extras/issues/new?labels=bug&template=01_bug-report.md">Report a Bug</a> •
-  <a href="#contribution">Contribution</a> •
+  <a href="#contribution">Contribution</a>
 </p>
 
 `streamlit-extras` is a place for you to discover, try, install and share Streamlit re-usable bits we call <b><i>extras</i></b> Head over to <a href="extras.streamlitapp.com">extras.streamlitapp.com</a> to discover them and if you're seduced... go ahead and <a href="#getting-started">get started</a>!
