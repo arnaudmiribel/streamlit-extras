@@ -50,7 +50,7 @@ pip install streamlit-extras
 
 ### Usage
 
-Here's an example with one of the easiest extras around, <a href="https://extras.streamlitapp.com/Stoggle">Stoggle</a>
+Here's an example with one of the easiest extras around, <a href="https://extras.streamlitapp.com/Toggle%20button">stoggle</a>
 ```python
 import streamlit_extras as stx
 
