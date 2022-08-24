@@ -51,7 +51,7 @@ pip install streamlit-extras
 
 ### Usage
 
-<sup>Visit <a href="extras.streamlitapp.com/Stoggle">extras.streamlitapp.com</a></sup>
+Here's an example with one of the easiest extras around, <a href="extras.streamlitapp.com/Stoggle">Stoggle</a>
 ```python
 import streamlit_extras as stx
 
