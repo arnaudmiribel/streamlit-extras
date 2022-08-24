@@ -29,8 +29,11 @@
 ---
 
 <p align="center">
-     Try out and explore various examples in our playgrounds at <a href="https://extras.streamlitapp.com">extras.streamlitapp.com</a>.
+     Try out and explore various examples in our playgrounds at <a href="https://extras.streamlitapp.com">extras.streamlitapp.com</a>.<br><br>
+     <img src="https://user-images.githubusercontent.com/7164864/186383332-147e820d-cd02-4962-b8b9-91fe9f675dfe.gif" width="400px"></img>
 </p>
+
+
 
 ---
 
