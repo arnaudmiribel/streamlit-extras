@@ -1,6 +1,6 @@
 
 <h1 align="center">
-    <a href="https://extras.streamlitapp.com" title="Python Version"><img src="https://static.streamlit.io/badges/streamlit_badge_black_white.svg"></a><br>
+
     🪢 streamlit-extras
 </h1>
 
@@ -10,6 +10,7 @@
 
 
 <p align="center">
+    <a href="https://extras.streamlitapp.com" title="Python Version"><img src="https://static.streamlit.io/badges/streamlit_badge_black_white.svg"></a><br>
     <a href="https://github.com/arnaudmiribel/streamlit-extras/" title="Python Version"><img src="https://img.shields.io/badge/Python-3.9%2B-blue&style=flat"></a>
     <a href="https://twitter.com/arnaudmiribel" title="Follow on Twitter"><img src="https://img.shields.io/twitter/follow/arnaudmiribel.svg?style=social&label=Follow"></a>
 </p>
