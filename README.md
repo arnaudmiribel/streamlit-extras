@@ -1,6 +1,5 @@
 
 <h1 align="center">
-
     🪢 streamlit-extras
 </h1>
 
