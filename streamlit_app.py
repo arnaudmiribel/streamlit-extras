@@ -154,7 +154,9 @@ def get_empty():
 st.page(get_empty, "  ", " ")
 
 PATH_TO_EXTRAS = "streamlit_extras"
-extra_names = [folder.name for folder in Path(PATH_TO_EXTRAS).glob("*")]
+extra_names = [
+    folder.name for folder in Path(PATH_TO_EXTRAS).glob("*") if folder.is_dir()
+]
 
 settings = dict()
 
