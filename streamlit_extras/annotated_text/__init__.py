@@ -173,7 +173,7 @@ def annotated_text(*args):
 
     """
     st.markdown(
-        util.get_annotated_html(*args),
+        get_annotated_html(*args),
         unsafe_allow_html=True,
     )
     st.write("")
