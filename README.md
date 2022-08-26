@@ -8,7 +8,7 @@
 # 🪢 streamlit-extras
 
 
-<strong>A Python library with all useful Streamlit extras</strong>
+<strong>A Python library with useful Streamlit extras</strong>
 
 `streamlit-extras` is a Python library putting together useful Streamlit bits of code (<b><i>extras</i></b>).
 
