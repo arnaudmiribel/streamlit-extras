@@ -8,7 +8,6 @@ from typing import Callable, List
 import streamlit_patches as st
 from streamlit_extras.badges import badge
 from streamlit_extras.function_explorer import function_explorer
-from streamlit_extras.stoggle import stoggle
 from streamlit_extras.switch_page_button import switch_page
 
 
@@ -34,33 +33,22 @@ def get_function_body(func):
 
 
 def home():
-    st.title("🪢 streamlit-extras")
+    st.title("🪢 streamlit-extras gallery")
     st.write(
         """
-Want to give a special touch to your [Streamlit](https://www.streamlit.io) apps?
+Welcome to the **🪢 streamlit-extras** gallery! If you want to give a special touch to your Streamlit apps, you're at the right place!
 
-You're at the right place! Here in the **🪢 streamlit-extras** gallery, we feature creative usages of Streamlit we call _extras_! Go ahead and
-discover them!
+Go ahead and browse available extras in the left handside menu, and if you like them, remember, you're just a pip install away from using them:
+
+```
+pip install streamlit-extras
+```
+
+Learn more about the library on [GitHub](https://www.github.com/arnaudmiribel/streamlit-extras)!
 """
     )
 
     random_extra = st.button("👀 Show me a random extra now!")
-
-    stoggle(
-        "Extras & Streamlit Components? 🤔",
-        """Extras currently are useful pieces of code which are built upon Streamlit and simple Python
-or HTML/JS without requiring an additional server. If you've heard of Streamlit
-Components <a href="https://blog.streamlit.io/introducing-streamlit-components/">[launch blog]</a>
-before, this might sound familiar! Extras are indeed a certain
-category within Streamlit Components also known as as <strong>static</strong> components. We thought
-it would be useful to give them a central location considering they're much easier to build and share!""",
-    )
-
-    stoggle(
-        "Wait, how can I use these extras in my app ?! 🤩",
-        """Go ahead and <a href="https://github.com/arnaudmiribel/streamlit-extras#getting-started">get started!</a>
-    """,
-    )
 
     if random_extra:
         switch_page(
@@ -196,6 +184,7 @@ for extra_name in extra_names:
     )
 
     def get_page_content(
+        extra_name: str,
         icon: str,
         title: str,
         examples: List[Callable],
@@ -238,7 +227,8 @@ for extra_name in extra_names:
             st.write("## Example usage")
 
             for example in examples:
-                st.code(get_function_body(example))
+                import_code = f"""from streamlit_extras.{extra_name} import {func.__name__}\n\n"""
+                st.code(import_code + get_function_body(example))
                 example(**inputs)
 
             st.write("")
@@ -260,6 +250,7 @@ for extra_name in extra_names:
 
     settings[extra_name] = dict(
         path=get_page_content(
+            extra_name,
             icon,
             title,
             examples,
