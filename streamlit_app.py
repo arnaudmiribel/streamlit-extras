@@ -186,6 +186,7 @@ for extra_name in extra_names:
     )
     pypi_name = mod.__pypi_name__ if hasattr(mod, "__pypi_name__") else None
     twitter_username = mod.__twitter_username__ if hasattr(mod, "__twitter_username__") else None
+    support_page_username = mod.__support_page_username__ if hasattr(mod, "__support_page_username__") else None
     experimental_playground = (
         mod.__experimental_playground__
         if hasattr(mod, "__experimental_playground__")
@@ -204,6 +205,7 @@ for extra_name in extra_names:
         streamlit_cloud_url: str,
         pypi_name: str,
         twitter_username: str,
+        support_page_username : str;
         experimental_playground: bool,
     ) -> Callable:
         def page_content():
@@ -215,7 +217,7 @@ for extra_name in extra_names:
             st.write(desc)
 
             # Social badges
-            if any([github_repo, streamlit_cloud_url, pypi_name, twitter_username]):
+            if any([github_repo, streamlit_cloud_url, pypi_name, twitter_username, support_page_username]):
                 columns = cycle(st.columns(6))
                 if github_repo:
                     with next(columns):
@@ -229,6 +231,9 @@ for extra_name in extra_names:
                 if twitter_username:
                     with next(columns):
                         badge("twitter", name=twitter_username)
+                if support_page_username:
+                    with next(columns):
+                        badge("twitter", name=support_page_username)
                 
             st.write("## Example usage")
 
@@ -266,6 +271,7 @@ for extra_name in extra_names:
             streamlit_cloud_url,
             pypi_name,
             twitter_username,
+            support_page_username,
             experimental_playground,
         ),
         name=title,
