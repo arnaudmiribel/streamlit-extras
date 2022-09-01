@@ -233,7 +233,7 @@ for extra_name in extra_names:
                         badge("twitter", name=twitter_username)
                 if support_page_username:
                     with next(columns):
-                        badge("twitter", name=support_page_username)
+                        badge("creator_support", name=support_page_username)
                 
             st.write("## Example usage")
 
