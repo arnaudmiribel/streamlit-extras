@@ -4,9 +4,10 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-streamlit = "1.11.1"
+streamlit = ">=1.12.0"
 htbuilder = "*"
 silly = "*"
+streamlit-keyup = ">=0.1.6"
 
 [dev-packages]
 
