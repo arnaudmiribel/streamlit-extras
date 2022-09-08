@@ -1,16 +1,16 @@
 import streamlit as st
 from htbuilder import a, img
 
-_SUPPORTED_TYPES = ("pypi", "streamlit", "github", "twitter", "creator_support")
+_SUPPORTED_TYPES = ("pypi", "streamlit", "github", "twitter", "buymeacoffee")
 
 
 def badge(type: str, name: str = None, url: str = None):
     """Easily create a badge!
 
     Args:
-        type (str): Badge type. Can be "pypi", "github", "streamlit", "twitter" or "creator_support"
+        type (str): Badge type. Can be "pypi", "github", "streamlit", "twitter" or "buymeacoffee"
         name (str): Name of the PyPI package, GitHub repository, Twitter's username or BuyMeaCoffee Creator's page name. 
-                    Mandatory when using type="pypi", type="twitter" & type="creator_support"
+                    Mandatory when using type="pypi", type="twitter" & type="buymeacoffee"
         url (str): URL of the Streamlit Cloud app. Mandatory when using type="streamlit"
     """
 
@@ -65,7 +65,7 @@ def badge(type: str, name: str = None, url: str = None):
             )
         ) 
         
-    if type == "creator_support":
+    if type == "buymeacoffee":
         assert name, (
             "You must provide a valid Buy-Me-a-Coffee page username" )
         badge_html = str(
@@ -95,14 +95,14 @@ def example_github():
 def example_twitter():
     badge(type="twitter", name="streamlit")
     
-def example_creator_support():
-    badge(type="creator_support", name="andfanilo")
+def example_buymeacoffee():
+    badge(type="buymeacoffee", name="andfanilo")
 
 
 __func__ = badge
 __title__ = "Badges"
 __desc__ = "Create custom badges (e.g. PyPI, Streamlit Cloud, GitHub, Twitter, Buy Me a Coffee)"
 __icon__ = "🏷️"
-__examples__ = [example_pypi, example_streamlit, example_github, example_twitter, example_creator_support]
+__examples__ = [example_pypi, example_streamlit, example_github, example_twitter, buymeacoffee]
 __author__ = "Arnaud Miribel, ShruAgarwal"
 __experimental_playground__ = True
