@@ -103,6 +103,6 @@ __func__ = badge
 __title__ = "Badges"
 __desc__ = "Create custom badges (e.g. PyPI, Streamlit Cloud, GitHub, Twitter, Buy Me a Coffee)"
 __icon__ = "🏷️"
-__examples__ = [example_pypi, example_streamlit, example_github, example_twitter, buymeacoffee]
+__examples__ = [example_pypi, example_streamlit, example_github, example_twitter, example_buymeacoffee]
 __author__ = "Arnaud Miribel, ShruAgarwal"
 __experimental_playground__ = True
