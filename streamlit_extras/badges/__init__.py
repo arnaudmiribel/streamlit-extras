@@ -1,15 +1,16 @@
 import streamlit as st
 from htbuilder import a, img
 
-_SUPPORTED_TYPES = ("pypi", "streamlit", "github", "twitter")
+_SUPPORTED_TYPES = ("pypi", "streamlit", "github", "twitter", "buymeacoffee")
 
 
 def badge(type: str, name: str = None, url: str = None):
     """Easily create a badge!
 
     Args:
-        type (str): Badge type. Can be "pypi", "github", "streamlit" or "twitter"
-        name (str): Name of the PyPI package, GitHub repository or Twitter's username. Mandatory when using type="pypi" & type="twitter"
+        type (str): Badge type. Can be "pypi", "github", "streamlit", "twitter" or "buymeacoffee"
+        name (str): Name of the PyPI package, GitHub repository, Twitter's username or BuyMeaCoffee Creator's page name. 
+                    Mandatory when using type="pypi", type="twitter" & type="buymeacoffee"
         url (str): URL of the Streamlit Cloud app. Mandatory when using type="streamlit"
     """
 
@@ -63,6 +64,17 @@ def badge(type: str, name: str = None, url: str = None):
                 )
             )
         ) 
+        
+    if type == "buymeacoffee":
+        assert name, (
+            "You must provide a valid Buy-Me-a-Coffee page username" )
+        badge_html = str(
+            a(href=f"https://www.buymeacoffee.com/{name}")(
+                img(
+                    src=f"https://img.shields.io/badge/Buy%20me%20a%20coffee--yellow.svg?logo=buy-me-a-coffee&logoColor=orange&style=social"
+                )
+            )
+        )
 
     if badge_html is not None:
         st.write(badge_html, unsafe_allow_html=True)
@@ -82,12 +94,15 @@ def example_github():
     
 def example_twitter():
     badge(type="twitter", name="streamlit")
+    
+def example_buymeacoffee():
+    badge(type="buymeacoffee", name="andfanilo")
 
 
 __func__ = badge
 __title__ = "Badges"
-__desc__ = "Create custom badges (e.g. PyPI, Streamlit Cloud, GitHub, Twitter)"
+__desc__ = "Create custom badges (e.g. PyPI, Streamlit Cloud, GitHub, Twitter, Buy Me a Coffee)"
 __icon__ = "🏷️"
-__examples__ = [example_pypi, example_streamlit, example_github, example_twitter]
+__examples__ = [example_pypi, example_streamlit, example_github, example_twitter, example_buymeacoffee]
 __author__ = "Arnaud Miribel, ShruAgarwal"
 __experimental_playground__ = True
