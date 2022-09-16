@@ -64,12 +64,11 @@ def echo_expander(code_location="above", expander=True, label="Show code"):
 
     from streamlit import empty, source_util
     from streamlit.echo import _get_indent, _get_initial_indent
-    import streamlit as st_st
 
     if code_location == "above":
         placeholder = empty()
     else:
-        placeholder = st_st
+        placeholder = st
 
     try:
         # Get stack frame *before* running the echoed code. The frame's
