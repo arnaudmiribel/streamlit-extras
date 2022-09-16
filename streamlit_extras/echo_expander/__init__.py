@@ -46,7 +46,7 @@ def echo_expander(code_location="above", expander=True, label="Show code"):
     expander : Boolean
         Whether the code block should occur in an expander.
         If False, then same as `st.echo`
-        Defualt is True
+        Default is True
     label : Text
         If expander is True, then the label for the expander.
         Default is "Show code"
