@@ -57,7 +57,7 @@ def echo_expander(code_location="above", expander=True, label="Show code"):
     >>> with st.echo():
     >>>     st.write('This code will be printed')
 
-    >>> with st.echo(code_location="below", expander=True, label="Expand to see the code"):
+    >>> with st.echo_expander(code_location="below", expander=True, label="Expand to see the code"):
     >>>     st.write('This code will be printed in an expander')
 
     """
