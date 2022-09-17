@@ -239,11 +239,13 @@ for extra_name in extra_names:
                     with next(columns):
                         badge("buymeacoffee", name=buymeacoffee_username)
 
-            st.write("## Example usage")
+            st.write("## Usage")
 
             for example in examples:
                 import_code = f"""from streamlit_extras.{extra_name} import {func.__name__}\n\n"""
+                st.caption(f"↓ {example.__name__} · Input code")
                 st.code(import_code + get_function_body(example))
+                st.caption(f"↓ {example.__name__} · Output")
                 example(**inputs)
 
             st.write("")

@@ -1,13 +1,14 @@
+import contextlib
+import textwrap
+import traceback
+from typing import List
+
 import streamlit as st
 
 ###
 # Extension from echo() in streamlit/echo.py
 ###
 
-import contextlib
-import textwrap
-import traceback
-from typing import List
 
 @contextlib.contextmanager
 def echo_expander(code_location="above", expander=True, label="Show code"):
@@ -90,11 +91,11 @@ def echo_expander(code_location="above", expander=True, label="Show code"):
     except FileNotFoundError as err:
         placeholder.warning("Unable to display code. %s" % err)
 
+
 def example1():
     with echo_expander():
         import streamlit as st
 
-        st.title("Hello Streamlit!")
         st.markdown(
             """
             This component is a combination of `st.echo` and `st.expander`.
@@ -103,16 +104,26 @@ def example1():
             """
         )
 
+
 def example2():
-    with echo_expander(code_location="below", label="Simple Dataframe example"):
-        import streamlit as st
+    with echo_expander(
+        code_location="below", label="Simple Dataframe example"
+    ):
         import pandas as pd
-        df = pd.DataFrame([[1, 2, 3, 4, 5], [11, 12, 13, 14, 15]], columns=('A', 'B', 'C', 'D', 'E'))
+        import streamlit as st
+
+        df = pd.DataFrame(
+            [[1, 2, 3, 4, 5], [11, 12, 13, 14, 15]],
+            columns=("A", "B", "C", "D", "E"),
+        )
         st.dataframe(df)
+
 
 __func__ = echo_expander
 __title__ = "Echo Expander"
-__desc__ = "Execute code, and show the code that was executed, but in an expander."
+__desc__ = (
+    "Execute code, and show the code that was executed, but in an expander."
+)
 __icon__ = "🆒"
 __examples__ = [example1, example2]
-__experimental_playground__ = True
+__experimental_playground__ = False
