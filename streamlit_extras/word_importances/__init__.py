@@ -34,17 +34,17 @@ def format_word_importances(words: List[str], importances: List[float]) -> str:
     return html
 
 
-def _get_color(attr):
+def _get_color(importance: float):
     # clip values to prevent CSS errors (Values should be from [-1,1])
-    attr = max(-1, min(1, attr))
-    if attr > 0:
+    importance = max(-1, min(1, importance))
+    if importance > 0:
         hue = 120
         sat = 75
-        lig = 100 - int(50 * attr)
+        lig = 100 - int(50 * importance)
     else:
         hue = 0
         sat = 75
-        lig = 100 - int(-40 * attr)
+        lig = 100 - int(-40 * importance)
     return "hsl({}, {}%, {}%)".format(hue, sat, lig)
 
 
