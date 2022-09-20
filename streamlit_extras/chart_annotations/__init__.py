@@ -17,7 +17,7 @@ def get_data() -> pd.DataFrame:
 
 
 @st.experimental_memo(ttl=60 * 60 * 24)
-def get_chart(data):
+def get_chart(data: pd.DataFrame) -> alt.Chart:
     hover = alt.selection_single(
         fields=["date"],
         nearest=True,
