@@ -8,7 +8,7 @@ alt.themes.enable("streamlit")
 
 
 @st.experimental_memo
-def get_data():
+def get_data() -> pd.DataFrame:
     source = pd.read_csv(
         "https://raw.githubusercontent.com/vega/vega-datasets/next/data/stocks.csv"
     )
