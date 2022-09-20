@@ -34,7 +34,7 @@ def format_word_importances(words: List[str], importances: List[float]) -> str:
     return html
 
 
-def _get_color(importance: float):
+def _get_color(importance: float) -> str:
     # clip values to prevent CSS errors (Values should be from [-1,1])
     importance = max(-1, min(1, importance))
     if importance > 0:
