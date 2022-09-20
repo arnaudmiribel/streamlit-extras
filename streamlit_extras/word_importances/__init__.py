@@ -4,7 +4,7 @@ import streamlit as st
 
 
 def format_word_importances(words: List[str], importances: List[float]) -> str:
-    """Adds a background
+    """Adds a background color to each word based on its importance (float from -1 to 1)
 
     Args:
         words (list): List of words
