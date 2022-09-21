@@ -1,0 +1,21 @@
+[flake8]
+max-line-length = 88
+select =
+    E # pep8 errors
+    F # pyflakes errors
+    W # pep8 warnings
+    B # flake8-bugbear warnings
+ignore =
+    E501 # "Line lengths are recommended to be no greater than 79 characters"
+    E203 # "Whitespace before ':'": conflicts with black
+    W503 # "line break before binary operator": conflicts with black
+exclude =
+    .git
+    .vscode
+    .pytest_cache
+    .mypy_cache
+    .venv
+    .env
+    .direnv
+    streamlit_patches.py
+per-file-ignores =

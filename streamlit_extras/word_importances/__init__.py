@@ -15,9 +15,7 @@ def format_word_importances(words: List[str], importances: List[float]) -> str:
     """
     if importances is None or len(importances) == 0:
         return "<td></td>"
-    assert len(words) == len(
-        importances
-    ), "Words and importances but be of same length"
+    assert len(words) == len(importances), "Words and importances but be of same length"
 
     tags = ["<td>"]
     for word, importance in zip(words, importances[: len(words)]):
@@ -62,9 +60,7 @@ def example():
 
 __func__ = format_word_importances
 __title__ = "Word importances"
-__desc__ = (
-    "Highlight words based on their importances. Inspired from captum library."
-)
+__desc__ = "Highlight words based on their importances. Inspired from captum library."
 __icon__ = "❗"
 __examples__ = [example]
 __author__ = "Arnaud Miribel"

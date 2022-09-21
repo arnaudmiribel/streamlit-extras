@@ -212,9 +212,7 @@ def example():
 
 __func__ = rain
 __title__ = "Let emojis rain"
-__desc__ = (
-    "Use this to create more animations like st.balloons() and st.snow()"
-)
+__desc__ = "Use this to create more animations like st.balloons() and st.snow()"
 __icon__ = "🌧️"
 __examples__ = [example]
 __author__ = "Arnaud Miribel"

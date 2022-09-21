@@ -1,3 +1,0 @@
-streamlit
-Unidecode
-streamlit-keyup>=0.1.6

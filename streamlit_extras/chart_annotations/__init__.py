@@ -140,13 +140,9 @@ def example():
 
 __func__ = get_annotations_chart
 __title__ = "Chart annotations"
-__desc__ = (
-    "Add annotations to specific timestamps in your time series in Altair!"
-)
+__desc__ = "Add annotations to specific timestamps in your time series in Altair!"
 __icon__ = "⬇"
 __examples__ = [example]
 __author__ = "Arnaud Miribel"
-__github__repo__ = (
-    "https://github.com/streamlit/example-app-time-series-annotation"
-)
+__github__repo__ = "https://github.com/streamlit/example-app-time-series-annotation"
 __streamlit_cloud_url__ = "https://streamlit-example-app-time-series-annotati-streamlit-app-vmbrzi.streamlitapp.com/"

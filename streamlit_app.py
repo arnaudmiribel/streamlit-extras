@@ -27,8 +27,7 @@ def get_function_body(func):
     # Find the indentation of the first line
     indentation = len(first_line) - len(first_line.lstrip())
     return "".join(
-        [first_line[indentation:]]
-        + [line[indentation:] for line in source_lines]
+        [first_line[indentation:]] + [line[indentation:] for line in source_lines]
     )
 
 
@@ -147,6 +146,104 @@ extra_names = [
     if folder.is_dir() and folder.name != "__pycache__"
 ]
 
+
+def get_page_content(
+    extra_name: str,
+    icon: str,
+    title: str,
+    examples: List[Callable],
+    func: Callable,
+    inputs: dict,
+    desc: str,
+    author: str,
+    github_repo: Optional[str] = None,
+    streamlit_cloud_url: Optional[str] = None,
+    pypi_name: Optional[str] = None,
+    package_name: Optional[str] = None,
+    twitter_username: Optional[str] = None,
+    buymeacoffee_username: Optional[str] = None,
+    experimental_playground: bool = False,
+) -> Callable:
+    def page_content():
+        st.title(icon + " " + title)
+
+        if author:
+            st.caption(f"By: {author}")
+
+        st.write(desc)
+
+        # Social badges
+        if any(
+            [
+                github_repo,
+                streamlit_cloud_url,
+                pypi_name,
+                twitter_username,
+                buymeacoffee_username,
+            ]
+        ):
+            columns = cycle(st.columns(6))
+            if github_repo:
+                with next(columns):
+                    badge("github", name=github_repo)
+            if pypi_name:
+                with next(columns):
+                    badge("pypi", name=pypi_name)
+            if streamlit_cloud_url:
+                with next(columns):
+                    badge("streamlit", url=streamlit_cloud_url)
+            if twitter_username:
+                with next(columns):
+                    badge("twitter", name=twitter_username)
+            if buymeacoffee_username:
+                with next(columns):
+                    badge("buymeacoffee", name=buymeacoffee_username)
+
+        st.write("## Usage")
+
+        st.write(pypi_name)
+
+        if pypi_name:
+            st.write(
+                f"""
+                    Automatically installed when you install `streamlit-extras`, but
+                    you can also install it separately with
+                    ```
+                    pip install {pypi_name}
+                    ```
+                    """
+            )
+
+        for example in examples:
+            if pypi_name:
+                import_code = f"from {package_name} import {func.__name__}\n\n"
+            else:
+                import_code = (
+                    f"from streamlit_extras.{extra_name} import {func.__name__}\n\n"
+                )
+            st.caption(f"↓ {example.__name__} · Input code")
+            st.code(import_code + get_function_body(example))
+            st.caption(f"↓ {example.__name__} · Output")
+            example(**inputs)
+
+        st.write("")
+        st.write("## Docstring")
+        st.help(func)
+
+        with st.expander("Show me the full code!"):
+            st.code(inspect.getsource(func))
+
+        if experimental_playground:
+            st.write("")
+            st.write("## Playground 🛝 [experimental]")
+            st.caption("In this section, you can test the function live!")
+            function_explorer(func=func)
+
+    page_content.__name__ = title
+
+    return page_content
+
+
 settings = dict()
 
 for extra_name in extra_names:
@@ -164,107 +261,7 @@ for extra_name in extra_names:
     package_name = getattr(mod, "__package_name__", None)
     twitter_username = getattr(mod, "__twitter_username__", None)
     buymeacoffee_username = getattr(mod, "__buymeacoffee_username__", None)
-    experimental_playground = getattr(
-        mod, "__experimental_playground__", False
-    )
-
-    def get_page_content(
-        extra_name: str,
-        icon: str,
-        title: str,
-        examples: List[Callable],
-        func: Callable,
-        inputs: dict,
-        desc: str,
-        author: str,
-        github_repo: Optional[str] = None,
-        streamlit_cloud_url: Optional[str] = None,
-        pypi_name: Optional[str] = None,
-        package_name: Optional[str] = None,
-        twitter_username: Optional[str] = None,
-        buymeacoffee_username: Optional[str] = None,
-        experimental_playground: bool = False,
-    ) -> Callable:
-        def page_content():
-            st.title(icon + " " + title)
-
-            if author:
-                st.caption(f"By: {author}")
-
-            st.write(desc)
-
-            # Social badges
-            if any(
-                [
-                    github_repo,
-                    streamlit_cloud_url,
-                    pypi_name,
-                    twitter_username,
-                    buymeacoffee_username,
-                ]
-            ):
-                columns = cycle(st.columns(6))
-                if github_repo:
-                    with next(columns):
-                        badge("github", name=github_repo)
-                if pypi_name:
-                    with next(columns):
-                        badge("pypi", name=pypi_name)
-                if streamlit_cloud_url:
-                    with next(columns):
-                        badge("streamlit", url=streamlit_cloud_url)
-                if twitter_username:
-                    with next(columns):
-                        badge("twitter", name=twitter_username)
-                if buymeacoffee_username:
-                    with next(columns):
-                        badge("buymeacoffee", name=buymeacoffee_username)
-
-            st.write("## Usage")
-
-            if pypi_name:
-                st.write(
-                    f"""
-                    Automatically installed when you install `streamlit-extras`, but
-                    you can also install it separately with
-                    ```
-                    pip install {pypi_name}
-                    ```
-                    """
-                )
-
-            for example in examples:
-                if pypi_name:
-                    import_code = (
-                        f"from {package_name} import {func.__name__}\n\n"
-                    )
-                else:
-                    import_code = (
-                        f"from streamlit_extras.{extra_name} import"
-                        f" {func.__name__}\n\n"
-                    )
-                st.caption(f"↓ {example.__name__} · Input code")
-                st.code(import_code + get_function_body(example))
-                st.caption(f"↓ {example.__name__} · Output")
-                example(**inputs)
-                st.write("")
-
-            st.write("")
-            st.write("## Docstring")
-            st.help(func)
-
-            with st.expander("Show me the full code!"):
-                st.code(inspect.getsource(func))
-
-            if experimental_playground:
-                st.write("")
-                st.write(f"## Playground 🛝 [experimental]")
-                st.caption("In this section, you can test the function live!")
-                function_explorer(func=func)
-
-        page_content.__name__ = title
-
-        return page_content
+    experimental_playground = getattr(mod, "__experimental_playground__", False)
 
     settings[extra_name] = dict(
         path=get_page_content(
