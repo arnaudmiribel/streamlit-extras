@@ -1,7 +1,6 @@
 import contextlib
 import textwrap
 import traceback
-from typing import List
 
 import streamlit as st
 
@@ -40,7 +39,6 @@ def echo_expander(code_location="above", expander=True, label="Show code"):
     """
 
     from streamlit import empty, source_util
-    from streamlit.echo import _get_indent, _get_initial_indent
 
     if code_location == "above":
         placeholder = empty()
@@ -118,7 +116,7 @@ def example2():
 __func__ = echo_expander
 __title__ = "Echo Expander"
 __desc__ = "Execute code, and show the code that was executed, but in an expander."
-__author__ = "Brian Hess"
 __icon__ = "🆒"
+__author__ = "Brian Hess"
 __examples__ = [example1, example2]
 __experimental_playground__ = False

@@ -10,9 +10,7 @@ def switch_page(page_name: str):
 
     page_name = standardize_name(page_name)
 
-    pages = get_pages(
-        "streamlit_app.py"
-    )  # OR whatever your main page is called
+    pages = get_pages("streamlit_app.py")  # OR whatever your main page is called
 
     for page_hash, config in pages.items():
         if standardize_name(config["page_name"]) == page_name:
@@ -23,13 +21,9 @@ def switch_page(page_name: str):
                 )
             )
 
-    page_names = [
-        standardize_name(config["page_name"]) for config in pages.values()
-    ]
+    page_names = [standardize_name(config["page_name"]) for config in pages.values()]
 
-    raise ValueError(
-        f"Could not find page {page_name}. Must be one of {page_names}"
-    )
+    raise ValueError(f"Could not find page {page_name}. Must be one of {page_names}")
 
 
 def example():

@@ -69,5 +69,7 @@ __icon__ = "🚩"
 __examples__ = [example]
 __inputs__ = dict(df=df)
 __author__ = "dataprofessor"
-__streamlit_cloud_url__ = "https://dataprofessor-st-demo-image-table-streamlit-app-1x7rnd.streamlitapp.com/"
+__streamlit_cloud_url__ = (
+    "https://dataprofessor-st-demo-image-table-streamlit-app-1x7rnd.streamlitapp.com/"
+)
 __github_repo__ = "dataprofessor/st-demo-image-table"

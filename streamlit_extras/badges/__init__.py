@@ -9,7 +9,7 @@ def badge(type: str, name: str = None, url: str = None):
 
     Args:
         type (str): Badge type. Can be "pypi", "github", "streamlit", "twitter" or "buymeacoffee"
-        name (str): Name of the PyPI package, GitHub repository, Twitter's username or BuyMeaCoffee Creator's page name. 
+        name (str): Name of the PyPI package, GitHub repository, Twitter's username or BuyMeaCoffee Creator's page name.
                     Mandatory when using type="pypi", type="twitter" & type="buymeacoffee"
         url (str): URL of the Streamlit Cloud app. Mandatory when using type="streamlit"
     """
@@ -53,25 +53,23 @@ def badge(type: str, name: str = None, url: str = None):
                 )
             )
         )
-        
+
     if type == "twitter":
-        assert name, (
-            "You must provide a valid twitter username" )
+        assert name, "You must provide a valid twitter username"
         badge_html = str(
             a(href=f"https://twitter.com/intent/follow?screen_name={name}")(
                 img(
                     src=f"https://img.shields.io/twitter/follow/{name}?style=social&logo=twitter"
                 )
             )
-        ) 
-        
+        )
+
     if type == "buymeacoffee":
-        assert name, (
-            "You must provide a valid Buy-Me-a-Coffee page username" )
+        assert name, "You must provide a valid Buy-Me-a-Coffee page username"
         badge_html = str(
             a(href=f"https://www.buymeacoffee.com/{name}")(
                 img(
-                    src=f"https://img.shields.io/badge/Buy%20me%20a%20coffee--yellow.svg?logo=buy-me-a-coffee&logoColor=orange&style=social"
+                    src="https://img.shields.io/badge/Buy%20me%20a%20coffee--yellow.svg?logo=buy-me-a-coffee&logoColor=orange&style=social"
                 )
             )
         )
@@ -91,10 +89,12 @@ def example_streamlit():
 
 def example_github():
     badge(type="github", name="streamlit/streamlit")
-    
+
+
 def example_twitter():
     badge(type="twitter", name="streamlit")
-    
+
+
 def example_buymeacoffee():
     badge(type="buymeacoffee", name="andfanilo")
 
@@ -103,6 +103,12 @@ __func__ = badge
 __title__ = "Badges"
 __desc__ = "Create custom badges (e.g. PyPI, Streamlit Cloud, GitHub, Twitter, Buy Me a Coffee)"
 __icon__ = "🏷️"
-__examples__ = [example_pypi, example_streamlit, example_github, example_twitter, example_buymeacoffee]
+__examples__ = [
+    example_pypi,
+    example_streamlit,
+    example_github,
+    example_twitter,
+    example_buymeacoffee,
+]
 __author__ = "Arnaud Miribel, ShruAgarwal"
 __experimental_playground__ = True
