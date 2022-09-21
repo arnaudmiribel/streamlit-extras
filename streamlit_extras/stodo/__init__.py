@@ -76,4 +76,3 @@ __examples__ = [example]
 __author__ = "Arnaud Miribel"
 __github_repo__ = "arnaudmiribel/stodo"
 __streamlit_cloud_url__ = "http://stodoo.streamlitapp.com"
-__pypi_name__ = None

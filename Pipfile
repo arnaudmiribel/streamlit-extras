@@ -11,6 +11,7 @@ streamlit-keyup = ">=0.1.6"
 st-annotated-text = "*"
 
 [dev-packages]
+pytest = "*"
 
 [requires]
 python_version = "3.9"

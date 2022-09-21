@@ -116,7 +116,7 @@ def example2():
 __func__ = echo_expander
 __title__ = "Echo Expander"
 __desc__ = "Execute code, and show the code that was executed, but in an expander."
-__author__ = "Brian Hess"
 __icon__ = "🆒"
+__author__ = "Brian Hess"
 __examples__ = [example1, example2]
 __experimental_playground__ = False

@@ -108,5 +108,3 @@ __desc__ = "Give a UI to any Python function! Very alpha though"
 __icon__ = "👩‍🚀"
 __examples__ = [example]
 __author__ = "Arnaud Miribel"
-__streamlit_cloud_url__ = None
-__github_repo__ = None
