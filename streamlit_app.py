@@ -27,7 +27,8 @@ def get_function_body(func):
     # Find the indentation of the first line
     indentation = len(first_line) - len(first_line.lstrip())
     return "".join(
-        [first_line[indentation:]] + [line[indentation:] for line in source_lines]
+        [first_line[indentation:]]
+        + [line[indentation:] for line in source_lines]
     )
 
 
@@ -163,7 +164,9 @@ for extra_name in extra_names:
     package_name = getattr(mod, "__package_name__", None)
     twitter_username = getattr(mod, "__twitter_username__", None)
     buymeacoffee_username = getattr(mod, "__buymeacoffee_username__", None)
-    experimental_playground = getattr(mod, "__experimental_playground__", False)
+    experimental_playground = getattr(
+        mod, "__experimental_playground__", False
+    )
 
     def get_page_content(
         extra_name: str,
@@ -219,8 +222,6 @@ for extra_name in extra_names:
 
             st.write("## Usage")
 
-            st.write(pypi_name)
-
             if pypi_name:
                 st.write(
                     f"""
@@ -234,15 +235,19 @@ for extra_name in extra_names:
 
             for example in examples:
                 if pypi_name:
-                    import_code = f"from {package_name} import {func.__name__}\n\n"
+                    import_code = (
+                        f"from {package_name} import {func.__name__}\n\n"
+                    )
                 else:
                     import_code = (
-                        f"from streamlit_extras.{extra_name} import {func.__name__}\n\n"
+                        f"from streamlit_extras.{extra_name} import"
+                        f" {func.__name__}\n\n"
                     )
                 st.caption(f"↓ {example.__name__} · Input code")
                 st.code(import_code + get_function_body(example))
                 st.caption(f"↓ {example.__name__} · Output")
                 example(**inputs)
+                st.write("")
 
             st.write("")
             st.write("## Docstring")
