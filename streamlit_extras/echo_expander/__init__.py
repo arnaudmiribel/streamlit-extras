@@ -1,7 +1,6 @@
 import contextlib
 import textwrap
 import traceback
-from typing import List
 
 import streamlit as st
 
@@ -40,7 +39,6 @@ def echo_expander(code_location="above", expander=True, label="Show code"):
     """
 
     from streamlit import empty, source_util
-    from streamlit.echo import _get_indent, _get_initial_indent
 
     if code_location == "above":
         placeholder = empty()

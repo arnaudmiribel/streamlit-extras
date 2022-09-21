@@ -1,5 +1,5 @@
 import inspect
-from typing import Callable
+from typing import Any, Callable, Dict
 
 import pandas as pd
 import streamlit as st
@@ -32,7 +32,7 @@ def function_explorer(func: Callable):
     """
 
     args = get_args(func)
-    inputs = dict()
+    inputs: Dict[str, Any] = dict()
 
     st.write("#### Inputs")
     st.write(

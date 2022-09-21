@@ -52,7 +52,6 @@ line-length = 88
 files = [
   "**/*.py",
 ]
-exclude = "streamlit_patches.py"
 follow_imports = "silent"
 ignore_missing_imports = true
 scripts_are_modules = true

@@ -1,4 +1,4 @@
-from typing import Literal
+from typing import Callable, Dict, Literal
 
 import streamlit.components.v1 as components
 import validators
@@ -214,7 +214,7 @@ def tagmycode_snippet(link, height=600, width=950, scrolling=True):
     )
 
 
-_SUPPORTED_PLATORMS = {
+_SUPPORTED_PLATORMS: Dict[str, Callable] = {
     "github": github_gist,
     "gitlab": gitlab_snippet,
     "codepen": codepen_snippet,

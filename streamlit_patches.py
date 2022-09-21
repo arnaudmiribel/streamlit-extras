@@ -5,7 +5,15 @@ from typing import Any, Callable, Dict, List, Optional, Union
 
 import requests
 from streamlit import *
-from streamlit import __version__, _get_script_run_ctx, set_page_config, source_util
+from streamlit import (
+    StopException,
+    __version__,
+    _get_script_run_ctx,
+    error,
+    experimental_singleton,
+    set_page_config,
+    source_util,
+)
 from streamlit.commands.page_config import get_random_emoji
 from streamlit.runtime.scriptrunner.script_runner import (
     LOGGER,
@@ -191,7 +199,7 @@ def _run_script(self, rerun_data: RerunData) -> None:
             script_path = current_page_info["script_path"]
             extra_script_path = current_page_info.get("real_script_path")
         else:
-            script_path = main_script_path
+            script_path = self._main_script_path
             extra_script_path = None
 
             # At this point, we know that either
