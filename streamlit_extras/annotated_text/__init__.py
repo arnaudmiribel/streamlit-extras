@@ -1,4 +1,4 @@
-from annotated_text import annotated_text, annotation
+from annotated_text import annotated_text
 
 
 def example_1():
