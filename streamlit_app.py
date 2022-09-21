@@ -3,7 +3,7 @@ import random
 from importlib import import_module
 from itertools import cycle, dropwhile
 from pathlib import Path
-from typing import Callable, List
+from typing import Callable, List, Optional
 
 import streamlit_patches as st
 from streamlit_extras.badges import badge
@@ -155,37 +155,17 @@ for extra_name in extra_names:
     icon = mod.__icon__
     func = mod.__func__
     examples = mod.__examples__
-    if hasattr(mod, "__inputs__"):
-        inputs = mod.__inputs__
-    else:
-        inputs = dict()
-
-    desc = mod.__desc__ if hasattr(mod, "__desc__") else dict()
-    inputs = mod.__inputs__ if hasattr(mod, "__inputs__") else dict()
-    author = mod.__author__ if hasattr(mod, "__author__") else None
-    github_repo = (
-        mod.__github_repo__ if hasattr(mod, "__github_repo__") else None
-    )
-    streamlit_cloud_url = (
-        mod.__streamlit_cloud_url__
-        if hasattr(mod, "__streamlit_cloud_url__")
-        else None
-    )
-    pypi_name = mod.__pypi_name__ if hasattr(mod, "__pypi_name__") else None
-    twitter_username = (
-        mod.__twitter_username__
-        if hasattr(mod, "__twitter_username__")
-        else None
-    )
-    buymeacoffee_username = (
-        mod.__buymeacoffee_username__
-        if hasattr(mod, "__buymeacoffee_username__")
-        else None
-    )
-    experimental_playground = (
-        mod.__experimental_playground__
-        if hasattr(mod, "__experimental_playground__")
-        else False
+    inputs = getattr(mod, "__inputs__", dict())
+    desc = mod.__desc__
+    author = mod.__author__
+    github_repo = getattr(mod, "__github_repo__", None)
+    streamlit_cloud_url = getattr(mod, "__streamlit_cloud_url__", None)
+    pypi_name = getattr(mod, "__pypi_name__", None)
+    package_name = getattr(mod, "__package_name__", None)
+    twitter_username = getattr(mod, "__twitter_username__", None)
+    buymeacoffee_username = getattr(mod, "__buymeacoffee_username__", None)
+    experimental_playground = getattr(
+        mod, "__experimental_playground__", False
     )
 
     def get_page_content(
@@ -197,12 +177,13 @@ for extra_name in extra_names:
         inputs: dict,
         desc: str,
         author: str,
-        github_repo: str,
-        streamlit_cloud_url: str,
-        pypi_name: str,
-        twitter_username: str,
-        buymeacoffee_username: str,
-        experimental_playground: bool,
+        github_repo: Optional[str] = None,
+        streamlit_cloud_url: Optional[str] = None,
+        pypi_name: Optional[str] = None,
+        package_name: Optional[str] = None,
+        twitter_username: Optional[str] = None,
+        buymeacoffee_username: Optional[str] = None,
+        experimental_playground: bool = False,
     ) -> Callable:
         def page_content():
             st.title(icon + " " + title)
@@ -241,12 +222,32 @@ for extra_name in extra_names:
 
             st.write("## Usage")
 
+            if pypi_name:
+                st.write(
+                    f"""
+                    Automatically installed when you install `streamlit-extras`, but
+                    you can also install it separately with
+                    ```
+                    pip install {pypi_name}
+                    ```
+                    """
+                )
+
             for example in examples:
-                import_code = f"""from streamlit_extras.{extra_name} import {func.__name__}\n\n"""
+                if pypi_name:
+                    import_code = (
+                        f"from {package_name} import {func.__name__}\n\n"
+                    )
+                else:
+                    import_code = (
+                        f"from streamlit_extras.{extra_name} import"
+                        f" {func.__name__}\n\n"
+                    )
                 st.caption(f"↓ {example.__name__} · Input code")
                 st.code(import_code + get_function_body(example))
                 st.caption(f"↓ {example.__name__} · Output")
                 example(**inputs)
+                st.write("")
 
             st.write("")
             st.write("## Docstring")
@@ -267,20 +268,21 @@ for extra_name in extra_names:
 
     settings[extra_name] = dict(
         path=get_page_content(
-            extra_name,
-            icon,
-            title,
-            examples,
-            func,
-            inputs,
-            desc,
-            author,
-            github_repo,
-            streamlit_cloud_url,
-            pypi_name,
-            twitter_username,
-            buymeacoffee_username,
-            experimental_playground,
+            extra_name=extra_name,
+            icon=icon,
+            title=title,
+            examples=examples,
+            func=func,
+            inputs=inputs,
+            desc=desc,
+            author=author,
+            github_repo=github_repo,
+            streamlit_cloud_url=streamlit_cloud_url,
+            pypi_name=pypi_name,
+            package_name=package_name,
+            twitter_username=twitter_username,
+            buymeacoffee_username=buymeacoffee_username,
+            experimental_playground=experimental_playground,
         ),
         name=title,
         icon=icon,
