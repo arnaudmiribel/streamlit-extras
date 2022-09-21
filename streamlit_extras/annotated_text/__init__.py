@@ -2,6 +2,8 @@ from annotated_text import annotated_text, annotation
 
 
 def example_1():
+    from annotated_text import annotated_text
+
     annotated_text(
         "This ",
         ("is", "verb", "#8ef"),
@@ -18,6 +20,8 @@ def example_1():
 
 
 def example_2():
+    from annotated_text import annotated_text, annotation
+
     annotated_text(
         "Hello ",
         annotation("world!", "noun", color="#8ef", border="1px dashed red"),
