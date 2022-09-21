@@ -1,5 +1,6 @@
 from annotated_text import annotated_text, annotation
 
+
 def example_1():
     annotated_text(
         "This ",

@@ -25,3 +25,35 @@ keywords = [
 [project.urls]
 "Homepage" = "https://github.com/arnaudmiribel/streamlit-extras"
 "Bug Tracker" = "https://github.com/arnaudmiribel/streamlit-extras/issues"
+
+[tool.isort]
+profile = "black"
+line_length = 88
+skip = ["./.venv", "./direnv", ".env"]
+
+[tool.black]
+exclude = '''
+(
+  /(
+      \.vscode
+    | \.git
+    | \.pytest_cache
+    | \.mypy_cache
+    | \.venv
+    | \.env
+    | \.direnv
+  )/
+)
+'''
+include = '\.pyi?$'
+line-length = 88
+
+[tool.mypy]
+files = [
+  "**/*.py",
+]
+exclude = "streamlit_patches.py"
+follow_imports = "silent"
+ignore_missing_imports = true
+scripts_are_modules = true
+python_version = 3.9

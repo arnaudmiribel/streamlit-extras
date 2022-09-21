@@ -1,5 +1,4 @@
 import inspect
-import random
 from typing import Callable
 
 import pandas as pd
@@ -55,32 +54,27 @@ def function_explorer(func: Callable):
         else:
             label += f" ({type_hint.__name__})"
             if type_hint == int:
-                default = get_arg_from_session_state(
-                    func.__name__, argument
-                ) or (default if not is_empty(default) else 12)
-                inputs[argument] = st.number_input(
-                    label, step=1, value=default
+                default = get_arg_from_session_state(func.__name__, argument) or (
+                    default if not is_empty(default) else 12
                 )
+                inputs[argument] = st.number_input(label, step=1, value=default)
             elif type_hint == float:
                 default = (
-                    get_arg_from_session_state(func.__name__, argument)
-                    or default
+                    get_arg_from_session_state(func.__name__, argument) or default
                     if not is_empty(default)
                     else 12.0
                 )
                 inputs[argument] = st.number_input(label, value=default)
             elif type_hint == str:
                 default = (
-                    get_arg_from_session_state(func.__name__, argument)
-                    or default
+                    get_arg_from_session_state(func.__name__, argument) or default
                     if not is_empty(default)
                     else "Sample string"
                 )
                 inputs[argument] = st_keyup(label, value=default)
             elif type_hint == bool:
                 default = (
-                    get_arg_from_session_state(func.__name__, argument)
-                    or default
+                    get_arg_from_session_state(func.__name__, argument) or default
                     if not is_empty(default)
                     else True
                 )
@@ -90,9 +84,7 @@ def function_explorer(func: Callable):
                     func.__name__, argument
                 ) or pd.DataFrame(["abcde"])
             else:
-                st.warning(
-                    f"`function_explorer` does not support type {type_hint}"
-                )
+                st.warning(f"`function_explorer` does not support type {type_hint}")
 
     st.write("#### Output")
     func(**inputs)
@@ -102,9 +94,7 @@ def function_explorer(func: Callable):
 
 
 def example():
-    def foo(
-        age: int, name: str, image_url: str = "http://placekitten.com/120/120"
-    ):
+    def foo(age: int, name: str, image_url: str = "http://placekitten.com/120/120"):
         st.write(f"Hey! My name is {name} and I'm {age} years old")
         st.write("Here's a picture")
         st.image(image_url)

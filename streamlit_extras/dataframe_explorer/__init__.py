@@ -80,9 +80,7 @@ def dataframe_explorer(df: pd.DataFrame) -> pd.DataFrame:
                     key=f"{random_key_base}_{column}",
                 )
                 if len(filters[column]) == 2:
-                    filters[column] = tuple(
-                        map(pd.to_datetime, filters[column])
-                    )
+                    filters[column] = tuple(map(pd.to_datetime, filters[column]))
                     start_date, end_date = filters[column]
                     df = df.loc[df[column].between(start_date, end_date)]
             else:
@@ -97,9 +95,7 @@ def dataframe_explorer(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def generate_fake_dataframe(
-    size, cols, col_names=None, intervals=None, seed=None
-):
+def generate_fake_dataframe(size, cols, col_names=None, intervals=None, seed=None):
     from itertools import cycle
 
     import numpy as np
@@ -197,9 +193,7 @@ def generate_fake_dataframe(
         )
     elif col_names is None:
         suffix = {"c": "cat", "i": "int", "f": "float", "d": "date"}
-        col_names = [
-            f"column_{str(i)}_{suffix.get(col)}" for i, col in enumerate(cols)
-        ]
+        col_names = [f"column_{str(i)}_{suffix.get(col)}" for i, col in enumerate(cols)]
 
     if isinstance(intervals, list):
         assert len(intervals) == len(cols), (
@@ -217,9 +211,9 @@ def generate_fake_dataframe(
     for col, col_name, interval in zip(cols, col_names, intervals):
         if interval is None:
             interval = default_intervals[col]
-        assert (
-            len(interval) == 2 and isinstance(interval, tuple)
-        ) or isinstance(interval, list), (
+        assert (len(interval) == 2 and isinstance(interval, tuple)) or isinstance(
+            interval, list
+        ), (
             f"This interval {interval} is neither a tuple of two elements nor"
             " a list of strings."
         )

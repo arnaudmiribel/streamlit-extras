@@ -22,14 +22,10 @@ def keyboard_to_url(
     Either give key and we'll try to find its associated key_code. Or directly
     provide the key_code."""
 
-    assert (
-        key or key_code
-    ) and url, """You must provide key or key_code, and a URL"""
+    assert (key or key_code) and url, """You must provide key or key_code, and a URL"""
 
     if key:
-        key_code_js_row = (
-            f"const keyCode = '{key}'.toUpperCase().charCodeAt(0);"
-        )
+        key_code_js_row = f"const keyCode = '{key}'.toUpperCase().charCodeAt(0);"
     if key_code:
         key_code_js_row = f"const keyCode = {key_code};"
 

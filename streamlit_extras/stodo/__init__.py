@@ -19,8 +19,7 @@ def to_do(st_commands, checkbox_id):
                 if cmd == st.write:
                     text = args[0]
                     cols[1].write(
-                        "<s style='color: rgba(49, 51, 63, 0.4)'>"
-                        f" {text} </s>",
+                        "<s style='color: rgba(49, 51, 63, 0.4)'>" f" {text} </s>",
                         unsafe_allow_html=True,
                     )
                 else:
