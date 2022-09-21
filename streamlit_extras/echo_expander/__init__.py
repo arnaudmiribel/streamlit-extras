@@ -59,18 +59,22 @@ def echo_expander(code_location="above", expander=True, label="Show code"):
 
         # Use ast to parse the Python file and find the code block to display
         import ast
+
         ap = ast.parse("".join(source_lines))
 
         ap_map = {}
+
         def map_ast(a):
-            if not hasattr(a, 'body'):
+            if not hasattr(a, "body"):
                 return
             for b in a.body:
                 ap_map[b.lineno] = b
                 map_ast(b)
 
         map_ast(ap)
-        lines_to_display = source_lines[ap_map[start_line].body[0].lineno - 1 : ap_map[start_line].end_lineno]
+        lines_to_display = source_lines[
+            ap_map[start_line].body[0].lineno - 1 : ap_map[start_line].end_lineno
+        ]
         code_string = textwrap.dedent("".join(lines_to_display))
 
         # Run the echoed code...
@@ -100,9 +104,7 @@ def example1():
 
 
 def example2():
-    with echo_expander(
-        code_location="below", label="Simple Dataframe example"
-    ):
+    with echo_expander(code_location="below", label="Simple Dataframe example"):
         import pandas as pd
         import streamlit as st
 
@@ -115,9 +117,8 @@ def example2():
 
 __func__ = echo_expander
 __title__ = "Echo Expander"
-__desc__ = (
-    "Execute code, and show the code that was executed, but in an expander."
-)
+__desc__ = "Execute code, and show the code that was executed, but in an expander."
+__author__ = "Brian Hess"
 __icon__ = "🆒"
 __examples__ = [example1, example2]
 __experimental_playground__ = False

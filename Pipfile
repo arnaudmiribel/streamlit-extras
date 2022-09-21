@@ -8,6 +8,7 @@ streamlit = ">=1.12.0"
 htbuilder = "*"
 silly = "*"
 streamlit-keyup = ">=0.1.6"
+st-annotated-text = "*"
 
 [dev-packages]
 
