@@ -1,4 +1,0 @@
-streamlit
-Unidecode
-streamlit-keyup>=0.1.6
-st-annotated-text
