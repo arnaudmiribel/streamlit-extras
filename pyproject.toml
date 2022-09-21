@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0", "streamlit==1.11.1", "htbuilder", "st-annotated-text"]
+requires = ["setuptools>=61.0", "streamlit==1.11.1"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -21,6 +21,7 @@ keywords = [
     "ui",
     "data",
 ]
+dependencies = ["htbuilder", "st-annotated-text", "streamlit-embedcode"]
 
 [project.urls]
 "Homepage" = "https://github.com/arnaudmiribel/streamlit-extras"
