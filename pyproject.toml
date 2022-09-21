@@ -21,7 +21,12 @@ keywords = [
     "ui",
     "data",
 ]
-dependencies = ["htbuilder", "st-annotated-text", "streamlit-embedcode"]
+dependencies = [
+  "htbuilder",
+  "st-annotated-text",
+  "streamlit-embedcode",
+  "streamlit-keyup"
+]
 
 [project.urls]
 "Homepage" = "https://github.com/arnaudmiribel/streamlit-extras"
