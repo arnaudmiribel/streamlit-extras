@@ -5,6 +5,7 @@ from validators import url as validate_url
 GITHUB_ICON = "https://cdn-icons-png.flaticon.com/512/25/25231.png"
 NOTION_ICON = "https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png"
 TWITTER_ICON = "https://seeklogo.com/images/T/twitter-icon-circle-blue-logo-0902F48837-seeklogo.com.png"
+STREAMLIT_ICON = "https://aws1.discourse-cdn.com/business7/uploads/streamlit/original/2X/f/f0d0d26db1f2d99da8472951c60e5a1b782eb6fe.png"
 
 
 def mention(label: str, url: str, icon: str = "🔗", write: bool = True):
@@ -24,6 +25,8 @@ def mention(label: str, url: str, icon: str = "🔗", write: bool = True):
         icon = NOTION_ICON
     elif icon.lower() == "twitter":
         icon = TWITTER_ICON
+    elif icon.lower() == "streamlit":
+        icon = STREAMLIT_ICON
 
     if validate_url(icon):
         icon_html = img(
@@ -70,7 +73,8 @@ a:hover {
 
 def example_1():
     mention(
-        label="Default mention",
+        label="An awesome Streamlit App",
+        icon="streamlit",  # Some icons are available... like Streamlit!
         url="https://extras.streamlitapp.com",
     )
 
@@ -78,7 +82,7 @@ def example_1():
 def example_2():
     mention(
         label="streamlit-extras",
-        icon="🪢",
+        icon="🪢",  # You can also just use an emoji
         url="https://github.com/arnaudmiribel/streamlit-extras",
     )
 
@@ -86,7 +90,7 @@ def example_2():
 def example_3():
     mention(
         label="example-app-cv-model",
-        icon="github",
+        icon="github",  # GitHub is also featured!
         url="https://github.com/streamlit/example-app-cv-model",
     )
 
@@ -94,16 +98,16 @@ def example_3():
 def example_4():
     mention(
         label="That page somewhere in Notion",
-        icon="notion",
+        icon="notion",  # Notion is also featured!
         url="https://notion.so",
     )
 
 
 def example_5():
     inline_mention = mention(
-        label="example-app-cv-model",
-        icon="github",
-        url="https://github.com/streamlit/example-app-cv-model",
+        label="streamlit",
+        icon="twitter",  # Twitter is also featured!
+        url="https://www.twitter.com/streamlit",
         write=False,
     )
 
