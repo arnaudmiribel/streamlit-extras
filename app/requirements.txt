@@ -1,0 +1,4 @@
+# These are the requirements for the gallery app
+streamlit==1.12.2
+streamlit-keyup
+streamlit-extras

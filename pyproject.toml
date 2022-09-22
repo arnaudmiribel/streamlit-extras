@@ -19,11 +19,10 @@ keywords = [
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.9.7 || >3.9.7,<4.0" # Apparently streamlit doesn't work with 3.9.7
-streamlit = "^1.12.2"
+streamlit = "^1.0.0"
 htbuilder = "^0.6.0"
 st-annotated-text = "^3.0.0"
 streamlit-embedcode = "^0.1.2"
-streamlit-keyup = "^0.1.9"
 protobuf = "3.19.4" # Should be unnecessary when next streamlit patch is released
 
 [tool.poetry.group.dev.dependencies]

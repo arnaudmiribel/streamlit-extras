@@ -1,11 +1,13 @@
 import inspect
+import pkgutil
 import random
 from importlib import import_module
 from itertools import cycle, dropwhile
-from pathlib import Path
 from typing import Callable, List, Optional
 
 import streamlit_patches as st
+
+import streamlit_extras
 from streamlit_extras.badges import badge
 from streamlit_extras.function_explorer import function_explorer
 from streamlit_extras.switch_page_button import switch_page
@@ -139,12 +141,9 @@ def get_empty():
 
 st.page(get_empty, "  ", " ")
 
-PATH_TO_EXTRAS = "streamlit_extras"
-extra_names = [
-    folder.name
-    for folder in Path(PATH_TO_EXTRAS).glob("*")
-    if folder.is_dir() and folder.name != "__pycache__"
-]
+EXTRAS_LIBRARY_NAME = "streamlit_extras"
+
+extra_names = [name for (_, name, _) in pkgutil.iter_modules(streamlit_extras.__path__)]
 
 
 def get_page_content(
@@ -244,8 +243,8 @@ def get_page_content(
 
 settings = dict()
 
-for extra_name in extra_names:
-    mod = import_module(f"{PATH_TO_EXTRAS}.{extra_name}")
+for extra_name in sorted(extra_names):
+    mod = import_module(f"{EXTRAS_LIBRARY_NAME}.{extra_name}")
     title = mod.__title__
     icon = mod.__icon__
     func = mod.__func__
