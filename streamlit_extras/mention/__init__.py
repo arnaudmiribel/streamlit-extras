@@ -125,3 +125,4 @@ __examples__ = [
     example_5,
 ]
 __author__ = "Arnaud Miribel"
+__experimental_playground__ = True
