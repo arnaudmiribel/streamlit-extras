@@ -1,4 +1,4 @@
-import streamlit_patches as st
+import streamlit as st
 
 
 def to_do(st_commands, checkbox_id):

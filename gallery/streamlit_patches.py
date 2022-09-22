@@ -73,7 +73,7 @@ def page(
     """
 
     # TODO -- FIX THIS
-    main_script_path = "streamlit_app.py"
+    main_script_path = "gallery/streamlit_app.py"
 
     main_page_hash = calc_md5(main_script_path)
 

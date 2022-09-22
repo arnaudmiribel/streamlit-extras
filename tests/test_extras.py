@@ -1,24 +1,19 @@
+import pkgutil
 from importlib import import_module
-from pathlib import Path
 from typing import List
 
 import pytest
 
-PATH_TO_EXTRAS = "streamlit_extras"
+import streamlit_extras
 
 
 def get_extras() -> List[str]:
-    extra_names = [
-        folder.name
-        for folder in Path(PATH_TO_EXTRAS).glob("*")
-        if folder.is_dir() and folder.name != "__pycache__"
-    ]
-    return extra_names
+    return [extra.name for extra in pkgutil.iter_modules(streamlit_extras.__path__)]
 
 
 @pytest.mark.parametrize("extra", get_extras())
 def test_extra_attributes(extra: str):
-    mod = import_module(f"{PATH_TO_EXTRAS}.{extra}")
+    mod = import_module(f"streamlit_extras.{extra}")
     assert type(mod.__title__) == str
     assert type(mod.__icon__) == str
     assert type(mod.__desc__) == str
