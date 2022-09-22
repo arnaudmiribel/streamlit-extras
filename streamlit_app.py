@@ -201,8 +201,6 @@ def get_page_content(
 
         st.write("## Usage")
 
-        st.write(pypi_name)
-
         if pypi_name:
             st.write(
                 f"""
@@ -219,7 +217,7 @@ def get_page_content(
                 import_code = f"from {package_name} import {func.__name__}\n\n"
             else:
                 import_code = (
-                    f"from streamlit_extras.{extra_name} import {func.__name__}\n\n"
+                    f"from streamlit_extras.{extra_name} import" f" {func.__name__}\n\n"
                 )
             st.caption(f"↓ {example.__name__} · Input code")
             st.code(import_code + get_function_body(example))
