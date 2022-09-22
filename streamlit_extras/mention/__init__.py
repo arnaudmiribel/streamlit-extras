@@ -95,7 +95,7 @@ def example_4():
     mention(
         label="That page somewhere in Notion",
         icon="notion",
-        url="notion.so",
+        url="https://notion.so",
     )
 
 
