@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Callable, List, Optional
 
 import streamlit_patches as st
+
 from streamlit_extras.badges import badge
 from streamlit_extras.function_explorer import function_explorer
 from streamlit_extras.switch_page_button import switch_page

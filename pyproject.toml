@@ -9,7 +9,7 @@ license = "Apache 2.0"
 description = "A library to discover, try, install and share Streamlit extras"
 authors = ["Arnaud Miribel <arnaudmiribel@gmail.com>"]
 readme = "README.md"
-packages = [{include = "streamlit_extras"}]
+packages = [{include = "streamlit_extras", from = "src"}]
 keywords = [
     "python",
     "streamlit",
