@@ -30,6 +30,7 @@ protobuf = "3.19.4" # Should be unnecessary when next streamlit patch is release
 pytest = "^7.1.3"
 black = "^22.8.0"
 isort = "^5.10.1"
+mypy = "^0.971"
 
 [tools.poetry.urls]
 "Homepage" = "https://github.com/arnaudmiribel/streamlit-extras"
