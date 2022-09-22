@@ -4,7 +4,7 @@ from typing import List
 
 import pytest
 
-PATH_TO_EXTRAS = "streamlit_extras"
+PATH_TO_EXTRAS = "src/streamlit_extras"
 
 
 def get_extras() -> List[str]:
@@ -18,7 +18,7 @@ def get_extras() -> List[str]:
 
 @pytest.mark.parametrize("extra", get_extras())
 def test_extra_attributes(extra: str):
-    mod = import_module(f"{PATH_TO_EXTRAS}.{extra}")
+    mod = import_module(f"{PATH_TO_EXTRAS.replace('/', '.')}.{extra}")
     assert type(mod.__title__) == str
     assert type(mod.__icon__) == str
     assert type(mod.__desc__) == str
