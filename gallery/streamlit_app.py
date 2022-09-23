@@ -3,6 +3,7 @@ import pkgutil
 import random
 from importlib import import_module
 from itertools import cycle, dropwhile
+from pathlib import Path
 from typing import Callable, List, Optional
 
 import streamlit_patches as st
@@ -66,40 +67,9 @@ Learn more about the library on [GitHub](https://www.github.com/arnaudmiribel/st
 
 
 def contribute():
-    st.title("🙋 Contribute")
-    st.write(
-        """
-Head over to our public [repository](https://github.com/arnaudmiribel/streamlit-extras) and:
-- Create an empty directory for your extra in the `extras/` directory
-- Add a `__init__.py` file to give in some metadata so we can automatically showcase your extra in the hub! Here's an example:
-
-```
-# __init__.py
-
-def my_main_function():
-    pass
-
-def example():
-    pass
-
-__func__ = my_main_function  # main function of your extra!
-__title__ = "Great title!"  # title of your extra!
-__desc__ = "Great description"  # description of your extra!
-__icon__ = "🔭"  # give your extra an icon!
-__examples__ = [example]  # create some examples to show how cool your extra is!
-__author__ = "Eva Jensen"
-__github_repo__ = "evajensen/my-repo"
-__streamlit_cloud_url__ = "http://my-super-app.streamlitapp.com"
-__pypi_name__ = ...
-__experimental_playground__ = False
-
-```
-- Submit a PR!
-
-
-If you are having troubles, create an issue on the repo or [DM me on Twitter](https://twitter.com/arnaudmiribel)!
-"""
-    )
+    path = (Path(__file__) / "../../CONTRIBUTING.md").resolve()
+    content = path.read_text()
+    st.write(content)
 
 
 def waiting_list():
