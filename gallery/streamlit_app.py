@@ -1,4 +1,5 @@
 import inspect
+import pkgutil
 import random
 from importlib import import_module
 from itertools import cycle, dropwhile
@@ -6,6 +7,8 @@ from pathlib import Path
 from typing import Callable, List, Optional
 
 import streamlit_patches as st
+
+import streamlit_extras
 from streamlit_extras.badges import badge
 from streamlit_extras.function_explorer import function_explorer
 from streamlit_extras.switch_page_button import switch_page
@@ -64,40 +67,9 @@ Learn more about the library on [GitHub](https://www.github.com/arnaudmiribel/st
 
 
 def contribute():
-    st.title("🙋 Contribute")
-    st.write(
-        """
-Head over to our public [repository](https://github.com/arnaudmiribel/streamlit-extras) and:
-- Create an empty directory for your extra in the `extras/` directory
-- Add a `__init__.py` file to give in some metadata so we can automatically showcase your extra in the hub! Here's an example:
-
-```
-# __init__.py
-
-def my_main_function():
-    pass
-
-def example():
-    pass
-
-__func__ = my_main_function  # main function of your extra!
-__title__ = "Great title!"  # title of your extra!
-__desc__ = "Great description"  # description of your extra!
-__icon__ = "🔭"  # give your extra an icon!
-__examples__ = [example]  # create some examples to show how cool your extra is!
-__author__ = "Eva Jensen"
-__github_repo__ = "evajensen/my-repo"
-__streamlit_cloud_url__ = "http://my-super-app.streamlitapp.com"
-__pypi_name__ = ...
-__experimental_playground__ = False
-
-```
-- Submit a PR!
-
-
-If you are having troubles, create an issue on the repo or [DM me on Twitter](https://twitter.com/arnaudmiribel)!
-"""
-    )
+    path = (Path(__file__) / "../../CONTRIBUTING.md").resolve()
+    content = path.read_text()
+    st.write(content)
 
 
 def waiting_list():
@@ -139,12 +111,8 @@ def get_empty():
 
 st.page(get_empty, "  ", " ")
 
-PATH_TO_EXTRAS = "streamlit_extras"
-extra_names = [
-    folder.name
-    for folder in Path(PATH_TO_EXTRAS).glob("*")
-    if folder.is_dir() and folder.name != "__pycache__"
-]
+
+extra_names = [extra.name for extra in pkgutil.iter_modules(streamlit_extras.__path__)]
 
 
 def get_page_content(
@@ -245,7 +213,7 @@ def get_page_content(
 settings = dict()
 
 for extra_name in extra_names:
-    mod = import_module(f"{PATH_TO_EXTRAS}.{extra_name}")
+    mod = import_module(f"streamlit_extras.{extra_name}")
     title = mod.__title__
     icon = mod.__icon__
     func = mod.__func__

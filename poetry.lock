@@ -573,7 +573,7 @@ htbuilder = "*"
 
 [[package]]
 name = "streamlit"
-version = "1.12.2"
+version = "1.13.0"
 description = "The fastest way to build data apps in Python"
 category = "main"
 optional = false
@@ -590,7 +590,7 @@ numpy = "*"
 packaging = ">=14.1"
 pandas = ">=0.21.0"
 pillow = ">=6.2.0"
-protobuf = ">=3.12,<4"
+protobuf = ">=3.12,<3.20.2 || >3.20.2,<4"
 pyarrow = ">=4.0"
 pydeck = ">=0.1.dev5"
 pympler = ">=0.9"
@@ -745,7 +745,7 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.9,<3.9.7 || >3.9.7,<4.0" # Apparently streamlit doesn't work with 3.9.7
-content-hash = "0aab468398ce4bfc5816f9a1dc0c1fb00c860ab63ab889132e552e7db6da2ff0"
+content-hash = "93ba29095b7aa97a2092dcbfcd314d9ca56de54c04a5e8b1e29de8e0ee7ceefd"
 
 [metadata.files]
 altair = [
@@ -1232,8 +1232,8 @@ st-annotated-text = [
     {file = "st-annotated-text-3.0.0.tar.gz", hash = "sha256:b63a55ef03411ce4e37bf9269a32e6ee4b344a658552e3fb0b4924bca0c5dc40"},
 ]
 streamlit = [
-    {file = "streamlit-1.12.2-py2.py3-none-any.whl", hash = "sha256:c56d0775feb39116ff90a8b01ee15be27212ee50abb88943607205d26d1d9923"},
-    {file = "streamlit-1.12.2.tar.gz", hash = "sha256:f0461bebd6c1b58c38f0f602ee9bb6699f66dfe14fd2e05abc25ebe96ff4ba21"},
+    {file = "streamlit-1.13.0-py2.py3-none-any.whl", hash = "sha256:3231a6f424f8a7f365dc9e46d4fbb66a3634fd570c74769b8a69f792d9285d3a"},
+    {file = "streamlit-1.13.0.tar.gz", hash = "sha256:eb178dc87d9f01e2be11ee9e4d55f79a678597ece56cacbfe5a9236d768d48da"},
 ]
 streamlit-embedcode = [
     {file = "streamlit-embedcode-0.1.2.tar.gz", hash = "sha256:22a50eb43407bab3d0ed2d4b58e89819da477cd0592ef87edbd373c286712e3a"},
