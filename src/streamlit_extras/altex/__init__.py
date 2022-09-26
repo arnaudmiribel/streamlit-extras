@@ -11,7 +11,6 @@ import streamlit as st
 # TODO: Add 'ascending' for bar charts
 
 # echo = partial(echo_expander, code_location="above")
-echo = st.echo
 
 
 weather_data_url = (
