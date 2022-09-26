@@ -1,0 +1,475 @@
+from functools import partial
+from typing import Optional, Union
+
+import altair as alt
+import numpy as np
+import pandas as pd
+import streamlit as st
+
+# TODO: Add 'ascending' for bar charts
+
+
+weather_data_url = (
+    "https://raw.githubusercontent.com/tvst/plost/master/data/seattle-weather.csv"
+)
+stocks_data_url = (
+    "https://raw.githubusercontent.com/vega/vega/main/docs/data/stocks.csv"
+)
+barley_data_url = (
+    "https://raw.githubusercontent.com/vega/vega/main/docs/data/barley.json"
+)
+
+
+@st.experimental_memo
+def url_to_dataframe(url: str) -> pd.DataFrame:
+    """Collects a CSV/JSON file from a URL and load it into a dataframe, with appropriate caching (memo)
+
+    Args:
+        url (str): URL of the CSV/JSON file
+
+    Returns:
+        pd.DataFrame: Resulting dataframe
+    """
+    if url.endswith(".csv"):
+        return pd.read_csv(url)
+    elif url.endswith(".json"):
+        return pd.read_json(url)
+    else:
+        raise Exception("URL must end with .json or .csv")
+
+
+with st.expander("Get some data first"):
+
+    """We use the following datasets to provide examples with the charts:"""
+
+    weather = url_to_dataframe(weather_data_url)
+    stocks = url_to_dataframe(stocks_data_url).assign(
+        date=lambda df: pd.to_datetime(df.date)
+    )
+    barley = url_to_dataframe(barley_data_url)
+
+    left, right = st.columns(2)
+    left.caption(f"↓ The [Stocks]({stocks_data_url}) dataset")
+    left.dataframe(weather)
+    right.caption(f"↓ The [Weather]({weather_data_url}) dataset")
+    right.dataframe(stocks)
+    left, right = st.columns(2)
+    left.caption(f"↓ The [Barley]({barley_data_url}) dataset")
+    left.dataframe(barley)
+
+    random_data = pd.DataFrame(
+        np.random.randn(20, 7),
+        columns=list("abcdefg"),
+    ).reset_index()
+    right.caption("↓ A random dataset")
+    right.dataframe(random_data)
+
+
+def _drop_nones(iterable: Union[dict, list]):
+    """Remove nones for iterable.
+    If dict, drop keys when value is None
+    If list, drop values when value equal None
+
+    Args:
+        iterable (Union[dict, str]): Input iterable
+
+    Raises:
+        Exception: TypeError
+
+    Returns:
+        Union[dict, str]: Input interable without Nones
+    """
+    if isinstance(iterable, dict):
+        return {k: v for k, v in iterable.items() if v is not None}
+    if isinstance(iterable, list):
+        return [x for x in iterable if x is not None]
+    raise TypeError(f"Iterable of type {type(iterable)} is not supported")
+
+
+def _get_shorthand(param: Union[str, alt.X, alt.Y]):
+    """Get Altair shorthand from parameter, if exists
+
+    Args:
+        param (Union[str, alt.X, alt.Y]): Param x/y
+
+    Returns:
+        str: Parameter itself or shorthand when alt.X/alt.Y object
+    """
+    if param is None:
+        return None
+    elif not isinstance(param, str):
+        return param.shorthand
+    else:
+        return param
+
+
+def _get_spark_axis_config(
+    axis: Union[alt.X, alt.Y, str], output_type: Union[alt.X, alt.Y]
+) -> Union[alt.X, alt.Y]:
+    """Whenever chart is a spark chart, modify x and y configs to specify axis=None
+
+    Args:
+        axis (Union[alt.X, alt.Y, str]): Chart input for x
+        output_type (Union[alt.X, alt.Y]): Chart input for y
+
+    Raises:
+        Exception: TypeError when input has invalid type
+
+    Returns:
+        alt.X/alt.Y: Updated config for x/y
+    """
+    if isinstance(axis, (alt.X, alt.Y)):
+        axis_config = axis.to_dict()
+        axis_config["axis"] = None
+        return output_type(**axis_config)
+    elif isinstance(axis, str):
+        return output_type(shorthand=axis, axis=None)
+    else:
+        raise TypeError("Input x/y must be of type str or alt.X or alt.Y")
+
+
+def _chart(
+    mark_function: str,
+    data: pd.DataFrame,
+    x: Union[alt.X, str],
+    y: Union[alt.Y, str],
+    color: Optional[Union[alt.Color, str]] = None,
+    opacity: Optional[Union[alt.value, float]] = None,
+    column: Optional[Union[alt.Column, str]] = None,
+    rolling: Optional[int] = None,
+    title: Optional[str] = None,
+    width: Optional[int] = None,
+    height: Optional[int] = None,
+    spark: bool = False,
+):
+    """Get an Altair chart object
+
+    Args:
+        mark_function (str): Altair mark function, example line/bar/point
+        data (pd.DataFrame): Dataframe to use for the chart
+        x (Union[alt.X, str]): Column for the x axis
+        y (Union[alt.Y, str]): Column for the y axis
+        color (Optional[Union[alt.Color, str]], optional): Color a specific group of your data. Defaults to None.
+        opacity (Optional[Union[alt.value, float]], optional): Change opacity of marks. Defaults to None.
+        column (Optional[Union[alt.Column, str]], optional): Groupby a specific column. Defaults to None.
+        rolling (Optional[int], optional): Rolling average window size. Defaults to None.
+        title (Optional[str], optional): Title of the chart. Defaults to None.
+        width (Optional[int], optional): Width of the chart. Defaults to None.
+        height (Optional[int], optional): Height of the chart. Defaults to None.
+        spark (bool, optional): Whether or not to make spark chart, i.e. a chart without axes nor ticks nor legend. Defaults to False.
+
+    Returns:
+        alt.Chart: Altair chart
+    """
+
+    alt.themes.enable("streamlit")
+
+    x_ = _get_shorthand(x)
+    y_ = _get_shorthand(y)
+    color_ = _get_shorthand(color)
+
+    tooltip_config = _drop_nones([x_, y_, color_])
+
+    chart_config = _drop_nones(
+        {
+            "data": data,
+            "title": title,
+            "mark": mark_function,
+            "width": width,
+            "height": height,
+        }
+    )
+
+    chart = alt.Chart(**chart_config)
+
+    if rolling is not None:
+        rolling_column = f"{y_} ({rolling}-average)"
+        y = f"{rolling_column}:Q"
+        transform_config = {
+            rolling_column: f"mean({y_})",
+            "frame": [-rolling, 0],
+            "groupby": [str(color)],
+        }
+        chart = chart.transform_window(**transform_config)
+
+    if spark:
+        chart = chart.configure_view(strokeWidth=0).configure_axis(
+            grid=False, domain=False
+        )
+        x_axis = _get_spark_axis_config(x, alt.X)
+        y_axis = _get_spark_axis_config(y, alt.Y)
+    else:
+        x_axis = x
+        y_axis = y
+
+    encode_config = _drop_nones(
+        {
+            "x": x_axis,
+            "y": y_axis,
+            "color": color,
+            "tooltip": tooltip_config,
+            "opacity": alt.value(opacity) if isinstance(opacity, float) else opacity,
+            "column": column,
+        }
+    )
+
+    chart = chart.encode(**encode_config)
+
+    return chart
+
+
+def chart(use_container_width: bool = True, **kwargs):
+    """Display an Altair chart in Streamlit
+
+    Args:
+        **kwargs: See function _chart()
+        use_container_width (bool, optional): Whether or not the displayed chart uses all available width. Defaults to True.
+    """
+
+    if "width" in kwargs:
+        use_container_width = False
+
+    st.altair_chart(
+        _chart(**kwargs),
+        use_container_width=use_container_width,
+    )
+
+
+scatter_chart = partial(chart, mark_function="point")
+line_chart = partial(chart, mark_function="line")
+area_chart = partial(chart, mark_function="area")
+bar_chart = partial(chart, mark_function="bar")
+hist_chart = partial(bar_chart, y="count()")
+sparkline_chart = partial(line_chart, spark=True)
+sparkbar_chart = partial(bar_chart, spark=True)
+sparkhist_chart = partial(hist_chart, spark=True)
+sparkarea_chart = partial(area_chart, spark=True)
+
+
+@st.experimental_memo
+def example_line():
+    line_chart(
+        data=stocks.query("symbol == 'GOOG'"),
+        x="date",
+        y="price",
+        title="A beautiful simple line chart",
+    )
+
+
+@st.experimental_memo
+def example_multi_line():
+    line_chart(
+        data=stocks,
+        x="date",
+        y="price",
+        color="symbol",
+        title="A beautiful multi line chart",
+    )
+
+
+@st.experimental_memo
+def example_bar():
+    bar_chart(
+        data=stocks.query("symbol == 'GOOG'"),
+        x="date",
+        y="price",
+        title="A beautiful bar chart",
+    )
+
+
+@st.experimental_memo
+def example_hist():
+    hist_chart(
+        data=stocks.assign(price=stocks.price.round(0)),
+        x="price",
+        title="A beautiful histogram",
+    )
+
+
+@st.experimental_memo
+def example_scatter_opacity():
+    scatter_chart(
+        data=weather,
+        x=alt.X("wind:Q", title="Custom X title"),
+        y=alt.Y("temp_min:Q", title="Custom Y title"),
+        title="A beautiful scatter chart with custom opacity",
+        opacity=0.2,
+    )
+
+
+@st.experimental_memo
+def example_bar_horizontal():
+    bar_chart(
+        data=weather.head(15),
+        x="temp_max:Q",
+        y=alt.Y("date:O", title="Temperature"),
+        title="A beautiful horizontal bar chart",
+    )
+
+
+@st.experimental_memo
+def example_bar_log():
+    bar_chart(
+        data=weather,
+        x=alt.X("temp_max:Q", title="Temperature"),
+        y=alt.Y(
+            "count()",
+            title="Count of records",
+            scale=alt.Scale(type="symlog"),
+        ),
+        title="A beautiful histogram... with log scale",
+    )
+
+
+@st.experimental_memo
+def example_bar_sorted():
+    bar_chart(
+        data=weather.sort_values(by="temp_max", ascending=False).head(25),
+        x=alt.X("date", sort="-y"),
+        y=alt.Y("temp_max:Q"),
+        title="A beautiful sorted-by-value bar chart",
+    )
+
+
+@st.experimental_memo
+def example_scatter():
+    scatter_chart(
+        data=weather,
+        x=alt.X("wind:Q", title="Custom X title"),
+        y=alt.Y("temp_min:Q", title="Custom Y title"),
+        title="A beautiful scatter chart",
+    )
+
+
+@st.experimental_memo
+def example_hist_time():
+    hist_chart(
+        data=weather,
+        x="week(date):T",
+        y="day(date):T",
+        color=alt.Color(
+            "median(temp_max):Q",
+            legend=None,
+        ),
+        title="A beautiful time hist chart",
+    )
+
+
+@st.experimental_memo
+def example_sparkline():
+    sparkline_chart(
+        data=stocks.query("symbol == 'GOOG'"),
+        x="date",
+        y="price",
+        title="A beautiful sparkline chart",
+        rolling=7,
+        height=150,
+    )
+
+
+@st.experimental_memo
+def example_sparkbar():
+    sparkbar_chart(
+        data=stocks.query("symbol == 'GOOG'"),
+        x="date",
+        y="price",
+        title="A beautiful sparkbar chart",
+        height=150,
+    )
+
+
+@st.experimental_memo
+def example_sparkarea():
+
+    df = pd.melt(
+        random_data,
+        id_vars="index",
+        value_vars=list("abcdefg"),
+    )
+
+    sparkarea_chart(
+        data=df,
+        x="index",
+        y="value",
+        color=alt.Color("variable", legend=None),
+        title="A beautiful (also probably useless) sparkarea chart",
+        opacity=alt.value(0.6),
+        height=200,
+    )
+
+
+@st.experimental_memo
+def example_bar_stacked():
+    bar_chart(
+        data=barley,
+        x=alt.X("variety", title="Variety"),
+        y="sum(yield)",
+        color="site",
+        title="A beautiful stacked bar chart",
+    )
+
+
+@st.experimental_memo
+def example_bar_normalized():
+    bar_chart(
+        data=barley,
+        x=alt.X("variety:N", title="Variety"),
+        y=alt.Y("sum(yield):Q", stack="normalize"),
+        color="site:N",
+        title="A beautiful normalized stacked bar chart",
+    )
+
+
+@st.experimental_memo
+def example_bar_normalized_custom():
+    bar_chart(
+        data=barley,
+        x=alt.X("variety", title="Variety"),
+        y="sum(yield)",
+        color=alt.Color("site", scale=alt.Scale(scheme="lighttealblue"), legend=None),
+        title="A beautiful stacked bar chart (without legend, custom colors)",
+    )
+
+
+@st.experimental_memo
+def example_bar_grouped():
+    bar_chart(
+        data=barley,
+        x="year:O",
+        y="sum(yield):Q",
+        color="year:N",
+        column="site:N",
+        title="A beautiful grouped bar charts",
+        width=90,
+        use_container_width=False,
+    )
+
+
+__func__ = chart
+__title__ = "Altex"
+__desc__ = (
+    "A simple wrapper on top of Altair to make Streamlit charts in an"
+    " express API. If you're lazy and/or familiar with Altair, this is "
+    " probably a good fit! Inspired by plost and plotly-express."
+)
+__icon__ = "👸"
+__examples__ = [
+    example_line,
+    example_multi_line,
+    example_bar,
+    example_hist,
+    example_scatter,
+    example_sparkline,
+    example_sparkbar,
+    example_sparkarea,
+    example_hist_time,
+    example_bar_sorted,
+    example_bar_normalized,
+    example_bar_grouped,
+    example_bar_horizontal,
+    example_bar_log,
+    example_scatter_opacity,
+    example_bar_normalized_custom,
+]
+__author__ = "Arnaud Miribel"
+__experimental_playground__ = False
