@@ -1,10 +1,12 @@
+from typing import Literal, get_args
+
 import streamlit as st
 from htbuilder import a, img
 
-_SUPPORTED_TYPES = ("pypi", "streamlit", "github", "twitter", "buymeacoffee")
+_SUPPORTED_TYPES = Literal["pypi", "streamlit", "github", "twitter", "buymeacoffee"]
 
 
-def badge(type: str, name: str = None, url: str = None):
+def badge(type: _SUPPORTED_TYPES, name: str = None, url: str = None):
     """Easily create a badge!
 
     Args:
@@ -16,9 +18,9 @@ def badge(type: str, name: str = None, url: str = None):
 
     assert type, "Type must be given!"
 
-    assert type in _SUPPORTED_TYPES, (
+    assert type in get_args(_SUPPORTED_TYPES), (
         f"Input type '{type}' is not supported! Supported types are"
-        f" {_SUPPORTED_TYPES}"
+        f" {get_args(_SUPPORTED_TYPES)}"
     )
 
     badge_html = None
