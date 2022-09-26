@@ -1,12 +1,12 @@
 import inspect
-from typing import Any, Callable, Dict
+from typing import Any, Callable, Dict, get_args
 
 import pandas as pd
 import streamlit as st
 from st_keyup import st_keyup
 
 
-def get_args(func):
+def get_arg_details(func):
     signature = inspect.signature(func)
     return [
         dict(argument=k, type_hint=v.annotation, default=v.default)
@@ -31,7 +31,7 @@ def function_explorer(func: Callable):
         func (callable): Python function
     """
 
-    args = get_args(func)
+    args = get_arg_details(func)
     inputs: Dict[str, Any] = dict()
 
     st.write("#### Inputs")
@@ -83,6 +83,15 @@ def function_explorer(func: Callable):
                 inputs[argument] = get_arg_from_session_state(
                     func.__name__, argument
                 ) or pd.DataFrame(["abcde"])
+            elif str(type_hint).startswith("typing.Literal"):
+                options = get_args(type_hint)
+                default = (
+                    get_arg_from_session_state(func.__name__, argument) or default
+                    if not is_empty(default)
+                    else options[0]
+                )
+                idx = options.index(default)
+                inputs[argument] = st.selectbox(label, options, index=idx)
             else:
                 st.warning(f"`function_explorer` does not support type {type_hint}")
 
