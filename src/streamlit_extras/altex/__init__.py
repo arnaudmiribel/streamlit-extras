@@ -6,9 +6,7 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
-
 # TODO: Add 'ascending' for bar charts
-
 
 
 weather_data_url = (
