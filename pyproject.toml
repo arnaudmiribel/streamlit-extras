@@ -25,7 +25,7 @@ htbuilder = "^0.6.0"
 st-annotated-text = "^3.0.0"
 streamlit-embedcode = "^0.1.2"
 streamlit-keyup = "^0.1.9"
-protobuf = "3.19.4" # Should be unnecessary when next streamlit patch is released
+protobuf = "3.19.5" # Should be unnecessary when next streamlit patch is released
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.1.3"
