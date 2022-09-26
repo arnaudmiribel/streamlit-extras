@@ -26,7 +26,7 @@ def test_extra_attributes(extra: str):
         assert type(mod.__github_repo__) == str
     if hasattr(mod, "__pypi_name__"):
         assert type(mod.__pypi_name__) == str
-    if hasattr(mod, "__package_name__"):
+        # If __pypi_name__ is set, __package_name__ should be set too
         assert type(mod.__package_name__) == str
     if hasattr(mod, "__streamlit_cloud_url__"):
         assert type(mod.__streamlit_cloud_url__) == str
