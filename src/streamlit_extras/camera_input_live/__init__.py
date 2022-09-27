@@ -20,3 +20,6 @@ __github_repo__ = "blackary/streamlit-camera-input-live"
 __pypi_name__ = "streamlit-camera-input-live"
 __package_name__ = "camera_input_live"
 __experimental_playground__ = False
+__forum_url__ = (
+    "https://discuss.streamlit.io/t/new-component-streamlit-camera-live-input/31220"
+)
