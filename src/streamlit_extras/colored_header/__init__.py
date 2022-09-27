@@ -1,5 +1,6 @@
 """Add colorful headers to your Streamlit app."""
 import itertools
+from typing import Literal
 
 import streamlit as st
 
@@ -142,11 +143,22 @@ HEADER_COLOR_CYCLE = itertools.cycle(
     ]
 )
 
+_SUPPORTED_COLORS = Literal[
+    "light-blue-70",
+    "orange-70",
+    "blue-green-70",
+    "blue-70",
+    "violet-70",
+    "red-70",
+    "green-70",
+    "yellow-80",
+]
+
 
 def colored_header(
     label: str = "Nice title",
     description: str = "Cool description",
-    color_name: str = "red-70",
+    color_name: _SUPPORTED_COLORS = "red-70",
 ):
     """
     Shows a header with a colored underline and an optional description.
