@@ -27,7 +27,7 @@
 
 - 📙&nbsp; <b>Discover:</b> Visit the gallery <a href="https://extras.streamlitapp.com">extras.streamlitapp.com</a> to discover all extras in their natural habitat.
 - 🛝&nbsp; <b>Try:</b> The gallery comes with a Streamlit-based playground for some extras. Try it before you <strike>buy</strike> install it!
-- ⬇️&nbsp; <b>Install:</b> `streamlit-extras` is a PyPI package with all extras included. Get them all through pip!
+- ⬇️&nbsp; <b>Install:</b> `streamlit-extras` is a PyPI package with all extras included. Get them all using pip!
 - 🫴&nbsp; <b>Share:</b> Go ahead and share your own extras, it's just [a PR away](https://extras.streamlitapp.com/Contribute)!
 
 ## Getting Started
