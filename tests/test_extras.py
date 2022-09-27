@@ -30,9 +30,13 @@ def test_extra_attributes(extra: str):
         assert type(mod.__package_name__) == str
     if hasattr(mod, "__streamlit_cloud_url__"):
         assert type(mod.__streamlit_cloud_url__) == str
+        assert "streamlit" in mod.__streamlit_cloud_url__
     if hasattr(mod, "__twitter_username__"):
         assert type(mod.__twitter_username__) == str
     if hasattr(mod, "__buymeacoffee_username__"):
         assert type(mod.__buymeacoffee_username__) == str
+    if hasattr(mod, "__forum_url__"):
+        assert type(mod.__forum_url__) == str
+        assert "discuss.streamlit.io" in mod.__forum_url__
     if hasattr(mod, "__experimental_playground__"):
         assert type(mod.__experimental_playground__) == bool

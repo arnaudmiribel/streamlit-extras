@@ -5,7 +5,7 @@ import streamlit as st
 center_css = """
 <style>
 
-div[class='css-4z1n4l ehezqtx5']{
+div[class*="StatusWidget"]{
 
     position: fixed;
     top: 50%;
