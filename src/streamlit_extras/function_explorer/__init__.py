@@ -52,7 +52,10 @@ def function_explorer(func: Callable):
             )
             inputs[argument] = st.text_input(label, value=default)
         else:
-            label += f" ({type_hint.__name__})"
+            if hasattr(type_hint, "__name__"):
+                label += f" ({type_hint.__name__})"
+            else:
+                label += f" ({str(type_hint)})"
             if type_hint == int:
                 default = get_arg_from_session_state(func.__name__, argument) or (
                     default if not is_empty(default) else 12
