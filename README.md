@@ -52,9 +52,6 @@ stoggle(
 
 <img src="https://user-images.githubusercontent.com/16867691/192553812-f91c801b-e820-470b-84c6-4563504c6ce5.gif"></img>
 
-
-
-
 ## Documentation
 
 Visit <a href="https://extras.streamlitapp.com">extras.streamlitapp.com</a>
