@@ -11,6 +11,7 @@ import streamlit_patches as st
 import streamlit_extras
 from streamlit_extras.badges import badge
 from streamlit_extras.function_explorer import function_explorer
+from streamlit_extras.mention import mention
 from streamlit_extras.switch_page_button import switch_page
 
 
@@ -126,6 +127,7 @@ def get_page_content(
     author: str,
     github_repo: Optional[str] = None,
     streamlit_cloud_url: Optional[str] = None,
+    forum_url: Optional[str] = None,
     pypi_name: Optional[str] = None,
     package_name: Optional[str] = None,
     twitter_username: Optional[str] = None,
@@ -148,6 +150,7 @@ def get_page_content(
                 pypi_name,
                 twitter_username,
                 buymeacoffee_username,
+                forum_url,
             ]
         ):
             columns = cycle(st.columns(6))
@@ -166,6 +169,9 @@ def get_page_content(
             if buymeacoffee_username:
                 with next(columns):
                     badge("buymeacoffee", name=buymeacoffee_username)
+            if forum_url:
+                with next(columns):
+                    mention(icon="streamlit", url=forum_url, label="Forum post")
 
         st.write("## Usage")
 
@@ -227,6 +233,7 @@ for extra_name in extra_names:
     package_name = getattr(mod, "__package_name__", None)
     twitter_username = getattr(mod, "__twitter_username__", None)
     buymeacoffee_username = getattr(mod, "__buymeacoffee_username__", None)
+    forum_url = getattr(mod, "__forum_url__", None)
     experimental_playground = getattr(mod, "__experimental_playground__", False)
 
     settings[extra_name] = dict(
@@ -245,6 +252,7 @@ for extra_name in extra_names:
             package_name=package_name,
             twitter_username=twitter_username,
             buymeacoffee_username=buymeacoffee_username,
+            forum_url=forum_url,
             experimental_playground=experimental_playground,
         ),
         name=title,
