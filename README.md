@@ -25,10 +25,10 @@
 
 ## Highlights
 
-- 📙&nbsp; <b>Discover:</b> Visit the gallery <a href="https://extras.streamlitapp.com">extras.streamlitapp.com</a> to discover all extras in their natural habitat
+- 📙&nbsp; <b>Discover:</b> Visit the gallery <a href="https://extras.streamlitapp.com">extras.streamlitapp.com</a> to discover all extras in their natural habitat.
 - 🛝&nbsp; <b>Try:</b> The gallery comes with a Streamlit-based playground for some extras. Try it before you <strike>buy</strike> install it!
-- ⬇️&nbsp; <b>Install:</b> `streamlit-extras` is a PyPI package with all extras included. Catch them all using pip!
-- 🫴&nbsp; <b>Share:</b> Go ahead and share your own extras, it's just a PR away!
+- ⬇️&nbsp; <b>Install:</b> `streamlit-extras` is a PyPI package with all extras included. Get them all using pip!
+- 🫴&nbsp; <b>Share:</b> Go ahead and share your own extras, it's just [a PR away](https://extras.streamlitapp.com/Contribute)!
 
 ## Getting Started
 
@@ -44,8 +44,13 @@ Here's an example with one of the easiest extras around, <a href="https://extras
 ```python
 from streamlit_extras.stoggle import stoggle
 
-stoggle("Summary", "More content that's hidden by default!")
+stoggle(
+    "Click me!",
+    """🥷 Surprise! Here's some additional content""",
+)
 ```
+
+<img src="https://user-images.githubusercontent.com/16867691/192553812-f91c801b-e820-470b-84c6-4563504c6ce5.gif"></img>
 
 ## Documentation
 
