@@ -3,7 +3,8 @@ from streamlit_toggle import st_toggle_switch
 
 
 def example():
-    tswitch = st_toggle_switch(
+    st.write("## Toggle Switch")
+    st_toggle_switch(
         label="Enable Setting?",
         key="switch_1",
         default_value=False,

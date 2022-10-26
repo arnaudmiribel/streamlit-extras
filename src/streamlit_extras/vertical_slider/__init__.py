@@ -3,7 +3,8 @@ from streamlit_vertical_slider import vertical_slider
 
 
 def example():
-    vertical = vertical_slider(
+    st.write("## Vertical Slider")
+    vertical_slider(
         key="slider",
         default_value=25,
         step=1,
