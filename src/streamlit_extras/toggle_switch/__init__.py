@@ -1,5 +1,5 @@
 import streamlit as st
-import  streamlit_toggle
+from streamlit_toggle import st_toggle_switch
 
 
 def example():

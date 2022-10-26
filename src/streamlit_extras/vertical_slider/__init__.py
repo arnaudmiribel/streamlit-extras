@@ -1,5 +1,5 @@
 import streamlit as st
-import  streamlit_vertical_slider
+from streamlit_vertical_slider import vertical_slider
 
 def example():
     vertical = vertical_slider(key="slider", 
@@ -7,9 +7,9 @@ def example():
                         step=1,
                         min_value=0, 
                         max_value=100,
-                        track_color="gray",
-                        thumb_color="blue",
-                        slider_color="red"
+                        track_color="gray", #optional
+                        thumb_color="blue", #optional
+                        slider_color="red"  #optional
                         )
 
 __func__ = vertical_slider  # main function of your extra!
