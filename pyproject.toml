@@ -27,6 +27,8 @@ streamlit-embedcode = ">=0.1.2"
 streamlit-keyup = ">=0.1.9"
 protobuf = "!=3.20.2"
 streamlit-camera-input-live = ">=0.2.0"
+streamlit-vertical-slider = ">=1.0.2"
+streamlit-toggle-switch = ">=1.0.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.1.3"
