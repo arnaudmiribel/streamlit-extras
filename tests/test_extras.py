@@ -40,3 +40,11 @@ def test_extra_attributes(extra: str):
         assert "discuss.streamlit.io" in mod.__forum_url__
     if hasattr(mod, "__experimental_playground__"):
         assert type(mod.__experimental_playground__) == bool
+
+
+@pytest.mark.parametrize("extra", get_extras())
+def test_extra_tests(extra: str):
+    mod = import_module(f"streamlit_extras.{extra}")
+    if hasattr(mod, "__tests__"):
+        for test in mod.__tests__:
+            test()
