@@ -5,16 +5,23 @@ from typing import Any, Callable, Dict, List, Optional, Union
 
 import requests
 from streamlit import *
-from streamlit import (
-    StopException,
+from streamlit import (  # _get_script_run_ctx,
     __version__,
-    _get_script_run_ctx,
     error,
     experimental_singleton,
     set_page_config,
     source_util,
 )
 from streamlit.commands.page_config import get_random_emoji
+
+# from streamlit.in_memory_file_manager import in_memory_file_manager
+from streamlit.runtime.media_file_manager import media_file_manager
+
+# from streamlit.runtime.media_file_manager import (
+#     media_file_manager as in_memory_file_manager,
+# )
+from streamlit.runtime.scriptrunner import StopException
+from streamlit.runtime.scriptrunner import get_script_run_ctx as _get_script_run_ctx
 from streamlit.runtime.scriptrunner.script_runner import (
     LOGGER,
     SCRIPT_RUN_WITHOUT_ERRORS_KEY,
