@@ -6,15 +6,15 @@ from typing import Any, Callable, Dict, List, Optional, Union
 import requests
 from streamlit import *
 from streamlit import (
-    StopException,
     __version__,
-    _get_script_run_ctx,
     error,
     experimental_singleton,
+    runtime,
     set_page_config,
     source_util,
 )
 from streamlit.commands.page_config import get_random_emoji
+from streamlit.runtime.scriptrunner import get_script_run_ctx as _get_script_run_ctx
 from streamlit.runtime.scriptrunner.script_runner import (
     LOGGER,
     SCRIPT_RUN_WITHOUT_ERRORS_KEY,
@@ -23,12 +23,12 @@ from streamlit.runtime.scriptrunner.script_runner import (
     RerunException,
     ScriptRunner,
     ScriptRunnerEvent,
+    StopException,
     _clean_problem_modules,
     _log_if_error,
     _new_module,
     config,
     handle_uncaught_app_exception,
-    in_memory_file_manager,
     magic,
     modified_sys_path,
 )
@@ -143,7 +143,7 @@ def _run_script(self, rerun_data: RerunData) -> None:
     LOGGER.debug("Running script %s", rerun_data)
 
     # Reset DeltaGenerators, widgets, media files.
-    in_memory_file_manager.clear_session_files()
+    runtime.get_instance().media_file_mgr.clear_session_refs()
 
     pages = source_util.get_pages(self._main_script_path)
     # Safe because pages will at least contain the app's main page.
