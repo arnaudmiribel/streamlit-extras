@@ -1,2 +1,2 @@
-streamlit==1.12.2
-streamlit-extras>=0.1.4
+streamlit==1.14.0
+streamlit-extras>=0.1.5

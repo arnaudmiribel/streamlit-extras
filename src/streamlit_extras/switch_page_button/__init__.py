@@ -2,7 +2,7 @@ import streamlit as st
 
 
 def switch_page(page_name: str):
-    from streamlit import _RerunData, _RerunException
+    from streamlit.runtime.scriptrunner import RerunData, RerunException
     from streamlit.source_util import get_pages
 
     def standardize_name(name: str) -> str:
@@ -14,8 +14,8 @@ def switch_page(page_name: str):
 
     for page_hash, config in pages.items():
         if standardize_name(config["page_name"]) == page_name:
-            raise _RerunException(
-                _RerunData(
+            raise RerunException(
+                RerunData(
                     page_script_hash=page_hash,
                     page_name=page_name,
                 )
@@ -32,9 +32,25 @@ def example():
         switch_page("Contribute")
 
 
+def test_switch_page():
+    import pytest
+    from streamlit.runtime.scriptrunner import RerunException
+
+    with pytest.raises(RerunException):
+        switch_page("streamlit app")
+
+
+def test_switch_invalid_page():
+    import pytest
+
+    with pytest.raises(ValueError):
+        switch_page("non existent page")
+
+
 __func__ = switch_page
 __title__ = "Switch page function"
 __desc__ = "Function to switch page programmatically in a MPA"
 __icon__ = "🖱️"
 __examples__ = [example]
 __author__ = "Zachary Blackwood"
+__tests__ = [test_switch_page, test_switch_invalid_page]

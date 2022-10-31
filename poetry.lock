@@ -609,7 +609,7 @@ htbuilder = "*"
 
 [[package]]
 name = "streamlit"
-version = "1.12.2"
+version = "1.14.0"
 description = "The fastest way to build data apps in Python"
 category = "main"
 optional = false
@@ -816,7 +816,7 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.9.7 || >3.9.7,<4.0" # Apparently streamlit doesn't work with 3.9.7
-content-hash = "ff46bfcba1c88f0268f904751e18c5022cdbf5b9409aaeedfe12140b3c2a18eb"
+content-hash = "d287301fa2bc392f8a555ca2f0f7a329630b0afe98116948790b6f6c3d20b3fa"
 
 [metadata.files]
 altair = [
@@ -1290,8 +1290,8 @@ st-annotated-text = [
     {file = "st-annotated-text-3.0.0.tar.gz", hash = "sha256:b63a55ef03411ce4e37bf9269a32e6ee4b344a658552e3fb0b4924bca0c5dc40"},
 ]
 streamlit = [
-    {file = "streamlit-1.12.2-py2.py3-none-any.whl", hash = "sha256:c56d0775feb39116ff90a8b01ee15be27212ee50abb88943607205d26d1d9923"},
-    {file = "streamlit-1.12.2.tar.gz", hash = "sha256:f0461bebd6c1b58c38f0f602ee9bb6699f66dfe14fd2e05abc25ebe96ff4ba21"},
+    {file = "streamlit-1.14.0-py2.py3-none-any.whl", hash = "sha256:e078b8143d150ba721bdb9194218e311c5fe1d6d4156473a2dea6cc848a6c9fc"},
+    {file = "streamlit-1.14.0.tar.gz", hash = "sha256:62556d873567e1b3427bcd118a57ee6946619f363bd6bba38df2d1f8225ecba0"},
 ]
 streamlit-camera-input-live = [
     {file = "streamlit-camera-input-live-0.2.0.tar.gz", hash = "sha256:20ceb952b98410084176fcfeb9148e02ea29033a88d4a923161ac7890cedae0f"},
