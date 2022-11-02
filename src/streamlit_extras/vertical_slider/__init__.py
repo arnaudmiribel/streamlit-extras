@@ -19,7 +19,7 @@ def example():
 __func__ = vertical_slider  # main function of your extra!
 __title__ = "Vertical Slider"  # title of your extra!
 __desc__ = (
-    "Continuos Vertical Slider with color customizations"  # description of your extra!
+    "Continuous Vertical Slider with color customizations"  # description of your extra!
 )
 __icon__ = "🎚"  # give your extra an icon!
 __examples__ = [example]  # create some examples to show how cool your extra is!
@@ -27,4 +27,5 @@ __author__ = "Carlos D. Serrano"
 __pypi_name__ = "streamlit-vertical-slider"
 __package_name__ = "streamlit_vertical_slider"
 __github_repo__ = "sqlinsights/streamlit-vertical-slider"  # Optional
+__forum_url__ = "https://discuss.streamlit.io/t/vertical-slider-component/32229"
 __experimental_playground__ = False  # Optional
