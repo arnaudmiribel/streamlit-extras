@@ -22,6 +22,9 @@ def test_extra_attributes(extra: str):
         assert type(mod.__funcs__) == list
         for func in mod.__funcs__:
             assert callable(func)
+        # If you have multiple functions, then each example function must
+        # specify which of these functions must be imported
+        assert type(mod.__examples__) == dict
     else:
         assert callable(mod.__func__)
     assert len(mod.__examples__) > 0
