@@ -7,6 +7,14 @@ NOTION_ICON = "https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_lo
 TWITTER_ICON = "https://seeklogo.com/images/T/twitter-icon-circle-blue-logo-0902F48837-seeklogo.com.png"
 STREAMLIT_ICON = "https://aws1.discourse-cdn.com/business7/uploads/streamlit/original/2X/f/f0d0d26db1f2d99da8472951c60e5a1b782eb6fe.png"
 
+STYLE_HTML = """
+<style>
+a:hover {
+    background-color: rgba(.7, .7, .7, .05);
+}
+</style>
+"""
+
 
 def mention(label: str, url: str, icon: str = "🔗", write: bool = True):
     """Mention a link with a label and icon.
@@ -36,17 +44,6 @@ def mention(label: str, url: str, icon: str = "🔗", write: bool = True):
     else:
         icon_html = icon + "  "
 
-    st.write(
-        """
-<style>
-a:hover {
-    background-color: rgba(.7, .7, .7, .05);
-}
-</style>
-""",
-        unsafe_allow_html=True,
-    )
-
     mention_html = a(
         contenteditable=False,
         href=url,
@@ -65,10 +62,11 @@ a:hover {
         span(),
     )
 
+    html = STYLE_HTML + str(mention_html)
     if write:
-        st.write(str(mention_html), unsafe_allow_html=True)
+        st.write(html, unsafe_allow_html=True)
     else:
-        return str(mention_html)
+        return html
 
 
 def example_1():
