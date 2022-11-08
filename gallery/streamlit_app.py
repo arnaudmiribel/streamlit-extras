@@ -4,7 +4,7 @@ import random
 from importlib import import_module
 from itertools import cycle, dropwhile
 from pathlib import Path
-from typing import Callable, List, Optional
+from typing import Callable, Dict, List, Optional, Union
 
 import streamlit_patches as st
 
@@ -120,8 +120,8 @@ def get_page_content(
     extra_name: str,
     icon: str,
     title: str,
-    examples: List[Callable],
-    func: Callable,
+    examples: Union[List[Callable], Dict[Callable, List[Callable]]],
+    funcs: List[Callable],
     inputs: dict,
     desc: str,
     author: str,
@@ -187,11 +187,17 @@ def get_page_content(
             )
 
         for example in examples:
+            if isinstance(examples, dict):
+                funcs_to_import = examples[example]
+                func_name = ", ".join([func.__name__ for func in funcs_to_import])
+            else:
+                func_name = funcs[0].__name__
+
             if pypi_name:
-                import_code = f"from {package_name} import {func.__name__}\n\n"
+                import_code = f"from {package_name} import {func_name}\n\n"
             else:
                 import_code = (
-                    f"from streamlit_extras.{extra_name} import" f" {func.__name__}\n\n"
+                    f"from streamlit_extras.{extra_name} import" f" {func_name}\n\n"
                 )
             st.caption(f"↓ {example.__name__} · Input code")
             st.code(import_code + get_function_body(example))
@@ -199,17 +205,18 @@ def get_page_content(
             example(**inputs)
 
         st.write("")
-        st.write("## Docstring")
-        st.help(func)
+        st.write("## Docstring(s)")
+        for func in funcs:
+            st.help(func)
 
-        with st.expander("Show me the full code!"):
-            st.code(inspect.getsource(func))
+            with st.expander("Show me the full code!"):
+                st.code(inspect.getsource(func))
 
-        if experimental_playground:
-            st.write("")
-            st.write("## Playground 🛝 [experimental]")
-            st.caption("In this section, you can test the function live!")
-            function_explorer(func=func)
+            if experimental_playground:
+                st.write("")
+                st.write("## Playground 🛝 [experimental]")
+                st.caption("In this section, you can test the function live!")
+                function_explorer(func=func)
 
     page_content.__name__ = title
 
@@ -222,7 +229,10 @@ for extra_name in extra_names:
     mod = import_module(f"streamlit_extras.{extra_name}")
     title = mod.__title__
     icon = mod.__icon__
-    func = mod.__func__
+    if hasattr(mod, "__funcs__"):
+        funcs = mod.__funcs__
+    else:
+        funcs = [mod.__func__]
     examples = mod.__examples__
     inputs = getattr(mod, "__inputs__", dict())
     desc = mod.__desc__
@@ -242,7 +252,7 @@ for extra_name in extra_names:
             icon=icon,
             title=title,
             examples=examples,
-            func=func,
+            funcs=funcs,
             inputs=inputs,
             desc=desc,
             author=author,

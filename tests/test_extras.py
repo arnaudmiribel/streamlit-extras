@@ -17,8 +17,19 @@ def test_extra_attributes(extra: str):
     assert type(mod.__title__) == str
     assert type(mod.__icon__) == str
     assert type(mod.__desc__) == str
-    assert callable(mod.__func__)
+    assert hasattr(mod, "__funcs__") or hasattr(mod, "__func__")
+    if hasattr(mod, "__funcs__"):
+        assert type(mod.__funcs__) == list
+        for func in mod.__funcs__:
+            assert callable(func)
+    else:
+        assert callable(mod.__func__)
     assert len(mod.__examples__) > 0
+    if type(mod.__examples__) == dict:
+        for example, funcs in mod.__examples__.items():
+            assert callable(example)
+            for func in funcs:
+                assert callable(func)
     assert type(mod.__author__) == str
     if hasattr(mod, "__inputs__"):
         assert type(mod.__inputs__) == dict
