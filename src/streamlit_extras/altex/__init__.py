@@ -232,6 +232,8 @@ sparkarea_chart = partial(area_chart, spark=True)
 
 @st.experimental_memo
 def example_line():
+    from streamlit_extras.altex import line_chart
+
     line_chart(
         data=stocks.query("symbol == 'GOOG'"),
         x="date",
@@ -242,6 +244,8 @@ def example_line():
 
 @st.experimental_memo
 def example_multi_line():
+    from streamlit_extras.altex import line_chart
+
     line_chart(
         data=stocks,
         x="date",
@@ -253,6 +257,8 @@ def example_multi_line():
 
 @st.experimental_memo
 def example_bar():
+    from streamlit_extras.altex import bar_chart
+
     bar_chart(
         data=stocks.query("symbol == 'GOOG'"),
         x="date",
@@ -263,6 +269,8 @@ def example_bar():
 
 @st.experimental_memo
 def example_hist():
+    from streamlit_extras.altex import hist_chart
+
     hist_chart(
         data=stocks.assign(price=stocks.price.round(0)),
         x="price",
@@ -272,6 +280,8 @@ def example_hist():
 
 @st.experimental_memo
 def example_scatter_opacity():
+    from streamlit_extras.altex import scatter_chart
+
     scatter_chart(
         data=weather,
         x=alt.X("wind:Q", title="Custom X title"),
@@ -283,6 +293,8 @@ def example_scatter_opacity():
 
 @st.experimental_memo
 def example_bar_horizontal():
+    from streamlit_extras.altex import bar_chart
+
     bar_chart(
         data=weather.head(15),
         x="temp_max:Q",
@@ -293,6 +305,8 @@ def example_bar_horizontal():
 
 @st.experimental_memo
 def example_bar_log():
+    from streamlit_extras.altex import bar_chart
+
     bar_chart(
         data=weather,
         x=alt.X("temp_max:Q", title="Temperature"),
@@ -307,6 +321,8 @@ def example_bar_log():
 
 @st.experimental_memo
 def example_bar_sorted():
+    from streamlit_extras.altex import bar_chart
+
     bar_chart(
         data=weather.sort_values(by="temp_max", ascending=False).head(25),
         x=alt.X("date", sort="-y"),
@@ -317,6 +333,8 @@ def example_bar_sorted():
 
 @st.experimental_memo
 def example_scatter():
+    from streamlit_extras.altex import scatter_chart
+
     scatter_chart(
         data=weather,
         x=alt.X("wind:Q", title="Custom X title"),
@@ -327,6 +345,8 @@ def example_scatter():
 
 @st.experimental_memo
 def example_hist_time():
+    from streamlit_extras.altex import hist_chart
+
     hist_chart(
         data=weather,
         x="week(date):T",
@@ -341,6 +361,8 @@ def example_hist_time():
 
 @st.experimental_memo
 def example_sparkline():
+    from streamlit_extras.altex import sparkline_chart
+
     sparkline_chart(
         data=stocks.query("symbol == 'GOOG'"),
         x="date",
@@ -353,6 +375,8 @@ def example_sparkline():
 
 @st.experimental_memo
 def example_sparkbar():
+    from streamlit_extras.altex import sparkbar_chart
+
     sparkbar_chart(
         data=stocks.query("symbol == 'GOOG'"),
         x="date",
@@ -364,6 +388,7 @@ def example_sparkbar():
 
 @st.experimental_memo
 def example_sparkarea():
+    from streamlit_extras.altex import sparkarea_chart
 
     df = pd.melt(
         random_data,
@@ -384,6 +409,8 @@ def example_sparkarea():
 
 @st.experimental_memo
 def example_bar_stacked():
+    from streamlit_extras.altex import bar_chart
+
     bar_chart(
         data=barley,
         x=alt.X("variety", title="Variety"),
@@ -395,6 +422,8 @@ def example_bar_stacked():
 
 @st.experimental_memo
 def example_bar_normalized():
+    from streamlit_extras.altex import bar_chart
+
     bar_chart(
         data=barley,
         x=alt.X("variety:N", title="Variety"),
@@ -406,6 +435,8 @@ def example_bar_normalized():
 
 @st.experimental_memo
 def example_bar_normalized_custom():
+    from streamlit_extras.altex import bar_chart
+
     bar_chart(
         data=barley,
         x=alt.X("variety", title="Variety"),
@@ -417,6 +448,8 @@ def example_bar_normalized_custom():
 
 @st.experimental_memo
 def example_bar_grouped():
+    from streamlit_extras.altex import bar_chart
+
     bar_chart(
         data=barley,
         x="year:O",
