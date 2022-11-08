@@ -38,31 +38,15 @@ def url_to_dataframe(url: str) -> pd.DataFrame:
         raise Exception("URL must end with .json or .csv")
 
 
-with st.expander("Get some data first"):
-
-    """We use the following datasets to provide examples with the charts:"""
-
-    weather = url_to_dataframe(weather_data_url)
-    stocks = url_to_dataframe(stocks_data_url).assign(
-        date=lambda df: pd.to_datetime(df.date)
-    )
-    barley = url_to_dataframe(barley_data_url)
-
-    left, right = st.columns(2)
-    left.caption(f"↓ The [Stocks]({stocks_data_url}) dataset")
-    left.dataframe(weather)
-    right.caption(f"↓ The [Weather]({weather_data_url}) dataset")
-    right.dataframe(stocks)
-    left, right = st.columns(2)
-    left.caption(f"↓ The [Barley]({barley_data_url}) dataset")
-    left.dataframe(barley)
-
-    random_data = pd.DataFrame(
-        np.random.randn(20, 7),
-        columns=list("abcdefg"),
-    ).reset_index()
-    right.caption("↓ A random dataset")
-    right.dataframe(random_data)
+weather = url_to_dataframe(weather_data_url)
+stocks = url_to_dataframe(stocks_data_url).assign(
+    date=lambda df: pd.to_datetime(df.date)
+)
+barley = url_to_dataframe(barley_data_url)
+random_data = pd.DataFrame(
+    np.random.randn(20, 7),
+    columns=list("abcdefg"),
+).reset_index()
 
 
 def _drop_nones(iterable: Union[dict, list]):
