@@ -207,14 +207,15 @@ def get_page_content(
         st.write("")
         st.write("## Docstring(s)")
         for func in funcs:
-            st.help(func)
-
-            with st.expander("Show me the full code!"):
+            st.write(f"### `{func.__name__}`")
+            with st.expander("Docstring"):
+                st.help(func)
+            with st.expander("Source code"):
                 st.code(inspect.getsource(func))
 
             if experimental_playground:
                 st.write("")
-                st.write("## Playground 🛝 [experimental]")
+                st.write("#### Playground 🛝 [experimental]")
                 st.caption("In this section, you can test the function live!")
                 function_explorer(func=func)
 
