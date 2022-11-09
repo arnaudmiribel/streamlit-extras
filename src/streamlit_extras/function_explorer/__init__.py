@@ -34,7 +34,7 @@ def function_explorer(func: Callable):
     args = get_arg_details(func)
     inputs: Dict[str, Any] = dict()
 
-    st.write("#### Inputs")
+    st.write("##### Inputs")
     st.write(
         f"Go ahead and play with `{func.__name__}` parameters, see how"
         " they change the output!"
@@ -100,7 +100,7 @@ def function_explorer(func: Callable):
             else:
                 st.warning(f"`function_explorer` does not support type {type_hint}")
 
-    st.write("#### Output")
+    st.write("##### Output")
     func(**inputs)
     if func.__name__ not in st.session_state:
         st.session_state[func.__name__] = {}
