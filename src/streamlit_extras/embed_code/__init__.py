@@ -20,7 +20,7 @@ def example_gitlab():
     gitlab_snippet(
         "https://gitlab.com/snippets/1995463",
         width=700,
-        height=400,
+        height=200,
     )
 
 
