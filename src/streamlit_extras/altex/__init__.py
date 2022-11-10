@@ -6,19 +6,6 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
-# TODO: Add 'ascending' for bar charts
-
-
-weather_data_url = (
-    "https://raw.githubusercontent.com/tvst/plost/master/data/seattle-weather.csv"
-)
-stocks_data_url = (
-    "https://raw.githubusercontent.com/vega/vega/main/docs/data/stocks.csv"
-)
-barley_data_url = (
-    "https://raw.githubusercontent.com/vega/vega/main/docs/data/barley.json"
-)
-
 
 @st.experimental_memo
 def url_to_dataframe(url: str) -> pd.DataFrame:
@@ -38,15 +25,37 @@ def url_to_dataframe(url: str) -> pd.DataFrame:
         raise Exception("URL must end with .json or .csv")
 
 
-weather = url_to_dataframe(weather_data_url)
-stocks = url_to_dataframe(stocks_data_url).assign(
-    date=lambda df: pd.to_datetime(df.date)
+
+weather_data_url = (
+    "https://raw.githubusercontent.com/tvst/plost/master/data/seattle-weather.csv"
 )
-barley = url_to_dataframe(barley_data_url)
-random_data = pd.DataFrame(
-    np.random.randn(20, 7),
-    columns=list("abcdefg"),
-).reset_index()
+stocks_data_url = (
+    "https://raw.githubusercontent.com/vega/vega/main/docs/data/stocks.csv"
+)
+barley_data_url = (
+    "https://raw.githubusercontent.com/vega/vega/main/docs/data/barley.json"
+)
+
+
+def get_weather_data():
+    return url_to_dataframe(weather_data_url)
+
+
+def get_stocks_data():
+    return url_to_dataframe(stocks_data_url).assign(
+        date=lambda df: pd.to_datetime(df.date)
+    )
+
+
+def get_barley_data():
+    return url_to_dataframe(barley_data_url)
+
+
+def get_random_data():
+    return pd.DataFrame(
+        np.random.randn(20, 7),
+        columns=list("abcdefg"),
+    ).reset_index()
 
 
 def _drop_nones(iterable: Union[dict, list]):
@@ -219,20 +228,30 @@ def chart(use_container_width: bool = True, **kwargs):
     )
 
 
-scatter_chart = partial(chart, mark_function="point")
-line_chart = partial(chart, mark_function="line")
-area_chart = partial(chart, mark_function="area")
-bar_chart = partial(chart, mark_function="bar")
-hist_chart = partial(bar_chart, y="count()")
-sparkline_chart = partial(line_chart, spark=True)
-sparkbar_chart = partial(bar_chart, spark=True)
-sparkhist_chart = partial(hist_chart, spark=True)
-sparkarea_chart = partial(area_chart, spark=True)
+def _partial(*args, **kwargs):
+    """Alternative to 'functools.partial' where __name__ attribute
+    can be set manually, since the default partial does not create it.
+    """
+    __name__ = kwargs.pop("__name__", "foo")
+    func = partial(*args, **kwargs)
+    func.__name__ = __name__
+    return func
+
+
+scatter_chart = _partial(chart, mark_function="point", __name__="scatter_chart")
+line_chart = _partial(chart, mark_function="line", __name__="line_chart")
+area_chart = _partial(chart, mark_function="area", __name__="area_chart")
+bar_chart = _partial(chart, mark_function="bar", __name__="bar_chart")
+hist_chart = _partial(bar_chart, y="count()", __name__="hist_chart")
+sparkline_chart = _partial(line_chart, spark=True, __name__="sparkline_chart")
+sparkbar_chart = _partial(bar_chart, spark=True, __name__="sparkbar_chart")
+sparkhist_chart = _partial(hist_chart, spark=True, __name__="sparkhist_chart")
+sparkarea_chart = _partial(area_chart, spark=True, __name__="sparkarea_chart")
 
 
 @st.experimental_memo
 def example_line():
-    from streamlit_extras.altex import line_chart
+    stocks = get_stocks_data()
 
     line_chart(
         data=stocks.query("symbol == 'GOOG'"),
@@ -244,8 +263,7 @@ def example_line():
 
 @st.experimental_memo
 def example_multi_line():
-    from streamlit_extras.altex import line_chart
-
+    stocks = get_stocks_data()
     line_chart(
         data=stocks,
         x="date",
@@ -257,8 +275,7 @@ def example_multi_line():
 
 @st.experimental_memo
 def example_bar():
-    from streamlit_extras.altex import bar_chart
-
+    stocks = get_stocks_data()
     bar_chart(
         data=stocks.query("symbol == 'GOOG'"),
         x="date",
@@ -269,8 +286,7 @@ def example_bar():
 
 @st.experimental_memo
 def example_hist():
-    from streamlit_extras.altex import hist_chart
-
+    stocks = get_stocks_data()
     hist_chart(
         data=stocks.assign(price=stocks.price.round(0)),
         x="price",
@@ -280,8 +296,7 @@ def example_hist():
 
 @st.experimental_memo
 def example_scatter_opacity():
-    from streamlit_extras.altex import scatter_chart
-
+    weather = get_weather_data()
     scatter_chart(
         data=weather,
         x=alt.X("wind:Q", title="Custom X title"),
@@ -293,8 +308,7 @@ def example_scatter_opacity():
 
 @st.experimental_memo
 def example_bar_horizontal():
-    from streamlit_extras.altex import bar_chart
-
+    weather = get_weather_data()
     bar_chart(
         data=weather.head(15),
         x="temp_max:Q",
@@ -305,8 +319,7 @@ def example_bar_horizontal():
 
 @st.experimental_memo
 def example_bar_log():
-    from streamlit_extras.altex import bar_chart
-
+    weather = get_weather_data()
     bar_chart(
         data=weather,
         x=alt.X("temp_max:Q", title="Temperature"),
@@ -321,8 +334,7 @@ def example_bar_log():
 
 @st.experimental_memo
 def example_bar_sorted():
-    from streamlit_extras.altex import bar_chart
-
+    weather = get_weather_data()
     bar_chart(
         data=weather.sort_values(by="temp_max", ascending=False).head(25),
         x=alt.X("date", sort="-y"),
@@ -333,8 +345,7 @@ def example_bar_sorted():
 
 @st.experimental_memo
 def example_scatter():
-    from streamlit_extras.altex import scatter_chart
-
+    weather = get_weather_data()
     scatter_chart(
         data=weather,
         x=alt.X("wind:Q", title="Custom X title"),
@@ -345,8 +356,7 @@ def example_scatter():
 
 @st.experimental_memo
 def example_hist_time():
-    from streamlit_extras.altex import hist_chart
-
+    weather = get_weather_data()
     hist_chart(
         data=weather,
         x="week(date):T",
@@ -361,8 +371,7 @@ def example_hist_time():
 
 @st.experimental_memo
 def example_sparkline():
-    from streamlit_extras.altex import sparkline_chart
-
+    stocks = get_stocks_data()
     sparkline_chart(
         data=stocks.query("symbol == 'GOOG'"),
         x="date",
@@ -375,8 +384,7 @@ def example_sparkline():
 
 @st.experimental_memo
 def example_sparkbar():
-    from streamlit_extras.altex import sparkbar_chart
-
+    stocks = get_stocks_data()
     sparkbar_chart(
         data=stocks.query("symbol == 'GOOG'"),
         x="date",
@@ -388,8 +396,7 @@ def example_sparkbar():
 
 @st.experimental_memo
 def example_sparkarea():
-    from streamlit_extras.altex import sparkarea_chart
-
+    random_data = get_random_data()
     df = pd.melt(
         random_data,
         id_vars="index",
@@ -409,8 +416,7 @@ def example_sparkarea():
 
 @st.experimental_memo
 def example_bar_stacked():
-    from streamlit_extras.altex import bar_chart
-
+    barley = get_barley_data()
     bar_chart(
         data=barley,
         x=alt.X("variety", title="Variety"),
@@ -422,8 +428,7 @@ def example_bar_stacked():
 
 @st.experimental_memo
 def example_bar_normalized():
-    from streamlit_extras.altex import bar_chart
-
+    barley = get_barley_data()
     bar_chart(
         data=barley,
         x=alt.X("variety:N", title="Variety"),
@@ -435,8 +440,7 @@ def example_bar_normalized():
 
 @st.experimental_memo
 def example_bar_normalized_custom():
-    from streamlit_extras.altex import bar_chart
-
+    barley = get_barley_data()
     bar_chart(
         data=barley,
         x=alt.X("variety", title="Variety"),
@@ -448,8 +452,7 @@ def example_bar_normalized_custom():
 
 @st.experimental_memo
 def example_bar_grouped():
-    from streamlit_extras.altex import bar_chart
-
+    barley = get_barley_data()
     bar_chart(
         data=barley,
         x="year:O",
@@ -462,7 +465,7 @@ def example_bar_grouped():
     )
 
 
-__func__ = chart
+__funcs__ = [_chart]
 __title__ = "Altex"
 __desc__ = (
     "A simple wrapper on top of Altair to make Streamlit charts in an"
@@ -470,23 +473,23 @@ __desc__ = (
     " probably a good fit! Inspired by plost and plotly-express."
 )
 __icon__ = "👸"
-__examples__ = [
-    example_line,
-    example_multi_line,
-    example_bar,
-    example_hist,
-    example_scatter,
-    example_sparkline,
-    example_sparkbar,
-    example_sparkarea,
-    example_hist_time,
-    example_bar_sorted,
-    example_bar_normalized,
-    example_bar_grouped,
-    example_bar_horizontal,
-    example_bar_log,
-    example_scatter_opacity,
-    example_bar_normalized_custom,
-]
+__examples__ = {
+    example_line: [line_chart, get_stocks_data],
+    example_multi_line: [line_chart, get_stocks_data],
+    example_bar: [bar_chart, get_stocks_data],
+    example_hist: [hist_chart, get_stocks_data],
+    example_scatter: [scatter_chart, get_weather_data],
+    example_sparkline: [sparkline_chart, get_stocks_data],
+    example_sparkbar: [sparkbar_chart, get_stocks_data],
+    example_sparkarea: [sparkarea_chart, get_random_data],
+    example_hist_time: [hist_chart, get_weather_data],
+    example_bar_sorted: [bar_chart, get_weather_data],
+    example_bar_normalized: [bar_chart, get_barley_data],
+    example_bar_grouped: [bar_chart, get_barley_data],
+    example_bar_horizontal: [bar_chart, get_weather_data],
+    example_bar_log: [bar_chart, get_weather_data],
+    example_scatter_opacity: [scatter_chart, get_weather_data],
+    example_bar_normalized_custom: [bar_chart, get_barley_data],
+}
 __author__ = "Arnaud Miribel"
 __experimental_playground__ = False
