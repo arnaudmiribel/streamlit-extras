@@ -25,7 +25,6 @@ def url_to_dataframe(url: str) -> pd.DataFrame:
         raise Exception("URL must end with .json or .csv")
 
 
-
 weather_data_url = (
     "https://raw.githubusercontent.com/tvst/plost/master/data/seattle-weather.csv"
 )
