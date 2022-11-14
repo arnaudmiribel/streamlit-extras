@@ -1,6 +1,10 @@
 import streamlit as st
 from st_keyup import st_keyup
 
+from .. import extra
+
+st_keyup = extra(st_keyup)
+
 
 def example():
     st.write("## Notice how the output doesn't update until you hit enter")
@@ -17,7 +21,6 @@ def example_with_debounce():
     st.write(out)
 
 
-__func__ = st_keyup
 __title__ = "Keyup text input"
 __desc__ = "A text input that updates with every key press"
 __icon__ = "🔑"

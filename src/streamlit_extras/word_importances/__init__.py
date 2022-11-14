@@ -2,7 +2,10 @@ from typing import List
 
 import streamlit as st
 
+from .. import extra
 
+
+@extra
 def format_word_importances(words: List[str], importances: List[float]) -> str:
     """Adds a background color to each word based on its importance (float from -1 to 1)
 
@@ -58,7 +61,6 @@ def example():
     st.write(html, unsafe_allow_html=True)
 
 
-__func__ = format_word_importances
 __title__ = "Word importances"
 __desc__ = "Highlight words based on their importances. Inspired from captum library."
 __icon__ = "❗"

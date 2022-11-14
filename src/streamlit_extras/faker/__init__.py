@@ -1,5 +1,9 @@
 from streamlit_faker import get_streamlit_faker
 
+from .. import extra
+
+get_streamlit_faker = extra(get_streamlit_faker)
+
 
 def example():
     fake = get_streamlit_faker(seed=42)
@@ -11,7 +15,6 @@ def example():
     fake.altair_chart()
 
 
-__func__ = get_streamlit_faker
 __title__ = "Streamlit Faker"
 __desc__ = "Fake Streamlit commands at the speed of light! Great for prototyping apps."
 __icon__ = "🥷"

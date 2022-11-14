@@ -1,6 +1,8 @@
 import streamlit as st
 from htbuilder import span
 
+from .. import extra
+
 
 def load_key_css():
     st.write(
@@ -23,6 +25,7 @@ def load_key_css():
     )
 
 
+@extra
 def key(text: str, write: bool = True) -> str:
     """Applies a custom CSS to input text which makes it look like a keyboard key.
     To be used after running load_key_css() at least once in the app!
@@ -55,7 +58,6 @@ def example_inline():
     )
 
 
-__func__ = key
 __title__ = "Keyboard text"
 __desc__ = "Create a keyboard styled text"
 __icon__ = "⌨️"

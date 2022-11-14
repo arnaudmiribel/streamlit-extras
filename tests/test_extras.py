@@ -17,16 +17,14 @@ def test_extra_attributes(extra: str):
     assert type(mod.__title__) == str
     assert type(mod.__icon__) == str
     assert type(mod.__desc__) == str
-    assert hasattr(mod, "__funcs__") or hasattr(mod, "__func__")
-    if hasattr(mod, "__funcs__"):
-        assert type(mod.__funcs__) == list
-        for func in mod.__funcs__:
-            assert callable(func)
-        # If you have multiple functions, then each example function must
-        # specify which of these functions must be imported
+    assert hasattr(mod, "__funcs__")
+    assert type(mod.__funcs__) == list
+    for func in mod.__funcs__:
+        assert callable(func)
+    # If you have multiple functions, then each example function must
+    # specify which of these functions must be imported
+    if len(mod.__funcs__) > 1:
         assert type(mod.__examples__) == dict
-    else:
-        assert callable(mod.__func__)
     assert len(mod.__examples__) > 0
     if type(mod.__examples__) == dict:
         for example, funcs in mod.__examples__.items():

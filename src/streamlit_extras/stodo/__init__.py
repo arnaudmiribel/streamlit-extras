@@ -1,6 +1,9 @@
 import streamlit as st
 
+from .. import extra
 
+
+@extra
 def to_do(st_commands, checkbox_id):
     """Create a to_do item
 
@@ -68,7 +71,6 @@ def example():
     )
 
 
-__func__ = to_do
 __title__ = "To-do items"
 __desc__ = "Simple Python function to create to-do items in Streamlit!"
 __icon__ = "✔️"

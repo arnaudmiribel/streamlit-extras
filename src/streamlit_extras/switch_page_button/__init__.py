@@ -1,6 +1,9 @@
 import streamlit as st
 
+from .. import extra
 
+
+@extra
 def switch_page(page_name: str):
     from streamlit.runtime.scriptrunner import RerunData, RerunException
     from streamlit.source_util import get_pages
@@ -47,7 +50,6 @@ def test_switch_invalid_page():
         switch_page("non existent page")
 
 
-__func__ = switch_page
 __title__ = "Switch page function"
 __desc__ = "Function to switch page programmatically in a MPA"
 __icon__ = "🖱️"

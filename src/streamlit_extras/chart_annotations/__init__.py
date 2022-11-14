@@ -4,6 +4,8 @@ import altair as alt
 import pandas as pd
 import streamlit as st
 
+from .. import extra
+
 alt.themes.enable("streamlit")
 
 
@@ -57,6 +59,7 @@ def get_chart(data: pd.DataFrame) -> alt.Chart:
     return (lines + points + tooltips).interactive()
 
 
+@extra
 def get_annotations_chart(
     annotations: Iterable[Tuple],
     y: float = 0,
@@ -138,7 +141,6 @@ def example():
     st.altair_chart(chart, use_container_width=True)
 
 
-__func__ = get_annotations_chart
 __title__ = "Chart annotations"
 __desc__ = "Add annotations to specific timestamps in your time series in Altair!"
 __icon__ = "⬇"

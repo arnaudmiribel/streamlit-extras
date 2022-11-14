@@ -9,14 +9,15 @@ Head over to our public [repository](https://github.com/arnaudmiribel/streamlit-
 
     ```python
     # extras/<extra_name>/__init__.py
+    from .. import extra
 
+    @extra  # this will register your function's extra
     def my_main_function():
         ...
 
     def example():
         ...
 
-    __func__ = my_main_function  # main function of your extra!
     __title__ = "Great title!"  # title of your extra!
     __desc__ = "Great description"  # description of your extra!
     __icon__ = "🔭"  # give your extra an icon!
@@ -31,11 +32,13 @@ Head over to our public [repository](https://github.com/arnaudmiribel/streamlit-
     # extras/<extra_name>/__init__.py
 
     from my_package import my_main_function
+    from .. import extra
+
+    my_main_function = extra(my_main_function)
 
     def example():
         ...
 
-    __func__ = my_main_function  # main function of your extra!
     __title__ = "Great title!"  # title of your extra!
     __desc__ = "Great description"  # description of your extra!
     __icon__ = "🔭"  # give your extra an icon!

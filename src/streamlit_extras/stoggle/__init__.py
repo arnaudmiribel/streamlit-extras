@@ -2,7 +2,10 @@ import streamlit as st
 from htbuilder import details, div, p, styles
 from htbuilder import summary as smry
 
+from .. import extra
 
+
+@extra
 def stoggle(summary: str, content: str):
     """
     Displays a toggle widget in Streamlit
@@ -30,7 +33,6 @@ def example():
     )
 
 
-__func__ = stoggle
 __title__ = "Toggle button"
 __desc__ = "Toggle button just like in Notion!"
 __icon__ = "➡️"

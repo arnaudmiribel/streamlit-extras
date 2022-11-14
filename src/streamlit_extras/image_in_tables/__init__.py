@@ -3,6 +3,8 @@ from typing import Iterable
 import pandas as pd
 import streamlit as st
 
+from .. import extra
+
 
 @st.experimental_memo
 def get_dataframe() -> pd.DataFrame:
@@ -36,6 +38,7 @@ def get_dataframe() -> pd.DataFrame:
     return df
 
 
+@extra
 @st.experimental_memo
 def table_with_images(df: pd.DataFrame, url_columns: Iterable):
 
@@ -62,7 +65,6 @@ def example(df: pd.DataFrame):
     st.markdown(df_html, unsafe_allow_html=True)
 
 
-__func__ = table_with_images
 __title__ = "Image in tables"
 __desc__ = "Transform URLs into images in your dataframes"
 __icon__ = "🚩"

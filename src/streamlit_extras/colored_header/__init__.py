@@ -4,6 +4,8 @@ from typing import Literal
 
 import streamlit as st
 
+from .. import extra
+
 
 def color(name):
     """Returns a color from the streamlit color palette, e.g. red-100, as hex."""
@@ -155,6 +157,7 @@ _SUPPORTED_COLORS = Literal[
 ]
 
 
+@extra
 def colored_header(
     label: str = "Nice title",
     description: str = "Cool description",
@@ -183,7 +186,6 @@ def example():
     )
 
 
-__func__ = colored_header
 __title__ = "Color ya Headers"
 __desc__ = "This function makes headers much prettier in Streamlit"
 __icon__ = "🖌️"

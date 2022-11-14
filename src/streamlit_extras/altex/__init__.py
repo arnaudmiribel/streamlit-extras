@@ -6,6 +6,8 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
+from .. import extra
+
 
 @st.experimental_memo
 def url_to_dataframe(url: str) -> pd.DataFrame:
@@ -120,6 +122,7 @@ def _get_spark_axis_config(
         raise TypeError("Input x/y must be of type str or alt.X or alt.Y")
 
 
+@extra
 def _chart(
     mark_function: str,
     data: pd.DataFrame,
@@ -464,7 +467,6 @@ def example_bar_grouped():
     )
 
 
-__funcs__ = [_chart]
 __title__ = "Altex"
 __desc__ = (
     "A simple wrapper on top of Altair to make Streamlit charts in an"

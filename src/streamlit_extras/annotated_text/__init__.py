@@ -1,5 +1,9 @@
 from annotated_text import annotated_text
 
+from .. import extra
+
+annotated_text = extra(annotated_text)
+
 
 def example_1():
     from annotated_text import annotated_text
@@ -28,7 +32,6 @@ def example_2():
     )
 
 
-__func__ = annotated_text
 __title__ = "Annotated text"
 __desc__ = "A simple way to display annotated text in Streamlit apps"
 __icon__ = "🖊️"

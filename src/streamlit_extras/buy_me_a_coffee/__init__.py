@@ -3,6 +3,8 @@ from typing import Literal
 import streamlit as st
 from streamlit.components.v1 import html
 
+from .. import extra
+
 Font = Literal[
     "Cookie",
     "Lato",
@@ -14,6 +16,7 @@ Font = Literal[
 ]
 
 
+@extra
 def button(
     username: str,
     floating: bool = True,
@@ -61,7 +64,6 @@ def example():
     button(username="fake-username", floating=False, width=221)
 
 
-__func__ = button  # main function of your extra!
 __title__ = "Buy Me a Coffee Button"  # title of your extra!
 __desc__ = "Adds a floating button which links to your Buy Me a Coffee page"  # description of your extra!
 __icon__ = "☕"  # give your extra an icon!
