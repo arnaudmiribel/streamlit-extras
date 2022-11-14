@@ -21,7 +21,7 @@ def example():
 
 __title__ = "Toggle Switch"  # title of your extra!
 __desc__ = (
-    "On/Off Toggle Switch with color custimizations"  # description of your extra!
+    "On/Off Toggle Switch with color customizations"  # description of your extra!
 )
 __icon__ = "🔛"  # give your extra an icon!
 __examples__ = [example]  # create some examples to show how cool your extra is!
