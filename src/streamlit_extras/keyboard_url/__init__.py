@@ -28,33 +28,34 @@ def keyboard_to_url(
 
     if key:
         key_code_js_row = f"const keyCode = '{key}'.toUpperCase().charCodeAt(0);"
-    if key_code:
+    elif key_code:
         key_code_js_row = f"const keyCode = {key_code};"
+    else:
+        raise ValueError("You must provide key or key_code")
 
-    with st.sidebar:
-        components.html(
-            f"""
-    <script>
-    const doc = window.parent.document;
-    buttons = Array.from(doc.querySelectorAll('button[kind=primary]'));
-    {key_code_js_row}
-    doc.addEventListener('keydown', function(e) {{
-        e = e || window.event;
-        var target = e.target || e.srcElement;
-        // Only trigger the events if they're not happening in an input/textarea/select/button field
-        if ( !/INPUT|TEXTAREA|SELECT|BUTTON/.test(target.nodeName) ) {{
-            switch (e.keyCode) {{
-                case keyCode:
-                    window.open('{url}', '_blank').focus();
-                    break;
-            }}
+    components.html(
+        f"""
+<script>
+const doc = window.parent.document;
+buttons = Array.from(doc.querySelectorAll('button[kind=primary]'));
+{key_code_js_row}
+doc.addEventListener('keydown', function(e) {{
+    e = e || window.event;
+    var target = e.target || e.srcElement;
+    // Only trigger the events if they're not happening in an input/textarea/select/button field
+    if ( !/INPUT|TEXTAREA|SELECT|BUTTON/.test(target.nodeName) ) {{
+        switch (e.keyCode) {{
+            case keyCode:
+                window.open('{url}', '_blank').focus();
+                break;
         }}
-    }});
-    </script>
-    """,
-            height=0,
-            width=0,
-        )
+    }}
+}});
+</script>
+""",
+        height=0,
+        width=0,
+    )
 
 
 def example():
