@@ -230,10 +230,7 @@ for extra_name in extra_names:
     mod = import_module(f"streamlit_extras.{extra_name}")
     title = mod.__title__
     icon = mod.__icon__
-    if hasattr(mod, "__funcs__"):
-        funcs = mod.__funcs__
-    else:
-        funcs = [mod.__func__]
+    funcs = mod.__funcs__
     examples = mod.__examples__
     inputs = getattr(mod, "__inputs__", dict())
     desc = mod.__desc__

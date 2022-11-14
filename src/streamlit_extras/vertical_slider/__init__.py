@@ -1,6 +1,10 @@
 import streamlit as st
 from streamlit_vertical_slider import vertical_slider
 
+from .. import extra
+
+vertical_slider = extra(vertical_slider)
+
 
 def example():
     st.write("## Vertical Slider")
@@ -16,7 +20,6 @@ def example():
     )
 
 
-__func__ = vertical_slider  # main function of your extra!
 __title__ = "Vertical Slider"  # title of your extra!
 __desc__ = (
     "Continuous Vertical Slider with color customizations"  # description of your extra!

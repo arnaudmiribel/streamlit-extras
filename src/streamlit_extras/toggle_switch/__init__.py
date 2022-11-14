@@ -1,6 +1,10 @@
 import streamlit as st
 from streamlit_toggle import st_toggle_switch
 
+from .. import extra
+
+st_toggle_switch = extra(st_toggle_switch)
+
 
 def example():
     st.write("## Toggle Switch")
@@ -15,7 +19,6 @@ def example():
     )
 
 
-__func__ = st_toggle_switch  # main function of your extra!
 __title__ = "Toggle Switch"  # title of your extra!
 __desc__ = (
     "On/Off Toggle Switch with color customizations"  # description of your extra!

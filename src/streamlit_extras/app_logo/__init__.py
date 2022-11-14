@@ -1,7 +1,10 @@
 import streamlit as st
 import validators
 
+from .. import extra
 
+
+@extra
 def add_logo(logo_url: str):
     """Add a logo (from logo_url) on the top of the navigation page of a multipage app.
     Taken from https://discuss.streamlit.io/t/put-logo-and-title-above-on-top-of-page-navigation-in-sidebar-of-multipage-app/28213/6
@@ -32,7 +35,6 @@ def example():
     st.write("👈 Check out the cat in the nav-bar!")
 
 
-__func__ = add_logo
 __title__ = "App logo"
 __desc__ = "Add a logo on top of the navigation bar of a multipage app"
 __icon__ = "🐱"

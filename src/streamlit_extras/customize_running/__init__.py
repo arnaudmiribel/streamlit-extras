@@ -2,6 +2,8 @@ import time
 
 import streamlit as st
 
+from .. import extra
+
 center_css = """
 <style>
 
@@ -18,6 +20,7 @@ div[class*="StatusWidget"]{
 """
 
 
+@extra
 def center_running():
     st.markdown(center_css, unsafe_allow_html=True)
 
@@ -29,7 +32,6 @@ def example():
         time.sleep(2)
 
 
-__func__ = center_running
 __title__ = "Customize running"
 __desc__ = "Customize the running widget"
 __icon__ = "🏃‍♂️"

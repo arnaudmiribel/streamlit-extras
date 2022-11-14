@@ -2,7 +2,10 @@ from typing import Union
 
 import streamlit as st
 
+from .. import extra
 
+
+@extra
 def rain(
     emoji: str,
     font_size: int = 64,
@@ -210,7 +213,6 @@ def example():
     )
 
 
-__func__ = rain
 __title__ = "Let emojis rain"
 __desc__ = "Use this to create more animations like st.balloons() and st.snow()"
 __icon__ = "🌧️"

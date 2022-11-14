@@ -1,6 +1,10 @@
 import streamlit as st
 from camera_input_live import camera_input_live
 
+from .. import extra
+
+camera_input_live = extra(camera_input_live)
+
 
 def example():
     st.write("# See a new image every second")
@@ -10,7 +14,6 @@ def example():
         st.image(image)
 
 
-__func__ = camera_input_live
 __title__ = "Camera input live"
 __desc__ = "A camera input that updates a variable number of seconds"
 __icon__ = "📸"

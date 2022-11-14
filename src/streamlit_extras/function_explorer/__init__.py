@@ -5,6 +5,8 @@ import pandas as pd
 import streamlit as st
 from st_keyup import st_keyup
 
+from .. import extra
+
 
 def get_arg_details(func):
     signature = inspect.signature(func)
@@ -24,6 +26,7 @@ def get_arg_from_session_state(func_name: str, argument: str):
             return st.session_state[func_name]["inputs"][argument]
 
 
+@extra
 def function_explorer(func: Callable):
     """Gives a Streamlit UI to any function.
 
@@ -116,7 +119,6 @@ def example():
     function_explorer(foo)
 
 
-__func__ = function_explorer
 __title__ = "Function explorer"
 __desc__ = "Give a UI to any Python function! Very alpha though"
 __icon__ = "👩‍🚀"

@@ -7,6 +7,15 @@ from streamlit_embedcode import (
     tagmycode_snippet,
 )
 
+from .. import extra
+
+codepen_snippet = extra(codepen_snippet)
+github_gist = extra(github_gist)
+gitlab_snippet = extra(gitlab_snippet)
+ideone_snippet = extra(ideone_snippet)
+pastebin_snippet = extra(pastebin_snippet)
+tagmycode_snippet = extra(tagmycode_snippet)
+
 
 def example_github():
     github_gist(
@@ -56,14 +65,6 @@ def example_tagmycode(tagmycode_snippet):
     )
 
 
-__funcs__ = [
-    github_gist,
-    gitlab_snippet,
-    codepen_snippet,
-    ideone_snippet,
-    pastebin_snippet,
-    tagmycode_snippet,
-]
 __title__ = "Embed code"
 __desc__ = "Embed code from various platforms (Gists, snippets...)"
 __icon__ = "📋"

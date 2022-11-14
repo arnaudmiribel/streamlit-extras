@@ -9,7 +9,10 @@ from pandas.api.types import (
     is_object_dtype,
 )
 
+from .. import extra
 
+
+@extra
 def dataframe_explorer(df: pd.DataFrame) -> pd.DataFrame:
     """
     Adds a UI on top of a dataframe to let viewers filter columns
@@ -257,7 +260,6 @@ def example(df: pd.DataFrame):
     st.dataframe(filtered_df)
 
 
-__func__ = dataframe_explorer
 __title__ = "Dataframe explorer UI"
 __desc__ = (
     "Let your viewers explore dataframes themselves! Learn more about it on"

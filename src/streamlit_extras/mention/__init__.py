@@ -2,6 +2,8 @@ import streamlit as st
 from htbuilder import a, img, span
 from validators import url as validate_url
 
+from .. import extra
+
 GITHUB_ICON = "https://cdn-icons-png.flaticon.com/512/25/25231.png"
 NOTION_ICON = "https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png"
 TWITTER_ICON = "https://seeklogo.com/images/T/twitter-icon-circle-blue-logo-0902F48837-seeklogo.com.png"
@@ -16,6 +18,7 @@ a:hover {
 """
 
 
+@extra
 def mention(label: str, url: str, icon: str = "🔗", write: bool = True):
     """Mention a link with a label and icon.
 
@@ -115,7 +118,6 @@ def example_5():
     )
 
 
-__func__ = mention
 __title__ = "Mentions"
 __desc__ = "Create nice links with icons, like Notion mentions!"
 __icon__ = "🫵"

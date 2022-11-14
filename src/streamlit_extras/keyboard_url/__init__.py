@@ -1,9 +1,11 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
+from .. import extra
 from ..keyboard_text import key, load_key_css
 
 
+@extra
 def keyboard_to_url(
     key: str = None,
     key_code: int = None,
@@ -66,7 +68,6 @@ def example():
     )
 
 
-__func__ = keyboard_to_url
 __title__ = "Keyboard to URL"
 __desc__ = (
     "Create bindings so that hitting a key on your keyboard opens an URL in a"

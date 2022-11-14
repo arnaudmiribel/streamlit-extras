@@ -4,11 +4,14 @@ import traceback
 
 import streamlit as st
 
+from .. import extra
+
 ###
 # Extension from echo() in streamlit/echo.py
 ###
 
 
+@extra
 @contextlib.contextmanager
 def echo_expander(code_location="above", expander=True, label="Show code"):
     """Use in a `with` block to draw some code on the app, then execute it.
@@ -113,7 +116,6 @@ def example2():
         st.dataframe(df)
 
 
-__func__ = echo_expander
 __title__ = "Echo Expander"
 __desc__ = "Execute code, and show the code that was executed, but in an expander."
 __icon__ = "🆒"

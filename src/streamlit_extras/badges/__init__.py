@@ -3,9 +3,12 @@ from typing import Literal, get_args
 import streamlit as st
 from htbuilder import a, img
 
+from .. import extra
+
 _SUPPORTED_TYPES = Literal["pypi", "streamlit", "github", "twitter", "buymeacoffee"]
 
 
+@extra
 def badge(type: _SUPPORTED_TYPES, name: str = None, url: str = None):
     """Easily create a badge!
 
@@ -101,7 +104,6 @@ def example_buymeacoffee():
     badge(type="buymeacoffee", name="andfanilo")
 
 
-__func__ = badge
 __title__ = "Badges"
 __desc__ = "Create custom badges (e.g. PyPI, Streamlit Cloud, GitHub, Twitter, Buy Me a Coffee)"
 __icon__ = "🏷️"
