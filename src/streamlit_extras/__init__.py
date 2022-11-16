@@ -2,7 +2,7 @@ import inspect
 from importlib import import_module
 from typing import Any, Callable, Optional, TypeVar, Union, overload
 
-from streamlit import _gather_metrics
+from streamlit.runtime.metrics_util import gather_metrics as _gather_metrics
 
 F = TypeVar("F", bound=Callable[..., Any])
 
