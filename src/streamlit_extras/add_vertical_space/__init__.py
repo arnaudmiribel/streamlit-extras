@@ -3,7 +3,7 @@ import streamlit as st
 from .. import extra
 
 
-@extra  # this will register your function's extra
+@extra
 def add_vertical_space(num_lines: int = 1):
     """Add vertical space to your Streamlit app."""
     for _ in range(num_lines):
@@ -11,7 +11,7 @@ def add_vertical_space(num_lines: int = 1):
 
 
 def example():
-    add_n_lines = st.slider("Add n vertical lines below this")
+    add_n_lines = st.slider("Add n vertical lines below this", 1, 20, 5)
     add_vertical_space(add_n_lines)
     st.write("Here is text after the nth line!")
 
