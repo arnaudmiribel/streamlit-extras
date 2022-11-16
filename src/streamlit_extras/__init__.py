@@ -48,11 +48,8 @@ def extra(
         else:
             module.__funcs__ = [func]  # type: ignore
 
-        try:
-            profiling_name = f"{module}.{func.__name__}"
-            return _gather_metrics(name=profiling_name, func=func)
-        except ImportError:
-            return func
+        profiling_name = f"{module}.{func.__name__}"
+        return _gather_metrics(name=profiling_name, func=func)
 
     def wrapper(f: F) -> F:
         return f
