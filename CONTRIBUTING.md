@@ -2,7 +2,7 @@
 
 Head over to our public [repository](https://github.com/arnaudmiribel/streamlit-extras) and:
 
-- Create an empty directory for your extra in the `extras/` directory
+- Create an empty directory for your extra in the `src/streamlit_extras` directory
 - Add a `__init__.py` file to give in some metadata so we can automatically showcase your extra in the hub!
 
   - If your function is new, and doesn't yet exist on PyPi, here's an example of how to add it:
@@ -25,6 +25,7 @@ Head over to our public [repository](https://github.com/arnaudmiribel/streamlit-
     __author__ = "Eva Jensen"
     __experimental_playground__ = False # Optional
     ```
+    To test it out, run `poetry run` and `pip install -e .` in the `streamlit-extras` directory, and then run the `gallery/streamlit_app.py` app.
 
   - If your extra already exists on github and pypi:
 
