@@ -25,7 +25,7 @@ Head over to our public [repository](https://github.com/arnaudmiribel/streamlit-
     __author__ = "Eva Jensen"
     __experimental_playground__ = False # Optional
     ```
-    To test it out, run `poetry run` and `pip install -e .` in the `streamlit-extras` directory, and then run the `gallery/streamlit_app.py` app.
+    To test it out, run `pip install -e .` in the `streamlit-extras` directory, and then run the `gallery/streamlit_app.py` app.
 
   - If your extra already exists on github and pypi:
 
