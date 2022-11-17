@@ -2,7 +2,13 @@ import inspect
 from importlib import import_module
 from typing import Any, Callable, Optional, TypeVar, Union, overload
 
-from streamlit import _gather_metrics
+try:
+    from streamlit.runtime.metrics_util import gather_metrics as _gather_metrics
+except ImportError:
+
+    def _gather_metrics(name, func):  # type: ignore
+        return func
+
 
 F = TypeVar("F", bound=Callable[..., Any])
 
@@ -42,11 +48,8 @@ def extra(
         else:
             module.__funcs__ = [func]  # type: ignore
 
-        try:
-            profiling_name = f"{module}.{func.__name__}"
-            return _gather_metrics(name=profiling_name, func=func)
-        except ImportError:
-            return func
+        profiling_name = f"{module}.{func.__name__}"
+        return _gather_metrics(name=profiling_name, func=func)
 
     def wrapper(f: F) -> F:
         return f
