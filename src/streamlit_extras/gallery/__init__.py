@@ -146,8 +146,8 @@ _CARD_CSS = """
 
 @st.experimental_memo
 def _card_builder(
-    df_element,
-    columns,
+    df_element: pd.DataFrame,
+    columns: dict,
 ) -> str:
 
     # Validate card types
@@ -241,6 +241,10 @@ def gallery(df: pd.DataFrame, columns: Dict, spec: Tuple = (None, 3)):
     if df.empty:
         st.caption("Empty gallery.")
 
+    assert isinstance(columns, dict), NotImplementedError(
+        "For now, column types must be explicitly given."
+    )
+
     num_cards = len(df)
 
     # Spec validation
@@ -249,10 +253,6 @@ def gallery(df: pd.DataFrame, columns: Dict, spec: Tuple = (None, 3)):
     if num_rows is None:
         num_rows = math.ceil(num_cards / num_cols)
     assert num_cols is not None
-
-    # Columns validation
-    if columns is None:
-        columns = df.columns
 
     card_index = 0
 

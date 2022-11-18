@@ -15,7 +15,12 @@ from streamlit import (
 )
 from streamlit.commands.page_config import get_random_emoji
 from streamlit.runtime.scriptrunner import get_script_run_ctx as _get_script_run_ctx
-from streamlit.runtime.scriptrunner.script_runner import _LOGGER as LOGGER
+
+try:
+    from streamlit.runtime.scriptrunner.script_runner import _LOGGER as LOGGER
+except ImportError:
+    from streamlit.runtime.scriptrunner.script_runner import LOGGER
+
 from streamlit.runtime.scriptrunner.script_runner import (
     SCRIPT_RUN_WITHOUT_ERRORS_KEY,
     ForwardMsg,
