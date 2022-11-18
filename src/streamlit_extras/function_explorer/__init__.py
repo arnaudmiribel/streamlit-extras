@@ -74,12 +74,20 @@ def function_explorer(func: Callable):
                 )
                 inputs[argument] = st.number_input(label, value=default)
             elif type_hint == str:
-                default = (
-                    get_arg_from_session_state(func.__name__, argument) or default
-                    if not is_empty(default)
-                    else "Sample string"
-                )
-                inputs[argument] = st_keyup(label, value=default)
+                if argument.endswith("_color"):
+                    default = (
+                        get_arg_from_session_state(func.__name__, argument) or default
+                        if not is_empty(default)
+                        else "#000000"
+                    )
+                    inputs[argument] = st.color_picker(label, value=default)
+                else:
+                    default = (
+                        get_arg_from_session_state(func.__name__, argument) or default
+                        if not is_empty(default)
+                        else "Sample string"
+                    )
+                    inputs[argument] = st_keyup(label, value=default)
             elif type_hint == bool:
                 default = (
                     get_arg_from_session_state(func.__name__, argument) or default
