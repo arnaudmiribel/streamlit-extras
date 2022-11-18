@@ -4,7 +4,7 @@ from streamlit_extras import extra
 
 
 @extra
-def selectbox(*args, no_selection_label: str = "---", **kwargs):
+def selectbox(*args, **kwargs):
     """A selectbox that returns None unless the user has explicitly selected one of the
     options.
 
@@ -16,7 +16,17 @@ def selectbox(*args, no_selection_label: str = "---", **kwargs):
     no_selection_label : str
         The label to use for the no-selection option. Defaults to "---".
     """
-    options = kwargs.get("options", [])
+    no_selection_label = kwargs.pop("no_selection_label", "---")
+
+    args = list(args)
+
+    # Get the options from either the args or kwargs
+    try:
+        options = args.pop(1)
+    except IndexError:
+        options = kwargs["options"]
+
+    # Prepend the no-selection option to the list of options
     if no_selection_label not in options:
         options = [no_selection_label] + options
         kwargs["options"] = options
@@ -40,7 +50,7 @@ def example():
         user selects an option.
         """
     )
-    result = selectbox("Select an option", options=["A", "B", "C"])
+    result = selectbox("Select an option", ["A", "B", "C"])
     st.write("Result:", result)
 
 
