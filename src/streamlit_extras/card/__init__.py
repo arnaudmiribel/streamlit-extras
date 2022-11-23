@@ -4,6 +4,7 @@ from .. import extra
 
 card = extra(card)
 
+
 def example():
     card(
         title="Hello World!",
@@ -11,6 +12,7 @@ def example():
         image="http://placekitten.com/300/250",
         url="https://www.google.com",
     )
+
 
 __title__ = "Card"  # title of your extra!
 __desc__ = "Streamlit Component, for a UI card"  # description of your extra!
@@ -20,5 +22,3 @@ __author__ = "Gamliel Cohen <gamcoh>"
 __pypi_name__ = "streamlit-card"
 __package_name__ = "streamlit_card"
 __github_repo__ = "gamcoh/st-card"  # Optional repo handle
-
-
