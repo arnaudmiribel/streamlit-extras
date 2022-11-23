@@ -49,17 +49,7 @@ def example_collapsible_content():
 
 __func__ = mdlit
 __title__ = "Markdownlit"
-__desc__ = """markdownlit is a Markdown command in Python which puts together a few additional capabilities foreseen to be useful in the context of @(Streamlit)(streamlit.io) apps. It is built as an extension to the great @(https://github.com/Python-Markdown/markdown) project. You can use markdownlit along with `st.markdown()`!
-
-Here are the features of markdownlit:
-
-1. **Magic links** like @(🍐)(Pear)(https://www.youtube.com/watch?v=dQw4w9WgXcQ), @(https://youtube.com) @(twitter.com/arnaudmiribel), @(github.com/arnaudmiribel/streamlit-extras)
-2. **Colored text.** Includes [red]red[/red], [green]green[/green], [blue]blue[/blue], [orange]orange[/orange] and [violet]violet[/violet].
-3. ??? "**Collapsible content.** See this > toggle you're using right now!"
-       Funny, right!
-4. **Beautiful arrows.** Arrows - > are automatically translated to →
-5. **Beautiful dashes.** Double dashes - - are automatically translated to —
-"""
+__desc__ = """markdownlit adds a set of lit Markdown commands for your Streamlit apps!"""
 __icon__ = "〽️"
 __examples__ = [
     example_link_and_colors,
