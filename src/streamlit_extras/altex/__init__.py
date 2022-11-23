@@ -2,6 +2,7 @@ from functools import partial
 from typing import Optional, Union
 
 import altair as alt
+import entrypoints
 import numpy as np
 import pandas as pd
 import streamlit as st
@@ -157,7 +158,10 @@ def _chart(
         alt.Chart: Altair chart
     """
 
-    alt.themes.enable("streamlit")
+    try:
+        alt.themes.enable("streamlit")
+    except entrypoints.NoSuchEntryPoint:
+        pass
 
     x_ = _get_shorthand(x)
     y_ = _get_shorthand(y)
