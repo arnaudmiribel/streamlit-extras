@@ -49,7 +49,9 @@ def example_collapsible_content():
 
 __func__ = mdlit
 __title__ = "Markdownlit"
-__desc__ = """markdownlit adds a set of lit Markdown commands for your Streamlit apps!"""
+__desc__ = (
+    """markdownlit adds a set of lit Markdown commands for your Streamlit apps!"""
+)
 __icon__ = "〽️"
 __examples__ = [
     example_link_and_colors,
