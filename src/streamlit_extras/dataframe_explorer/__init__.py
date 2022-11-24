@@ -1,5 +1,6 @@
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
+import numpy as np
 import pandas as pd
 import streamlit as st
 from pandas.api.types import (
@@ -13,20 +14,26 @@ from .. import extra
 
 
 @extra
-def dataframe_explorer(df: pd.DataFrame) -> pd.DataFrame:
+def dataframe_explorer(
+    df: pd.DataFrame, checkbox: Optional[str] = "🔭 I want to explore this dataframe"
+) -> pd.DataFrame:
     """
     Adds a UI on top of a dataframe to let viewers filter columns
     Args:
         df (pd.DataFrame): Original dataframe
+        checkbox (str): Checkbox label. If None, no checkbox will be used.
     Returns:
         pd.DataFrame: Filtered dataframe
     """
-    modify = st.checkbox("🔭 I want to explore this dataframe")
+
+    random_key_base = np.random.randint(0, 1e6)
+    modify = True
+
+    if checkbox is not None:
+        modify = st.checkbox(checkbox, key=f"checkbox_{random_key_base}", value=False)
 
     if not modify:
         return df
-
-    random_key_base = pd.util.hash_pandas_object(df)
 
     df = df.copy()
 
@@ -44,7 +51,9 @@ def dataframe_explorer(df: pd.DataFrame) -> pd.DataFrame:
     modification_container = st.container()
 
     with modification_container:
-        to_filter_columns = st.multiselect("Filter dataframe on", df.columns)
+        to_filter_columns = st.multiselect(
+            "Filter dataframe on", df.columns, key=f"multiselect_{random_key_base}"
+        )
         filters: Dict[str, Any] = dict()
         for column in to_filter_columns:
             left, right = st.columns((1, 20))
