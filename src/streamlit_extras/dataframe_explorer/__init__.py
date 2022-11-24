@@ -35,6 +35,8 @@ def dataframe_explorer(
     if not modify:
         return df
 
+    random_key_base = np.random.randint(0, 1e8)
+
     df = df.copy()
 
     # Try to convert datetimes into standard format (datetime, no timezone)
@@ -52,7 +54,7 @@ def dataframe_explorer(
 
     with modification_container:
         to_filter_columns = st.multiselect(
-            "Filter dataframe on", df.columns, key=f"multiselect_{random_key_base}"
+            "Filter dataframe on", df.columns, key=f"{random_key_base}_main_multiselect"
         )
         filters: Dict[str, Any] = dict()
         for column in to_filter_columns:
