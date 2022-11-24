@@ -1,5 +1,6 @@
 import inspect
 from importlib import import_module
+from pathlib import Path
 from typing import Any, Callable, Optional, TypeVar, Union, overload
 
 try:
@@ -39,7 +40,7 @@ def extra(
     if func:
 
         filename = inspect.stack()[1].filename
-        submodule = filename.split("/")[-2]
+        submodule = Path(filename).parent.name
         extra_name = "streamlit_extras." + submodule
         module = import_module(extra_name)
 
@@ -48,7 +49,7 @@ def extra(
         else:
             module.__funcs__ = [func]  # type: ignore
 
-        profiling_name = f"{module}.{func.__name__}"
+        profiling_name = f"{submodule}.{func.__name__}"
         return _gather_metrics(name=profiling_name, func=func)
 
     def wrapper(f: F) -> F:
