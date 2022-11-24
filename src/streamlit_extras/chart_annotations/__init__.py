@@ -1,3 +1,4 @@
+from functools import partial
 from typing import Iterable, Tuple
 
 import altair as alt
@@ -6,7 +7,10 @@ import streamlit as st
 
 from .. import extra
 
-alt.themes.enable("streamlit")
+try:
+    alt.themes.enable("streamlit")
+except Exception:
+    st.altair_chart = partial(st.altair_chart, theme="streamlit")
 
 
 @st.experimental_memo

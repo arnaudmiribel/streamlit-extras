@@ -157,7 +157,10 @@ def _chart(
         alt.Chart: Altair chart
     """
 
-    alt.themes.enable("streamlit")
+    try:
+        alt.themes.enable("streamlit")
+    except Exception:
+        st.altair_chart = partial(st.altair_chart, theme="streamlit")
 
     x_ = _get_shorthand(x)
     y_ = _get_shorthand(y)

@@ -7,10 +7,42 @@ import streamlit as st
 
 from .. import extra
 
+# from ..no_default_selectbox import selectbox
+
 
 @st.experimental_memo
-def to_csv(data: pd.DataFrame):
+def _to_csv(data: pd.DataFrame):
     return data.to_csv().encode("utf-8")
+
+
+@st.experimental_memo
+def _to_excel(data: pd.DataFrame):
+    return data.to_excel().encode("utf-8")
+
+
+@st.experimental_memo
+def _to_parquet(data: pd.DataFrame):
+    return data.to_parquet()
+
+
+@st.experimental_memo
+def _get_supported_exports():
+    return {
+        "CSV": {
+            "function": _to_csv,
+            "extension": ".csv",
+            "mime": "text/csv",
+        },
+        "Excel": {
+            "function": _to_excel,
+            "extension": ".xlsx",
+            "mime": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        },
+        "Parquet": {
+            "function": _to_parquet,
+            "extension": ".parquet",
+        },
+    }
 
 
 @extra  # type: ignore
@@ -29,7 +61,6 @@ def chart_container(
         data (pd.DataFrame): Dataframe used in the dataframe tab.
         tabs (Iterable, optional): Tab labels. Defaults to ("Chart 📈", "Dataframe 📄", "Export 📁").
     """
-
     tab_1, tab_2, tab_3 = st.tabs(tabs)
 
     with tab_1:
@@ -39,15 +70,30 @@ def chart_container(
         st.dataframe(data, use_container_width=True)
 
     with tab_3:
-        st.download_button(
-            "Download data as .csv",
-            data=to_csv(data),
-            file_name="data.csv",
-            mime="text/csv",
-            # In case there are multiple containers created, this ensures
-            # the buttons will have a different key even if the label is the same.
-            key=np.random.randint(0, 1e9),
+        if len(data) > 1_000_000:
+            st.warning(
+                f"Dataframe has {len(data)} rows. Truncating to 1M rows for export."
+            )
+
+        export_data = data.head(1_000_000)
+        supported_exports = _get_supported_exports()
+        chosen_export_format = st.selectbox(
+            "Choose export format",
+            supported_exports.keys(),
+            key=f"export_{np.random.randint(0, 1e9)}",
         )
+
+        if chosen_export_format:
+            export_utils = supported_exports[chosen_export_format]
+            exporter = export_utils["function"]
+            extension = export_utils["extension"]
+            st.download_button(
+                f"Download data as {extension}",
+                data=exporter(export_data),
+                file_name="data" + extension,
+                mime=export_utils.get("mime"),
+                key=f"export_button_{np.random.randint(0, 1e9)}",
+            )
 
 
 def example_one():
