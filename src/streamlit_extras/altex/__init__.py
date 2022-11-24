@@ -161,7 +161,7 @@ def _chart(
     try:
         alt.themes.enable("streamlit")
     except entrypoints.NoSuchEntryPoint:
-        pass
+        st.altair_chart = partial(st.altair_chart, theme="streamlit")
 
     x_ = _get_shorthand(x)
     y_ = _get_shorthand(y)

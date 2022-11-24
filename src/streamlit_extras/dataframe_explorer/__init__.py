@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 import numpy as np
 import pandas as pd
@@ -14,25 +14,28 @@ from .. import extra
 
 
 @extra
-def dataframe_explorer(df: pd.DataFrame, use_checkbox: bool = True) -> pd.DataFrame:
+def dataframe_explorer(
+    df: pd.DataFrame, checkbox: Optional[str] = "🔭 I want to explore this dataframe"
+) -> pd.DataFrame:
     """
     Adds a UI on top of a dataframe to let viewers filter columns
     Args:
         df (pd.DataFrame): Original dataframe
-        use_checkbox (bool): Add a checkbox before letting a viewer explore dataframe. Default True
+        checkbox (str): Checkbox label. If None, no checkbox will be used.
     Returns:
         pd.DataFrame: Filtered dataframe
     """
 
+    random_key_base = np.random.randint(0, 1e6)
+    modify = True
+
+    if checkbox is not None:
+        modify = st.checkbox(checkbox, key=f"checkbox_{random_key_base}", value=False)
+
+    if not modify:
+        return df
+
     random_key_base = np.random.randint(0, 1e8)
-
-    if use_checkbox:
-        modify = st.checkbox(
-            "🔭 I want to explore this dataframe", key=f"{random_key_base}_checkbox"
-        )
-
-        if not modify:
-            return df
 
     df = df.copy()
 

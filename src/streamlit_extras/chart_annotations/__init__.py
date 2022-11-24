@@ -1,3 +1,4 @@
+from functools import partial
 from typing import Iterable, Tuple
 
 import altair as alt
@@ -10,7 +11,7 @@ from .. import extra
 try:
     alt.themes.enable("streamlit")
 except entrypoints.NoSuchEntryPoint:
-    pass
+    st.altair_chart = partial(st.altair_chart, theme="streamlit")
 
 
 @st.experimental_memo
