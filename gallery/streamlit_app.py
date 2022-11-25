@@ -70,7 +70,7 @@ Learn more about the library on [GitHub](https://www.github.com/arnaudmiribel/st
 def contribute():
     path = (Path(__file__) / "../../CONTRIBUTING.md").resolve()
     content = path.read_text()
-    st.write(content)
+    st.write(content, unsafe_allow_html=True)
 
 
 def waiting_list():
