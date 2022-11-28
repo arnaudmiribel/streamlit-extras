@@ -1,6 +1,5 @@
 from typing import Any, Dict
 
-import numpy as np
 import pandas as pd
 import streamlit as st
 from pandas.api.types import (
@@ -14,25 +13,16 @@ from .. import extra
 
 
 @extra
-def dataframe_explorer(df: pd.DataFrame, use_checkbox: bool = True) -> pd.DataFrame:
+def dataframe_explorer(df: pd.DataFrame) -> pd.DataFrame:
     """
     Adds a UI on top of a dataframe to let viewers filter columns
     Args:
         df (pd.DataFrame): Original dataframe
-        use_checkbox (bool): Add a checkbox before letting a viewer explore dataframe. Default True
     Returns:
         pd.DataFrame: Filtered dataframe
     """
 
-    random_key_base = np.random.randint(0, 1e8)
-
-    if use_checkbox:
-        modify = st.checkbox(
-            "🔭 I want to explore this dataframe", key=f"{random_key_base}_checkbox"
-        )
-
-        if not modify:
-            return df
+    random_key_base = pd.util.hash_pandas_object(df)
 
     df = df.copy()
 
@@ -51,7 +41,9 @@ def dataframe_explorer(df: pd.DataFrame, use_checkbox: bool = True) -> pd.DataFr
 
     with modification_container:
         to_filter_columns = st.multiselect(
-            "Filter dataframe on", df.columns, key=f"{random_key_base}_main_multiselect"
+            "Filter dataframe on",
+            df.columns,
+            key=f"{random_key_base}_multiselect",
         )
         filters: Dict[str, Any] = dict()
         for column in to_filter_columns:
@@ -258,14 +250,12 @@ def generate_fake_dataframe(size, cols, col_names=None, intervals=None, seed=Non
     return df
 
 
-dataframe = generate_fake_dataframe(
-    size=500, cols="dfc", col_names=("date", "income", "person"), seed=1
-)
-
-
-def example(df: pd.DataFrame):
-    filtered_df = dataframe_explorer(df)
-    st.dataframe(filtered_df)
+def example_one():
+    dataframe = generate_fake_dataframe(
+        size=500, cols="dfc", col_names=("date", "income", "person"), seed=1
+    )
+    filtered_df = dataframe_explorer(dataframe)
+    st.dataframe(filtered_df, use_container_width=True)
 
 
 __title__ = "Dataframe explorer UI"
@@ -275,8 +265,7 @@ __desc__ = (
     " post](https://blog.streamlit.io/auto-generate-a-dataframe-filtering-ui-in-streamlit-with-filter_dataframe/)"
 )
 __icon__ = "🔭"
-__examples__ = [example]
-__inputs__ = dict(df=dataframe)
+__examples__ = [example_one]
 __author__ = "Streamlit Data Team!"
 __streamlit_cloud_url__ = "https://st-filter-dataframe.streamlitapp.com/"
 __github_repo__ = "tylerjrichards/st-filter-dataframe"

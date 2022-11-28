@@ -52,6 +52,10 @@ def test_extra_attributes(extra: str):
         assert "discuss.streamlit.io" in mod.__forum_url__
     if hasattr(mod, "__experimental_playground__"):
         assert type(mod.__experimental_playground__) == bool
+    if hasattr(mod, "__experimental_playground_funcs__"):
+        assert type(mod.__experimental_playground_funcs__) == list
+        for func in mod.__experimental_playground_funcs__:
+            assert callable(func)
 
 
 @pytest.mark.parametrize("extra", get_extras())

@@ -70,7 +70,7 @@ Learn more about the library on [GitHub](https://www.github.com/arnaudmiribel/st
 def contribute():
     path = (Path(__file__) / "../../CONTRIBUTING.md").resolve()
     content = path.read_text()
-    st.write(content)
+    st.write(content, unsafe_allow_html=True)
 
 
 def waiting_list():
@@ -133,6 +133,7 @@ def get_page_content(
     twitter_username: Optional[str] = None,
     buymeacoffee_username: Optional[str] = None,
     experimental_playground: bool = False,
+    experimental_playground_funcs: Optional[List[Callable]] = None,
 ) -> Callable:
     def page_content():
         st.title(icon + " " + title)
@@ -218,6 +219,9 @@ def get_page_content(
                 st.write("#### Playground 🛝 [experimental]")
                 st.caption("In this section, you can test the function live!")
                 function_explorer(func=func)
+                if experimental_playground_funcs:
+                    for e_p_func in experimental_playground_funcs:
+                        e_p_func()
 
     page_content.__name__ = title
 
@@ -243,6 +247,9 @@ for extra_name in extra_names:
     buymeacoffee_username = getattr(mod, "__buymeacoffee_username__", None)
     forum_url = getattr(mod, "__forum_url__", None)
     experimental_playground = getattr(mod, "__experimental_playground__", False)
+    experimental_playground_funcs = getattr(
+        mod, "__experimental_playground_funcs__", None
+    )
 
     settings[extra_name] = dict(
         path=get_page_content(
@@ -262,6 +269,7 @@ for extra_name in extra_names:
             buymeacoffee_username=buymeacoffee_username,
             forum_url=forum_url,
             experimental_playground=experimental_playground,
+            experimental_playground_funcs=experimental_playground_funcs,
         ),
         name=title,
         icon=icon,

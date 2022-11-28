@@ -53,6 +53,7 @@ Head over to our public [repository](https://github.com/arnaudmiribel/streamlit-
     ```
 
     Then add `my_package` to the list of `dependencies` in `pyproject.toml`
+  - You can also add a "featured-extra" badge to your original README.md if you like! <a href="https://github.com/arnaudmiribel/streamlit-extras"> <img src="https://img.shields.io/badge/-%F0%9F%AA%A2%20featured%20extra-e8ded1"></img></a>
 
 - If you'd like to test that your package has all the required fields, you can run `poetry run pytest` from the repository
 - You can set up linting to standardize your code by running `pre-commit install`, which will then check the formatting of the files you added
