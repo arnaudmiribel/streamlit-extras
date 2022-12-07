@@ -1,3 +1,4 @@
+import pandas as pd
 import streamlit as st
 
 from streamlit_extras import extra
@@ -28,7 +29,14 @@ def selectbox(*args, **kwargs):
 
     # Prepend the no-selection option to the list of options
     if no_selection_label not in options:
-        options = [no_selection_label] + options
+        if isinstance(options, list):
+            options = [no_selection_label] + options
+        elif isinstance(options, pd.Series):
+            options = pd.concat([pd.Series([no_selection_label]), options])
+        elif isinstance(options, pd.DataFrame):
+            # If the options are a DataFrame, the options are just the first column
+            options = options.iloc[:, 0]
+            options = pd.concat([pd.Series([no_selection_label]), options])
         kwargs["options"] = options
 
     result = st.selectbox(*args, **kwargs)
@@ -51,6 +59,21 @@ def example():
         """
     )
     result = selectbox("Select an option", ["A", "B", "C"])
+    st.write("Result:", result)
+
+    result = selectbox(
+        "Select an option with custom label",
+        ["A", "B", "C"],
+        no_selection_label="Select an option",
+    )
+    st.write("Result:", result)
+
+    result = selectbox("Select an option from series", pd.Series(["A", "B", "C"]))
+
+    st.write("Result:", result)
+
+    result = selectbox("Select an option from dataframe", pd.DataFrame(["A", "B", "C"]))
+
     st.write("Result:", result)
 
 
