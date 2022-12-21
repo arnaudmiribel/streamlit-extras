@@ -1,5 +1,5 @@
 import streamlit as st
-import streamlit_book as st_book
+from streamlit_book import set_chapter_config as st_book
 
 from .. import extra
 
@@ -8,7 +8,7 @@ st_book = extra(st_book)
 
 def example():
     st.write("## Streamlit Book")
-    st_book.set_chapter_config(path="pages/chapter")
+    st_book(path="st_book/pages/chapter")
 
 
 __title__ = "Streamlit Book - Multipaging Demo"
