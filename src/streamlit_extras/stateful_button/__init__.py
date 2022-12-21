@@ -10,8 +10,6 @@ def button(*args, key=None, **kwargs):
     it works as a toggle button. If you click it, it will be pressed, and if you click
     it again, it will be unpressed.
 
-    Taken from https://discuss.streamlit.io/t/how-to-use-multiple-buttons-in-st-columns/35088/4?u=blackary
-
     args:
         Same as st.button
     kwargs:
