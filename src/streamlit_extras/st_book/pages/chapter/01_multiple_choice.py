@@ -3,17 +3,17 @@ import streamlit_book as stb
 
 st.write("A multiple choice question")
 
-# To control the width of the text outputs
-c1, c2 = st.columns([5,5])
-with c1:
-    stb.multiple_choice("I typically ask recruiters to point out which of these are a pokemon",
-                        {"ditto":True,
-                         "jupyter":False,
-                         "pyspark":False,
-                         "scikit":False,
-                         "metapod":True,
-                         "vulpix":True},
-                        success='Are you a pokemon master?', 
-                        error="Gotta catch them all!", 
-                        button='Check'
-                       )
+stb.multiple_choice(
+    "I typically ask recruiters to point out which of these are a pokemon",
+    {
+        "ditto": True,
+        "jupyter": False,
+        "pyspark": False,
+        "scikit": False,
+        "metapod": True,
+        "vulpix": True,
+    },
+    success="Are you a pokemon master?",
+    error="Gotta catch them all!",
+    button="Check",
+)
