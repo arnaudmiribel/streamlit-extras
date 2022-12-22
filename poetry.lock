@@ -900,6 +900,18 @@ streamlit = "*"
 streamlit-extras = "*"
 
 [[package]]
+name = "streamlit-image-coordinates"
+version = "0.1.1"
+description = "Streamlit component that displays an image and returns the coordinates when you click on it"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+jinja2 = "*"
+streamlit = ">=1.2"
+
+[[package]]
 name = "streamlit-keyup"
 version = "0.2.0"
 description = "Text input that renders on keyup"
@@ -1051,7 +1063,7 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.9.7 || >3.9.7,<4.0" # Apparently streamlit doesn't work with 3.9.7
-content-hash = "331b16a283af3861dbb348e122b2c1a5817cd1a41baf233b352b558cbad111bd"
+content-hash = "d68b3196efc6e33c48ac09872f10094bfca2ba745fc56a658c62a5e79ff641cd"
 
 [metadata.files]
 altair = [
@@ -1846,6 +1858,10 @@ streamlit-embedcode = [
 streamlit-faker = [
     {file = "streamlit_faker-0.0.2-py3-none-any.whl", hash = "sha256:93d3d910d9be3e60f07c21b28d2ed0487737e071e48ce1faf858e1f68e05b624"},
     {file = "streamlit_faker-0.0.2.tar.gz", hash = "sha256:3b6625fefb5c2bc759a3b2407c53c97b23cf69924ec31bd2fa7d5313b7691068"},
+]
+streamlit-image-coordinates = [
+    {file = "streamlit-image-coordinates-0.1.1.tar.gz", hash = "sha256:ff103059ac9170622c7a30a294884941c192f72de6f5b4504ba129d1d36b0225"},
+    {file = "streamlit_image_coordinates-0.1.1-py3-none-any.whl", hash = "sha256:b1b1ae161e841d8da73a81b362a4a0b7e6fe2dbc32ffd298b8b60b4257cac7d6"},
 ]
 streamlit-keyup = [
     {file = "streamlit-keyup-0.2.0.tar.gz", hash = "sha256:5a38037af547163566eff9fec0ee17a7e3556e4bf99b68d44327c726b8ea85b3"},

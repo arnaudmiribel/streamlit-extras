@@ -32,6 +32,7 @@ htbuilder = "0.6.1"
 streamlit-faker = ">=0.0.2"
 streamlit-card = ">=0.0.4"
 markdownlit = ">=0.0.5"
+streamlit-image-coordinates = "^0.1.1"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.1.3"
