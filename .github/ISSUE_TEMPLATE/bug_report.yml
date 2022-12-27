@@ -44,7 +44,7 @@ body:
       render: bash
     validations:
       required: false
-  - type: text
+  - type: input
     id: version
     attributes:
       label: "Streamlit Version"
