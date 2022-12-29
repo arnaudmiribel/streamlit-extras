@@ -9,7 +9,7 @@ body:
     id: description
     attributes:
       label: "Description"
-      description: Please enter an explicit description of your issue
+      description: Please enter an explicit description of your issue along with the necessary code to reproduce it
       placeholder: Short and explicit description of your incident...
     validations:
       required: true
