@@ -45,9 +45,16 @@ body:
     validations:
       required: false
   - type: input
-    id: version
+    id: st_version
     attributes:
-      label: "Streamlit Version"
-      description: What version of Streamlit are you running?
+      label: "Version of streamlit"
+      description: What version of streamlit are you running?
+    validations:
+      required: true
+  - type: input
+    id: extras_version
+    attributes:
+      label: "Version of streamlit-extras"
+      description: What version of streamlit-extras are you running?
     validations:
       required: true
