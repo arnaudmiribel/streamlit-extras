@@ -8,7 +8,7 @@ st_book = extra(st_book)
 
 def example():
     st.write("## Streamlit Book")
-    st_book(path="st_book/pages/chapter")
+    st_book(path="src/streamlit_extras/st_book/pages/chapter")
 
 
 __title__ = "Streamlit Book - Multipaging Demo"
