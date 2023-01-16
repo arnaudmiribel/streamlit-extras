@@ -16,7 +16,7 @@ from streamlit import (
 from streamlit.commands.page_config import get_random_emoji
 from streamlit.runtime.scriptrunner import get_script_run_ctx as _get_script_run_ctx
 from streamlit.runtime.scriptrunner.script_runner import (
-    LOGGER,
+    #LOGGER,
     SCRIPT_RUN_WITHOUT_ERRORS_KEY,
     ForwardMsg,
     RerunData,
@@ -140,7 +140,7 @@ def _run_script(self, rerun_data: RerunData) -> None:
     """
     assert self._is_in_script_thread()
 
-    LOGGER.debug("Running script %s", rerun_data)
+#    LOGGER.debug("Running script %s", rerun_data)
 
     # Reset DeltaGenerators, widgets, media files.
     runtime.get_instance().media_file_mgr.clear_session_refs()
@@ -226,7 +226,7 @@ def _run_script(self, rerun_data: RerunData) -> None:
 
     except BaseException as e:
         # We got a compile error. Send an error event and bail immediately.
-        LOGGER.debug("Fatal script error: %s", e)
+        #LOGGER.debug("Fatal script error: %s", e)
         self._session_state[SCRIPT_RUN_WITHOUT_ERRORS_KEY] = False
         self.on_event.send(
             self,
