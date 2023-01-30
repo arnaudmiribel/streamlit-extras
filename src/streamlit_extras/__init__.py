@@ -50,7 +50,11 @@ def extra(
             module.__funcs__ = [func]  # type: ignore
 
         profiling_name = f"{submodule}.{func.__name__}"
-        return _gather_metrics(name=profiling_name, func=func)
+        try:
+            return _gather_metrics(name=profiling_name, func=func)
+        except TypeError:
+            # Don't fail on streamlit==1.13.0, which only expects a callable
+            pass
 
     def wrapper(f: F) -> F:
         return f
