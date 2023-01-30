@@ -74,7 +74,7 @@ files = [
 follow_imports = "silent"
 ignore_missing_imports = true
 scripts_are_modules = true
-python_version = 3.9
+python_version = "3.9"
 
 
 [tool.ruff]

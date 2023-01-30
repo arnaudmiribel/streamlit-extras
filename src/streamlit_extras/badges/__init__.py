@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import Literal, get_args
 
 import streamlit as st
@@ -9,7 +11,7 @@ _SUPPORTED_TYPES = Literal["pypi", "streamlit", "github", "twitter", "buymeacoff
 
 
 @extra
-def badge(type: _SUPPORTED_TYPES, name: str = None, url: str = None):
+def badge(type: _SUPPORTED_TYPES, name: str | None = None, url: str | None = None):
     """Easily create a badge!
 
     Args:

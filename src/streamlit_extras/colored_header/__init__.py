@@ -11,8 +11,8 @@ def color(name):
     """Returns a color from the streamlit color palette, e.g. red-100, as hex."""
     try:
         hue, intensity = name.rsplit("-", 1)
-    except ValueError or KeyError:
-        st.exception(
+    except (ValueError, KeyError):
+        st.error(
             "Input color_name must contain a name (red, orange, ...) and"
             " intensity (10, 20, ... 100) e.g. 'red-70'"
         )
