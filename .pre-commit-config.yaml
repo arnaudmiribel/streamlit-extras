@@ -14,6 +14,7 @@ repos:
     args:
     - --ignore-missing-imports
     - --follow-imports=silent
+    - --python-version=3.9
     additional_dependencies:
     - types-all
 - repo: https://github.com/pre-commit/pre-commit-hooks
