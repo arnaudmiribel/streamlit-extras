@@ -39,15 +39,18 @@ def home():
     st.title("🪢 streamlit-extras gallery")
     st.write(
         """
-Welcome to the **🪢 streamlit-extras** gallery! If you want to give a special touch to your Streamlit apps, you're at the right place!
+Welcome to the **🪢 streamlit-extras** gallery! If you want to give a special touch to
+your Streamlit apps, you're at the right place!
 
-Go ahead and browse available extras in the left handside menu, and if you like them, remember, you're just a pip install away from using them:
+Go ahead and browse available extras in the left handside menu, and if you like them,
+remember, you're just a pip install away from using them:
 
 ```
 pip install streamlit-extras
 ```
 
-Learn more about the library on [GitHub](https://www.github.com/arnaudmiribel/streamlit-extras)!
+Learn more about the library on
+[GitHub](https://www.github.com/arnaudmiribel/streamlit-extras)!
 """
     )
 

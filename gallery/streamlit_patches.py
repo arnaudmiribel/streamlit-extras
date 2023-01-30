@@ -6,11 +6,9 @@ from typing import Any, Callable, Dict, List, Optional, Union
 import requests
 from streamlit import *
 from streamlit import (
-    __version__,
     error,
     experimental_singleton,
     runtime,
-    set_page_config,
     source_util,
 )
 from streamlit.commands.page_config import get_random_emoji
