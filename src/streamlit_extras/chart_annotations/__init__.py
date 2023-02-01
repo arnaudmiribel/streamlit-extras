@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from functools import partial
 from typing import Iterable, Tuple
 
@@ -68,8 +70,8 @@ def get_chart(data: pd.DataFrame) -> alt.Chart:
 def get_annotations_chart(
     annotations: Iterable[Tuple],
     y: float = 0,
-    min_date: str = None,
-    max_date: str = None,
+    min_date: str | None = None,
+    max_date: str | None = None,
     marker: str = "⬇",
     marker_size: float = 20,
     marker_offset_x: float = 0,
@@ -130,9 +132,9 @@ def get_annotations_chart(
     return annotations_chart
 
 
-def example():
+def example() -> None:
     data: pd.DataFrame = get_data()
-    chart: alt.Chart = get_chart(data=data)
+    chart: alt.TopLevelMixin = get_chart(data=data)
 
     chart += get_annotations_chart(
         annotations=[
@@ -143,7 +145,7 @@ def example():
         ],
     )
 
-    st.altair_chart(chart, use_container_width=True)
+    st.altair_chart(chart, use_container_width=True)  # type: ignore
 
 
 __title__ = "Chart annotations"

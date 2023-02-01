@@ -74,5 +74,29 @@ files = [
 follow_imports = "silent"
 ignore_missing_imports = true
 scripts_are_modules = true
-python_version = 3.9
+python_version = "3.9"
 
+
+[tool.ruff]
+exclude = [
+    ".git",
+    ".vscode",
+    ".pytest_cache",
+    ".mypy_cache",
+    ".venv",
+    ".env",
+    ".direnv",
+    "streamlit_patches.py",
+]
+target-version = "py39"
+ignore = ["E501"]
+line-length = 88
+select = [
+    "B",
+    "E",
+    "F",
+    "W",
+    "I",
+]
+
+[tool.ruff.per-file-ignores]
