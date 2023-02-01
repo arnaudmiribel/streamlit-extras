@@ -6,9 +6,8 @@ from itertools import cycle, dropwhile
 from pathlib import Path
 from typing import Callable, Dict, List, Optional, Union
 
-import streamlit_patches as st
-
 import streamlit_extras
+import streamlit_patches as st
 from streamlit_extras.badges import badge
 from streamlit_extras.function_explorer import function_explorer
 from streamlit_extras.mention import mention

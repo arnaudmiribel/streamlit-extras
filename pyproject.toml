@@ -96,6 +96,7 @@ select = [
     "E",
     "F",
     "W",
+    "I",
 ]
 
 [tool.ruff.per-file-ignores]
