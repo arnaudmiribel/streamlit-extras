@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 import inspect
-from dataclasses import dataclass
-from typing import Any, Callable, Dict, Optional, Union, get_args
+from typing import Any, Callable, Dict, NamedTuple, Union, get_args
 
 import pandas as pd
 import streamlit as st
@@ -14,8 +13,7 @@ NoneType = type(None)
 UnionType = type(Union[int, float])
 
 
-@dataclass
-class Argument:
+class Argument(NamedTuple):
     argument: str
     type_hint: Any
     default: Any
@@ -44,9 +42,7 @@ def get_arg_from_session_state(func_name: str, argument: str):
 
 
 @extra
-def function_explorer(
-    func: Callable, default_arguments: Optional[Dict[str, Any]] = None
-):
+def function_explorer(func: Callable, default_arguments: Dict[str, Any] | None = None):
     """Gives a Streamlit UI to any function.
 
     Args:
@@ -63,9 +59,7 @@ def function_explorer(
     )
 
     for argument_info in args:
-        argument = argument_info.argument
-        type_hint = argument_info.type_hint
-        default = argument_info.default
+        argument, type_hint, default = argument_info
 
         label = argument if not is_empty(default) else f"{argument}*"
 
