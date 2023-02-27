@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import inspect
-from typing import Any, Callable, Dict, NamedTuple, Union, get_args
+from typing import Any, Callable, NamedTuple, Union, get_args
 
 import pandas as pd
 import streamlit as st
@@ -42,7 +42,7 @@ def get_arg_from_session_state(func_name: str, argument: str):
 
 
 @extra
-def function_explorer(func: Callable, default_arguments: Dict[str, Any] | None = None):
+def function_explorer(func: Callable, default_arguments: dict[str, Any] | None = None):
     """Gives a Streamlit UI to any function.
 
     Args:
@@ -50,7 +50,7 @@ def function_explorer(func: Callable, default_arguments: Dict[str, Any] | None =
     """
 
     args = get_arg_details(func)
-    inputs: Dict[str, Any] = dict()
+    inputs: dict[str, Any] = dict()
 
     st.write("##### Inputs")
     st.write(

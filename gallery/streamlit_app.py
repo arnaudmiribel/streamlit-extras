@@ -1,10 +1,12 @@
+from __future__ import annotations
+
 import inspect
 import pkgutil
 import random
 from importlib import import_module
 from itertools import cycle, dropwhile
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Union
+from typing import Any, Callable
 
 import streamlit_extras
 import streamlit_patches as st
@@ -122,21 +124,21 @@ def get_page_content(
     extra_name: str,
     icon: str,
     title: str,
-    examples: Union[List[Callable], Dict[Callable, List[Callable]]],
-    funcs: List[Callable],
+    examples: list[Callable] | dict[Callable, list[Callable]],
+    funcs: list[Callable],
     inputs: dict,
     desc: str,
     author: str,
-    github_repo: Optional[str] = None,
-    streamlit_cloud_url: Optional[str] = None,
-    forum_url: Optional[str] = None,
-    pypi_name: Optional[str] = None,
-    package_name: Optional[str] = None,
-    twitter_username: Optional[str] = None,
-    buymeacoffee_username: Optional[str] = None,
+    github_repo: str | None = None,
+    streamlit_cloud_url: str | None = None,
+    forum_url: str | None = None,
+    pypi_name: str | None = None,
+    package_name: str | None = None,
+    twitter_username: str | None = None,
+    buymeacoffee_username: str | None = None,
     experimental_playground: bool = False,
-    experimental_playground_funcs: Optional[List[Callable]] = None,
-    playground_arg_defaults: Optional[Dict[str, Any]] = None,
+    experimental_playground_funcs: list[Callable] | None = None,
+    playground_arg_defaults: dict[str, Any] | None = None,
 ) -> Callable:
     def page_content():
         st.title(icon + " " + title)

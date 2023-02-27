@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from functools import partial
-from typing import Iterable, Tuple
+from typing import Iterable
 
 import altair as alt
 import entrypoints
@@ -68,7 +68,7 @@ def get_chart(data: pd.DataFrame) -> alt.Chart:
 
 @extra
 def get_annotations_chart(
-    annotations: Iterable[Tuple],
+    annotations: Iterable[tuple],
     y: float = 0,
     min_date: str | None = None,
     max_date: str | None = None,
