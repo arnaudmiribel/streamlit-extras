@@ -11,11 +11,7 @@ _SUPPORTED_TYPES = Literal["pypi", "streamlit", "github", "twitter", "buymeacoff
 
 
 @extra
-def badge(
-    type: _SUPPORTED_TYPES,
-    name: str | None = None,
-    url: str | None = None,
-):
+def badge(type: _SUPPORTED_TYPES, name: str | None = None, url: str | None = None):
     """Easily create a badge!
 
     Args:
