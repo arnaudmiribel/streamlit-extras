@@ -29,8 +29,11 @@ def add_logo(logo_url: str, height: int = 120):
             [data-testid="stSidebarNav"] {{
                 background-image: {logo};
                 background-repeat: no-repeat;
-                padding-top: {height - 40}px;
+                padding-top: {height + 30}px;
                 background-position: 20px 20px;
+            }}
+            [data-testid="stSidebarNav"] ul:first-of-type {{
+                padding-top: 0 !important;
             }}
         </style>
         """,
@@ -52,3 +55,6 @@ __icon__ = "🐱"
 __examples__ = [example]
 __author__ = "Zachary Blackwood"
 __experimental_playground__ = True
+__playground_arg_defaults__ = {
+    "logo_url": "http://placekitten.com/120/125",
+}

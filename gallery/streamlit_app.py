@@ -4,7 +4,7 @@ import random
 from importlib import import_module
 from itertools import cycle, dropwhile
 from pathlib import Path
-from typing import Callable, Dict, List, Optional, Union
+from typing import Any, Callable, Dict, List, Optional, Union
 
 import streamlit_extras
 import streamlit_patches as st
@@ -136,6 +136,7 @@ def get_page_content(
     buymeacoffee_username: Optional[str] = None,
     experimental_playground: bool = False,
     experimental_playground_funcs: Optional[List[Callable]] = None,
+    playground_arg_defaults: Optional[Dict[str, Any]] = None,
 ) -> Callable:
     def page_content():
         st.title(icon + " " + title)
@@ -220,7 +221,7 @@ def get_page_content(
                 st.write("")
                 st.write("#### Playground 🛝 [experimental]")
                 st.caption("In this section, you can test the function live!")
-                function_explorer(func=func)
+                function_explorer(func=func, default_arguments=playground_arg_defaults)
                 if experimental_playground_funcs:
                     for e_p_func in experimental_playground_funcs:
                         e_p_func()
@@ -252,6 +253,7 @@ for extra_name in extra_names:
     experimental_playground_funcs = getattr(
         mod, "__experimental_playground_funcs__", None
     )
+    playground_arg_defaults = getattr(mod, "__playground_arg_defaults__", None)
 
     settings[extra_name] = dict(
         path=get_page_content(
@@ -272,6 +274,7 @@ for extra_name in extra_names:
             forum_url=forum_url,
             experimental_playground=experimental_playground,
             experimental_playground_funcs=experimental_playground_funcs,
+            playground_arg_defaults=playground_arg_defaults,
         ),
         name=title,
         icon=icon,

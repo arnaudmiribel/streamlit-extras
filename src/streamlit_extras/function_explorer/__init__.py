@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import inspect
-from typing import Any, Callable, Dict, get_args
+from dataclasses import dataclass
+from typing import Any, Callable, Dict, Optional, Union, get_args
 
 import pandas as pd
 import streamlit as st
@@ -7,11 +10,25 @@ from st_keyup import st_keyup
 
 from .. import extra
 
+NoneType = type(None)
+UnionType = type(Union[int, float])
 
-def get_arg_details(func):
-    signature = inspect.signature(func)
+
+@dataclass
+class Argument:
+    argument: str
+    type_hint: Any
+    default: Any
+
+
+def get_arg_details(func) -> list[Argument]:
+    try:
+        # Python 3.10 added eval_str=True
+        signature = inspect.signature(func, eval_str=True)  # type: ignore
+    except TypeError:
+        signature = inspect.signature(func)
     return [
-        dict(argument=k, type_hint=v.annotation, default=v.default)
+        Argument(argument=k, type_hint=v.annotation, default=v.default)
         for k, v in signature.parameters.items()
     ]
 
@@ -27,7 +44,9 @@ def get_arg_from_session_state(func_name: str, argument: str):
 
 
 @extra
-def function_explorer(func: Callable):
+def function_explorer(
+    func: Callable, default_arguments: Optional[Dict[str, Any]] = None
+):
     """Gives a Streamlit UI to any function.
 
     Args:
@@ -44,8 +63,20 @@ def function_explorer(func: Callable):
     )
 
     for argument_info in args:
-        argument, type_hint, default = argument_info.values()
+        argument = argument_info.argument
+        type_hint = argument_info.type_hint
+        default = argument_info.default
+
         label = argument if not is_empty(default) else f"{argument}*"
+
+        if default_arguments and argument in default_arguments:
+            default = default_arguments[argument]
+
+        if isinstance(type_hint, UnionType):
+            # Replace union types with the second argument being None with the first
+            # option
+            if len(type_hint.__args__) == 2 and type_hint.__args__[1] == NoneType:  # type: ignore
+                type_hint = type_hint.__args__[0]  # type: ignore
 
         if is_empty(type_hint):
             default = (
@@ -56,9 +87,7 @@ def function_explorer(func: Callable):
             inputs[argument] = st.text_input(label, value=default)
         else:
             if hasattr(type_hint, "__name__"):
-                label += f" ({type_hint.__name__})"
-            elif str(type_hint).startswith("typing.Literal"):
-                label += " (typing.Literal)"
+                label += f" ({type_hint.__name__})"  # type: ignore
             else:
                 raise Exception(f"Not sure how to handle {type_hint}")
             if type_hint == int:

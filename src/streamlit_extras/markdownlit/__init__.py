@@ -62,3 +62,6 @@ __github_repo__ = "arnaudmiribel/markdownlit"
 __pypi_name__ = "markdownlit"
 __package_name__ = "markdownlit"
 __experimental_playground__ = True
+__playground_arg_defaults__ = {
+    "body": "@(https://extras.streamlit.app)",
+}

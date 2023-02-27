@@ -27,11 +27,11 @@ def get_dataframe() -> pd.DataFrame:
 
     # Create a list named country to store all the image paths
     country = [
-        "https://www.countries-ofthe-world.com/flags-normal/flag-of-United-States-of-America.png",
-        "https://www.countries-ofthe-world.com/flags-normal/flag-of-Brazil.png",
-        "https://www.countries-ofthe-world.com/flags-normal/flag-of-Russia.png",
-        "https://www.countries-ofthe-world.com/flags-normal/flag-of-India.png",
-        "https://www.countries-ofthe-world.com/flags-normal/flag-of-Peru.png",
+        "https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg",
+        "https://upload.wikimedia.org/wikipedia/en/0/05/Flag_of_Brazil.svg",
+        "https://upload.wikimedia.org/wikipedia/en/f/f3/Flag_of_Russia.svg",
+        "https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg",
+        "https://upload.wikimedia.org/wikipedia/commons/c/cf/Flag_of_Peru.svg",
     ]
     # Assigning the new list as a new column of the dataframe
     df["Flag"] = country

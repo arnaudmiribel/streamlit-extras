@@ -11,7 +11,11 @@ _SUPPORTED_TYPES = Literal["pypi", "streamlit", "github", "twitter", "buymeacoff
 
 
 @extra
-def badge(type: _SUPPORTED_TYPES, name: str | None = None, url: str | None = None):
+def badge(
+    type: _SUPPORTED_TYPES,
+    name: str | None = None,
+    url: str | None = None,
+):
     """Easily create a badge!
 
     Args:
@@ -118,3 +122,4 @@ __examples__ = [
 ]
 __author__ = "Arnaud Miribel, ShruAgarwal"
 __experimental_playground__ = True
+__playground_arg_defaults__ = {"name": "streamlit-extras"}
