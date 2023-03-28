@@ -3,7 +3,6 @@ from importlib import import_module
 from typing import List
 
 import pytest
-
 import streamlit_extras
 
 

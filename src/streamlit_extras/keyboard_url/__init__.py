@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import streamlit as st
 import streamlit.components.v1 as components
 
@@ -7,9 +9,9 @@ from ..keyboard_text import key, load_key_css
 
 @extra
 def keyboard_to_url(
-    key: str = None,
-    key_code: int = None,
-    url: str = None,
+    key: str | None = None,
+    key_code: int | None = None,
+    url: str | None = None,
 ):
     """Map a keyboard key to open a new tab with a given URL.
     Args:
@@ -76,4 +78,5 @@ __desc__ = (
 )
 __icon__ = "🎯"
 __examples__ = [example]
+__author__ = "Arnaud Miribel"
 __author__ = "Arnaud Miribel"
