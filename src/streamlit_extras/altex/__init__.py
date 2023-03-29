@@ -98,10 +98,10 @@ def _get_shorthand(param: Union[str, alt.X, alt.Y]):
         return param
 
 
-def _get_spark_axis_config(
-    axis: Union[alt.X, alt.Y, str], output_type: Union[alt.X, alt.Y]
+def _update_axis_config(
+    axis: Union[alt.X, alt.Y, str], output_type: Union[alt.X, alt.Y], updates: dict
 ) -> Union[alt.X, alt.Y]:
-    """Whenever chart is a spark chart, modify x and y configs to specify axis=None
+    """Update x and y configs
 
     Args:
         axis (Union[alt.X, alt.Y, str]): Chart input for x
@@ -110,15 +110,19 @@ def _get_spark_axis_config(
     Raises:
         Exception: TypeError when input has invalid type
 
+    Examples:
+    >>> _update_axis_config(alt.X("x"), alt.Y, {"axis": "None"})
+
     Returns:
         alt.X/alt.Y: Updated config for x/y
     """
     if isinstance(axis, (alt.X, alt.Y)):
         axis_config = axis.to_dict()
-        axis_config["axis"] = None
+        for key, value in updates.items():
+            axis_config[key] = value
         return output_type(**axis_config)
     elif isinstance(axis, str):
-        return output_type(shorthand=axis, axis=None)
+        return output_type(shorthand=axis, **updates)
     else:
         raise TypeError("Input x/y must be of type str or alt.X or alt.Y")
 
@@ -137,6 +141,7 @@ def _chart(
     width: Optional[int] = None,
     height: Optional[int] = None,
     spark: bool = False,
+    autoscale_y: bool = False,
 ):
     """Get an Altair chart object
 
@@ -153,6 +158,7 @@ def _chart(
         width (Optional[int], optional): Width of the chart. Defaults to None.
         height (Optional[int], optional): Height of the chart. Defaults to None.
         spark (bool, optional): Whether or not to make spark chart, i.e. a chart without axes nor ticks nor legend. Defaults to False.
+        autoscale_y (bool, optional): Whether or not to autoscale the y axis. Defaults to False.
 
     Returns:
         alt.Chart: Altair chart
@@ -195,11 +201,14 @@ def _chart(
         chart = chart.configure_view(strokeWidth=0).configure_axis(
             grid=False, domain=False
         )
-        x_axis = _get_spark_axis_config(x, alt.X)
-        y_axis = _get_spark_axis_config(y, alt.Y)
+        x_axis = _update_axis_config(x, alt.X, {"axis": None})
+        y_axis = _update_axis_config(y, alt.Y, {"axis": None})
     else:
         x_axis = x
         y_axis = y
+
+    if autoscale_y:
+        y_axis = _update_axis_config(y_axis, alt.Y, {"scale": alt.Scale(zero=False)})
 
     encode_config = _drop_nones(
         {
@@ -253,6 +262,21 @@ sparkline_chart = _partial(line_chart, spark=True, __name__="sparkline_chart")
 sparkbar_chart = _partial(bar_chart, spark=True, __name__="sparkbar_chart")
 sparkhist_chart = _partial(hist_chart, spark=True, __name__="sparkhist_chart")
 sparkarea_chart = _partial(area_chart, spark=True, __name__="sparkarea_chart")
+# minisparkline_chart = _partial(line_chart, spark=True, height=80, autoscale_y=True, __name__="minisparkline_chart")
+# minisparkbar_chart = _partial(bar_chart, spark=True, height=80, autoscale_y=True, __name__="minisparkbar_chart")
+# minisparkarea_chart = _partial(area_chart, spark=True, height=80, autoscale_y=True, __name__="minisparkarea_chart")
+# minisparkhist_chart = _partial(hist_chart, spark=True, height=80, autoscale_y=True, __name__="minisparkhist_chart")
+
+# def minispark_chart(data: pd.DataFrame, x: str = "record_date:T", y: str = "cost") -> None:
+#     sparkline_chart(
+#         data=data,
+#         x=x,
+#         y=alt.Y(
+#             y + ":Q",
+#             scale=alt.Scale(domain=[data[y].min(), data[y].max()]),
+#         ),
+#         height=80,
+#     )
 
 
 @st.experimental_memo
@@ -389,6 +413,43 @@ def example_sparkline():
 
 
 @st.experimental_memo
+def example_minisparklines():
+    stocks = get_stocks_data()
+
+    left, middle, right = st.columns(3)
+    with left:
+        data = stocks.query("symbol == 'GOOG'")
+        st.metric("GOOG", int(data["price"].mean()))
+        sparkline_chart(
+            data=data,
+            x="date",
+            y="price:Q",
+            height=80,
+            autoscale_y=True,
+        )
+    with middle:
+        data = stocks.query("symbol == 'MSFT'")
+        st.metric("MSFT", int(data["price"].mean()))
+        sparkline_chart(
+            data=data,
+            x="date",
+            y="price:Q",
+            height=80,
+            autoscale_y=True,
+        )
+    with right:
+        data = stocks.query("symbol == 'AAPL'")
+        st.metric("AAPL", int(data["price"].mean()))
+        sparkline_chart(
+            data=data,
+            x="date",
+            y="price:Q",
+            height=80,
+            autoscale_y=True,
+        )
+
+
+@st.experimental_memo
 def example_sparkbar():
     stocks = get_stocks_data()
     sparkbar_chart(
@@ -485,6 +546,7 @@ __examples__ = {
     example_hist: [hist_chart, get_stocks_data],
     example_scatter: [scatter_chart, get_weather_data],
     example_sparkline: [sparkline_chart, get_stocks_data],
+    example_minisparklines: [sparkline_chart, get_stocks_data],
     example_sparkbar: [sparkbar_chart, get_stocks_data],
     example_sparkarea: [sparkarea_chart, get_random_data],
     example_hist_time: [hist_chart, get_weather_data],
