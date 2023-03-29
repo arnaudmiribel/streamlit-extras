@@ -8,6 +8,11 @@ import entrypoints
 import pandas as pd
 import streamlit as st
 
+try:
+    from streamlit import cache_data  # streamlit >= 1.18.0
+except ImportError:
+    from streamlit import experimental_memo as cache_data  # streamlit >= 0.89
+
 from .. import extra
 
 try:
@@ -16,7 +21,7 @@ except entrypoints.NoSuchEntryPoint:
     st.altair_chart = partial(st.altair_chart, theme="streamlit")
 
 
-@st.experimental_memo
+@cache_data
 def get_data() -> pd.DataFrame:
     source = pd.read_csv(
         "https://raw.githubusercontent.com/vega/vega-datasets/next/data/stocks.csv"
@@ -25,7 +30,7 @@ def get_data() -> pd.DataFrame:
     return source
 
 
-@st.experimental_memo(ttl=60 * 60 * 24)
+@cache_data(ttl=60 * 60 * 24)
 def get_chart(data: pd.DataFrame) -> alt.Chart:
     hover = alt.selection_single(
         fields=["date"],

@@ -4,15 +4,20 @@ from typing import Generator, Sequence
 import pandas as pd
 import streamlit as st
 
+try:
+    from streamlit import cache_data  # streamlit >= 1.18.0
+except ImportError:
+    from streamlit import experimental_memo as cache_data  # streamlit >= 0.89
+
 from .. import extra
 
 
-@st.experimental_memo
+@cache_data
 def _to_csv(data: pd.DataFrame):
     return data.to_csv().encode("utf-8")
 
 
-@st.experimental_memo
+@cache_data
 def _to_parquet(data: pd.DataFrame):
     return data.to_parquet()
 

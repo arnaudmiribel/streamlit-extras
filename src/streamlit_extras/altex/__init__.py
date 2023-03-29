@@ -7,10 +7,15 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
+try:
+    from streamlit import cache_data  # streamlit >= 1.18.0
+except ImportError:
+    from streamlit import experimental_memo as cache_data  # streamlit >= 0.89
+
 from .. import extra
 
 
-@st.experimental_memo
+@cache_data
 def url_to_dataframe(url: str) -> pd.DataFrame:
     """Collects a CSV/JSON file from a URL and load it into a dataframe, with appropriate caching (memo)
 
@@ -255,7 +260,7 @@ sparkhist_chart = _partial(hist_chart, spark=True, __name__="sparkhist_chart")
 sparkarea_chart = _partial(area_chart, spark=True, __name__="sparkarea_chart")
 
 
-@st.experimental_memo
+@cache_data
 def example_line():
     stocks = get_stocks_data()
 
@@ -267,7 +272,7 @@ def example_line():
     )
 
 
-@st.experimental_memo
+@cache_data
 def example_multi_line():
     stocks = get_stocks_data()
     line_chart(
@@ -279,7 +284,7 @@ def example_multi_line():
     )
 
 
-@st.experimental_memo
+@cache_data
 def example_bar():
     stocks = get_stocks_data()
     bar_chart(
@@ -290,7 +295,7 @@ def example_bar():
     )
 
 
-@st.experimental_memo
+@cache_data
 def example_hist():
     stocks = get_stocks_data()
     hist_chart(
@@ -300,7 +305,7 @@ def example_hist():
     )
 
 
-@st.experimental_memo
+@cache_data
 def example_scatter_opacity():
     weather = get_weather_data()
     scatter_chart(
@@ -312,7 +317,7 @@ def example_scatter_opacity():
     )
 
 
-@st.experimental_memo
+@cache_data
 def example_bar_horizontal():
     weather = get_weather_data()
     bar_chart(
@@ -323,7 +328,7 @@ def example_bar_horizontal():
     )
 
 
-@st.experimental_memo
+@cache_data
 def example_bar_log():
     weather = get_weather_data()
     bar_chart(
@@ -338,7 +343,7 @@ def example_bar_log():
     )
 
 
-@st.experimental_memo
+@cache_data
 def example_bar_sorted():
     weather = get_weather_data()
     bar_chart(
@@ -349,7 +354,7 @@ def example_bar_sorted():
     )
 
 
-@st.experimental_memo
+@cache_data
 def example_scatter():
     weather = get_weather_data()
     scatter_chart(
@@ -360,7 +365,7 @@ def example_scatter():
     )
 
 
-@st.experimental_memo
+@cache_data
 def example_hist_time():
     weather = get_weather_data()
     hist_chart(
@@ -375,7 +380,7 @@ def example_hist_time():
     )
 
 
-@st.experimental_memo
+@cache_data
 def example_sparkline():
     stocks = get_stocks_data()
     sparkline_chart(
@@ -388,7 +393,7 @@ def example_sparkline():
     )
 
 
-@st.experimental_memo
+@cache_data
 def example_sparkbar():
     stocks = get_stocks_data()
     sparkbar_chart(
@@ -400,7 +405,7 @@ def example_sparkbar():
     )
 
 
-@st.experimental_memo
+@cache_data
 def example_sparkarea():
     random_data = get_random_data()
     df = pd.melt(
@@ -420,7 +425,7 @@ def example_sparkarea():
     )
 
 
-@st.experimental_memo
+@cache_data
 def example_bar_stacked():
     barley = get_barley_data()
     bar_chart(
@@ -432,7 +437,7 @@ def example_bar_stacked():
     )
 
 
-@st.experimental_memo
+@cache_data
 def example_bar_normalized():
     barley = get_barley_data()
     bar_chart(
@@ -444,7 +449,7 @@ def example_bar_normalized():
     )
 
 
-@st.experimental_memo
+@cache_data
 def example_bar_normalized_custom():
     barley = get_barley_data()
     bar_chart(
@@ -456,7 +461,7 @@ def example_bar_normalized_custom():
     )
 
 
-@st.experimental_memo
+@cache_data
 def example_bar_grouped():
     barley = get_barley_data()
     bar_chart(
