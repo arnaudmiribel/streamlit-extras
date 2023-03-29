@@ -262,21 +262,6 @@ sparkline_chart = _partial(line_chart, spark=True, __name__="sparkline_chart")
 sparkbar_chart = _partial(bar_chart, spark=True, __name__="sparkbar_chart")
 sparkhist_chart = _partial(hist_chart, spark=True, __name__="sparkhist_chart")
 sparkarea_chart = _partial(area_chart, spark=True, __name__="sparkarea_chart")
-# minisparkline_chart = _partial(line_chart, spark=True, height=80, autoscale_y=True, __name__="minisparkline_chart")
-# minisparkbar_chart = _partial(bar_chart, spark=True, height=80, autoscale_y=True, __name__="minisparkbar_chart")
-# minisparkarea_chart = _partial(area_chart, spark=True, height=80, autoscale_y=True, __name__="minisparkarea_chart")
-# minisparkhist_chart = _partial(hist_chart, spark=True, height=80, autoscale_y=True, __name__="minisparkhist_chart")
-
-# def minispark_chart(data: pd.DataFrame, x: str = "record_date:T", y: str = "cost") -> None:
-#     sparkline_chart(
-#         data=data,
-#         x=x,
-#         y=alt.Y(
-#             y + ":Q",
-#             scale=alt.Scale(domain=[data[y].min(), data[y].max()]),
-#         ),
-#         height=80,
-#     )
 
 
 @st.experimental_memo
