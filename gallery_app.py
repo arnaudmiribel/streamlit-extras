@@ -9,11 +9,12 @@ from pathlib import Path
 from typing import Any, Callable
 
 import streamlit_extras
-import streamlit_patches as st
 from streamlit_extras.badges import badge
 from streamlit_extras.function_explorer import function_explorer
 from streamlit_extras.mention import mention
 from streamlit_extras.switch_page_button import switch_page
+
+import gallery.streamlit_patches as st
 
 
 def get_function_body(func):
@@ -72,7 +73,7 @@ Learn more about the library on
 
 
 def contribute():
-    path = (Path(__file__) / "../../CONTRIBUTING.md").resolve()
+    path = (Path(__file__).parent / "CONTRIBUTING.md").resolve()
     content = path.read_text()
     st.write(content, unsafe_allow_html=True)
 
@@ -147,19 +148,23 @@ def get_page_content(
             st.caption(f"By: {author}")
 
         st.write(desc)
+        num_cols = sum(
+            map(
+                bool,
+                (
+                    github_repo,
+                    streamlit_cloud_url,
+                    pypi_name,
+                    twitter_username,
+                    buymeacoffee_username,
+                    forum_url,
+                ),
+            )
+        )
 
         # Social badges
-        if any(
-            [
-                github_repo,
-                streamlit_cloud_url,
-                pypi_name,
-                twitter_username,
-                buymeacoffee_username,
-                forum_url,
-            ]
-        ):
-            columns = cycle(st.columns(6))
+        if num_cols > 0:
+            columns = cycle(st.columns(num_cols))
             if github_repo:
                 with next(columns):
                     badge("github", name=github_repo)

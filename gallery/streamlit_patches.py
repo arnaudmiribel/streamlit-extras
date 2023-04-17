@@ -5,12 +5,7 @@ from typing import Any, Callable, Dict, List, Optional, Union
 
 import requests
 from streamlit import *
-from streamlit import (
-    error,
-    experimental_singleton,
-    runtime,
-    source_util,
-)
+from streamlit import error, experimental_singleton, runtime, source_util
 from streamlit.commands.page_config import get_random_emoji
 from streamlit.runtime.scriptrunner import get_script_run_ctx as _get_script_run_ctx
 from streamlit.runtime.scriptrunner.script_runner import (
@@ -71,7 +66,7 @@ def page(
     """
 
     # TODO -- FIX THIS
-    main_script_path = "gallery/streamlit_app.py"
+    main_script_path = "gallery.py"
 
     main_page_hash = calc_md5(main_script_path)
 
