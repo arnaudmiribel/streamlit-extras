@@ -66,7 +66,7 @@ def page(
     """
 
     # TODO -- FIX THIS
-    main_script_path = "gallery.py"
+    main_script_path = "gallery_app.py"
 
     main_page_hash = calc_md5(main_script_path)
 
