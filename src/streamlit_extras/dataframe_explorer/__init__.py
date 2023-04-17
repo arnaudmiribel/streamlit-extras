@@ -13,11 +13,12 @@ from .. import extra
 
 
 @extra
-def dataframe_explorer(df: pd.DataFrame) -> pd.DataFrame:
+def dataframe_explorer(df: pd.DataFrame, case: bool = True) -> pd.DataFrame:
     """
     Adds a UI on top of a dataframe to let viewers filter columns
     Args:
         df (pd.DataFrame): Original dataframe
+        case (bool, optional): If True, text inputs will be case sensitive. Defaults to True.
     Returns:
         pd.DataFrame: Filtered dataframe
     """
@@ -93,7 +94,7 @@ def dataframe_explorer(df: pd.DataFrame) -> pd.DataFrame:
                     key=f"{random_key_base}_{column}",
                 )
                 if filters[column]:
-                    df = df[df[column].str.contains(filters[column])]
+                    df = df[df[column].str.contains(filters[column], case=case)]
 
     return df
 
@@ -178,7 +179,7 @@ def generate_fake_dataframe(size, cols, col_names=None, intervals=None, seed=Non
     default_intervals = {
         "i": (0, 10),
         "f": (0, 100),
-        "c": ("names", 5),
+        "c": ("names", 12),
         "d": ("2020-01-01", "2020-12-31"),
     }
     rng = np.random.default_rng(seed)
@@ -254,7 +255,7 @@ def example_one():
     dataframe = generate_fake_dataframe(
         size=500, cols="dfc", col_names=("date", "income", "person"), seed=1
     )
-    filtered_df = dataframe_explorer(dataframe)
+    filtered_df = dataframe_explorer(dataframe, case=False)
     st.dataframe(filtered_df, use_container_width=True)
 
 

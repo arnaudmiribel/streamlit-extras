@@ -7,10 +7,15 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
+try:
+    from streamlit import cache_data  # streamlit >= 1.18.0
+except ImportError:
+    from streamlit import experimental_memo as cache_data  # streamlit >= 0.89
+
 from .. import extra
 
 
-@st.experimental_memo
+@cache_data
 def url_to_dataframe(url: str) -> pd.DataFrame:
     """Collects a CSV/JSON file from a URL and load it into a dataframe, with appropriate caching (memo)
 
@@ -98,10 +103,10 @@ def _get_shorthand(param: Union[str, alt.X, alt.Y]):
         return param
 
 
-def _get_spark_axis_config(
-    axis: Union[alt.X, alt.Y, str], output_type: Union[alt.X, alt.Y]
+def _update_axis_config(
+    axis: Union[alt.X, alt.Y, str], output_type: Union[alt.X, alt.Y], updates: dict
 ) -> Union[alt.X, alt.Y]:
-    """Whenever chart is a spark chart, modify x and y configs to specify axis=None
+    """Update x and y configs
 
     Args:
         axis (Union[alt.X, alt.Y, str]): Chart input for x
@@ -110,15 +115,19 @@ def _get_spark_axis_config(
     Raises:
         Exception: TypeError when input has invalid type
 
+    Examples:
+    >>> _update_axis_config(alt.X("x"), alt.Y, {"axis": "None"})
+
     Returns:
         alt.X/alt.Y: Updated config for x/y
     """
     if isinstance(axis, (alt.X, alt.Y)):
         axis_config = axis.to_dict()
-        axis_config["axis"] = None
+        for key, value in updates.items():
+            axis_config[key] = value
         return output_type(**axis_config)
     elif isinstance(axis, str):
-        return output_type(shorthand=axis, axis=None)
+        return output_type(shorthand=axis, **updates)
     else:
         raise TypeError("Input x/y must be of type str or alt.X or alt.Y")
 
@@ -137,6 +146,7 @@ def _chart(
     width: Optional[int] = None,
     height: Optional[int] = None,
     spark: bool = False,
+    autoscale_y: bool = False,
 ):
     """Get an Altair chart object
 
@@ -153,6 +163,7 @@ def _chart(
         width (Optional[int], optional): Width of the chart. Defaults to None.
         height (Optional[int], optional): Height of the chart. Defaults to None.
         spark (bool, optional): Whether or not to make spark chart, i.e. a chart without axes nor ticks nor legend. Defaults to False.
+        autoscale_y (bool, optional): Whether or not to autoscale the y axis. Defaults to False.
 
     Returns:
         alt.Chart: Altair chart
@@ -195,11 +206,14 @@ def _chart(
         chart = chart.configure_view(strokeWidth=0).configure_axis(
             grid=False, domain=False
         )
-        x_axis = _get_spark_axis_config(x, alt.X)
-        y_axis = _get_spark_axis_config(y, alt.Y)
+        x_axis = _update_axis_config(x, alt.X, {"axis": None})
+        y_axis = _update_axis_config(y, alt.Y, {"axis": None})
     else:
         x_axis = x
         y_axis = y
+
+    if autoscale_y:
+        y_axis = _update_axis_config(y_axis, alt.Y, {"scale": alt.Scale(zero=False)})
 
     encode_config = _drop_nones(
         {
@@ -255,7 +269,7 @@ sparkhist_chart = _partial(hist_chart, spark=True, __name__="sparkhist_chart")
 sparkarea_chart = _partial(area_chart, spark=True, __name__="sparkarea_chart")
 
 
-@st.experimental_memo
+@cache_data
 def example_line():
     stocks = get_stocks_data()
 
@@ -267,7 +281,7 @@ def example_line():
     )
 
 
-@st.experimental_memo
+@cache_data
 def example_multi_line():
     stocks = get_stocks_data()
     line_chart(
@@ -279,7 +293,7 @@ def example_multi_line():
     )
 
 
-@st.experimental_memo
+@cache_data
 def example_bar():
     stocks = get_stocks_data()
     bar_chart(
@@ -290,7 +304,7 @@ def example_bar():
     )
 
 
-@st.experimental_memo
+@cache_data
 def example_hist():
     stocks = get_stocks_data()
     hist_chart(
@@ -300,7 +314,7 @@ def example_hist():
     )
 
 
-@st.experimental_memo
+@cache_data
 def example_scatter_opacity():
     weather = get_weather_data()
     scatter_chart(
@@ -312,7 +326,7 @@ def example_scatter_opacity():
     )
 
 
-@st.experimental_memo
+@cache_data
 def example_bar_horizontal():
     weather = get_weather_data()
     bar_chart(
@@ -323,7 +337,7 @@ def example_bar_horizontal():
     )
 
 
-@st.experimental_memo
+@cache_data
 def example_bar_log():
     weather = get_weather_data()
     bar_chart(
@@ -338,7 +352,7 @@ def example_bar_log():
     )
 
 
-@st.experimental_memo
+@cache_data
 def example_bar_sorted():
     weather = get_weather_data()
     bar_chart(
@@ -349,7 +363,7 @@ def example_bar_sorted():
     )
 
 
-@st.experimental_memo
+@cache_data
 def example_scatter():
     weather = get_weather_data()
     scatter_chart(
@@ -360,7 +374,7 @@ def example_scatter():
     )
 
 
-@st.experimental_memo
+@cache_data
 def example_hist_time():
     weather = get_weather_data()
     hist_chart(
@@ -375,7 +389,7 @@ def example_hist_time():
     )
 
 
-@st.experimental_memo
+@cache_data
 def example_sparkline():
     stocks = get_stocks_data()
     sparkline_chart(
@@ -386,6 +400,43 @@ def example_sparkline():
         rolling=7,
         height=150,
     )
+
+
+@cache_data
+def example_minisparklines():
+    stocks = get_stocks_data()
+
+    left, middle, right = st.columns(3)
+    with left:
+        data = stocks.query("symbol == 'GOOG'")
+        st.metric("GOOG", int(data["price"].mean()))
+        sparkline_chart(
+            data=data,
+            x="date",
+            y="price:Q",
+            height=80,
+            autoscale_y=True,
+        )
+    with middle:
+        data = stocks.query("symbol == 'MSFT'")
+        st.metric("MSFT", int(data["price"].mean()))
+        sparkline_chart(
+            data=data,
+            x="date",
+            y="price:Q",
+            height=80,
+            autoscale_y=True,
+        )
+    with right:
+        data = stocks.query("symbol == 'AAPL'")
+        st.metric("AAPL", int(data["price"].mean()))
+        sparkline_chart(
+            data=data,
+            x="date",
+            y="price:Q",
+            height=80,
+            autoscale_y=True,
+        )
 
 
 @st.experimental_memo
@@ -400,7 +451,7 @@ def example_sparkbar():
     )
 
 
-@st.experimental_memo
+@cache_data
 def example_sparkarea():
     random_data = get_random_data()
     df = pd.melt(
@@ -420,7 +471,7 @@ def example_sparkarea():
     )
 
 
-@st.experimental_memo
+@cache_data
 def example_bar_stacked():
     barley = get_barley_data()
     bar_chart(
@@ -432,7 +483,7 @@ def example_bar_stacked():
     )
 
 
-@st.experimental_memo
+@cache_data
 def example_bar_normalized():
     barley = get_barley_data()
     bar_chart(
@@ -444,7 +495,7 @@ def example_bar_normalized():
     )
 
 
-@st.experimental_memo
+@cache_data
 def example_bar_normalized_custom():
     barley = get_barley_data()
     bar_chart(
@@ -456,7 +507,7 @@ def example_bar_normalized_custom():
     )
 
 
-@st.experimental_memo
+@cache_data
 def example_bar_grouped():
     barley = get_barley_data()
     bar_chart(
@@ -485,6 +536,7 @@ __examples__ = {
     example_hist: [hist_chart, get_stocks_data],
     example_scatter: [scatter_chart, get_weather_data],
     example_sparkline: [sparkline_chart, get_stocks_data],
+    example_minisparklines: [sparkline_chart, get_stocks_data],
     example_sparkbar: [sparkbar_chart, get_stocks_data],
     example_sparkarea: [sparkarea_chart, get_random_data],
     example_hist_time: [hist_chart, get_weather_data],
