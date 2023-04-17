@@ -439,7 +439,7 @@ def example_minisparklines():
         )
 
 
-@st.experimental_memo
+@cache_data
 def example_sparkbar():
     stocks = get_stocks_data()
     sparkbar_chart(

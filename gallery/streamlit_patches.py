@@ -1,18 +1,19 @@
 import sys
 from pathlib import Path
 from time import sleep
+from timeit import default_timer as timer
 from typing import Any, Callable, Dict, List, Optional, Union
 
 import requests
 from streamlit import *
-from streamlit import error, experimental_singleton, runtime, source_util
+from streamlit import cache_data, error, runtime, source_util
 from streamlit.commands.page_config import get_random_emoji
+from streamlit.error_util import handle_uncaught_app_exception
+from streamlit.proto.ForwardMsg_pb2 import ForwardMsg
 from streamlit.runtime.scriptrunner import get_script_run_ctx as _get_script_run_ctx
+from streamlit.runtime.scriptrunner.script_requests import RerunData
 from streamlit.runtime.scriptrunner.script_runner import (
-    LOGGER,
-    SCRIPT_RUN_WITHOUT_ERRORS_KEY,
-    ForwardMsg,
-    RerunData,
+    _LOGGER,
     RerunException,
     ScriptRunner,
     ScriptRunnerEvent,
@@ -21,15 +22,15 @@ from streamlit.runtime.scriptrunner.script_runner import (
     _log_if_error,
     _new_module,
     config,
-    handle_uncaught_app_exception,
     magic,
-    modified_sys_path,
 )
+from streamlit.runtime.state import SCRIPT_RUN_WITHOUT_ERRORS_KEY
 from streamlit.source_util import _on_pages_changed, get_pages
 from streamlit.util import calc_md5
+from streamlit.vendor.ipython.modified_sys_path import modified_sys_path
 
 
-@experimental_singleton
+@cache_data
 def get_icons() -> Dict[str, str]:
     url = "https://raw.githubusercontent.com/omnidan/node-emoji/master/lib/emoji.json"
     return requests.get(url).json()
@@ -133,15 +134,20 @@ def _run_script(self, rerun_data: RerunData) -> None:
     """
     assert self._is_in_script_thread()
 
-    LOGGER.debug("Running script %s", rerun_data)
+    _LOGGER.debug("Running script %s", rerun_data)
+
+    start_time: float = timer()
+    prep_time: float = 0  # This will be overwritten once preparations are done.
 
     # Reset DeltaGenerators, widgets, media files.
     runtime.get_instance().media_file_mgr.clear_session_refs()
 
-    pages = source_util.get_pages(self._main_script_path)
+    main_script_path = self._main_script_path
+    pages = source_util.get_pages(main_script_path)
     # Safe because pages will at least contain the app's main page.
     main_page_info = list(pages.values())[0]
     current_page_info = None
+    uncaught_exception = None
 
     if rerun_data.page_script_hash:
         current_page_info = pages.get(rerun_data.page_script_hash, None)
@@ -192,7 +198,7 @@ def _run_script(self, rerun_data: RerunData) -> None:
             script_path = current_page_info["script_path"]
             extra_script_path = current_page_info.get("real_script_path")
         else:
-            script_path = self._main_script_path
+            script_path = main_script_path
             extra_script_path = None
 
             # At this point, we know that either
@@ -217,14 +223,14 @@ def _run_script(self, rerun_data: RerunData) -> None:
                 error(extra_script_path)
                 raise NotImplementedError("Must pass a file path or function")
 
-    except BaseException as e:
+    except Exception as ex:
         # We got a compile error. Send an error event and bail immediately.
-        LOGGER.debug("Fatal script error: %s", e)
+        _LOGGER.debug("Fatal script error: %s", ex)
         self._session_state[SCRIPT_RUN_WITHOUT_ERRORS_KEY] = False
         self.on_event.send(
             self,
             event=ScriptRunnerEvent.SCRIPT_STOPPED_WITH_COMPILE_ERROR,
-            exception=e,
+            exception=ex,
         )
         return
 
@@ -272,29 +278,56 @@ def _run_script(self, rerun_data: RerunData) -> None:
                 self._session_state.on_script_will_rerun(rerun_data.widget_states)
 
             ctx.on_script_start()
-            # write(code)
-            for c in code:
-                if callable(c):
-                    c()
+            prep_time = timer() - start_time
+            for code_block in code:
+                if callable(code_block):
+                    code_block()
                 else:
-                    exec(c, module.__dict__)
-                # write(module.__dict__)
+                    exec(code_block, module.__dict__)
+            self._session_state.maybe_check_serializable()
             self._session_state[SCRIPT_RUN_WITHOUT_ERRORS_KEY] = True
     except RerunException as e:
         rerun_exception_data = e.rerun_data
 
     except StopException:
+        # This is thrown when the script executes `st.stop()`.
+        # We don't have to do anything here.
         pass
 
-    except BaseException as e:
+    except Exception as ex:
         self._session_state[SCRIPT_RUN_WITHOUT_ERRORS_KEY] = False
-        handle_uncaught_app_exception(e)
+        uncaught_exception = ex
+        handle_uncaught_app_exception(uncaught_exception)
 
     finally:
         if rerun_exception_data:
             finished_event = ScriptRunnerEvent.SCRIPT_STOPPED_FOR_RERUN
         else:
             finished_event = ScriptRunnerEvent.SCRIPT_STOPPED_WITH_SUCCESS
+
+        if ctx.gather_usage_stats:
+            try:
+                # Prevent issues with circular import
+                from streamlit.runtime.metrics_util import (
+                    create_page_profile_message,
+                    to_microseconds,
+                )
+
+                # Create and send page profile information
+                ctx.enqueue(
+                    create_page_profile_message(
+                        ctx.tracked_commands,
+                        exec_time=to_microseconds(timer() - start_time),
+                        prep_time=to_microseconds(prep_time),
+                        uncaught_exception=type(uncaught_exception).__name__
+                        if uncaught_exception
+                        else None,
+                    )
+                )
+            except Exception as ex:
+                # Always capture all exceptions since we want to make sure that
+                # the telemetry never causes any issues.
+                _LOGGER.debug("Failed to create page profile", exc_info=ex)
         self._on_script_finished(ctx, finished_event)
 
     # Use _log_if_error() to make sure we never ever ever stop running the

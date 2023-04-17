@@ -1,7 +1,12 @@
 from __future__ import annotations
 
 import inspect
-from typing import Any, Callable, NamedTuple, Union, get_args
+
+try:
+    from types import UnionType
+except ImportError:
+    UnionType = type(int | float)  # type: ignore
+from typing import Any, Callable, NamedTuple, get_args
 
 import pandas as pd
 import streamlit as st
@@ -10,7 +15,7 @@ from st_keyup import st_keyup
 from .. import extra
 
 NoneType = type(None)
-UnionType = type(Union[int, float])
+# UnionType = type(Union[int, float])
 
 
 class Argument(NamedTuple):
