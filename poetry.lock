@@ -838,14 +838,14 @@ testing = ["coverage", "pytest", "pytest-cov", "pytest-regressions"]
 
 [[package]]
 name = "markdownlit"
-version = "0.0.6"
+version = "0.0.7"
 description = "markdownlit adds a couple of lit Markdown capabilities to your Streamlit apps"
 category = "main"
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "markdownlit-0.0.6-py3-none-any.whl", hash = "sha256:21197f1010036e9bb928b6aae74c0e6e7239996b08fa6a0fde3989c2b789e7d6"},
-    {file = "markdownlit-0.0.6.tar.gz", hash = "sha256:41516c0f9899101116de4b84f94b9af899516feb37bf8822547e651d35fcf4db"},
+    {file = "markdownlit-0.0.7-py3-none-any.whl", hash = "sha256:b58bb539dcb52e0b040ab2fed32f1f3146cbb2746dc3812940d9dd359c378bb6"},
+    {file = "markdownlit-0.0.7.tar.gz", hash = "sha256:553e2db454e2be4567caebef5176c98a40a7e24f7ea9c2fe8a1f05c1d9ea4005"},
 ]
 
 [package.dependencies]
@@ -2047,4 +2047,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.9.7 || >3.9.7,<4.0" # Apparently streamlit doesn't work with 3.9.7
-content-hash = "f4000c2b9228a0ab098aa46da485565eec72f21bb00ce2990a134b5106968bb9"
+content-hash = "f8461f647f345406df62305e2db4da6334f91090dc385c94359179a92b833be0"
