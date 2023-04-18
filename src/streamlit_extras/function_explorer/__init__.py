@@ -5,7 +5,9 @@ import inspect
 try:
     from types import UnionType
 except ImportError:
-    from typing import Union as UnionType  # type: ignore
+    from typing import Union
+
+    UnionType = type(Union)  # type: ignore
 
 from typing import Any, Callable, NamedTuple, get_args
 
