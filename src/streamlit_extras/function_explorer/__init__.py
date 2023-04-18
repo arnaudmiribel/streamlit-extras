@@ -1,7 +1,12 @@
 from __future__ import annotations
 
 import inspect
-from types import UnionType
+
+try:
+    from types import UnionType
+except ImportError:
+    from types import Union as UnionType  # type: ignore
+
 from typing import Any, Callable, NamedTuple, get_args
 
 import pandas as pd
