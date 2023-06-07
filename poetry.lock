@@ -1617,12 +1617,12 @@ streamlit = ">=1.2"
 
 [[package]]
 name = "streamlit-qs"
-version = "0.1.0"
+version = "0.1.1"
 description = "A small library to add extra functionality on top of streamlit's experimental_[get/set]_query_string API"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "streamlit-qs-0.1.0.tar.gz", hash = "sha256:102bfae62ca872d665461c57cb8e653265aab4e3bca0f95f914c52cf02c73a12"},
+    {file = "streamlit-qs-0.1.1.tar.gz", hash = "sha256:81704fe6eab152d1a80665cd7fb61addc93c4189ee29ea67e2a68ff673dbbb30"},
 ]
 
 [[package]]
@@ -1835,4 +1835,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.9.7 || >3.9.7,<4.0"
-content-hash = "75aebeede2966c35d14ddcbd8a59b73775e8d3822bb0529f82a032e6c863b30e"
+content-hash = "0f0db52ce7cf05d4e316447cd0776330a259cddacf312cbc9c8e64b0aa4697d0"
