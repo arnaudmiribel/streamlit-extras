@@ -30,12 +30,16 @@ def get_arg_details(func) -> list[Argument]:
     try:
         # Python 3.10 added eval_str=True
         signature = inspect.signature(func, eval_str=True)  # type: ignore
+        return [
+            Argument(argument=k, type_hint=v.annotation, default=v.default)
+            for k, v in signature.parameters.items()
+        ]
     except TypeError:
         signature = inspect.signature(func)
-    return [
-        Argument(argument=k, type_hint=v.annotation, default=v.default)
-        for k, v in signature.parameters.items()
-    ]
+        return [
+            Argument(argument=k, type_hint=eval(v.annotation), default=v.default)
+            for k, v in signature.parameters.items()
+        ]
 
 
 def is_empty(argument_attribute):

@@ -11,6 +11,7 @@ from streamlit.commands.page_config import get_random_emoji
 from streamlit.error_util import handle_uncaught_app_exception
 from streamlit.proto.ForwardMsg_pb2 import ForwardMsg
 from streamlit.runtime.scriptrunner import get_script_run_ctx as _get_script_run_ctx
+from streamlit.runtime.scriptrunner import magic
 from streamlit.runtime.scriptrunner.script_requests import RerunData
 from streamlit.runtime.scriptrunner.script_runner import (
     _LOGGER,
@@ -22,7 +23,6 @@ from streamlit.runtime.scriptrunner.script_runner import (
     _log_if_error,
     _new_module,
     config,
-    magic,
 )
 from streamlit.runtime.state import SCRIPT_RUN_WITHOUT_ERRORS_KEY
 from streamlit.source_util import _on_pages_changed, get_pages
