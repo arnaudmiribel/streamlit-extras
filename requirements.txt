@@ -1,3 +1,4 @@
 -e .
 streamlit==1.23.1
 markdownlit==0.0.7
+altair<5
