@@ -36,9 +36,19 @@ def get_arg_details(func) -> list[Argument]:
         ]
     except TypeError:
         signature = inspect.signature(func)
+        obj_globals = getattr(func, "__globals__", None)
+        obj_locals = None
         return [
-            Argument(argument=k, type_hint=eval(v.annotation), default=v.default)
-            for k, v in signature.parameters.items()
+            Argument(
+                argument=key,
+                type_hint=(
+                    value.annotation
+                    if not isinstance(value.annotation, str)
+                    else eval(value.annotation, obj_globals, obj_locals)
+                ),
+                default=value.default,
+            )
+            for key, value in signature.parameters.items()
         ]
 
 
