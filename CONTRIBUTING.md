@@ -56,6 +56,10 @@ Head over to our public [repository](https://github.com/arnaudmiribel/streamlit-
   - You can also add a "featured-extra" badge to your original README.md if you like! <a href="https://github.com/arnaudmiribel/streamlit-extras"> <img src="https://img.shields.io/badge/-%F0%9F%AA%A2%20featured%20extra-e8ded1"></img></a>
 
 - If you'd like to test that your package has all the required fields, you can run `poetry run pytest` from the repository
+
+> **Note:** If you are committing changes to the lockfile you will need to use poetry<=1.3.0 in order for the lockfile to be compatible
+> with the version used by the CI system.
+
 - You can set up linting to standardize your code by running `pre-commit install`, which will then check the formatting of the files you added
 - Submit a PR!
 

@@ -1,20 +1,20 @@
 from streamlit_qs import (
-    selectbox_qs,
-    multiselect_qs,
-    radio_qs,
-    text_area_qs,
-    text_input_qs,
-    number_input_qs,
-    checkbox_qs,
-    make_query_string,
-    update_qs_callback,
     add_qs_callback,
+    blacklist_key,
+    checkbox_qs,
     clear_qs_callback,
-    unenumifier,
     from_query_args,
     from_query_args_index,
-    blacklist_key,
+    make_query_string,
+    multiselect_qs,
+    number_input_qs,
+    radio_qs,
+    selectbox_qs,
+    text_area_qs,
+    text_input_qs,
     unblacklist_key,
+    unenumifier,
+    update_qs_callback,
 )
 
 from .. import extra
@@ -38,8 +38,8 @@ unblacklist_key = extra(unblacklist_key)
 
 # EXAMPLES -------------------------------------------------------------------
 def example_text_input():
-    from streamlit_qs import text_input_qs
     import streamlit as st
+    from streamlit_qs import text_input_qs
 
     st.markdown(
         "Click this URL: "
@@ -55,7 +55,8 @@ def example_multiselect():
     import streamlit as st
 
     st.markdown("[Click this URL](?multi=Streamlit&multi=QS&multi=Rocks#multi-select)")
-    values = multiselect_qs("Your opinion about this library:",
+    values = multiselect_qs(
+        "Your opinion about this library:",
         options=["Streamlit", "QS", "Rocks", "I", "Don't", "Know"],
         default=["I", "Don't", "Know"],
         key="multi",
@@ -66,30 +67,28 @@ def example_multiselect():
 
 
 def example_options():
-    selectbox_qs("Select an option:",
+    selectbox_qs(
+        "Select an option:",
         options=["A", "B", "C"],
         key="auto_select1",
-        autoupdate=True
+        autoupdate=True,
     )
-    radio_qs("Select another option:",
+    radio_qs(
+        "Select another option:",
         options=["A", "B", "C"],
         key="auto_select2",
-        autoupdate=True
+        autoupdate=True,
     )
 
 
 def example_permalink():
     import streamlit as st
 
-    number_input_qs("Enter a number",
-        key="number1",
-        autoupdate=True
+    number_input_qs("Enter a number", key="number1", autoupdate=True)
+    checkbox_qs("Click the checkbox", key="checkbox", autoupdate=True)
+    st.markdown(
+        f"You can make a permalink like this: [permalink](/{make_query_string()})"
     )
-    checkbox_qs("Click the checkbox",
-        key="checkbox",
-        autoupdate=True
-    )
-    st.markdown(f"You can make a permalink like this: [permalink](/{make_query_string()})")
 
 
 __title__ = "Query String"

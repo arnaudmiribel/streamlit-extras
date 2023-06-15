@@ -41,6 +41,7 @@ black = "^22.8.0"
 isort = "^5.10.1"
 mypy = "^0.971"
 streamlit = ">=1.12.2"
+pre-commit = "^3.3.3"
 
 [tools.poetry.urls]
 "Homepage" = "https://github.com/arnaudmiribel/streamlit-extras"
