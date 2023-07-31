@@ -5,16 +5,11 @@ from typing import Any, Callable, Dict, List, Optional, Union
 
 import requests
 from streamlit import *
-from streamlit import (
-    error,
-    experimental_singleton,
-    runtime,
-    source_util,
-)
+from streamlit import cache_resource, error, runtime, source_util
 from streamlit.commands.page_config import get_random_emoji
 from streamlit.runtime.scriptrunner import get_script_run_ctx as _get_script_run_ctx
-from streamlit.runtime.scriptrunner.script_runner import (
-    LOGGER,
+from streamlit.runtime.scriptrunner.script_runner import (  # magic,
+    _LOGGER,
     SCRIPT_RUN_WITHOUT_ERRORS_KEY,
     ForwardMsg,
     RerunData,
@@ -27,14 +22,13 @@ from streamlit.runtime.scriptrunner.script_runner import (
     _new_module,
     config,
     handle_uncaught_app_exception,
-    magic,
     modified_sys_path,
 )
 from streamlit.source_util import _on_pages_changed, get_pages
 from streamlit.util import calc_md5
 
 
-@experimental_singleton
+@cache_resource
 def get_icons() -> Dict[str, str]:
     url = "https://raw.githubusercontent.com/omnidan/node-emoji/master/lib/emoji.json"
     return requests.get(url).json()
@@ -138,7 +132,7 @@ def _run_script(self, rerun_data: RerunData) -> None:
     """
     assert self._is_in_script_thread()
 
-    LOGGER.debug("Running script %s", rerun_data)
+    _LOGGER.debug("Running script %s", rerun_data)
 
     # Reset DeltaGenerators, widgets, media files.
     runtime.get_instance().media_file_mgr.clear_session_refs()
@@ -224,7 +218,7 @@ def _run_script(self, rerun_data: RerunData) -> None:
 
     except BaseException as e:
         # We got a compile error. Send an error event and bail immediately.
-        LOGGER.debug("Fatal script error: %s", e)
+        _LOGGER.debug("Fatal script error: %s", e)
         self._session_state[SCRIPT_RUN_WITHOUT_ERRORS_KEY] = False
         self.on_event.send(
             self,
@@ -313,9 +307,6 @@ def _run_script(self, rerun_data: RerunData) -> None:
 def _get_code_from_path(script_path: str) -> Any:
     with source_util.open_python_file(script_path) as f:
         filebody = f.read()
-
-    if config.get_option("runner.magicEnabled"):
-        filebody = magic.add_magic(filebody, script_path)
 
     code = compile(
         filebody,
