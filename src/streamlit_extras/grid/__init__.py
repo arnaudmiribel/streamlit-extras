@@ -153,7 +153,7 @@ def example():
 
 
 __title__ = "Grid Layout"
-__desc__ = "A multi-element container that places element on a specified grid layout."
+__desc__ = "A multi-element container that places elements on a specified grid layout."
 __icon__ = "💠"
 __examples__ = [example]
 __author__ = "Lukas Masuch"

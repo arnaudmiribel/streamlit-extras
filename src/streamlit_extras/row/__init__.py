@@ -89,7 +89,7 @@ def example():
 
 
 __title__ = "Row Layout"
-__desc__ = "A multi-element horizontal container that places element in a row."
+__desc__ = "A multi-element horizontal container that places elements in a row."
 __icon__ = "🟰"
 __examples__ = [example]
 __author__ = "Lukas Masuch"
