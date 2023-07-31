@@ -145,5 +145,4 @@ __desc__ = "A chat container that automatically keeps track of the chat history.
 __icon__ = "💬"
 __examples__ = [example]
 __author__ = "Lukas Masuch"
-__forum_url__ = ""
 __experimental_playground__ = False

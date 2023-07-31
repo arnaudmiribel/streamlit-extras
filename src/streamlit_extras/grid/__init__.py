@@ -157,5 +157,4 @@ __desc__ = "A multi-element container that places elements on a specified grid l
 __icon__ = "💠"
 __examples__ = [example]
 __author__ = "Lukas Masuch"
-__forum_url__ = ""
 __experimental_playground__ = False
