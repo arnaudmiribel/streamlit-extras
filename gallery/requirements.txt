@@ -1,3 +1,4 @@
 streamlit==1.25.0
-streamlit-extras>=0.2.5
 altair<5
+# Local install of streamlit-extras:
+../
