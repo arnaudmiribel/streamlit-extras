@@ -143,6 +143,8 @@ def example():
 __title__ = "Stateful Chat"
 __desc__ = "A chat container that automatically keeps track of the chat history."
 __icon__ = "💬"
-__examples__ = [example]
+__examples__ = {
+    example: [chat, add_message],
+}
 __author__ = "Lukas Masuch"
 __experimental_playground__ = False
