@@ -25,6 +25,14 @@ def sandbox(
     instructions. Doing this inside the main Streamlit app would be unsafe since the user could
     execute arbitrary code on the server.
 
+    There are a few limitations to this approach:
+    * stlite does not support the full set of Streamlit features. See the stlite documentation
+      for more details on limitations: https://github.com/whitphx/stlite#limitations
+    * Since the code is executed inside the user's browser, it cannot access any files, session state,
+      or other functionalities of the server.
+    * The available compute resource depend on the user's machine. So, this is not suited for
+      heavy computations.
+
     Parameters
     ----------
 
