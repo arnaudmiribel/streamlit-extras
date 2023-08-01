@@ -8,6 +8,7 @@ from streamlit import *
 from streamlit import cache_resource, error, runtime, source_util
 from streamlit.commands.page_config import get_random_emoji
 from streamlit.runtime.scriptrunner import get_script_run_ctx as _get_script_run_ctx
+from streamlit.runtime.scriptrunner import magic
 from streamlit.runtime.scriptrunner.script_runner import (  # magic,
     _LOGGER,
     SCRIPT_RUN_WITHOUT_ERRORS_KEY,
@@ -307,6 +308,9 @@ def _run_script(self, rerun_data: RerunData) -> None:
 def _get_code_from_path(script_path: str) -> Any:
     with source_util.open_python_file(script_path) as f:
         filebody = f.read()
+
+    if config.get_option("runner.magicEnabled"):
+        filebody = magic.add_magic(filebody, script_path)
 
     code = compile(
         filebody,
