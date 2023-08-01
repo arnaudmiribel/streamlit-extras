@@ -35,6 +35,15 @@ def stylable_container(key: str, css_styles: str | List[str]) -> "DeltaGenerator
     if isinstance(css_styles, str):
         css_styles = [css_styles]
 
+    # Remove unneeded spacing that is added by the style markdown:
+    css_styles.append(
+        """
+> div:first-child {
+    margin-bottom: -1rem;
+}
+"""
+    )
+
     style_text = """
 <style>
 """
@@ -46,13 +55,14 @@ div[data-testid="stVerticalBlock"]:has(> div.element-container > div.stMarkdown 
 
 """
 
-    style_text += """
+    style_text += f"""
     </style>
+
+<span class="{key}"></span>
 """
 
     container = st.container()
     container.markdown(style_text, unsafe_allow_html=True)
-    container.markdown(f'<span class="{key}"></span>', unsafe_allow_html=True)
     return container
 
 
