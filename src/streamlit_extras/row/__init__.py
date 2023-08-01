@@ -69,9 +69,7 @@ div[data-testid="column"] > div > div[data-testid="stVerticalBlock"] > div.eleme
         ],
     )
 
-    return grid.GridDeltaGenerator(
-        parent_dg=container, spec=[spec], gap=gap, repeat=False
-    )
+    return grid.GridDeltaGenerator(parent_dg=container, spec=[spec], gap=gap)
 
 
 def example():
