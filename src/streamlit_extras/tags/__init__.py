@@ -42,4 +42,4 @@ __desc__ = "Display tags like github issues!"
 __icon__ = "🔖"
 __examples__ = [example]
 __author__ = "Maggie Liu"
-__experimental_playground__ = True
+__experimental_playground__ = False
