@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+from textwrap import dedent
+from typing import Literal
+
+import pytest
 import streamlit as st
 
 from .. import extra
@@ -16,10 +20,51 @@ TAGGER_COLOR_PALETTE = {
     "yellow": "#faca2b",
 }
 
+_DEFAULT_COLOR = "#808495"
+
+VALID_COLOR_NAMES = Literal[tuple(TAGGER_COLOR_PALETTE.keys())]  # type: ignore
+
+
+def _get_html(
+    content: str,
+    tags: list[str],
+    color_name: list[VALID_COLOR_NAMES] | VALID_COLOR_NAMES | None = None,
+) -> str:
+    tags_html = content + " "
+    for i in range(len(tags)):
+        if color_name is None:
+            color = _DEFAULT_COLOR
+        elif isinstance(color_name, list):
+            color = TAGGER_COLOR_PALETTE[color_name[i]]
+        elif isinstance(color_name, str):
+            color = TAGGER_COLOR_PALETTE[color_name]
+        else:
+            raise ValueError(
+                f"color_name must be a list or a string or None. "
+                f"color_name = {color_name}, type(color_name) = {type(color_name)}"
+            )
+
+        tags_html += dedent(
+            f"""
+            <span style="display:inline-block;
+            background-color: {color};
+            padding: 0.1rem 0.5rem;
+            font-size: 14px;
+            font-weight: 400;
+            color:white;
+            margin: 5px;
+            border-radius: 1rem;">{tags[i]}</span>
+            """
+        ).strip()
+
+    return tags_html
+
 
 @extra
 def tagger_component(
-    content: str, tags: list, color_name: list[str] | str | None = None
+    content: str,
+    tags: list[str],
+    color_name: list[VALID_COLOR_NAMES] | VALID_COLOR_NAMES | None = None,
 ):
     """
     Displays tags next to your text.
@@ -29,46 +74,26 @@ def tagger_component(
         color_name: A list or a string that indicates the color of tags.
         Choose from lightblue, orange, bluegreen, blue, violet, red, green, yellow
     """
-    if color_name is None:
-        _DEFAULT_COLOR = "#808495"
-        color_flag = False
-    else:
+    if isinstance(color_name, str):
+        if color_name not in TAGGER_COLOR_PALETTE:
+            raise ValueError(
+                f"color_name must contain a name from {TAGGER_COLOR_PALETTE.keys()} "
+                f"not {color_name}"
+            )
+    elif isinstance(color_name, list):
         for color in color_name:
-            if color not in [
-                "lightblue",
-                "orange",
-                "bluegreen",
-                "blue",
-                "violet",
-                "red",
-                "green",
-                "yellow",
-            ]:
-                st.error(
-                    "color_name must contain a name from lightblue, orange, bluegreen, blue, violet, red, green, yellow"
+            if color not in TAGGER_COLOR_PALETTE:
+                raise ValueError(
+                    f"color_name must contain a name from {TAGGER_COLOR_PALETTE.keys()}"
+                    f" not {color}"
                 )
-                st.stop()
-        if color_name and len(color_name) == len(tags):
-            color_flag = True
-        elif len(color_name) == 1:
-            _DEFAULT_COLOR = TAGGER_COLOR_PALETTE[color_name]  # type: ignore
-            color_flag = False
+            if len(color_name) != len(tags):
+                raise ValueError(
+                    f"color_name must be the same length as tags. "
+                    f"len(color_name) = {len(color_name)}, len(tags) = {len(tags)}"
+                )
 
-    tags_html = content + " "
-    for i in range(len(tags)):
-        tags_html += "".join(
-            [
-                f"""
-                <span style="display:inline-block;
-                background-color: {TAGGER_COLOR_PALETTE[color_name[i]] if color_flag else _DEFAULT_COLOR}
-                padding: 0.1rem 0.5rem;
-                font-size: 14px;
-                font-weight: 400;
-                color:white;
-                margin: 5px;
-                border-radius: 1rem;">{tags[i]}</span>"""
-            ]  # type: ignore
-        )
+    tags_html = _get_html(content, tags, color_name)
 
     st.write(tags_html, unsafe_allow_html=True)
 
@@ -87,9 +112,62 @@ def example():
     )
 
 
+def test_invalid_color():
+    with pytest.raises(ValueError):
+        tagger_component(
+            "Here is a feature request",
+            ["p2", "🚩triaged", "backlog"],
+            color_name="invalid",
+        )
+
+
+def test_invalid_color_list():
+    with pytest.raises(ValueError):
+        tagger_component(
+            "Here is a feature request",
+            ["p2", "🚩triaged", "backlog"],
+            color_name=["blue", "invalid"],
+        )
+
+
+def test_invalid_color_length():
+    with pytest.raises(ValueError):
+        tagger_component(
+            "Here is a feature request",
+            ["p2", "🚩triaged", "backlog"],
+            color_name=["blue"],
+        )
+
+
+def test_color_html():
+    output = _get_html("foo", ["bar"], color_name=["blue"])
+
+    assert (
+        output
+        == dedent(
+            """
+        foo <span style="display:inline-block;
+        background-color: #1c83e1;
+        padding: 0.1rem 0.5rem;
+        font-size: 14px;
+        font-weight: 400;
+        color:white;
+        margin: 5px;
+        border-radius: 1rem;">bar</span>
+        """
+        ).strip()
+    )
+
+
 __title__ = "Tags"
 __desc__ = "Display tags like github issues!"
 __icon__ = "🔖"
 __examples__ = [example]
 __author__ = "Maggie Liu"
 __experimental_playground__ = False
+__tests__ = [
+    test_invalid_color,
+    test_invalid_color_list,
+    test_invalid_color_length,
+    test_color_html,
+]
