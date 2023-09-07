@@ -3,7 +3,6 @@ from __future__ import annotations
 from textwrap import dedent
 from typing import Literal
 
-import pytest
 import streamlit as st
 
 from .. import extra
@@ -113,6 +112,8 @@ def example():
 
 
 def test_invalid_color():
+    import pytest
+
     with pytest.raises(ValueError):
         tagger_component(
             "Here is a feature request",
@@ -122,6 +123,8 @@ def test_invalid_color():
 
 
 def test_invalid_color_list():
+    import pytest
+
     with pytest.raises(ValueError):
         tagger_component(
             "Here is a feature request",
@@ -131,6 +134,8 @@ def test_invalid_color_list():
 
 
 def test_invalid_color_length():
+    import pytest
+
     with pytest.raises(ValueError):
         tagger_component(
             "Here is a feature request",
