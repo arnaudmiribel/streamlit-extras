@@ -1,4 +1,5 @@
 streamlit==1.25.0
 altair<5
+pytest
 # Local install of streamlit-extras:
 -e ./
