@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import logging
 import sys
+import unittest.mock as mock
 from contextlib import contextmanager
 from io import StringIO
 from typing import Callable, TextIO
-import unittest.mock as mock
 
 import streamlit as st
 from streamlit.runtime.scriptrunner.script_run_context import get_script_run_ctx
