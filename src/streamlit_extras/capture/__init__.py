@@ -4,11 +4,11 @@ import logging
 import sys
 from contextlib import contextmanager
 from io import StringIO
-from threading import current_thread
 from typing import Callable, TextIO
 
 import streamlit as st
 from streamlit.runtime.scriptrunner.script_run_context import get_script_run_ctx
+
 from streamlit_extras import extra
 
 __all__ = ["redirect", "stdout", "stderr", "logcapture"]
