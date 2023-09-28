@@ -16,9 +16,11 @@ from .. import extra
 def dataframe_explorer(df: pd.DataFrame, case: bool = True) -> pd.DataFrame:
     """
     Adds a UI on top of a dataframe to let viewers filter columns
+
     Args:
         df (pd.DataFrame): Original dataframe
         case (bool, optional): If True, text inputs will be case sensitive. Defaults to True.
+
     Returns:
         pd.DataFrame: Filtered dataframe
     """

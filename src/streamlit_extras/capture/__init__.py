@@ -106,7 +106,7 @@ def logcapture(
     """Redirect logging to a streamlit function call `dst`.
 
         Args:
-            dst (callable[str]): A funciton callable with a single string argument. The entire log contents will be
+            dst (callable[str]): A function callable with a single string argument. The entire log contents will be
                 passed to this function every time a log is written. It is designed to be compatible with st.empty().*
                 functions as callbacks.
             terminator (optional, str): If a `terminator` is specified, it is added onto the end of each log.
@@ -123,7 +123,7 @@ def logcapture(
                 logging.info("All logs will be output to an st.empty")
 
             with st_logging(st.empty().code, terminator="", to_logger=loguru.logger)
-    #           loguru.logger.info("This will also log (if using loguru's logger)")
+                loguru.logger.info("This will also log (if using loguru's logger)")
     """
     if not from_logger:
         from_logger = logging.getLogger()  # root logger

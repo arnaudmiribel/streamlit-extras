@@ -9,12 +9,17 @@ from .. import extra
 def format_word_importances(words: List[str], importances: List[float]) -> str:
     """Adds a background color to each word based on its importance (float from -1 to 1)
 
+    Examples:
+        >>> format_word_importances(words=["Hello", "world"], importances=[0.1, 0.2])
+
     Args:
         words (list): List of words
         importances (list): List of importances (scores from -1 to 1)
 
     Returns:
         html: HTML string with formatted word
+
+
     """
     if importances is None or len(importances) == 0:
         return "<td></td>"
