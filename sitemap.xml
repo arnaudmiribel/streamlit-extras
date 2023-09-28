@@ -2,232 +2,237 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/components/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://github.com/arnaudmiribel/streamlit-extras/credits/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <loc>https://github.com/arnaudmiribel/streamlit-extras/contributing/</loc>
+         <lastmod>2023-09-28</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://github.com/arnaudmiribel/streamlit-extras/getting_started/</loc>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/add_vertical_space/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/altex/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/annotated_text/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/app_logo/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/badges/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/buy_me_a_coffee/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/camera_input_live/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/capture/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/card/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/chart_annotations/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/chart_container/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/colored_header/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/customize_running/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/dataframe_explorer/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/echo_expander/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/embed_code/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/faker/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/function_explorer/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/grid/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/image_coordinates/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/image_in_tables/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/keyboard_text/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/keyboard_url/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/let_it_rain/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/mandatory_date_range/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/markdownlit/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/mention/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/metric_cards/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/no_default_selectbox/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/row/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/sandbox/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/st_keyup/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/stateful_button/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/stateful_chat/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/stodo/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/stoggle/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/streaming_write/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/stylable_container/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/switch_page_button/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/tags/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/toggle_switch/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/vertical_slider/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/arnaudmiribel/streamlit-extras/extras/word_importances/</loc>
-         <lastmod>2023-09-27</lastmod>
+         <lastmod>2023-09-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
