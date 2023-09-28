@@ -8,12 +8,11 @@ from types import ModuleType
 from typing import List
 
 import mkdocs_gen_files
-import streamlit_extras
 
 # TODO: Check why query_string fails
 extra_modules_names = [
     extra.name
-    for extra in pkgutil.iter_modules(streamlit_extras.__path__)
+    for extra in pkgutil.iter_modules(["src/streamlit_extras"])
     if extra.name != "query_string"
 ]
 
