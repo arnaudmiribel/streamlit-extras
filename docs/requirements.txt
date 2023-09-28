@@ -5,4 +5,4 @@ mkdocs-material>=5.0
 mkdocstrings
 mkdocstrings-python
 pymdown-extensions
-../src/streamlit_extras
+-e ../src/streamlit_extras
