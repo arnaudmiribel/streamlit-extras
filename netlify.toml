@@ -1,4 +1,4 @@
 [build]
 
 publish = "site"
-command = """ pip3 install -r docs/requirements.txt && mkdocs build -d site """
+command = """ pip install -r docs/requirements.txt && mkdocs build -d site """
