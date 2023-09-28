@@ -1,3 +1,5 @@
+import ast
+import importlib
 import inspect
 import pkgutil
 from importlib import import_module
@@ -6,7 +8,6 @@ from types import ModuleType
 from typing import List
 
 import mkdocs_gen_files
-
 import streamlit_extras
 
 # TODO: Check why query_string fails
@@ -66,10 +67,6 @@ Visit the [PyPI page](https://pypi.org/project/{pypi_name}/) for more informatio
 """
 
 
-import ast
-import importlib
-
-
 def find_decorated_functions(
     module_name: str, decorator_name: str = "extra"
 ) -> List[str]:
@@ -86,6 +83,8 @@ def find_decorated_functions(
     """
     module = importlib.import_module(module_name)
     decorated_functions = []
+
+    assert module.__file__, f"Module {module_name} has no __file__ attribute"
 
     with open(module.__file__, "r") as module_file:
         module_source = module_file.read()
@@ -114,6 +113,8 @@ def find_example_functions(module_name: str) -> List[str]:
     """
     module = importlib.import_module(module_name)
     example_functions = []
+
+    assert module.__file__, f"Module {module_name} has no __file__ attribute"
 
     with open(module.__file__, "r") as module_file:
         module_source = module_file.read()
@@ -174,11 +175,12 @@ for extra_module_name in extra_modules_names:
 
     full_doc_path = Path(f"extras/{extra_module_name}.md")
 
+    decorated_functions = extra_metadata.get("decorated_functions", [])
     extra_metadata["functions_docstrings"] = "--- \n".join(
         EXTRA_FUNCTIONS_MD_TEMPLATE.format(
             module_name=extra_module_name, func_name=decorated_function
         )
-        for decorated_function in extra_metadata.get("decorated_functions")
+        for decorated_function in decorated_functions
     )
 
     with mkdocs_gen_files.open(full_doc_path, "w") as f:
