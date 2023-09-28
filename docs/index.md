@@ -7,10 +7,6 @@ Welcome to the **🪢 streamlit-extras** documentation. If you want to give a sp
 
 This library includes > 20 functional or visual additions to Streamlit that will make your life easier or your apps nicer. We call them _extras_ and anyone's welcome to add their owns. See our [contribution guide](contributing.md).
 
-Go ahead and **Browse Extras** in the left handside menu, and if you like them, remember, you're just a pip install away from using them:
-
-``` py
-pip install streamlit-extras
-```
+**Browse Extras** in the left handside menu, and if you like them, go ahead and [get started](getting_started.md)!
 
 Maintained by [@arnaudmiribel](https://twitter.com/arnaudmiribel) & [@blackary](https://twitter.com/blackaryz).
