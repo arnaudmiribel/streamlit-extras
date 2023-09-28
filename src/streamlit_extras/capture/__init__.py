@@ -105,25 +105,25 @@ def logcapture(
 ):
     """Redirect logging to a streamlit function call `dst`.
 
-        Args:
-            dst (callable[str]): A function callable with a single string argument. The entire log contents will be
-                passed to this function every time a log is written. It is designed to be compatible with st.empty().*
-                functions as callbacks.
-            terminator (optional, str): If a `terminator` is specified, it is added onto the end of each log.
-                This defaults to a newline which causes them to display on separate lines within an st.empty.write `dst.
-                If using this with st.empty.code as `dst` it is recommended to set `terminator` to empty string.
-            from_logger (optional, logging.Logger or loguru.logger): The logger from which logs will be captured.
-                Defaults to `logging.root`.
-            formatter (optional, logging.Formatter): If specified, the specified formatter will be added to the logging
-                handler to control how logs are displayed.
+    Args:
+        dst (callable[str]): A function callable with a single string argument. The entire log contents will be
+            passed to this function every time a log is written. It is designed to be compatible with st.empty().*
+            functions as callbacks.
+        terminator (optional, str): If a `terminator` is specified, it is added onto the end of each log.
+            This defaults to a newline which causes them to display on separate lines within an st.empty.write `dst.
+            If using this with st.empty.code as `dst` it is recommended to set `terminator` to empty string.
+        from_logger (optional, logging.Logger or loguru.logger): The logger from which logs will be captured.
+            Defaults to `logging.root`.
+        formatter (optional, logging.Formatter): If specified, the specified formatter will be added to the logging
+            handler to control how logs are displayed.
 
-        Code Examples:
+    Code Examples:
 
-            with st_logging(st.empty().write):
-                logging.info("All logs will be output to an st.empty")
+        with st_logging(st.empty().write):
+            logging.info("All logs will be output to an st.empty")
 
-            with st_logging(st.empty().code, terminator="", to_logger=loguru.logger)
-                loguru.logger.info("This will also log (if using loguru's logger)")
+        with st_logging(st.empty().code, terminator="", to_logger=loguru.logger)
+            loguru.logger.info("This will also log (if using loguru's logger)")
     """
     if not from_logger:
         from_logger = logging.getLogger()  # root logger

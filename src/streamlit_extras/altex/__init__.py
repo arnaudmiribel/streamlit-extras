@@ -262,6 +262,7 @@ def _partial(*args, **kwargs):
 def scatter_chart(**kwargs):
     return chart(mark_function="point", __name__="scatter_chart", **kwargs)
 
+
 # scatter_chart = _partial(chart, mark_function="point", __name__="scatter_chart")
 line_chart = _partial(chart, mark_function="line", __name__="line_chart")
 area_chart = _partial(chart, mark_function="area", __name__="area_chart")

@@ -70,7 +70,9 @@ import ast
 import importlib
 
 
-def find_decorated_functions(module_name: str, decorator_name: str = "extra") -> List[str]:
+def find_decorated_functions(
+    module_name: str, decorator_name: str = "extra"
+) -> List[str]:
     """Parses a module to find out which functions are decorated with a given decorator
     We use this to identify the functions we want to show in the docs, which are
     decorated with `@extra`.
@@ -151,11 +153,17 @@ def get_extra_metadata(module: ModuleType, module_name: str) -> dict:
         "twitter_username": getattr(module, "__twitter_username__", None),
         "buymeacoffee_username": getattr(module, "__buymeacoffee_username__", None),
         "forum_url": getattr(module, "__forum_url__", None),
-        "experimental_playground": getattr(module, "__experimental_playground__", False),
-        "experimental_playground_funcs": getattr(module, "__experimental_playground_funcs__", None),
+        "experimental_playground": getattr(
+            module, "__experimental_playground__", False
+        ),
+        "experimental_playground_funcs": getattr(
+            module, "__experimental_playground_funcs__", None
+        ),
         "pretty_title": module.__icon__ + "  " + module.__title__,
         "module_name": module_name,
-        "decorated_functions": find_decorated_functions(f"streamlit_extras.{module_name}"),
+        "decorated_functions": find_decorated_functions(
+            f"streamlit_extras.{module_name}"
+        ),
         "example_functions": find_example_functions(f"streamlit_extras.{module_name}"),
     }
 
@@ -175,7 +183,9 @@ for extra_module_name in extra_modules_names:
 
     with mkdocs_gen_files.open(full_doc_path, "w") as f:
         template = (
-            EXTRA_MD_TEMPLATE_IF_PYPI if extra_metadata.get("pypi_name") else EXTRA_MD_TEMPLATE
+            EXTRA_MD_TEMPLATE_IF_PYPI
+            if extra_metadata.get("pypi_name")
+            else EXTRA_MD_TEMPLATE
         )
 
         print(template.format(**extra_metadata), file=f)
