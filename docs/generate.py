@@ -64,8 +64,8 @@ STLITE_HTML_TO_IFRAME = """
     <div id="root"></div>
     <script src="https://cdn.jsdelivr.net/npm/@stlite/mountable/build/stlite.js"></script>
     <script>
-      if (window.location.search !== "?embed=true&embed_options=disable_scrolling") {{
-        window.location.search = "?embed=true&embed_options=disable_scrolling";
+      if (window.location.search !== "?embed=true") {{
+        window.location.search = "?embed=true";
       }}
       stlite.mount(
   {{
@@ -130,7 +130,7 @@ STLITE_IFRAME_HTML = """
 </style>
 
 <details class="example">
-    <summary> Playground </summary>
+    <summary> Result (beta)</summary>
     <div class="container">
         <div class="content">
             <iframe srcdoc="{}" width="800" height="200" frameBorder="0" overflow="scroll"> <p> Just trying stuff </p> </iframe>
@@ -255,7 +255,7 @@ def find_example_functions(module_name: str) -> List[str]:
 
     for node in ast.walk(parsed_module):
         if isinstance(node, ast.FunctionDef):
-            if node.name.startswith("example_"):
+            if node.name.startswith("example"):
                 example_functions.append(node.name)
 
     return example_functions
