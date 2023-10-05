@@ -136,7 +136,7 @@ STLITE_IFRAME_HTML = """
             <iframe srcdoc="{}" width="800" height="200" frameBorder="0" overflow="scroll"> <p> Just trying stuff </p> </iframe>
         </div>
         <div class="banner">
-                <p>Powered by stlite</p>
+                <p style="text-align: right; margin-right: 20px;">🎈 Powered by <a href="https://github.com/whitphx/stlite">stlite</a></p>
         </div>
     </div>
 </details>
