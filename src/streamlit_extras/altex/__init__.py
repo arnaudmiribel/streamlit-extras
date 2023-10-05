@@ -148,7 +148,8 @@ def _chart(
     spark: bool = False,
     autoscale_y: bool = False,
 ) -> alt.Chart:
-    """Get an Altair chart object
+    """Create an Altair chart with a simple API.
+    Supported charts include line, bar, point, area, histogram, sparkline, sparkbar, sparkarea.
 
     Args:
         mark_function (str): Altair mark function, example line/bar/point

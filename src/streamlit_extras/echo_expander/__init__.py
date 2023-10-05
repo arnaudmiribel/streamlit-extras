@@ -14,31 +14,13 @@ from .. import extra
 @extra
 @contextlib.contextmanager
 def echo_expander(code_location="above", expander=True, label="Show code"):
-    """Use in a `with` block to draw some code on the app, then execute it.
+    """
+    Execute code, and show the code that was executed, but in an expander.
 
-    Parameters
-    ----------
-    code_location : "above" or "below"
-        Whether to show the echoed code before or after the results of the
-        executed code block.
-        Default is "above"
-    expander : Boolean
-        Whether the code block should occur in an expander.
-        If False, then same as `st.echo`
-        Default is True
-    label : Text
-        If expander is True, then the label for the expander.
-        Default is "Show code"
-
-    Example
-    -------
-
-    >>> with st.echo():
-    >>>     st.write('This code will be printed')
-
-    >>> with st.echo_expander(code_location="below", expander=True, label="Expand to see the code"):
-    >>>     st.write('This code will be printed in an expander')
-
+    Args:
+        code_location (str, optional): Whether to show the echoed code above or below. Defaults to "above".
+        expander (bool, optional): Whether the code block should occur in an expander. Defaults to True.
+        label (str, optional): If expander is True, then the label for the expander. Defaults to "Show code".
     """
 
     from streamlit import empty, source_util
