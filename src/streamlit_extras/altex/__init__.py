@@ -2,7 +2,6 @@ from functools import partial
 from typing import Optional, Union
 
 import altair as alt
-import entrypoints
 import numpy as np
 import pandas as pd
 import streamlit as st
@@ -13,6 +12,16 @@ except ImportError:
     from streamlit import experimental_memo as cache_data  # streamlit >= 0.89
 
 from .. import extra
+
+try:
+    from altair.utils.plugin_registry import NoSuchEntryPoint
+except ImportError:
+    from entrypoints import NoSuchEntryPoint
+
+try:
+    alt.themes.enable("streamlit")
+except NoSuchEntryPoint:
+    st.altair_chart = partial(st.altair_chart, theme="streamlit")
 
 
 @cache_data
@@ -168,11 +177,6 @@ def _chart(
     Returns:
         alt.Chart: Altair chart
     """
-
-    try:
-        alt.themes.enable("streamlit")
-    except entrypoints.NoSuchEntryPoint:
-        st.altair_chart = partial(st.altair_chart, theme="streamlit")
 
     x_ = _get_shorthand(x)
     y_ = _get_shorthand(y)
