@@ -15,8 +15,13 @@ except ImportError:
 from .. import extra
 
 try:
+    from alt.utils.plugin_registry import NoSuchEntryPoint
+except ImportError:
+    from entrypoints import NoSuchEntryPoint
+
+try:
     alt.themes.enable("streamlit")
-except alt.utils.plugin_registry.NoSuchEntryPoint:
+except NoSuchEntryPoint:
     st.altair_chart = partial(st.altair_chart, theme="streamlit")
 
 

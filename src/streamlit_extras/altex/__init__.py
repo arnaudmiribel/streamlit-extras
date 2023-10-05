@@ -170,6 +170,11 @@ def _chart(
     """
 
     try:
+        pass
+    except ImportError:
+        pass
+
+    try:
         alt.themes.enable("streamlit")
     except alt.utils.plugin_registry.NoSuchEntryPoint:
         st.altair_chart = partial(st.altair_chart, theme="streamlit")
