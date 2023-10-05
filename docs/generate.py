@@ -202,7 +202,8 @@ Visit the [PyPI page](https://pypi.org/project/{pypi_name}/) for more informatio
 def find_decorated_functions(
     module_name: str, decorator_name: str = "extra"
 ) -> List[str]:
-    """Parses a module to find out which functions are decorated with a given decorator
+    """
+    Parses a module to find out which functions are decorated with a given decorator
     We use this to identify the functions we want to show in the docs, which are
     decorated with `@extra`.
 
@@ -232,37 +233,9 @@ def find_decorated_functions(
     return decorated_functions
 
 
-def find_example_functions(module_name: str) -> List[str]:
-    """Parses a module to find out which functions are examples.
-    They should start with `example_`
-
-    Args:
-        module_name (str): Name of the module
-        decorator_name (str, optional): Name of the decorator. Defaults to "extra".
-
-    Returns:
-        List[str]: Example function names
-    """
-    module = importlib.import_module(module_name)
-    example_functions = []
-
-    assert module.__file__, f"Module {module_name} has no __file__ attribute"
-
-    with open(module.__file__, "r") as module_file:
-        module_source = module_file.read()
-
-    parsed_module = ast.parse(module_source)
-
-    for node in ast.walk(parsed_module):
-        if isinstance(node, ast.FunctionDef):
-            if node.name.startswith("example"):
-                example_functions.append(node.name)
-
-    return example_functions
-
-
 def get_extra_metadata(module: ModuleType, module_name: str) -> dict:
-    """Collect extra metadata from the module
+    """
+    Collect extra metadata from the module
 
     Args:
         module (ModuleType): Module of the extra
@@ -297,7 +270,7 @@ def get_extra_metadata(module: ModuleType, module_name: str) -> dict:
         "decorated_functions": find_decorated_functions(
             f"streamlit_extras.{module_name}"
         ),
-        "example_functions": find_example_functions(f"streamlit_extras.{module_name}"),
+        # "example_functions": find_example_functions(f"streamlit_extras.{module_name}"),
     }
 
 
@@ -324,14 +297,14 @@ for extra_module_name in extra_modules_names:
 
         print(template.format(**extra_metadata), file=f)
 
-        if extra_metadata["example_functions"]:
+        if extra_metadata["examples"]:
             print("## Examples", file=f)
-            for example_function in extra_metadata["example_functions"]:
-                func_source = inspect.getsource(getattr(mod, example_function))
+            for example_function in extra_metadata["examples"]:
+                func_source = inspect.getsource(example_function)
                 print(
                     EXTRA_EXAMPLE_MD_TEMPLATE.format(
-                        func_name=example_function,
-                        func_source=inspect.getsource(getattr(mod, example_function)),
+                        func_name=example_function.__name__,
+                        func_source=func_source,
                     ),
                     file=f,
                 )
@@ -339,7 +312,7 @@ for extra_module_name in extra_modules_names:
                 stlite_html = STLITE_HTML_TO_IFRAME.format(
                     code=STLITE_CODE.format(
                         extra_module_name=extra_module_name,
-                        example_function=example_function,
+                        example_function=example_function.__name__,
                     )
                 ).strip()
 
