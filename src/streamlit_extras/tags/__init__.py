@@ -67,11 +67,12 @@ def tagger_component(
 ):
     """
     Displays tags next to your text.
+
     Args:
         content (str): Content to be tagged
         tags (list): A list of tags to be displayed next to the content
         color_name: A list or a string that indicates the color of tags.
-        Choose from lightblue, orange, bluegreen, blue, violet, red, green, yellow
+            Choose from lightblue, orange, bluegreen, blue, violet, red, green, yellow
     """
     if isinstance(color_name, str):
         if color_name not in TAGGER_COLOR_PALETTE:

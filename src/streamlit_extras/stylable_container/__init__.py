@@ -12,25 +12,19 @@ if TYPE_CHECKING:
 
 @extra
 def stylable_container(key: str, css_styles: str | List[str]) -> "DeltaGenerator":
-    """Insert a container into your app which you can style using CSS.
-
+    """
+    Insert a container into your app which you can style using CSS.
     This is useful to style specific elements in your app.
 
-    Parameters
-    ----------
-    key : str
-        The key associated with this container. This needs to be unique since all styles will be
-        applied to the container with this key.
+    Args:
+        key (str): The key associated with this container. This needs to be unique since all styles will be
+            applied to the container with this key.
+        css_styles (str | List[str]): The CSS styles to apply to the container elements.
+            This can be a single CSS block or a list of CSS blocks.
 
-    css_styles : str or list of str
-        The CSS styles to apply to the container elements. This can be a single CSS block or a list of
-        CSS blocks.
-
-    Returns
-    -------
-    DeltaGenerator
-        A container object. Elements can be added to this container using either the 'with'
-        notation or by calling methods directly on the returned object.
+    Returns:
+        DeltaGenerator: A container object. Elements can be added to this container using either the 'with'
+            notation or by calling methods directly on the returned object.
     """
     if isinstance(css_styles, str):
         css_styles = [css_styles]

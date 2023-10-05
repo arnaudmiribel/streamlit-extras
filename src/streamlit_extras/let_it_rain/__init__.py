@@ -14,6 +14,12 @@ def rain(
 ):
     """
     Creates a CSS animation where input emoji falls from top to bottom of the screen.
+
+    Args:
+        emoji (str): Emoji
+        font_size (int, optional): Font size. Defaults to 64.
+        falling_speed (int, optional): Speed at which the emoji 'falls'. Defaults to 5.
+        animation_length (Union[int, str], optional): Length of the animation. Defaults to "infinite".
     """
 
     if isinstance(animation_length, int):
