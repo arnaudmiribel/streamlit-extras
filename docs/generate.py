@@ -1,4 +1,5 @@
 import ast
+import html
 import importlib
 import inspect
 import pkgutil
@@ -16,6 +17,137 @@ extra_modules_names = [
     for extra in pkgutil.iter_modules(streamlit_extras.__path__)
     if extra.name != "query_string"
 ]
+
+# STLITE_HTML = """
+# <div id="root"></div>
+# <script>
+#     if (window.location.search !== "?embed=true&embed_options=disable_scrolling") {{
+#     window.location.search = "?embed=true&embed_options=disable_scrolling";
+#     }}
+
+#     stlite.mount(
+# {{
+# requirements: ["streamlit", "streamlit-extras"], // Packages to install
+# entrypoint: "streamlit_app.py",
+# files: {{
+#     "streamlit_app.py": `
+# import streamlit as st
+
+# st.markdown('<style>[data-baseweb~="modal"]{{visibility: hidden;}}</style>', unsafe_allow_html=True,)
+
+# {code}
+# `,
+# }},
+# }},
+#     document.getElementById("root")
+#     );
+
+# </script>
+# """
+
+STLITE_HTML_TO_IFRAME = """
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>Embedded Streamlit App</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@stlite/mountable/build/stlite.css"
+    >
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="https://cdn.jsdelivr.net/npm/@stlite/mountable/build/stlite.js"></script>
+    <script>
+      if (window.location.search !== "?embed=true&embed_options=disable_scrolling") {{
+        window.location.search = "?embed=true&embed_options=disable_scrolling";
+      }}
+      stlite.mount(
+  {{
+    requirements: ["streamlit", "streamlit-extras"], // Packages to install
+    entrypoint: "streamlit_app.py",
+    files: {{
+      "streamlit_app.py": `
+import streamlit as st
+
+st.markdown('<style>[data-baseweb~="modal"]{{visibility: hidden;}}</style>', unsafe_allow_html=True,)
+
+{code}
+`,
+    }},
+  }},
+        document.getElementById("root")
+      );
+    </script>
+  </body>
+</html>
+"""
+
+code = """
+from streamlit_extras.stoggle import stoggle
+
+stoggle("This is just a...", "secret!")
+"""
+
+STLITE_IFRAME_HTML = """
+<style>
+    .container {{
+            width: 100%;
+            background-color: #fff;/* #f2f2f2;  */
+            border-radius: 2px;
+            margin-top: 20px;
+            border: 1px solid #f2f2f2; /* Thin border on left, top, and right */
+    }}
+
+    .content {{
+        padding: 20px;
+    }}
+
+    .banner {{
+        background-color: #f2f2f2;
+        text-align: center;
+        padding: 10px 0; /* Adjust padding to reduce height */
+        border-radius: 2px;
+    }}
+
+    .banner p {{
+        margin: 0;
+    }}
+
+    .banner a {{
+        text-decoration: none;
+        color: #007bff;
+    }}
+
+    iframe {{
+        overflow: scroll;
+    }}
+</style>
+
+<details class="example">
+    <summary> Playground </summary>
+    <div class="container">
+        <div class="content">
+            <iframe srcdoc="{}" width="800" height="200" frameBorder="0" overflow="scroll"> <p> Just trying stuff </p> </iframe>
+        </div>
+        <div class="banner">
+                <p>Powered by stlite</p>
+        </div>
+    </div>
+</details>
+"""
+
+STLITE_CODE = """
+from streamlit_extras.{extra_module_name} import *
+
+with st.echo():
+    {example_function}()
+"""
 
 EXTRA_EXAMPLE_MD_TEMPLATE = """
 ### `{func_name}`
@@ -195,6 +327,7 @@ for extra_module_name in extra_modules_names:
         if extra_metadata["example_functions"]:
             print("## Examples", file=f)
             for example_function in extra_metadata["example_functions"]:
+                func_source = inspect.getsource(getattr(mod, example_function))
                 print(
                     EXTRA_EXAMPLE_MD_TEMPLATE.format(
                         func_name=example_function,
@@ -202,5 +335,14 @@ for extra_module_name in extra_modules_names:
                     ),
                     file=f,
                 )
+
+                stlite_html = STLITE_HTML_TO_IFRAME.format(
+                    code=STLITE_CODE.format(
+                        extra_module_name=extra_module_name,
+                        example_function=example_function,
+                    )
+                ).strip()
+
+                print(STLITE_IFRAME_HTML.format(html.escape(stlite_html)), file=f)
 
     mkdocs_gen_files.set_edit_path(full_doc_path, "generate.py")
