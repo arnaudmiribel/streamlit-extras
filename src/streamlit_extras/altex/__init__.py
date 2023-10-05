@@ -13,6 +13,16 @@ except ImportError:
 
 from .. import extra
 
+try:
+    from altair.utils.plugin_registry import NoSuchEntryPoint
+except ImportError:
+    from entrypoints import NoSuchEntryPoint
+
+try:
+    alt.themes.enable("streamlit")
+except NoSuchEntryPoint:
+    st.altair_chart = partial(st.altair_chart, theme="streamlit")
+
 
 @cache_data
 def _url_to_dataframe(url: str) -> pd.DataFrame:
@@ -168,16 +178,6 @@ def _chart(
     Returns:
         alt.Chart: Altair chart
     """
-
-    try:
-        pass
-    except ImportError:
-        pass
-
-    try:
-        alt.themes.enable("streamlit")
-    except alt.utils.plugin_registry.NoSuchEntryPoint:
-        st.altair_chart = partial(st.altair_chart, theme="streamlit")
 
     x_ = _get_shorthand(x)
     y_ = _get_shorthand(y)
