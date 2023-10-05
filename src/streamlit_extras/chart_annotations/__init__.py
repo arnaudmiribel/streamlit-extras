@@ -15,7 +15,7 @@ except ImportError:
 from .. import extra
 
 try:
-    from alt.utils.plugin_registry import NoSuchEntryPoint
+    from altair.utils.plugin_registry import NoSuchEntryPoint
 except ImportError:
     from entrypoints import NoSuchEntryPoint
 
