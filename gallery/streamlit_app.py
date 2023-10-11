@@ -70,7 +70,7 @@ Learn more about the library on
 
 
 def contribute():
-    path = (Path(__file__) / "../../CONTRIBUTING.md").resolve()
+    path = (Path(__file__) / "../../docs/contributing.md").resolve()
     content = path.read_text()
     st.write(content, unsafe_allow_html=True)
 
