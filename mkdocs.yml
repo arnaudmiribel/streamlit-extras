@@ -15,6 +15,7 @@ theme:
   icon:
     repo: fontawesome/brands/github
   features:
+    - navigation.expand
     - content.code.annotate
     - content.code.select
     - content.code.copy
@@ -39,9 +40,9 @@ plugins:
 nav:
   - Home: index.md
   - Getting started: getting_started.md
-  - Browse Extras: extras/
   - Streamlit Components: components.md
   - Contributing: contributing.md
+  - Browse Extras: extras/
 
 
 markdown_extensions:
