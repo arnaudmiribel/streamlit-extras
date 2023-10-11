@@ -39,21 +39,17 @@ def redirect(src: TextIO, dst: Callable, terminator: str = "\n"):
 
 @extra
 @contextmanager
-def stdout(dst: Callable, terminator="\n"):
-    """Capture STDOUT and redirect it to a callable `dst`.
+def stdout(dst: Callable, terminator: str = "\n"):
+    """
+    Capture STDOUT and redirect it to a callable `dst`
 
     Args:
-        dst (callable[str]): A funciton callable with a single string argument. The entire captured contents will be
+        dst (Callable): A function callable with a single string argument. The entire captured contents will be
             passed to this function every time a new string is written. It is designed to be compatible with
             st.empty().* functions as callbacks.
-        terminator (optional, str): If a `terminator` is specified, it is added onto each call to stdout.write/print.
+        terminator (str, optional): If a `terminator` is specified, it is added onto each call to stdout.write/print.
             This defaults to a newline which causes them to display on separate lines within an st.empty.write `dst.
-            If using this with st.empty.code as `dst` it is recommended to set `terminator` to empty string.
-
-    Code Example:
-
-        with st_stdout(st.empty().write):
-            print("this will print as if st.write() was called")
+            If using this with st.empty.code as `dst` it is recommended to set `terminator` to empty string. Defaults to "\n".
     """
     with redirect(sys.stdout, dst, terminator):
         yield
@@ -62,7 +58,8 @@ def stdout(dst: Callable, terminator="\n"):
 @extra
 @contextmanager
 def stderr(dst: Callable, terminator="\n"):
-    """Capture STDERR and redirect it to a callable `dst`.
+    """
+    Capture STDERR and redirect it to a callable `dst`.
 
     Args:
         dst (callable[str]): A funciton callable with a single string argument. The entire captured contents will be
@@ -71,11 +68,6 @@ def stderr(dst: Callable, terminator="\n"):
         terminator (optional, str): If a `terminator` is specified, it is added onto each call to stdout.write/print.
             This defaults to a newline which causes them to display on separate lines within an st.empty.write `dst.
             If using this with st.empty.code as `dst` it is recommended to set `terminator` to empty string.
-
-    Code Example:
-
-        with st_stderr(st.empty().code, terminator=""):
-            print("this will print as if st.code() was called")
     """
     with redirect(sys.stderr, dst, terminator):
         yield
@@ -103,28 +95,22 @@ def logcapture(
     from_logger: logging.Logger | None = None,
     formatter: logging.Formatter | None = None,
 ):
-    """Redirect logging to a streamlit function call `dst`.
-
-        Args:
-            dst (callable[str]): A funciton callable with a single string argument. The entire log contents will be
-                passed to this function every time a log is written. It is designed to be compatible with st.empty().*
-                functions as callbacks.
-            terminator (optional, str): If a `terminator` is specified, it is added onto the end of each log.
-                This defaults to a newline which causes them to display on separate lines within an st.empty.write `dst.
-                If using this with st.empty.code as `dst` it is recommended to set `terminator` to empty string.
-            from_logger (optional, logging.Logger or loguru.logger): The logger from which logs will be captured.
-                Defaults to `logging.root`.
-            formatter (optional, logging.Formatter): If specified, the specified formatter will be added to the logging
-                handler to control how logs are displayed.
-
-        Code Examples:
-
-            with st_logging(st.empty().write):
-                logging.info("All logs will be output to an st.empty")
-
-            with st_logging(st.empty().code, terminator="", to_logger=loguru.logger)
-    #           loguru.logger.info("This will also log (if using loguru's logger)")
     """
+    Redirect logging to a streamlit function call `dst`.
+
+    Args:
+        dst (callable[str]): A function callable with a single string argument. The entire log contents will be
+            passed to this function every time a log is written. It is designed to be compatible with st.empty().*
+            functions as callbacks.
+        terminator (optional, str): If a `terminator` is specified, it is added onto the end of each log.
+            This defaults to a newline which causes them to display on separate lines within an st.empty.write `dst.
+            If using this with st.empty.code as `dst` it is recommended to set `terminator` to empty string.
+        from_logger (optional, logging.Logger or loguru.logger): The logger from which logs will be captured.
+            Defaults to `logging.root`.
+        formatter (optional, logging.Formatter): If specified, the specified formatter will be added to the logging
+            handler to control how logs are displayed.
+    """
+
     if not from_logger:
         from_logger = logging.getLogger()  # root logger
 

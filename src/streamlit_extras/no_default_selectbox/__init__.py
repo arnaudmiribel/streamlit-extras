@@ -36,16 +36,13 @@ def _transform_arguments(*args, **kwargs) -> tuple[str, Iterable[Any], dict[str,
 
 @extra
 def selectbox(*args, **kwargs):
-    """A selectbox that returns None unless the user has explicitly selected one of the
-    options.
-
-    All arguments are passed to st.selectbox except for `no_selection_label`, which is
+    """
+    A selectbox that returns None unless the user has explicitly selected one of the
+    options. All arguments are passed to st.selectbox except for `no_selection_label`, which is
     used to specify the label of the option that represents no selection.
 
-    Parameters
-    ----------
-    no_selection_label : str
-        The label to use for the no-selection option. Defaults to "---".
+    Args:
+        no_selection_label (str): The label to use for the no-selection option. Defaults to "---".
     """
     no_selection_label, _args, _kwargs = _transform_arguments(*args, **kwargs)
 

@@ -1,4 +1,4 @@
-# 🙋 Contribute
+# 🙋 Contributing
 
 Head over to our public [repository](https://github.com/arnaudmiribel/streamlit-extras) and:
 

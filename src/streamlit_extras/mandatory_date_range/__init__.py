@@ -23,9 +23,18 @@ def date_range_picker(
     will go ahead and run with a single output. This widget enforces a start and
     end date being selected, and will stop the app if only one is chosen.
 
-    Defaults to a range of 30 days ago to today
+    Args:
+        title (str): Title of the date widget
+        default_start (Optional[date], optional): Default start date. Defaults to None.
+        default_end (Optional[date], optional): Default end date. Defaults to None.
+        min_date (Optional[date], optional): Minimum date. Defaults to None.
+        max_date (Optional[date], optional): Maximum date. Defaults to None.
+        error_message (str, optional): Error message when only one date is chosen.
+            Defaults to "Please select start and end date".
+        key (Optional[str], optional): Widget key. Defaults to None.
 
-    Returns the selected start and end date
+    Returns:
+        Tuple[date, date]: Start and end date chosen in the widget
     """
 
     if default_start is None:

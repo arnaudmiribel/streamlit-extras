@@ -4,10 +4,15 @@ from .. import extra
 
 
 @extra
-def add_vertical_space(num_lines: int = 1):
-    """Add vertical space to your Streamlit app."""
+def add_vertical_space(num_lines: int = 1) -> None:
+    """
+    Add vertical space to your Streamlit app.
+
+    Args:
+        num_lines (int, optional): Height of the vertical space (given in number of lines). Defaults to 1.
+    """
     for _ in range(num_lines):
-        st.write("")
+        st.write("")  # This is just a way to do a line break!
 
 
 def example():

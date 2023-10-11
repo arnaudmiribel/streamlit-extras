@@ -14,7 +14,9 @@ def format_word_importances(words: List[str], importances: List[float]) -> str:
         importances (list): List of importances (scores from -1 to 1)
 
     Returns:
-        html: HTML string with formatted word
+        html (str): HTML string with formatted word
+
+
     """
     if importances is None or len(importances) == 0:
         return "<td></td>"

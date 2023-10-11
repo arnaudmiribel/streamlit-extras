@@ -8,11 +8,12 @@ def to_do(st_commands, checkbox_id):
     """Create a to_do item
 
     Args:
-        st_commands (_type_): _description_
-        checkbox_id (_type_): _description_
+        st_commands (_type_): List of (cmd, args) where cmd is a
+            streamlit command and args are the arguments of the command
+        checkbox_id (str): Use as a key to the checkbox
 
     Returns:
-        _type_: _description_
+        None: Prints the to do list
     """
     cols = st.columns((1, 20))
     done = cols[0].checkbox(" ", key=checkbox_id)

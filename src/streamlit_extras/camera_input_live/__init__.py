@@ -26,3 +26,4 @@ __experimental_playground__ = False
 __forum_url__ = (
     "https://discuss.streamlit.io/t/new-component-streamlit-camera-live-input/31220"
 )
+__stlite__ = False

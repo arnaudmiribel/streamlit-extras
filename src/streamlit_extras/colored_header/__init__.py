@@ -165,6 +165,13 @@ def colored_header(
 ):
     """
     Shows a header with a colored underline and an optional description.
+
+    Args:
+        label (str, optional): Header label. Defaults to "Nice title".
+        description (str, optional): Description shown under the header. Defaults to "Cool description".
+        color_name (_SUPPORTED_COLORS, optional): Color of the underline. Defaults to "red-70".
+            Supported colors are "light-blue-70", "orange-70", "blue-green-70", "blue-70", "violet-70",
+            "red-70", "green-70", "yellow-80".
     """
     if color_name is None:
         color_name = next(HEADER_COLOR_CYCLE)
@@ -187,7 +194,9 @@ def example():
 
 
 __title__ = "Color ya Headers"
-__desc__ = "This function makes headers much prettier in Streamlit"
+__desc__ = """This function makes headers much prettier in Streamlit.
+           **Note that this now accessible in native Streamlit in st.header
+           with parameter `divider`!**"""
 __icon__ = "🖌️"
 __examples__ = [example]
 __author__ = "Johannes Rieke / Tyler Richards"

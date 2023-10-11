@@ -17,7 +17,8 @@ def sandbox(
     height: int = 700,
     scrolling: bool = False,
 ) -> None:
-    """Execute untrusted Streamlit code in a sandboxed environment.
+    """
+    Execute untrusted Streamlit code in a sandboxed environment.
 
     This function allows you to execute untrusted Streamlit code inside the user's web browser
     by using stlite (https://github.com/whitphx/stlite) instead of the App server. This is useful
@@ -33,29 +34,21 @@ def sandbox(
     * The available compute resource depend on the user's machine. So, this is not suited for
       heavy computations.
 
-    Parameters
-    ----------
-
-    code : str or callable
-        The code to execute. This can either be a string containing the code or a function.
+    Args:
+      code (str | Callable[[], None]): The code to execute. This can either be a string containing the code or a function.
         If a function is passed, the source code will be extracted automatically. The function
         is required to be fully self-contained and not reference any variables outside of its
         scope.
-
-    stlite_version : str or None
-        The version of stlite to use. If None, the latest version will be used.
-
-    requirements : list of str or None
-        A list of Python packages to install before executing the code. If None, the following
+      stlite_version (str | None, optional): The version of stlite to use.
+        If None, the latest version will be used.. Defaults to None.
+      requirements (List[str] | None, optional): A list of Python packages
+        to install before executing the code. If None, the following
         packages will be installed: pandas, numpy, plotly, altair.
-
-    height : int
-        The height of the embedded app in pixels. Defaults to 700.
-
-    scrolling : bool
-        Whether to allow scrolling inside the embedded app. Defaults to False.
-
+      height (int, optional): The height of the embedded app in pixels. Defaults to 700.
+      scrolling (bool, optional): Whether to allow scrolling inside the embedded app.
+        Defaults to False.
     """
+
     stlite_css_url = "https://cdn.jsdelivr.net/npm/@stlite/mountable/build/stlite.css"
     stlite_js_url = "https://cdn.jsdelivr.net/npm/@stlite/mountable/build/stlite.js"
 

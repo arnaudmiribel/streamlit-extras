@@ -32,3 +32,4 @@ __package_name__ = "streamlit_vertical_slider"
 __github_repo__ = "sqlinsights/streamlit-vertical-slider"  # Optional
 __forum_url__ = "https://discuss.streamlit.io/t/vertical-slider-component/32229"
 __experimental_playground__ = False  # Optional
+__stlite__ = False

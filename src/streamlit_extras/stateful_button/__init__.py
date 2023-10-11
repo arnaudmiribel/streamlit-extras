@@ -8,12 +8,8 @@ def button(*args, key=None, **kwargs):
     """
     Works just like a normal streamlit button, but it remembers its state, so that
     it works as a toggle button. If you click it, it will be pressed, and if you click
-    it again, it will be unpressed.
-
-    args:
-        Same as st.button
-    kwargs:
-        Same as st.button except key is required
+    it again, it will be unpressed. Args and output are the same as for
+    [st.button](https://docs.streamlit.io/library/api-reference/widgets/st.button)
     """
 
     if key is None:

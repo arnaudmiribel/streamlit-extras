@@ -22,6 +22,9 @@ div[class*="StatusWidget"]{
 
 @extra
 def center_running():
+    """
+    Have the "running man" animation in the center of the screen instead of the top right corner.
+    """
     st.markdown(center_css, unsafe_allow_html=True)
 
 

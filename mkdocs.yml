@@ -1,0 +1,64 @@
+site_name: streamlit-extras
+site_url: https://github.com/arnaudmiribel/streamlit-extras
+repo_name: streamlit-extras
+repo_url: https://github.com/arnaudmiribel/streamlit-extras/releases/latest
+
+theme:
+  name: material
+  custom_dir: overrides
+  css:
+    - overrides/custom.css
+  logo: assets/logo.png
+  favicon: assets/logo.png
+  palette:
+    primary: gray
+  icon:
+    repo: fontawesome/brands/github
+  features:
+    - navigation.expand
+    - content.code.annotate
+    - content.code.select
+    - content.code.copy
+
+plugins:
+  - search
+  - mkdocstrings:
+      custom_templates: docs/_templates
+      default_handler: python
+      handlers:
+        python:
+          options:
+            show_signature_annotations: false
+            show_types_in_signature: true
+            separate_signature: false
+  - literate-nav:
+      nav_file: SUMMARY.md
+  - gen-files:
+      scripts:
+        - docs/generate.py
+
+nav:
+  - Home: index.md
+  - Getting started: getting_started.md
+  - Streamlit Components: components.md
+  - Contributing: contributing.md
+  - Browse Extras: extras/
+
+
+markdown_extensions:
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - toc:
+      toc_depth : "3"

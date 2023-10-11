@@ -9,6 +9,7 @@ from .. import extra
 def stoggle(summary: str, content: str):
     """
     Displays a toggle widget in Streamlit
+
     Args:
         summary (str): Summary of the toggle (always shown)
         content (str): Content shown after toggling

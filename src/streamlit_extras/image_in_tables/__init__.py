@@ -45,7 +45,17 @@ def get_dataframe() -> pd.DataFrame:
 
 @extra
 @cache_data
-def table_with_images(df: pd.DataFrame, url_columns: Iterable):
+def table_with_images(df: pd.DataFrame, url_columns: Iterable) -> str:
+    """
+    Generate the HTML of a table with images rendered in it.
+
+    Args:
+        df (pd.DataFrame): Original dataframe
+        url_columns (Iterable): Column in df which contains URLs
+
+    Returns:
+        table_html (str): HTML of the table with images
+    """
 
     df_ = df.copy()
 
@@ -56,7 +66,9 @@ def table_with_images(df: pd.DataFrame, url_columns: Iterable):
     for column in url_columns:
         df_[column] = df_[column].apply(_path_to_image_html)
 
-    return df_.to_html(escape=False)
+    table_html = df_.to_html(escape=False)
+
+    return table_html
 
 
 df = get_dataframe()
@@ -80,3 +92,4 @@ __streamlit_cloud_url__ = (
     "https://dataprofessor-st-demo-image-table-streamlit-app-1x7rnd.streamlitapp.com/"
 )
 __github_repo__ = "dataprofessor/st-demo-image-table"
+__stlite__ = False

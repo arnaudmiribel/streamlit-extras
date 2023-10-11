@@ -13,7 +13,10 @@ def keyboard_to_url(
     key_code: int | None = None,
     url: str | None = None,
 ):
-    """Map a keyboard key to open a new tab with a given URL.
+    """
+
+    Map a keyboard key to open a new tab with a given URL.
+
     Args:
         key (str, optional): Key to trigger (example 'k'). Defaults to None.
         key_code (int, optional): If key doesn't work, try hard-coding the key_code instead. Defaults to None.

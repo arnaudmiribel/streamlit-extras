@@ -25,7 +25,7 @@ except NoSuchEntryPoint:
 
 
 @cache_data
-def url_to_dataframe(url: str) -> pd.DataFrame:
+def _url_to_dataframe(url: str) -> pd.DataFrame:
     """Collects a CSV/JSON file from a URL and load it into a dataframe, with appropriate caching (memo)
 
     Args:
@@ -54,17 +54,17 @@ barley_data_url = (
 
 
 def get_weather_data():
-    return url_to_dataframe(weather_data_url)
+    return _url_to_dataframe(weather_data_url)
 
 
 def get_stocks_data():
-    return url_to_dataframe(stocks_data_url).assign(
+    return _url_to_dataframe(stocks_data_url).assign(
         date=lambda df: pd.to_datetime(df.date)
     )
 
 
 def get_barley_data():
-    return url_to_dataframe(barley_data_url)
+    return _url_to_dataframe(barley_data_url)
 
 
 def get_random_data():
@@ -156,8 +156,9 @@ def _chart(
     height: Optional[int] = None,
     spark: bool = False,
     autoscale_y: bool = False,
-):
-    """Get an Altair chart object
+) -> alt.Chart:
+    """Create an Altair chart with a simple API.
+    Supported charts include line, bar, point, area, histogram, sparkline, sparkbar, sparkarea.
 
     Args:
         mark_function (str): Altair mark function, example line/bar/point
@@ -262,7 +263,12 @@ def _partial(*args, **kwargs):
     return func
 
 
-scatter_chart = _partial(chart, mark_function="point", __name__="scatter_chart")
+@extra
+def scatter_chart(**kwargs):
+    return chart(mark_function="point", __name__="scatter_chart", **kwargs)
+
+
+# scatter_chart = _partial(chart, mark_function="point", __name__="scatter_chart")
 line_chart = _partial(chart, mark_function="line", __name__="line_chart")
 area_chart = _partial(chart, mark_function="area", __name__="area_chart")
 bar_chart = _partial(chart, mark_function="bar", __name__="bar_chart")
@@ -443,7 +449,7 @@ def example_minisparklines():
         )
 
 
-@st.experimental_memo
+@cache_data
 def example_sparkbar():
     stocks = get_stocks_data()
     sparkbar_chart(

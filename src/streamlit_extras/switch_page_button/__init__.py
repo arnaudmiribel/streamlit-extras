@@ -5,6 +5,12 @@ from .. import extra
 
 @extra
 def switch_page(page_name: str):
+    """
+    Switch page programmatically in a multipage app
+
+    Args:
+        page_name (str): Target page name
+    """
     from streamlit.runtime.scriptrunner import RerunData, RerunException
     from streamlit.source_util import get_pages
 
@@ -56,3 +62,4 @@ __icon__ = "🖱️"
 __examples__ = [example]
 __author__ = "Zachary Blackwood"
 __tests__ = [test_switch_page, test_switch_invalid_page]
+__stlite__ = False

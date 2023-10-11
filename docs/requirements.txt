@@ -1,0 +1,8 @@
+mkdocs>=1.1
+mkdocs-gen-files
+mkdocs-literate-nav
+mkdocs-material>=5.0
+mkdocstrings
+mkdocstrings-python
+pymdown-extensions
+-e ./
