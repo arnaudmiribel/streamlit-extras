@@ -11,39 +11,9 @@ from typing import List
 import mkdocs_gen_files
 import streamlit_extras
 
-# TODO: Check why query_string fails
 extra_modules_names = [
-    extra.name
-    for extra in pkgutil.iter_modules(streamlit_extras.__path__)
-    if extra.name != "query_string"
+    extra.name for extra in pkgutil.iter_modules(streamlit_extras.__path__)
 ]
-
-# STLITE_HTML = """
-# <div id="root"></div>
-# <script>
-#     if (window.location.search !== "?embed=true&embed_options=disable_scrolling") {{
-#     window.location.search = "?embed=true&embed_options=disable_scrolling";
-#     }}
-
-#     stlite.mount(
-# {{
-# requirements: ["streamlit", "streamlit-extras"], // Packages to install
-# entrypoint: "streamlit_app.py",
-# files: {{
-#     "streamlit_app.py": `
-# import streamlit as st
-
-# st.markdown('<style>[data-baseweb~="modal"]{{visibility: hidden;}}</style>', unsafe_allow_html=True,)
-
-# {code}
-# `,
-# }},
-# }},
-#     document.getElementById("root")
-#     );
-
-# </script>
-# """
 
 STLITE_HTML_TO_IFRAME = """
 <html>
@@ -129,11 +99,13 @@ STLITE_IFRAME_HTML = """
     }}
 </style>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.3.7/iframeResizer.min.js" integrity="sha512-JurjZFufyOjexPw9s5Eb1VRDauHh9/ZophxPxSHcdwc94xHIlzZEhS7O2HR7po0+VW5aQEiLwUsdxLfi9zcCgg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <details class="example">
-    <summary> Result (beta)</summary>
+    <summary> Output (beta)</summary>
     <div class="container">
         <div class="content">
-            <iframe srcdoc="{}" width="800" height="200" frameBorder="0" overflow="scroll"> <p> Just trying stuff </p> </iframe>
+            <iframe srcdoc="{}" width="100%" id="iframe-{}" height="400" frameBorder="0" overflow="scroll"> <p> Just trying stuff </p> </iframe>
         </div>
         <div class="banner">
                 <p style="text-align: right; margin-right: 20px;">🎈 Powered by <a href="https://github.com/whitphx/stlite">stlite</a></p>
@@ -270,7 +242,7 @@ def get_extra_metadata(module: ModuleType, module_name: str) -> dict:
         "decorated_functions": find_decorated_functions(
             f"streamlit_extras.{module_name}"
         ),
-        # "example_functions": find_example_functions(f"streamlit_extras.{module_name}"),
+        "stlite": getattr(module, "__stlite__", True),
     }
 
 
@@ -297,6 +269,7 @@ for extra_module_name in extra_modules_names:
 
         print(template.format(**extra_metadata), file=f)
 
+        example_function_names = []
         if extra_metadata["examples"]:
             print("## Examples", file=f)
             for example_function in extra_metadata["examples"]:
@@ -309,13 +282,31 @@ for extra_module_name in extra_modules_names:
                     file=f,
                 )
 
-                stlite_html = STLITE_HTML_TO_IFRAME.format(
-                    code=STLITE_CODE.format(
-                        extra_module_name=extra_module_name,
-                        example_function=example_function.__name__,
-                    )
-                ).strip()
+                if extra_metadata["stlite"]:
 
-                print(STLITE_IFRAME_HTML.format(html.escape(stlite_html)), file=f)
+                    stlite_html = STLITE_HTML_TO_IFRAME.format(
+                        code=STLITE_CODE.format(
+                            extra_module_name=extra_module_name,
+                            example_function=example_function.__name__,
+                        )
+                    ).strip()
+
+                    iframe_html = STLITE_IFRAME_HTML.format(
+                        html.escape(stlite_html),
+                        example_function.__name__,
+                    )
+
+                    example_function_names.append(example_function.__name__)
+
+                    print(iframe_html, file=f)
+
+            if extra_metadata["stlite"]:
+                # This is needed to have all iframes auto-resize
+                auto_size_iframe_html = "<script>\n"
+                for example_function_name in example_function_names:
+                    auto_size_iframe_html += f'iFrameResize({{ log: true, checkOrigin: false }}, "#iframe-{example_function_name}")\n'
+                auto_size_iframe_html += "</script>"
+
+            print(auto_size_iframe_html, file=f)
 
     mkdocs_gen_files.set_edit_path(full_doc_path, "generate.py")
