@@ -62,3 +62,4 @@ __icon__ = "🖱️"
 __examples__ = [example]
 __author__ = "Zachary Blackwood"
 __tests__ = [test_switch_page, test_switch_invalid_page]
+__stlite__ = False

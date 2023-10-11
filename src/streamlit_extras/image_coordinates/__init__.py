@@ -24,3 +24,4 @@ __experimental_playground__ = False
 __github_repo__ = "blackary/streamlit-image-coordinates"
 __pypi_name__ = "streamlit-image-coordinates"
 __package_name__ = "streamlit_image_coordinates"
+__stlite__ = False

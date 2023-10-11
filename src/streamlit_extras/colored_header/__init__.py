@@ -194,7 +194,9 @@ def example():
 
 
 __title__ = "Color ya Headers"
-__desc__ = "This function makes headers much prettier in Streamlit"
+__desc__ = """This function makes headers much prettier in Streamlit.
+           **Note that this now accessible in native Streamlit in st.header
+           with parameter `divider`!**"""
 __icon__ = "🖌️"
 __examples__ = [example]
 __author__ = "Johannes Rieke / Tyler Richards"

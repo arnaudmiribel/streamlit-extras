@@ -92,3 +92,4 @@ __streamlit_cloud_url__ = (
     "https://dataprofessor-st-demo-image-table-streamlit-app-1x7rnd.streamlitapp.com/"
 )
 __github_repo__ = "dataprofessor/st-demo-image-table"
+__stlite__ = False

@@ -131,3 +131,4 @@ __icon__ = "🌊"
 __examples__ = [example]
 __author__ = "Lukas Masuch"
 __experimental_playground__ = False
+__stlite__ = False

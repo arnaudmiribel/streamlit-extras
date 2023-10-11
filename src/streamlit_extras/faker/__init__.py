@@ -24,3 +24,4 @@ __github_repo__ = "arnaudmiribel/streamlit-faker"
 __pypi_name__ = "streamlit-faker"
 __package_name__ = "streamlit_faker"
 __experimental_playground__ = False
+__stlite__ = False
