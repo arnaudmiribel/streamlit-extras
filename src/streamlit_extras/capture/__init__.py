@@ -44,7 +44,7 @@ def stdout(dst: Callable, terminator: str = "\n"):
     Capture STDOUT and redirect it to a callable `dst`
 
     Args:
-        dst (Callable): A funciton callable with a single string argument. The entire captured contents will be
+        dst (Callable): A function callable with a single string argument. The entire captured contents will be
             passed to this function every time a new string is written. It is designed to be compatible with
             st.empty().* functions as callbacks.
         terminator (str, optional): If a `terminator` is specified, it is added onto each call to stdout.write/print.
