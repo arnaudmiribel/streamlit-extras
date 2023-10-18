@@ -1,4 +1,3 @@
-import itertools
 import pkgutil
 from importlib import import_module
 
@@ -44,12 +43,14 @@ add_vertical_space(1)
 show_extras()
 
 add_vertical_space(1)
-st.markdown("""
+st.markdown(
+    """
 #### Get started
 ```
 pip install streamlit-extras
 ```
-""")
+"""
+)
 
 add_vertical_space(1)
 st.markdown("#### Learn more")
