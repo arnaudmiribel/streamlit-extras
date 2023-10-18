@@ -12,23 +12,14 @@
 
 `streamlit-extras` is a Python library putting together useful Streamlit bits of code (<b><i>extras</i></b>).
 
----
+![CleanShot 2023-10-18 at 14 56 43](https://github.com/arnaudmiribel/streamlit-extras/assets/7164864/14f20cf6-033c-4143-9f29-d0e95bf7dca1)
 
-<p align="center">
-     Try out and explore available extras in our playgrounds at <a href="https://extras.streamlitapp.com">extras.streamlitapp.com</a>.<br><br>
-     <img src="https://user-images.githubusercontent.com/7164864/186383332-147e820d-cd02-4962-b8b9-91fe9f675dfe.gif" width="500px"></img>
-</p>
-
-
-
----
 
 ## Highlights
 
-- 📙&nbsp; <b>Discover:</b> Visit the gallery <a href="https://extras.streamlitapp.com">extras.streamlitapp.com</a> to discover all extras in their natural habitat.
-- 🛝&nbsp; <b>Try:</b> The gallery comes with a Streamlit-based playground for some extras. Try it before you <strike>buy</strike> install it!
+- 📙&nbsp; <b>Discover:</b> Visit our <a href="https://arnaudmiribel.github.io/streamlit-extras/">documentation</a> to discover all extras.
 - ⬇️&nbsp; <b>Install:</b> `streamlit-extras` is a PyPI package with all extras included. Get them all using pip!
-- 🫴&nbsp; <b>Share:</b> Go ahead and share your own extras, it's just [a PR away](https://extras.streamlitapp.com/Contribute)!
+- 🫴&nbsp; <b>Share:</b> Go ahead and share your own extras, it's just [a PR away](https://arnaudmiribel.github.io/streamlit-extras/contributing/)!
 
 ## Getting Started
 
@@ -40,7 +31,7 @@ pip install streamlit-extras
 
 ### Usage
 
-Here's an example with one of the easiest extras around, <a href="https://extras.streamlitapp.com/Toggle%20button">stoggle</a>
+Here's an example with one of the easiest extras around, <a href="https://arnaudmiribel.github.io/streamlit-extras/extras/stoggle/">stoggle</a>
 ```python
 from streamlit_extras.stoggle import stoggle
 
@@ -54,10 +45,10 @@ stoggle(
 
 ## Documentation
 
-Visit <a href="https://extras.streamlitapp.com">extras.streamlitapp.com</a>
+Visit <a href="https://arnaudmiribel.github.io/streamlit-extras/">https://arnaudmiribel.github.io/streamlit-extras</a>
 
 ## Contribution
 
-PRs are welcome! Guidelines here at <a href="https://extras.streamlitapp.com/Contribute">extras.streamlitapp.com/Contribute</a>
+PRs are welcome! Guidelines <a href="https://arnaudmiribel.github.io/streamlit-extras/contributing/">here</a>
 
 <sup>README template taken from <a href="https://github.com/LukasMasuch/streamlit-pydantic">LukasMasuch/streamlit-pydantic</a></sup>
