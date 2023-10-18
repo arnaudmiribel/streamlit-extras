@@ -7,11 +7,7 @@ import streamlit_extras
 from streamlit_extras.add_vertical_space import add_vertical_space
 from streamlit_extras.row import row
 
-st.set_page_config(
-    layout="centered",
-    page_icon=":knot:",
-    page_title="streamlit-extras"
-)
+st.set_page_config(layout="centered", page_icon=":knot:", page_title="streamlit-extras")
 
 """ # :knot: streamlit-extras """
 
