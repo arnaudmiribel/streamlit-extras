@@ -7,17 +7,20 @@ import streamlit_extras
 from streamlit_extras.add_vertical_space import add_vertical_space
 from streamlit_extras.row import row
 
-st.set_page_config(layout="centered")
+st.set_page_config(
+    layout="centered",
+    page_icon=":knot:",
+    page_title="streamlit-extras"
+)
 
 """ # :knot: streamlit-extras """
-
 
 @st.cache_resource
 def show_extras():
     extra_names = [
         extra.name for extra in pkgutil.iter_modules(streamlit_extras.__path__)
     ]
-    num_columns = 12
+    num_columns = 8
     columns = [
         st.columns(num_columns) for _ in range(len(extra_names) // num_columns + 1)
     ]
@@ -26,7 +29,11 @@ def show_extras():
     for extra_name in extra_names:
         mod = import_module(f"streamlit_extras.{extra_name}")
         icon = mod.__icon__
-        next(columns).markdown("### " + icon)
+        next(columns).link_button(
+            icon,
+            "https://arnaudmiribel.github.io/streamlit-extras/extras/" + extra_name,
+            use_container_width=True,
+        )
 
     next(columns).markdown("### ...")
 
@@ -37,6 +44,8 @@ st.markdown(
     " make your life easier or your apps nicer. We call them *extras* and anyone's welcome to add"
     " their owns."
 )
+
+add_vertical_space(1)
 
 show_extras()
 add_vertical_space(1)
