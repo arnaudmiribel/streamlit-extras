@@ -10,6 +10,7 @@ st.set_page_config(layout="centered", page_icon=":knot:", page_title="streamlit-
 
 """ # :knot: streamlit-extras """
 
+
 @st.cache_resource
 def show_extras():
     extra_names = [
@@ -33,9 +34,9 @@ def show_extras():
 
 st.markdown(
     "streamlit-extras is a Python library putting together useful Streamlit bits of code. It"
-    " includes > 20 (count emojis below!) functional or visual additions to Streamlit that will"
+    " includes > 40 (count emojis below!) functional or visual additions to Streamlit that will"
     " make your life easier or your apps nicer. We call them *extras* and anyone's welcome to add"
-    " their owns."
+    " their owns!"
 )
 
 add_vertical_space(1)
