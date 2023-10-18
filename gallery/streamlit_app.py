@@ -20,22 +20,20 @@ def show_extras():
     extra_names = [
         extra.name for extra in pkgutil.iter_modules(streamlit_extras.__path__)
     ]
-    num_columns = 8
-    columns = [
-        st.columns(num_columns) for _ in range(len(extra_names) // num_columns + 1)
-    ]
-    columns = itertools.chain.from_iterable(columns)
+
+    icon_row = row(10)
 
     for extra_name in extra_names:
         mod = import_module(f"streamlit_extras.{extra_name}")
         icon = mod.__icon__
-        next(columns).link_button(
+        icon_row.link_button(
             icon,
-            "https://arnaudmiribel.github.io/streamlit-extras/extras/" + extra_name,
+            f"https://arnaudmiribel.github.io/streamlit-extras/extras/{extra_name}/",
+            help=mod.__title__,
             use_container_width=True,
         )
 
-    next(columns).markdown("### ...")
+    icon_row.markdown("### ...")
 
 
 st.markdown(
@@ -48,6 +46,15 @@ st.markdown(
 add_vertical_space(1)
 
 show_extras()
+
+add_vertical_space(1)
+st.markdown("""
+#### Get started
+```
+pip install streamlit-extras
+```
+""")
+
 add_vertical_space(1)
 st.markdown("#### Learn more")
 links_row = row(2, vertical_align="center")
