@@ -1,6 +1,6 @@
 name: "💬 Something else..."
-description: Create a ticket to share an idea of a new extra.
-title: ""
+description: Submit another issue
+title: "Issue"
 body:
   - type: textarea
     id: description
