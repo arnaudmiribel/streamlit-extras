@@ -1,0 +1,11 @@
+name: "💬 Something else..."
+description: Submit another issue
+title: "Issue"
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: "Description"
+      placeholder: Short and explicit description of your issue/idea
+    validations:
+      required: true
