@@ -25,6 +25,7 @@ Head over to our public [repository](https://github.com/arnaudmiribel/streamlit-
     __author__ = "Eva Jensen"
     __experimental_playground__ = False # Optional
     ```
+
     To test it out, run `pip install -e .` in the `streamlit-extras` directory, and then run the `gallery/streamlit_app.py` app.
 
   - If your extra already exists on github and pypi:
@@ -53,6 +54,7 @@ Head over to our public [repository](https://github.com/arnaudmiribel/streamlit-
     ```
 
     Then add `my_package` to the list of `dependencies` in `pyproject.toml`
+
   - You can also add a "featured-extra" badge to your original README.md if you like! <a href="https://github.com/arnaudmiribel/streamlit-extras"> <img src="https://img.shields.io/badge/-%F0%9F%AA%A2%20featured%20extra-e8ded1"></img></a>
 
 - If you'd like to test that your package has all the required fields, you can run `poetry run pytest` from the repository
