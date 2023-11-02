@@ -15,7 +15,7 @@ def example():
     jupyterlite(1500,1600)
 
 __title__ = "Jupyterlite"  # title of your extra!
-__desc__ = "Add jupiterlite to your Streamlit app in one command"  # description of your extra!
+__desc__ = "Add a Jupyterlite sandbox to your Streamlit app in one command" 
 __icon__ = "💡"  # give your extra an icon!
 __examples__ = [example]  # create some examples to show how cool your extra is!
 __author__ = "Rahul Chauhan"
