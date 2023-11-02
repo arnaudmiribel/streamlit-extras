@@ -1,12 +1,16 @@
-# 🚀 Setting Up Your Streamlit Extra 🚀
+# Contributing your own extra
 
-In this guide, you'll learn how to set up a Streamlit Extra, either for a new function or an existing one. Streamlit Extras are a great way to extend the functionality of Streamlit and share your work with the community. Let's get started! 🌟
+In this guide, you'll learn how to publish a new Streamlit extra, either from a new function or an existing package. Let's get started!
 
-## For a New Function (Not Yet on PyPi) ✨
+## Requirements
 
-1. Create an empty directory for your extra in the `src/streamlit_extras` directory. 📂
+Set up linting to standardize your code by running `pre-commit install`, which will then check the formatting of the files you added. 
 
-2. Add a `__init__.py` file to provide metadata for showcasing your extra in the Streamlit Hub. 📝
+## Case 1: From a new function (not yet on PyPi)
+
+1. Create an empty directory for your extra in the `src/streamlit_extras` directory.
+
+2. Add a `__init__.py` file to provide metadata that will appear in our docs.
 
 ```python
 # extras/<extra_name>/__init__.py
@@ -28,12 +32,15 @@ __experimental_playground__ = False  # Optional
 
 ```
 
-To test it out, run pip install -e . in the streamlit-extras directory, and then run the gallery/streamlit_app.py app. 🧪
+3. To test it out, run `pip install -e .` in the `streamlit-extras` directory, and then `streamlit run gallery/streamlit_app.py` app.
 
-## For an Existing Function (Already on GitHub and PyPi) 🌐
-Create an empty directory for your extra in the src/streamlit_extras directory. 📂
+4. Submit a PR and share your extra with the world! 🎉
 
-Add a __init__.py file and import your main function from your package. 📝
+## Case 2: From an existing package (already in PyPi)
+
+Create an empty directory for your extra in the src/streamlit_extras directory.
+
+Add a __init__.py file and import your main function from your package.
 
 ```python
 # extras/<extra_name>/__init__.py
@@ -59,17 +66,16 @@ __experimental_playground__ = False  # Optional
 
 ```
 
-1. Add your package to the list of dependencies in pyproject.toml. 📦
+1. Add your package to the list of dependencies in pyproject.toml.
 
-2. (Optional) You can add a "featured-extra" badge to your original README.md if you like! 🌟
+2. (Optional) You can add a "featured-extra" badge to your original README.md if you like!
 
-3. To check that your package has all the required fields, run `poetry run pytest` from the repository. 🧾
+3. To check that your package has all the required fields, run `poetry run pytest` from the repository.
 
-4. Set up linting to standardize your code by running `pre-commit install`, which will then check the formatting of the files you added. 🛠️
+4. Submit a PR and share your extra with the world! 🎉
 
-5. Submit a PR and share your Streamlit Extra with the world! 🎉 👍
+## Help
 
-
-If you are having troubles, create an issue on the repo or [DM me on Twitter](https://twitter.com/arnaudmiribel)!
+If you are having troubles, create an issue or [DM me on Twitter](https://twitter.com/arnaudmiribel)!
 
 
