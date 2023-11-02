@@ -41,6 +41,16 @@ def style_metric_cards(
                 {box_shadow_str}
             }}
         </style>
+        <style>
+            div[data-testid="metric-container"] {{
+                background-color: {background_color};
+                border: {border_size_px}px solid {border_color};
+                padding: 5% 5% 5% 10%;
+                border-radius: {border_radius_px}px;
+                border-left: 0.5rem solid {border_left_color} !important;
+                {box_shadow_str}
+            }}
+        </style>
         """,
         unsafe_allow_html=True,
     )
