@@ -4,13 +4,13 @@ from .. import extra
 
 
 @extra
-def jupyterlite(height: int, width: int):
+def jupyterlite(height: int = 600 , width: int = 800):
     """
     Add a Jupyterlite sandbox to your Streamlit app
 
     Args:
-        height (int): Height of the Jupyterlite sandbox
-        width (int): Width of the Jupyterlite sandbox
+        height (int): Height of the Jupyterlite sandbox. Default value is 600.
+        width (int): Width of the Jupyterlite sandbox.  Default value is 800
     """
 
     iframe(
@@ -22,7 +22,6 @@ def jupyterlite(height: int, width: int):
 
 def example():
     jupyterlite(1500, 1600)
-
 
 __title__ = "Jupyterlite"
 __desc__ = "Add a Jupyterlite sandbox to your Streamlit app in one command"
