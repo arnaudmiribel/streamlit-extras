@@ -4,7 +4,7 @@ from .. import extra
 
 
 @extra
-def jupyterlite(height: int = 600 , width: int = 800):
+def jupyterlite(height: int = 600, width: int = 800):
     """
     Add a Jupyterlite sandbox to your Streamlit app
 
@@ -22,6 +22,7 @@ def jupyterlite(height: int = 600 , width: int = 800):
 
 def example():
     jupyterlite(1500, 1600)
+
 
 __title__ = "Jupyterlite"
 __desc__ = "Add a Jupyterlite sandbox to your Streamlit app in one command"
