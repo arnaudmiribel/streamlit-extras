@@ -5,6 +5,14 @@ from .. import extra
 
 @extra
 def jupyterlite(height: int, width: int):
+    """
+    Add a Jupyterlite sandbox to your Streamlit app
+
+    Args:
+        height (int): Height of the Jupyterlite sandbox
+        width (int): Width of the Jupyterlite sandbox
+    """
+
     iframe(
         src="https://jupyterlite.github.io/demo/repl/index.html?kernel=python&toolbar=1",
         height=height,
