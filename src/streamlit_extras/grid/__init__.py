@@ -93,9 +93,20 @@ def grid(
         key=f"grid_{vertical_align}",
         css_styles=[
             """
+div[data-testid="column"] > div[data-testid="stVerticalBlockBorderWrapper"] > div {
+height: 100%;
+}
+""",
+            """
 div[data-testid="column"] > div {
 height: 100%;
 }
+""",
+            f"""
+div[data-testid="column"] > div[data-testid="stVerticalBlockBorderWrapper"] > div > div[data-testid="stVerticalBlock"] > div.element-container {{
+    {"margin-top: auto;" if vertical_align in ["center", "bottom"] else ""}
+    {"margin-bottom: auto;" if vertical_align == "center" else ""}
+}}
 """,
             f"""
 div[data-testid="column"] > div > div[data-testid="stVerticalBlock"] > div.element-container {{
