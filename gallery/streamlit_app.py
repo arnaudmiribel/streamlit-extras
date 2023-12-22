@@ -15,6 +15,7 @@ st.set_page_config(layout="centered", page_icon=":knot:", page_title="streamlit-
 def show_extras():
     extra_names = [
         extra.name for extra in pkgutil.iter_modules(streamlit_extras.__path__)
+        if extra.name != "vertical_slider"  # 2.0.5 broke! Temp fix.
     ]
 
     icon_row = row(10)
