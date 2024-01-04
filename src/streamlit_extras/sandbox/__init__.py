@@ -49,8 +49,10 @@ def sandbox(
         Defaults to False.
     """
 
-    stlite_css_url = "https://cdn.jsdelivr.net/npm/@stlite/mountable/build/stlite.css"
-    stlite_js_url = "https://cdn.jsdelivr.net/npm/@stlite/mountable/build/stlite.js"
+    stlite_css_url = "https://cdn.jsdelivr.net/gh/LukasMasuch/stlite-demo/static/stlite/stlite/stlite.css"
+    stlite_js_url = (
+        "https://cdn.jsdelivr.net/gh/LukasMasuch/stlite-demo/static/stlite/stlite.js"
+    )
 
     if stlite_version is not None:
         stlite_css_url = f"https://cdn.jsdelivr.net/npm/@stlite/mountable@{stlite_version}/build/stlite.css"
