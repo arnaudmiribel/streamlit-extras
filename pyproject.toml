@@ -32,6 +32,7 @@ streamlit-card = ">=0.0.4"
 markdownlit = ">=0.0.5"
 streamlit-image-coordinates = "^0.1.1"
 entrypoints = ">=0.4"
+prometheus-client = ">=0.14.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.1.3"
