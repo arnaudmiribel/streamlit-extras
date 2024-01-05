@@ -120,7 +120,7 @@ def example():
     )
 
 
-__title__ = "Streamlit Prometheus"
+__title__ = "Prometheus"
 __desc__ = "Expose Prometheus metrics (https://prometheus.io) from your Streamlit app."
 __icon__ = "📊"
 __examples__ = [example]
