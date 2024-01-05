@@ -35,6 +35,13 @@ class PrometheusMetricsProvider(CacheStatsProvider):
         self.registry = registry
 
     def get_stats(self) -> List[CustomStat]:
+        """
+        Use generate_latest() method provided by prometheus to produce the
+        appropriately formatted OpenMetrics text encoding for all the stored metrics.
+
+        Then do a bit of string manipulation to package it in the format expected
+        by Streamlit's stats handler, so the final output looks the way we expect.
+        """
         DUPLICATE_SUFFIX = "\n# EOF\n"
         output_str = generate_latest(self.registry).decode(encoding="utf-8")
         if not output_str.endswith(DUPLICATE_SUFFIX):
