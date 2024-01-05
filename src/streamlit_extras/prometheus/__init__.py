@@ -109,6 +109,13 @@ def example():
 
     st.write(
         """
+        View a fuller example that uses the (safer) import metrics method at:
+        https://github.com/sfc-gh-jcarroll/streamlit-extras/tree/prometheus-example/prometheus_example
+        """
+    )
+
+    st.write(
+        """
         ### Example output at `{host:port}/_stcore/metrics`
         ```
         # TYPE my_counter counter
