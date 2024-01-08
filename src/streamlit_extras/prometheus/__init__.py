@@ -69,9 +69,9 @@ def streamlit_registry() -> CollectorRegistry:
     For an app running locally you can view the output with
     `curl localhost:8501/_stcore/metrics` or equivalent.
     """
-    from streamlit.runtime import Runtime
+    from streamlit import runtime
 
-    stats = Runtime.instance().stats_mgr
+    stats = runtime.get_instance().stats_mgr
 
     # Did we already register it elsewhere? If so, return that copy
     for prv in stats._cache_stats_providers:
