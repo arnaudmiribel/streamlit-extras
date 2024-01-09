@@ -110,7 +110,7 @@ def example():
     st.write(
         """
         View a fuller example that uses the (safer) import metrics method at:
-        https://github.com/sfc-gh-jcarroll/streamlit-extras/tree/prometheus-example/prometheus_example
+        https://github.com/arnaudmiribel/streamlit-extras/tree/main/src/streamlit_extras/prometheus/example
         """
     )
 
