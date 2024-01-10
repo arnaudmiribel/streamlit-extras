@@ -11,7 +11,6 @@ from .. import extra
 _DEFAULT_COLOR = "#808495"
 
 
-
 def _get_html(
     content: str,
     tags: list[str],
@@ -87,7 +86,6 @@ def example():
     )
 
 
-
 def test_invalid_color_length():
     import pytest
 
@@ -118,6 +116,7 @@ def test_color_html_list():
         ).strip()
     )
 
+
 def test_color_html_str():
     output = _get_html("foo", ["bar"], color_name="blue")
 
@@ -136,7 +135,8 @@ def test_color_html_str():
         """
         ).strip()
     )
-    
+
+
 def test_color_html_str_multiple_tags():
     output = _get_html("foo", ["bar", "foo"], color_name="blue")
     print(output)
@@ -163,8 +163,8 @@ def test_color_html_str_multiple_tags():
         ).strip()
     )
 
+
 def test_no_color_html():
-    import pytest
 
     output = _get_html("foo", ["bar"])
 
