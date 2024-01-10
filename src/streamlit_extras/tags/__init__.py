@@ -7,6 +7,16 @@ import streamlit as st
 from .. import extra
 
 # mypy: ignore-errors
+TAGGER_COLOR_PALETTE = {
+    "lightblue": "#00c0f2",
+    "orange": "#ffa421",
+    "bluegreen": "#00d4b1",
+    "blue": "#1c83e1",
+    "violet": "#803df5",
+    "red": "#ff4b4b",
+    "green": "#21c354",
+    "yellow": "#faca2b",
+}
 
 _DEFAULT_COLOR = "#808495"
 
@@ -21,9 +31,9 @@ def _get_html(
         if color_name is None:
             color = _DEFAULT_COLOR
         elif isinstance(color_name, list):
-            color = color_name[i]
+            color = TAGGER_COLOR_PALETTE.get(color_name[i], color_name[i])
         elif isinstance(color_name, str):
-            color = color_name
+            color = TAGGER_COLOR_PALETTE.get(color_name, color_name)
         else:
             raise ValueError(
                 f"color_name must be a list or a string or None. "
@@ -97,15 +107,33 @@ def test_invalid_color_length():
         )
 
 
-def test_color_html_list():
+def test_color_html_list_in_palette():
     output = _get_html("foo", ["bar"], color_name=["blue"])
+    assert (
+        output
+        == dedent(
+            f"""
+        foo <span style="display:inline-block;
+        background-color: {TAGGER_COLOR_PALETTE['blue']};
+        padding: 0.1rem 0.5rem;
+        font-size: 14px;
+        font-weight: 400;
+        color:white;
+        margin: 5px;
+        border-radius: 1rem;">bar</span>
+        """
+        ).strip()
+    )
 
+
+def test_color_html_list_not_in_palette():
+    output = _get_html("foo", ["bar"], color_name=["pink"])
     assert (
         output
         == dedent(
             """
         foo <span style="display:inline-block;
-        background-color: blue;
+        background-color: pink;
         padding: 0.1rem 0.5rem;
         font-size: 14px;
         font-weight: 400;
@@ -123,9 +151,9 @@ def test_color_html_str():
     assert (
         output
         == dedent(
-            """
+            f"""
         foo <span style="display:inline-block;
-        background-color: blue;
+        background-color: {TAGGER_COLOR_PALETTE['blue']};
         padding: 0.1rem 0.5rem;
         font-size: 14px;
         font-weight: 400;
@@ -143,16 +171,16 @@ def test_color_html_str_multiple_tags():
     assert (
         output
         == dedent(
-            """
+            f"""
         foo <span style="display:inline-block;
-        background-color: blue;
+        background-color: {TAGGER_COLOR_PALETTE['blue']};
         padding: 0.1rem 0.5rem;
         font-size: 14px;
         font-weight: 400;
         color:white;
         margin: 5px;
         border-radius: 1rem;">bar</span><span style="display:inline-block;
-        background-color: blue;
+        background-color: {TAGGER_COLOR_PALETTE['blue']};
         padding: 0.1rem 0.5rem;
         font-size: 14px;
         font-weight: 400;
@@ -193,7 +221,8 @@ __author__ = "Maggie Liu"
 __experimental_playground__ = False
 __tests__ = [
     test_invalid_color_length,
-    test_color_html_list,
+    test_color_html_list_in_palette,
+    test_color_html_list_not_in_palette,
     test_color_html_str,
     test_color_html_str_multiple_tags,
     test_no_color_html,
