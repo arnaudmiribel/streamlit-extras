@@ -58,10 +58,13 @@ def streamlit_registry() -> CollectorRegistry:
     Create and use Prometheus metrics in your app with `registry=streamlit_registry()`.
     The metrics will be exposed at Streamlit's existing `/_stcore/metrics` route.
 
+    **Note:** This extra works best with Streamlit >= 1.31. There are known bugs with
+    some earlier Streamlit versions, especially 1.30.0.
+
     See more example metrics in the Prometheus Python docs:
     https://prometheus.github.io/client_python/
 
-    Note: To produce accurate metrics, you are responsible to ensure that unique metric
+    To produce accurate metrics, you are responsible to ensure that unique metric
     objects are shared across app runs and sessions. We recommend either 1) initialize
     metrics in a separate file and import them in the main app script, or 2) initialize
     metrics in a cached function (and ensure the cache is not cleared during execution).
