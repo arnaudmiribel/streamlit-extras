@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from textwrap import dedent
-from typing import Literal
 
 import streamlit as st
 
@@ -21,22 +20,20 @@ TAGGER_COLOR_PALETTE = {
 
 _DEFAULT_COLOR = "#808495"
 
-VALID_COLOR_NAMES = Literal[tuple(TAGGER_COLOR_PALETTE.keys())]  # type: ignore
-
 
 def _get_html(
     content: str,
     tags: list[str],
-    color_name: list[VALID_COLOR_NAMES] | VALID_COLOR_NAMES | None = None,
+    color_name: list[str] | str | None = None,
 ) -> str:
     tags_html = content + " "
     for i in range(len(tags)):
         if color_name is None:
             color = _DEFAULT_COLOR
         elif isinstance(color_name, list):
-            color = TAGGER_COLOR_PALETTE[color_name[i]]
+            color = TAGGER_COLOR_PALETTE.get(color_name[i], color_name[i])
         elif isinstance(color_name, str):
-            color = TAGGER_COLOR_PALETTE[color_name]
+            color = TAGGER_COLOR_PALETTE.get(color_name, color_name)
         else:
             raise ValueError(
                 f"color_name must be a list or a string or None. "
@@ -63,7 +60,7 @@ def _get_html(
 def tagger_component(
     content: str,
     tags: list[str],
-    color_name: list[VALID_COLOR_NAMES] | VALID_COLOR_NAMES | None = None,
+    color_name: list[str] | str | None = None,
 ):
     """
     Displays tags next to your text.
@@ -74,24 +71,11 @@ def tagger_component(
         color_name: A list or a string that indicates the color of tags.
             Choose from lightblue, orange, bluegreen, blue, violet, red, green, yellow
     """
-    if isinstance(color_name, str):
-        if color_name not in TAGGER_COLOR_PALETTE:
-            raise ValueError(
-                f"color_name must contain a name from {TAGGER_COLOR_PALETTE.keys()} "
-                f"not {color_name}"
-            )
-    elif isinstance(color_name, list):
-        for color in color_name:
-            if color not in TAGGER_COLOR_PALETTE:
-                raise ValueError(
-                    f"color_name must contain a name from {TAGGER_COLOR_PALETTE.keys()}"
-                    f" not {color}"
-                )
-            if len(color_name) != len(tags):
-                raise ValueError(
-                    f"color_name must be the same length as tags. "
-                    f"len(color_name) = {len(color_name)}, len(tags) = {len(tags)}"
-                )
+    if isinstance(color_name, list) and len(color_name) != len(tags):
+        raise ValueError(
+            f"color_name must be the same length as tags. "
+            f"len(color_name) = {len(color_name)}, len(tags) = {len(tags)}"
+        )
 
     tags_html = _get_html(content, tags, color_name)
 
@@ -112,28 +96,6 @@ def example():
     )
 
 
-def test_invalid_color():
-    import pytest
-
-    with pytest.raises(ValueError):
-        tagger_component(
-            "Here is a feature request",
-            ["p2", "🚩triaged", "backlog"],
-            color_name="invalid",
-        )
-
-
-def test_invalid_color_list():
-    import pytest
-
-    with pytest.raises(ValueError):
-        tagger_component(
-            "Here is a feature request",
-            ["p2", "🚩triaged", "backlog"],
-            color_name=["blue", "invalid"],
-        )
-
-
 def test_invalid_color_length():
     import pytest
 
@@ -145,15 +107,101 @@ def test_invalid_color_length():
         )
 
 
-def test_color_html():
+def test_color_html_list_in_palette():
     output = _get_html("foo", ["bar"], color_name=["blue"])
+    assert (
+        output
+        == dedent(
+            f"""
+        foo <span style="display:inline-block;
+        background-color: {TAGGER_COLOR_PALETTE['blue']};
+        padding: 0.1rem 0.5rem;
+        font-size: 14px;
+        font-weight: 400;
+        color:white;
+        margin: 5px;
+        border-radius: 1rem;">bar</span>
+        """
+        ).strip()
+    )
 
+
+def test_color_html_list_not_in_palette():
+    output = _get_html("foo", ["bar"], color_name=["pink"])
     assert (
         output
         == dedent(
             """
         foo <span style="display:inline-block;
-        background-color: #1c83e1;
+        background-color: pink;
+        padding: 0.1rem 0.5rem;
+        font-size: 14px;
+        font-weight: 400;
+        color:white;
+        margin: 5px;
+        border-radius: 1rem;">bar</span>
+        """
+        ).strip()
+    )
+
+
+def test_color_html_str():
+    output = _get_html("foo", ["bar"], color_name="blue")
+
+    assert (
+        output
+        == dedent(
+            f"""
+        foo <span style="display:inline-block;
+        background-color: {TAGGER_COLOR_PALETTE['blue']};
+        padding: 0.1rem 0.5rem;
+        font-size: 14px;
+        font-weight: 400;
+        color:white;
+        margin: 5px;
+        border-radius: 1rem;">bar</span>
+        """
+        ).strip()
+    )
+
+
+def test_color_html_str_multiple_tags():
+    output = _get_html("foo", ["bar", "foo"], color_name="blue")
+    print(output)
+    assert (
+        output
+        == dedent(
+            f"""
+        foo <span style="display:inline-block;
+        background-color: {TAGGER_COLOR_PALETTE['blue']};
+        padding: 0.1rem 0.5rem;
+        font-size: 14px;
+        font-weight: 400;
+        color:white;
+        margin: 5px;
+        border-radius: 1rem;">bar</span><span style="display:inline-block;
+        background-color: {TAGGER_COLOR_PALETTE['blue']};
+        padding: 0.1rem 0.5rem;
+        font-size: 14px;
+        font-weight: 400;
+        color:white;
+        margin: 5px;
+        border-radius: 1rem;">foo</span>
+        """
+        ).strip()
+    )
+
+
+def test_no_color_html():
+
+    output = _get_html("foo", ["bar"])
+
+    assert (
+        output
+        == dedent(
+            f"""
+        foo <span style="display:inline-block;
+        background-color: {_DEFAULT_COLOR};
         padding: 0.1rem 0.5rem;
         font-size: 14px;
         font-weight: 400;
@@ -172,8 +220,10 @@ __examples__ = [example]
 __author__ = "Maggie Liu"
 __experimental_playground__ = False
 __tests__ = [
-    test_invalid_color,
-    test_invalid_color_list,
     test_invalid_color_length,
-    test_color_html,
+    test_color_html_list_in_palette,
+    test_color_html_list_not_in_palette,
+    test_color_html_str,
+    test_color_html_str_multiple_tags,
+    test_no_color_html,
 ]

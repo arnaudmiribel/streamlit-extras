@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "streamlit-extras"
-version = "0.3.6"
+version = "0.4.0"
 license = "Apache-2.0"
 description = "A library to discover, try, install and share Streamlit extras"
 authors = [
@@ -24,7 +24,7 @@ streamlit-embedcode = ">=0.1.2"
 streamlit-keyup = ">=0.1.9"
 protobuf = "!=3.20.2"
 streamlit-camera-input-live = ">=0.2.0"
-streamlit-vertical-slider = ">=1.0.2"
+streamlit-vertical-slider = ">=2.5.5"
 streamlit-toggle-switch = ">=1.0.2"
 htbuilder = ">=0.6.2"
 streamlit-faker = ">=0.0.2"
@@ -32,6 +32,7 @@ streamlit-card = ">=0.0.4"
 markdownlit = ">=0.0.5"
 streamlit-image-coordinates = "^0.1.1"
 entrypoints = ">=0.4"
+prometheus-client = ">=0.14.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.1.3"
