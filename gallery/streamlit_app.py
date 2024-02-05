@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import inspect
 import pkgutil
 import textwrap
@@ -61,11 +63,11 @@ with body():
     with st.container(border=True):
 
         extras_metadata = list()
-        for extra in pkgutil.iter_modules(streamlit_extras.__path__):
-            module = import_module(f"streamlit_extras.{extra.name}")
+        for _extra in pkgutil.iter_modules(streamlit_extras.__path__):
+            module = import_module(f"streamlit_extras.{_extra.name}")
             metadata = {
                 "module": module,
-                "name": extra.name,
+                "name": _extra.name,
                 "title": module.__title__,
                 "icon": module.__icon__,
                 "examples": module.__examples__,
@@ -76,13 +78,12 @@ with body():
             extras_metadata.append(metadata)
 
         st.caption("Choose extra:")
+
         selected = pills(
             "Select an extra",
             [extra["label"] for extra in extras_metadata],
             label_visibility="collapsed",
         )
-
-        extras_modules = list
 
 
 DEFAULT_CODE = """st.balloons()"""
@@ -101,7 +102,9 @@ if "requirements" not in st.session_state:
     st.session_state["requirements"] = ["streamlit", "streamlit-extras"]
 
 
-extra = [x for x in extras_metadata if x["label"] == selected][0]
+matching_extras: list[dict] = [x for x in extras_metadata if x["label"] == selected]
+if len(matching_extras) > 0:
+    extra: dict = matching_extras[0]
 
 if extra["playground"]:
 
