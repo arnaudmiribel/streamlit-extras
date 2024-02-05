@@ -3,6 +3,7 @@ from __future__ import annotations
 import inspect
 import pkgutil
 import textwrap
+import warnings
 from importlib import import_module
 
 import streamlit as st
@@ -11,11 +12,35 @@ from stlite_sandbox import stlite_sandbox
 from streamlit_extras.add_vertical_space import add_vertical_space
 from streamlit_pills import pills
 
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+
+
+@st.cache_resource
+def get_extras_metadata() -> list:
+    extras_metadata = list()
+    for _extra in pkgutil.iter_modules(streamlit_extras.__path__):
+        module = import_module(f"streamlit_extras.{_extra.name}")
+        metadata = {
+            "module": module,
+            "name": _extra.name,
+            "title": module.__title__,
+            "icon": module.__icon__,
+            "examples": module.__examples__,
+            "playground": getattr(module, "__playground__", False),
+        }
+
+        metadata["label"] = f"{metadata['icon']}  {metadata['title']}"
+        extras_metadata.append(metadata)
+    return extras_metadata
+
+
 st.set_page_config(
     layout="wide",
     page_icon=":knot:",
     page_title="streamlit-extras",
 )
+
+extras_metadata = get_extras_metadata()
 
 
 def body():
@@ -61,22 +86,6 @@ with body():
     )
 
     with st.container(border=True):
-
-        extras_metadata = list()
-        for _extra in pkgutil.iter_modules(streamlit_extras.__path__):
-            module = import_module(f"streamlit_extras.{_extra.name}")
-            metadata = {
-                "module": module,
-                "name": _extra.name,
-                "title": module.__title__,
-                "icon": module.__icon__,
-                "examples": module.__examples__,
-                "playground": getattr(module, "__playground__", False),
-            }
-
-            metadata["label"] = f"{metadata['icon']}  {metadata['title']}"
-            extras_metadata.append(metadata)
-
         st.caption("Choose extra:")
 
         selected = pills(
