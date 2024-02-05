@@ -231,18 +231,12 @@ def get_extra_metadata(module: ModuleType, module_name: str) -> dict:
         "twitter_username": getattr(module, "__twitter_username__", None),
         "buymeacoffee_username": getattr(module, "__buymeacoffee_username__", None),
         "forum_url": getattr(module, "__forum_url__", None),
-        "experimental_playground": getattr(
-            module, "__experimental_playground__", False
-        ),
-        "experimental_playground_funcs": getattr(
-            module, "__experimental_playground_funcs__", None
-        ),
         "pretty_title": module.__icon__ + "  " + module.__title__,
         "module_name": module_name,
         "decorated_functions": find_decorated_functions(
             f"streamlit_extras.{module_name}"
         ),
-        "stlite": getattr(module, "__stlite__", True),
+        "playground": getattr(module, "__playground__", False),
     }
 
 
