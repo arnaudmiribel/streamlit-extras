@@ -41,4 +41,4 @@ __examples__ = [example]
 __author__ = "Arnaud Miribel"
 __github_repo__ = "arnaudmiribel/stoggle"
 __streamlit_cloud_url__ = "http://stoggle.streamlitapp.com"
-__experimental_playground__ = True
+__playground__ = True

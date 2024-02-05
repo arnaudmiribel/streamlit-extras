@@ -190,7 +190,7 @@ __examples__ = {
     example_logcapture: [logcapture],
 }
 __author__ = "Alexander Martin"
-__experimental_playground__ = False
+__playground__ = False
 
 
 # TESTS ---------------------------------------------------------------------------------

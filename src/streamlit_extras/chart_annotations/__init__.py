@@ -164,3 +164,4 @@ __examples__ = [example]
 __author__ = "Arnaud Miribel"
 __github__repo__ = "https://github.com/streamlit/example-app-time-series-annotation"
 __streamlit_cloud_url__ = "https://streamlit-example-app-time-series-annotati-streamlit-app-vmbrzi.streamlitapp.com/"
+__playground__ = True

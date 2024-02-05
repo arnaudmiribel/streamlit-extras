@@ -138,4 +138,4 @@ __examples__ = {
     example: [chat, add_message],
 }
 __author__ = "Lukas Masuch"
-__experimental_playground__ = False
+__playground__ = False

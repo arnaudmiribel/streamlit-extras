@@ -30,5 +30,4 @@ __pypi_name__ = "streamlit-toggle-switch"
 __package_name__ = "streamlit_toggle"
 __github_repo__ = "sqlinsights/streamlit-toggle-switch"  # Optional
 __forum_url__ = "https://discuss.streamlit.io/t/streamlit-toggle-switch/32474"
-__experimental_playground__ = False  # Optional
-__stlite__ = False
+__playground__ = True

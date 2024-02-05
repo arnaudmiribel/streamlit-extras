@@ -29,5 +29,4 @@ __examples__ = [example, example_with_debounce]
 __github_repo__ = "blackary/streamlit-keyup"
 __pypi_name__ = "streamlit-keyup"
 __package_name__ = "st_keyup"
-__experimental_playground__ = False
-__stlite__ = False
+__playground__ = False  # Some funny error with stlite

@@ -103,4 +103,4 @@ __desc__ = "Execute code, and show the code that was executed, but in an expande
 __icon__ = "🆒"
 __author__ = "Brian Hess"
 __examples__ = [example1, example2]
-__experimental_playground__ = False
+__playground__ = True
