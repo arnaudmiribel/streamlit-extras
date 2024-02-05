@@ -108,7 +108,7 @@ STLITE_IFRAME_HTML = """
             <iframe srcdoc="{}" width="100%" id="iframe-{}" height="400" frameBorder="0" overflow="scroll"> <p> Just trying stuff </p> </iframe>
         </div>
         <div class="banner">
-                <p style="text-align: right; margin-right: 20px;">🎈 Powered by <a href="https://github.com/whitphx/stlite">stlite</a> • Edit in our <a href="https://extras.streamlit.app/Playground">playground</a></p>
+                <p style="text-align: right; margin-right: 20px;">🎈 Powered by <a href="https://github.com/whitphx/stlite">stlite</a> • Edit in our <a href="https://extras.streamlit.app/#playground">playground</a></p>
         </div>
     </div>
 </details>
