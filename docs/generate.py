@@ -282,7 +282,7 @@ for extra_module_name in extra_modules_names:
                     file=f,
                 )
 
-                if extra_metadata["stlite"]:
+                if extra_metadata["playground"]:
 
                     stlite_html = STLITE_HTML_TO_IFRAME.format(
                         code=STLITE_CODE.format(
@@ -300,7 +300,7 @@ for extra_module_name in extra_modules_names:
 
                     print(iframe_html, file=f)
 
-            if extra_metadata["stlite"]:
+            if extra_metadata["playground"]:
                 # This is needed to have all iframes auto-resize
                 auto_size_iframe_html = "<script>\n"
                 for example_function_name in example_function_names:
