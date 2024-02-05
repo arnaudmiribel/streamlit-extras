@@ -1,4 +1,5 @@
 streamlit
 streamlit-pills
+stlite-sandbox
 # Local install of streamlit-extras:
 -e ./
