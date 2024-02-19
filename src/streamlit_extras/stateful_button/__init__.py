@@ -23,7 +23,7 @@ def button(*args, key=None, **kwargs):
 
     if st.button(*args, **kwargs):
         st.session_state[key] = not st.session_state[key]
-        st.experimental_rerun()
+        st.rerun()
 
     return st.session_state[key]
 
