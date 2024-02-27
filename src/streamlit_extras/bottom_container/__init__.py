@@ -18,7 +18,9 @@ def bottom() -> DeltaGenerator:
     if hasattr(st, "_bottom"):
         return st._bottom
     else:
-        st.error("The bottom container is not supported in this Streamlit version.")
+        raise Exception(
+            "The bottom container is not supported in this Streamlit version."
+        )
 
 
 def example():
