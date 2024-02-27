@@ -22,6 +22,8 @@ def bottom() -> DeltaGenerator:
 
 
 def example():
+    st.write("This is the main container")
+
     with bottom():
         st.write("This is the bottom container")
         st.text_input("This is a text input in the bottom container")
