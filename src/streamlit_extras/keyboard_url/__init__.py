@@ -82,4 +82,4 @@ __desc__ = (
 __icon__ = "🎯"
 __examples__ = [example]
 __author__ = "Arnaud Miribel"
-__author__ = "Arnaud Miribel"
+__playground__ = True

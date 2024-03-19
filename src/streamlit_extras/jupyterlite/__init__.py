@@ -29,4 +29,4 @@ __desc__ = "Add a Jupyterlite sandbox to your Streamlit app in one command"
 __icon__ = "💡"
 __examples__ = [example]
 __author__ = "Rahul Chauhan"
-__experimental_playground__ = False
+__playground__ = False

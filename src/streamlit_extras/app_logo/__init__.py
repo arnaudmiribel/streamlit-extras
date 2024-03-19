@@ -50,4 +50,4 @@ __desc__ = "Add a logo on top of the navigation bar of a multipage app"
 __icon__ = "🐱"
 __examples__ = [example]
 __author__ = "Zachary Blackwood"
-__experimental_playground__ = True
+__playground__ = False

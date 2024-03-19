@@ -10,14 +10,6 @@ import streamlit as st
 
 from .. import extra
 
-_LOREM_IPSUM = """
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-"""
-
 
 @extra
 def write(*args: Any, unsafe_allow_html: bool = False, **kwargs) -> List[Any]:
@@ -106,6 +98,14 @@ def write(*args: Any, unsafe_allow_html: bool = False, **kwargs) -> List[Any]:
 
 
 def example():
+    _LOREM_IPSUM = """
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
+non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+"""
+
     def stream_example():
         for word in _LOREM_IPSUM.split():
             yield word + " "
@@ -126,9 +126,9 @@ def example():
 
 
 __title__ = "Streaming Write"
-__desc__ = "Drop-in replacement for `st.write` with streaming support."
+__desc__ = """Drop-in replacement for `st.write` with streaming support.
+**Note:** `st.write_stream` was released in Streamlit 1.31.0!"""
 __icon__ = "🌊"
 __examples__ = [example]
 __author__ = "Lukas Masuch"
-__experimental_playground__ = False
-__stlite__ = False
+__playground__ = True

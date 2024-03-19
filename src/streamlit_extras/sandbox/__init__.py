@@ -49,9 +49,11 @@ def sandbox(
         Defaults to False.
     """
 
-    stlite_css_url = "https://cdn.jsdelivr.net/gh/LukasMasuch/stlite-demo/static/stlite/stlite/stlite.css"
+    stlite_css_url = (
+        "https://cdn.jsdelivr.net/npm/@stlite/mountable@0.45.0/build/stlite.css"
+    )
     stlite_js_url = (
-        "https://cdn.jsdelivr.net/gh/LukasMasuch/stlite-demo/static/stlite/stlite.js"
+        "https://cdn.jsdelivr.net/npm/@stlite/mountable@0.45.0/build/stlite.js"
     )
 
     if stlite_version is not None:
@@ -151,4 +153,4 @@ __desc__ = "Execute untrusted Streamlit code in a sandboxed environment."
 __icon__ = "📦"
 __examples__ = [example]
 __author__ = "Lukas Masuch"
-__experimental_playground__ = False
+__playground__ = True

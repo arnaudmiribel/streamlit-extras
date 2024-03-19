@@ -84,4 +84,4 @@ __icon__ = "☕"  # give your extra an icon!
 __examples__ = [example]  # create some examples to show how cool your extra is!
 __author__ = "Zachary Blackwood"
 __forum_url__ = "https://discuss.streamlit.io/t/how-to-add-a-floating-widget-in-streamlit-app/33165/2?u=blackary"
-__experimental_playground__ = True  # Optional
+__playground__ = True  # Optional

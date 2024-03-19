@@ -20,8 +20,7 @@ clicked on the image."""
 __icon__ = "🎯"
 __examples__ = [example]
 __author__ = "Zachary Blackwood"
-__experimental_playground__ = False
+__playground__ = True
 __github_repo__ = "blackary/streamlit-image-coordinates"
 __pypi_name__ = "streamlit-image-coordinates"
 __package_name__ = "streamlit_image_coordinates"
-__stlite__ = False

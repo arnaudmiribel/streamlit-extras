@@ -27,12 +27,12 @@ STLITE_HTML_TO_IFRAME = """
     <title>Embedded Streamlit App</title>
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/LukasMasuch/stlite-demo/static/stlite/stlite/stlite.css"
+      href="https://cdn.jsdelivr.net/npm/@stlite/mountable@0.45.0/build/stlite.css"
     >
   </head>
   <body>
     <div id="root"></div>
-    <script src="https://cdn.jsdelivr.net/gh/LukasMasuch/stlite-demo/static/stlite/stlite.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@stlite/mountable@0.45.0/build/stlite.js"></script>
     <script>
       if (window.location.search !== "?embed=true") {{
         window.location.search = "?embed=true";
@@ -108,7 +108,7 @@ STLITE_IFRAME_HTML = """
             <iframe srcdoc="{}" width="100%" id="iframe-{}" height="400" frameBorder="0" overflow="scroll"> <p> Just trying stuff </p> </iframe>
         </div>
         <div class="banner">
-                <p style="text-align: right; margin-right: 20px;">🎈 Powered by <a href="https://github.com/whitphx/stlite">stlite</a></p>
+                <p style="text-align: right; margin-right: 20px;">🎈 Powered by <a href="https://github.com/whitphx/stlite">stlite</a> • Edit in our <a href="https://extras.streamlit.app/#playground">playground</a></p>
         </div>
     </div>
 </details>
@@ -231,18 +231,12 @@ def get_extra_metadata(module: ModuleType, module_name: str) -> dict:
         "twitter_username": getattr(module, "__twitter_username__", None),
         "buymeacoffee_username": getattr(module, "__buymeacoffee_username__", None),
         "forum_url": getattr(module, "__forum_url__", None),
-        "experimental_playground": getattr(
-            module, "__experimental_playground__", False
-        ),
-        "experimental_playground_funcs": getattr(
-            module, "__experimental_playground_funcs__", None
-        ),
         "pretty_title": module.__icon__ + "  " + module.__title__,
         "module_name": module_name,
         "decorated_functions": find_decorated_functions(
             f"streamlit_extras.{module_name}"
         ),
-        "stlite": getattr(module, "__stlite__", True),
+        "playground": getattr(module, "__playground__", False),
     }
 
 
@@ -282,7 +276,7 @@ for extra_module_name in extra_modules_names:
                     file=f,
                 )
 
-                if extra_metadata["stlite"]:
+                if extra_metadata["playground"]:
 
                     stlite_html = STLITE_HTML_TO_IFRAME.format(
                         code=STLITE_CODE.format(
@@ -300,7 +294,7 @@ for extra_module_name in extra_modules_names:
 
                     print(iframe_html, file=f)
 
-            if extra_metadata["stlite"]:
+            if extra_metadata["playground"]:
                 # This is needed to have all iframes auto-resize
                 auto_size_iframe_html = "<script>\n"
                 for example_function_name in example_function_names:

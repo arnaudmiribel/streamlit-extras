@@ -76,4 +76,4 @@ __author__ = "randyzwitch"
 __github_repo__ = "randyzwitch/streamlit-embedcode"
 __pypi_name__ = "streamlit-embedcode"
 __package_name__ = "streamlit_embedcode"
-__experimental_playground__ = False
+__playground__ = False

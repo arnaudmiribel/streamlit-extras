@@ -22,3 +22,4 @@ __author__ = "Gamliel Cohen <gamcoh>"
 __pypi_name__ = "streamlit-card"
 __package_name__ = "streamlit_card"
 __github_repo__ = "gamcoh/st-card"  # Optional repo handle
+__playground__ = True

@@ -26,4 +26,4 @@ __desc__ = "Add n lines of vertical space to your Streamlit app in one command" 
 __icon__ = "👽"  # give your extra an icon!
 __examples__ = [example]  # create some examples to show how cool your extra is!
 __author__ = "Tyler Richards"
-__experimental_playground__ = False  # Optional
+__playground__ = True

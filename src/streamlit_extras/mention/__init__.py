@@ -119,7 +119,9 @@ def example_5():
 
 
 __title__ = "Mentions"
-__desc__ = "Create nice links with icons, like Notion mentions!"
+__desc__ = """Create nice links with icons, like Notion mentions! **Note: There's
+also a great st.link_button in the native Streamlit commands offering! Have a look
+at it!"""
 __icon__ = "🫵"
 __examples__ = [
     example_1,
@@ -129,4 +131,4 @@ __examples__ = [
     example_5,
 ]
 __author__ = "Arnaud Miribel"
-__experimental_playground__ = True
+__playground__ = True

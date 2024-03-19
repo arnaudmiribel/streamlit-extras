@@ -60,6 +60,10 @@ def example():
 
         The selectbox below has no default value, so it will return None until the
         user selects an option.
+
+        **Note**: Since streamlit 1.27.0, you can initialize widgets with an empty
+        state by setting None as an initial value for st.number_input, st.selectbox,
+        st.date_input, st.time_input, st.radio, st.text_input, and st.text_area!
         """
     )
     result = selectbox("Select an option", ["A", "B", "C"])
@@ -76,10 +80,11 @@ def example():
 __title__ = "No-Default Selectbox"
 __desc__ = """
 Just like st.selectbox, but with no default value -- returns None if nothing is selected.
-
 Meant to be a solution to https://github.com/streamlit/streamlit/issues/949
+
+**Note**: Since streamlit 1.27.0, you can initialize widgets with an empty state by setting None as an initial value for st.number_input, st.selectbox, st.date_input, st.time_input, st.radio, st.text_input, and st.text_area!
 """
 __icon__ = "🗳️"
 __examples__ = [example]
 __author__ = "Zachary Blackwood"
-__experimental_playground__ = False
+__playground__ = True

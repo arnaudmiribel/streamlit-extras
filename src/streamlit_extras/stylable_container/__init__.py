@@ -93,4 +93,4 @@ __desc__ = "A container that allows to style its child elements using CSS."
 __icon__ = "🎨"
 __examples__ = [example]
 __author__ = "Lukas Masuch"
-__experimental_playground__ = False
+__playground__ = False
