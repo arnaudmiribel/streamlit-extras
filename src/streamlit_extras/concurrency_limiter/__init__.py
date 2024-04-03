@@ -97,7 +97,6 @@ def concurrency_limiter(func=None, max_concurrency: int = 1, show_spinner: bool 
                                 f"""Function {func.__name__} has approximately
                             {COUNTERS[function_key] - max_concurrency} instances
                             waiting...""",
-                                _cache=True,
                         ):
 
                             func_info.condition.wait()
