@@ -1,4 +1,4 @@
-"""DOCSTRING HERE"""
+"""Add concurrency_limiter decorator to your Streamlit app."""
 from __future__ import annotations
 
 import time
@@ -58,7 +58,13 @@ def _make_function_key(func: FunctionType, max_concurrency: int) -> str:
 
 @extra
 def concurrency_limiter(func=None, max_concurrency: int = 1, show_spinner: bool = True):
-    """Decorator that limits function concurrent execution in Stremalit app."""
+    """Decorator that limits function concurrent execution in Stremalit app.
+
+    Args:
+        max_concurrency (int): The number of allowed instances of the decorated function to be run simultaneously
+             Defaults to 1.
+        show_spinner (bool): If True, a spinner will be shown while waiting for the function to be executed.
+    """
 
     if func is None:
         return partial(
