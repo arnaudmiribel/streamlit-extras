@@ -1,22 +1,20 @@
 """Add concurrency_limiter decorator to your Streamlit app."""
 from __future__ import annotations
 
+import hashlib
+import inspect
+import sys
 import time
+from collections import Counter
+from dataclasses import dataclass
+from functools import partial, wraps
+from threading import Condition, Lock, Semaphore
+from types import FunctionType
+from typing import Any
 
 import streamlit as st
 
 from .. import extra
-
-from collections import Counter
-from functools import wraps, partial
-from dataclasses import dataclass
-
-from types import FunctionType
-from typing import Any
-import sys
-import hashlib
-import inspect
-from threading import Semaphore, Lock, Condition
 
 
 @dataclass
@@ -28,7 +26,7 @@ class FuncConcurrencyInfo:
 SEMAPHORES_LOCK = Lock()
 CONCURRENCY_MAP: dict[str, FuncConcurrencyInfo] = {}
 
-COUNTERS = Counter()
+COUNTERS: Counter = Counter()
 
 
 def _make_function_key(func: FunctionType, max_concurrency: int) -> str:
@@ -93,12 +91,9 @@ def concurrency_limiter(func=None, max_concurrency: int = 1, show_spinner: bool 
             with func_info.condition:
                 while not (acquired := func_info.semaphore.acquire(blocking=False)):
                     if show_spinner:
-                        with st.spinner(
-                                f"""Function {func.__name__} has approximately
-                            {COUNTERS[function_key] - max_concurrency} instances
-                            waiting...""",
-                        ):
-
+                        num_of_instances = COUNTERS[function_key] - max_concurrency
+                        text = f"""Function {func.__name__} has approximately {num_of_instances} instances waiting..."""
+                        with st.spinner(text):
                             func_info.condition.wait()
                     else:
                         func_info.condition.wait()
