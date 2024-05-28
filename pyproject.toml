@@ -33,6 +33,7 @@ markdownlit = ">=0.0.5"
 streamlit-image-coordinates = "^0.1.1"
 entrypoints = ">=0.4"
 prometheus-client = ">=0.14.0"
+st-theme = ">=1.0.1"
 validators = ">= 0.20.0"
 
 [tool.poetry.group.dev.dependencies]
