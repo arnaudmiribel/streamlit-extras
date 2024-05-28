@@ -1,5 +1,10 @@
 import streamlit as st
 
+try:
+    from streamlit import rerun
+except ImportError:
+    from streamlit import experimental_rerun as rerun
+
 from .. import extra
 
 
@@ -23,7 +28,7 @@ def button(*args, key=None, **kwargs):
 
     if st.button(*args, **kwargs):
         st.session_state[key] = not st.session_state[key]
-        st.experimental_rerun()
+        rerun()
 
     return st.session_state[key]
 

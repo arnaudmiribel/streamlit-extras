@@ -1,3 +1,4 @@
 streamlit
+validators
 # Local install of streamlit-extras:
 -e ./
