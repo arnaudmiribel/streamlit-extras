@@ -7,7 +7,6 @@ from threading import Thread
 from types import TracebackType
 
 import streamlit as st
-from packaging.version import Version
 from streamlit.errors import StreamlitAPIException
 from streamlit.runtime.caching.cache_utils import _make_value_key
 from streamlit.runtime.scriptrunner import add_script_run_ctx
@@ -82,8 +81,8 @@ def async_load(
 
 
     """
-    if Version(st.__version__) < Version("1.36"):
-        raise ImportError("async_load requires Streamlit >=1.36 for st.fragment")
+    if not hasattr(st, "fragment"):
+        raise ImportError("async_load requires Streamlit >=1.37 for st.fragment")
 
     def outer_decorator(func):
         @wraps(func)
