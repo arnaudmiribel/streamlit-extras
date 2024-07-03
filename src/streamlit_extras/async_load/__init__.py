@@ -47,7 +47,7 @@ def async_load(
 ):
     """Decorator to run a function in the background, and update the app on completion.
 
-    When you call a function decorated with st_async_load(), it will initially
+    When you call a function decorated with `@async_load()`, it will initially
     return `None` while the function executes asynchronously. A fragment will
     periodically execute to check when the function completes.
 
@@ -62,24 +62,13 @@ def async_load(
     If you set `refresh_every=`, the function is automatically rerun async on the
     specified interval, and the return value is updated on complete.
 
-    Parameters
-    ----------
-    func: callable
-            The function to load in the background.
-
-    poll_interval: float
-            How often to check if the function completed once it starts running.
-
-    key: str or None
-            A key to store the return value in session_state.
-
-    refresh_every: float, int or None
-            If set, the function will be re-executed and return value refreshed
+    Args:
+        func (Callable): The function to load in the background.
+        poll_interval (float, optional): How often to check if the function completed once it starts running.
+        key (str, optional): A key to store the return value in session_state.
+        refresh_every(int, optional): If set, the function will be re-executed and return value refreshed
             at the specified interval. This is based on the _start time_, not the
-            end time (so it should refresh every interval, not every
-            exec_time + interval)
-
-
+            end time (so it should refresh every interval, not every exec_time + interval)
     """
     if not hasattr(st, "fragment"):
         raise ImportError("async_load requires Streamlit >=1.37 for st.fragment")
