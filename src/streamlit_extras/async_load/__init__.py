@@ -66,7 +66,7 @@ def async_load(
         func (Callable): The function to load in the background.
         poll_interval (float, optional): How often to check if the function completed once it starts running.
         key (str, optional): A key to store the return value in session_state.
-        refresh_every(int, optional): If set, the function will be re-executed and return value refreshed
+        refresh_every (int, optional): If set, the function will be re-executed and return value refreshed
             at the specified interval. This is based on the _start time_, not the
             end time (so it should refresh every interval, not every exec_time + interval)
     """
