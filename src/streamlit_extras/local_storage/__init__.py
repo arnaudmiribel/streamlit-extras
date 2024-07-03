@@ -63,8 +63,19 @@ def local_storage() -> StLocalStorage:
     This extra is built on streamlit-js:
     https://pypi.org/project/streamlit-js/
 
-    NOTE: Storing data on an app viewer's machine may have privacy and compliance
+    **NOTE:** Storing data on an app viewer's machine may have privacy and compliance
     implications for your app. Be sure to take that into account with any usage.
+
+    **KNOWN ISSUE:** Calls to local_storage can trigger extra stop() and rerun() calls
+    unexpectedly. For example, in the following, the last line will not run
+    consistently:
+
+    ```python
+    ls = local_storage()
+    if st.button("Save"):
+        ls["my_key"] =  "some_val"
+        print("This won't execute")
+    ```
     """
 
     # Hide the JS iframes
