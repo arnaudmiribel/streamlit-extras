@@ -14,6 +14,9 @@ if TYPE_CHECKING:
 def bottom() -> DeltaGenerator:
     """
     Insert a multi-element container that sticks to the bottom of the app.
+
+    Note that this can only be in the main body of the app, and not in
+    other parts e.g. st.sidebar
     """
     if hasattr(st, "_bottom"):
         return st._bottom
