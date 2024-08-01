@@ -18,7 +18,7 @@ def image_selector(
     height: int = 300,
 ) -> dict:
     """Show the image, and enable the user to select an area in
-    the image using the selection type chosen in self.selection_type.
+    the image using the provided selection type.
 
     Args:
         image (Image.Image): Original image
