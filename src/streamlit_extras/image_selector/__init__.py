@@ -130,7 +130,7 @@ __desc__ = """
 Allows users to select an area within an image, using a lasso or a bounding
 box."""
 __icon__ = "🤠"
-__examples__ = [example]
+__examples__ = {example: [image_selector, show_selection]}
 __author__ = "Arnaud Miribel"
 __experimental_playground__ = False
 __stlite__ = True
