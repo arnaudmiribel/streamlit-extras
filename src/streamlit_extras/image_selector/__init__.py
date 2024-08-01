@@ -6,15 +6,14 @@ import numpy as np
 import plotly.graph_objects as go
 import requests
 import streamlit as st
-from PIL import ImageDraw
-from PIL.Image import Image
+from PIL import Image, ImageDraw
 
 from streamlit_extras import extra
 
 
 @dataclass
 class ImageSelector:
-    image: Image
+    image: Image.Image
     selection_type: Literal["lasso", "box"]
 
     @property
@@ -22,7 +21,18 @@ class ImageSelector:
         return np.array(self.image)
 
     @extra
-    def show(self, width: int = 300, height: int = 300):
+    def show(self, width: int = 300, height: int = 300) -> dict:
+        """
+        Show the image, and enable the user to select an area in
+        the image using the selection type chosen in self.selection_type.
+
+        Args:
+            width (int, optional): Width of the image container. Defaults to 300.
+            height (int, optional): Height of the image container. Defaults to 300.
+
+        Returns:
+            dict: The selection coordinates
+        """
 
         fig = go.Figure().add_trace(go.Image(z=self.image))
 
@@ -52,7 +62,8 @@ class ImageSelector:
         return self.selection
 
     @extra
-    def show_selection(self):
+    def show_selection(self) -> None:
+        """Shows the active image selection."""
         if coordinates := self.selection["selection"].get("box"):
             x_min, x_max = coordinates[0]["x"]
             y_min, y_max = coordinates[0]["y"]
@@ -75,11 +86,11 @@ class ImageSelector:
             draw = ImageDraw.Draw(mask)
             polygon = list(zip(lasso_x, lasso_y))
             draw.polygon(polygon, outline=1, fill=1)
-            mask = np.array(mask)
+            mask_array = np.array(mask)
 
             # Extract the pixels within the lasso selection
             selected_pixels = np.array(img_pil)
-            white_background[mask == 1] = selected_pixels[mask == 1]
+            white_background[mask_array == 1] = selected_pixels[mask_array == 1]
 
             # Extract the bounding box of the polygon
             min_x, min_y = int(min(lasso_x)), int(min(lasso_y))
@@ -97,7 +108,7 @@ def example():
         "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
     )
 
-    img: Image = Image.open(BytesIO(response.content))
+    img = Image.open(BytesIO(response.content))
 
     selection_type = st.radio(
         "Selection type", ["lasso", "box"], index=0, horizontal=True
