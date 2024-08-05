@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from io import BytesIO
 from typing import Literal
 
@@ -10,9 +12,47 @@ from PIL import Image, ImageDraw
 from streamlit_extras import extra
 
 
+def convert_to_pil_image(image: str | np.ndarray | Image.Image) -> Image.Image:
+    """
+    Converts an image from various sources (URL, local path, numpy array, or PIL.Image) to a PIL.Image object.
+
+    Parameters:
+    - image: Union[str, np.ndarray, Image.Image]
+        The input image which can be:
+        - URL (str) pointing to the image
+        - Local file path (str)
+        - Numpy array (np.ndarray)
+        - PIL.Image.Image object
+
+    Returns:
+    - Image.Image: The converted PIL.Image object.
+
+    Raises:
+    - ValueError: If the input type is not supported or the image cannot be opened.
+    """
+    if isinstance(image, str):
+        if image.startswith("http://") or image.startswith("https://"):
+            response = requests.get(image)
+            if response.status_code == 200:
+                image = Image.open(BytesIO(response.content))
+            else:
+                raise ValueError("Could not retrieve image from URL.")
+        else:
+            image = Image.open(image)
+    elif isinstance(image, np.ndarray):
+        image = Image.fromarray(image)
+    elif isinstance(image, Image.Image):
+        # Image is already a PIL.Image
+        pass
+    else:
+        raise ValueError("Unsupported image type.")
+
+    return image
+
+
 @extra
 def image_selector(
-    image: Image.Image,
+    image: Image.Image | str | np.ndarray,
     selection_type: Literal["lasso", "box"],
     width: int = 300,
     height: int = 300,
@@ -21,7 +61,8 @@ def image_selector(
     the image using the provided selection type.
 
     Args:
-        image (Image.Image): Original image
+        image (Image.Image | str | np.ndarray): Original image. Can be a PIL object,
+            or path to local file, or URL, or NumPy array
         selection_type (Literal[["lasso", "box"]): Selection type
         width (int, optional): Width of the image container. Defaults to 300.
         height (int, optional): Height of the image container. Defaults to 300.
@@ -29,6 +70,9 @@ def image_selector(
     Returns:
         dict: Selection coordinates
     """
+
+    image = convert_to_pil_image(image)
+
     fig = go.Figure().add_trace(go.Image(z=image))
 
     if selection_type == "lasso":
@@ -58,13 +102,15 @@ def image_selector(
 
 @extra
 def show_selection(
-    image: Image.Image,
+    image: Image.Image | str | np.ndarray,
     selection: dict,
 ) -> None:
     """Shows the image selection
 
     Args:
-        image (Image.Image): Original image
+        image (Image.Image | str | np.ndarray):
+            Original image. Can be a PIL object,
+            or path to local file, or URL, or NumPy array
         selection (dict): Selection coordinates, output of `image_selector`
     """
 
