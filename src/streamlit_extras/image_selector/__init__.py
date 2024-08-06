@@ -34,20 +34,20 @@ def convert_to_pil_image(image: str | np.ndarray | Image.Image) -> Image.Image:
         if image.startswith("http://") or image.startswith("https://"):
             response = requests.get(image)
             if response.status_code == 200:
-                image = Image.open(BytesIO(response.content))
+                pil_image = Image.open(BytesIO(response.content))
             else:
                 raise ValueError("Could not retrieve image from URL.")
         else:
-            image = Image.open(image)
+            pil_image = Image.open(image)
     elif isinstance(image, np.ndarray):
-        image = Image.fromarray(image)
+        pil_image = Image.fromarray(image)
     elif isinstance(image, Image.Image):
         # Image is already a PIL.Image
         pass
     else:
         raise ValueError("Unsupported image type.")
 
-    return image
+    return pil_image
 
 
 @extra
@@ -71,9 +71,9 @@ def image_selector(
         dict: Selection coordinates
     """
 
-    image = convert_to_pil_image(image)
+    pil_image = convert_to_pil_image(image)
 
-    fig = go.Figure().add_trace(go.Image(z=image))
+    fig = go.Figure().add_trace(go.Image(z=pil_image))
 
     if selection_type == "lasso":
         dragmode = "lasso"
@@ -114,7 +114,8 @@ def show_selection(
         selection (dict): Selection coordinates, output of `image_selector`
     """
 
-    image_array = np.array(image)
+    pil_image = convert_to_pil_image(image)
+    image_array = np.array(pil_image)
 
     if coordinates := selection["selection"].get("box"):
         x_min, x_max = coordinates[0]["x"]
@@ -165,7 +166,7 @@ def example():
         "Selection type", ["lasso", "box"], index=0, horizontal=True
     )
 
-    selection = image_selector(image=image, selection_type=selection_type)
+    selection = image_selector(image_pil=image, selection_type=selection_type)
     if selection:
         st.json(selection, expanded=False)
         show_selection(image, selection)
