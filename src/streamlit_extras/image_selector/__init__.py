@@ -42,8 +42,7 @@ def convert_to_pil_image(image: str | np.ndarray | Image.Image) -> Image.Image:
     elif isinstance(image, np.ndarray):
         pil_image = Image.fromarray(image)
     elif isinstance(image, Image.Image):
-        # Image is already a PIL.Image
-        pass
+        pil_image = image
     else:
         raise ValueError("Unsupported image type.")
 
