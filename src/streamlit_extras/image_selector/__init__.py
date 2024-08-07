@@ -52,7 +52,7 @@ def convert_to_pil_image(image: str | np.ndarray | Image.Image) -> Image.Image:
 @extra
 def image_selector(
     image: Image.Image | str | np.ndarray,
-    selection_type: Literal["lasso", "box"],
+    selection_type: Literal["lasso", "box"] = "box",
     width: int = 300,
     height: int = 300,
 ) -> dict:
@@ -165,7 +165,7 @@ def example():
         "Selection type", ["lasso", "box"], index=0, horizontal=True
     )
 
-    selection = image_selector(image_pil=image, selection_type=selection_type)
+    selection = image_selector(image=image, selection_type=selection_type)
     if selection:
         st.json(selection, expanded=False)
         show_selection(image, selection)
