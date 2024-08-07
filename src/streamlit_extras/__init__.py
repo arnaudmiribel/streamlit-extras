@@ -3,6 +3,12 @@ from importlib import import_module
 from pathlib import Path
 from typing import Any, Callable, Optional, TypeVar, Union, overload
 
+from streamlit_extras.version import (
+    STREAMLIT_EXTRAS_VERSION_STRING as _STREAMLIT_EXTRAS_VERSION_STRING,
+)
+
+__version__ = _STREAMLIT_EXTRAS_VERSION_STRING
+
 try:
     from streamlit.runtime.metrics_util import gather_metrics as _gather_metrics
 except ImportError:

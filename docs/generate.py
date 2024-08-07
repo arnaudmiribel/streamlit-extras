@@ -12,7 +12,9 @@ import mkdocs_gen_files
 import streamlit_extras
 
 extra_modules_names = [
-    extra.name for extra in pkgutil.iter_modules(streamlit_extras.__path__)
+    extra.name
+    for extra in pkgutil.iter_modules(streamlit_extras.__path__)
+    if extra.ispkg
 ]
 
 STLITE_HTML_TO_IFRAME = """
