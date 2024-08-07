@@ -7,7 +7,11 @@ import streamlit_extras
 
 
 def get_extras() -> List[str]:
-    return [extra.name for extra in pkgutil.iter_modules(streamlit_extras.__path__)]
+    return [
+        extra.name 
+        for extra in pkgutil.iter_modules(streamlit_extras.__path__) 
+        if extra.ispkg
+    ]
 
 
 @pytest.mark.parametrize("extra", get_extras())
