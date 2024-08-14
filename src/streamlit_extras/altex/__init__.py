@@ -560,3 +560,4 @@ __examples__ = {
 }
 __author__ = "Arnaud Miribel"
 __experimental_playground__ = False
+__stlite__ = False
