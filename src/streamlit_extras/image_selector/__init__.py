@@ -53,6 +53,7 @@ def convert_to_pil_image(image: str | np.ndarray | Image.Image) -> Image.Image:
 def image_selector(
     image: Image.Image | str | np.ndarray,
     selection_type: Literal["lasso", "box"] = "box",
+    key: str = "image-selector",
     width: int = 300,
     height: int = 300,
 ) -> dict:
@@ -63,6 +64,9 @@ def image_selector(
         image (Image.Image | str | np.ndarray): Original image. Can be a PIL object,
             or path to local file, or URL, or NumPy array
         selection_type (Literal[["lasso", "box"]): Selection type
+        key (str): Key for the st.plotly_chart component. This needs to be unique
+            for each instance of `image_selector`. Meaning whenever you call it
+            more than once, you should pass a custom `key` for each.
         width (int, optional): Width of the image container. Defaults to 300.
         height (int, optional): Height of the image container. Defaults to 300.
 
@@ -96,7 +100,7 @@ def image_selector(
         "displayModeBar": False,
     }
 
-    return st.plotly_chart(fig, on_select="rerun", config=config)
+    return st.plotly_chart(fig, on_select="rerun", config=config, key=key)
 
 
 @extra
