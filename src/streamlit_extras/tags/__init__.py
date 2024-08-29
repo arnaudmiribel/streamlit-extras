@@ -19,26 +19,30 @@ TAGGER_COLOR_PALETTE = {
 }
 
 _DEFAULT_COLOR = "#808495"
+_DEFAULT_TEXT_COLOR = "white"
+
+
+def _get_color(color_name: list[str] | str | None, index: int, default_color: str) -> str:
+    if color_name is None:
+        return default_color
+    if isinstance(color_name, list):
+        return TAGGER_COLOR_PALETTE.get(color_name[index], color_name[index])
+    if isinstance(color_name, str):
+        return TAGGER_COLOR_PALETTE.get(color_name, color_name)
+    raise ValueError(f"color_name must be a list, a string, or None. Got {type(color_name)}")
 
 
 def _get_html(
     content: str,
     tags: list[str],
     color_name: list[str] | str | None = None,
+    text_color_name: list[str] | str | None = None,
 ) -> str:
     tags_html = content + " "
     for i in range(len(tags)):
-        if color_name is None:
-            color = _DEFAULT_COLOR
-        elif isinstance(color_name, list):
-            color = TAGGER_COLOR_PALETTE.get(color_name[i], color_name[i])
-        elif isinstance(color_name, str):
-            color = TAGGER_COLOR_PALETTE.get(color_name, color_name)
-        else:
-            raise ValueError(
-                f"color_name must be a list or a string or None. "
-                f"color_name = {color_name}, type(color_name) = {type(color_name)}"
-            )
+
+        color = _get_color(color_name, i, _DEFAULT_COLOR)
+        text_color = _get_color(text_color_name, i, _DEFAULT_TEXT_COLOR)
 
         tags_html += dedent(
             f"""
@@ -47,7 +51,7 @@ def _get_html(
             padding: 0.1rem 0.5rem;
             font-size: 14px;
             font-weight: 400;
-            color:white;
+            color:{text_color};
             margin: 5px;
             border-radius: 1rem;">{tags[i]}</span>
             """
@@ -61,6 +65,7 @@ def tagger_component(
     content: str,
     tags: list[str],
     color_name: list[str] | str | None = None,
+    text_color_name: list[str] | str | None = None,
 ):
     """
     Displays tags next to your text.
@@ -71,13 +76,14 @@ def tagger_component(
         color_name: A list or a string that indicates the color of tags.
             Choose from lightblue, orange, bluegreen, blue, violet, red, green, yellow
     """
-    if isinstance(color_name, list) and len(color_name) != len(tags):
+    if isinstance(color_name, list) and len(color_name) != len(tags) and len(text_color_name) != len(tags):
         raise ValueError(
             f"color_name must be the same length as tags. "
             f"len(color_name) = {len(color_name)}, len(tags) = {len(tags)}"
+            f"len(text_color_name) = {len(text_color_name)}, len(tags) = {len(tags)}"
         )
 
-    tags_html = _get_html(content, tags, color_name)
+    tags_html = _get_html(content, tags, color_name, text_color_name)
 
     st.write(tags_html, unsafe_allow_html=True)
 
