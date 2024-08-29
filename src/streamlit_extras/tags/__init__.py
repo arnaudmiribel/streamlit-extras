@@ -81,6 +81,7 @@ def tagger_component(
         tags (list): A list of tags to be displayed next to the content
         color_name: A list or a string that indicates the color of tags.
             Choose from lightblue, orange, bluegreen, blue, violet, red, green, yellow
+        text_color_name: A list or a string that indicates the text color of tags.
     """
     if (isinstance(color_name, list) and len(color_name) != len(tags)) and (
         isinstance(text_color_name, list) and len(text_color_name) != len(tags)
