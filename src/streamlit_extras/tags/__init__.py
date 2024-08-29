@@ -28,6 +28,8 @@ def _get_color(
     if color_name is None:
         return default_color
     if isinstance(color_name, list):
+        if index >= len(color_name):
+            return default_color
         return TAGGER_COLOR_PALETTE.get(color_name[index], color_name[index])
     if isinstance(color_name, str):
         return TAGGER_COLOR_PALETTE.get(color_name, color_name)
