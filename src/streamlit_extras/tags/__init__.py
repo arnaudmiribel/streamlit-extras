@@ -83,15 +83,16 @@ def tagger_component(
             Choose from lightblue, orange, bluegreen, blue, violet, red, green, yellow
         text_color_name: A list or a string that indicates the text color of tags.
     """
-    if (isinstance(color_name, list) and len(color_name) != len(tags)) and (
-        isinstance(text_color_name, list) and len(text_color_name) != len(tags)
-    ):
+    if isinstance(color_name, list) and len(color_name) != len(tags):
         raise ValueError(
             f"color_name must be the same length as tags. "
             f"len(color_name) = {len(color_name)}, len(tags) = {len(tags)}"
+        )
+    if isinstance(text_color_name, list) and len(text_color_name) != len(tags):
+        raise ValueError(
+            f"text_color_name must be the same length as tags. "
             f"len(text_color_name) = {len(text_color_name)}, len(tags) = {len(tags)}"
         )
-
     tags_html = _get_html(content, tags, color_name, text_color_name)
 
     st.write(tags_html, unsafe_allow_html=True)
