@@ -3,18 +3,21 @@ from htbuilder.units import px
 from streamlit import streamlit as st
 from streamlit.components.v1 import html
 
+from .. import extra
 
-def star_rating(rating: float, color="#FFD700"):
+
+@extra
+def star_rating(rating: float, color: str = "#FFD700"):
     """
     Renders a read-only star rating component using htbuilder for Streamlit.
 
     Args:
-        rating (float): A number in the range [0, 5] representing the rating to be displayed. It can include half values like 2.5.`
+        rating (float): A number in the range [0, 5] representing the rating to be displayed. It can include half values like 2.5, and will be rounded to the nearest half-integer.
         color (str, optional): The color of the stars. Defaults to gold ("#FFD700").
     """
 
     # Sanitize the rating to ensure it stays within [0, 5]
-    rating = max(0, min(5, rating))
+    assert 0.0 <= rating <= 5.0, "Rating must be in the range [0, 5]"
 
     # Calculate the number of full stars, half stars, and empty stars
     full_stars = int(rating)
@@ -74,7 +77,7 @@ def example():
     star_rating(5)
 
 
-__title__ = "Star Rating Component"
+__title__ = "Read-only Star Rating Component"
 __desc__ = "A read-only Star rating using htbuilder for Streamlit."
 __icon__ = "⭐"
 __examples__ = [example]
