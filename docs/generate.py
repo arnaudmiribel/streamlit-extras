@@ -241,6 +241,10 @@ def get_extra_metadata(module: ModuleType, module_name: str) -> dict:
 
 
 def compress_and_encode(source_code: str) -> str:
+    import gzip
+    import base64
+    import re
+
     # Compress the content using gzip
     compressed = gzip.compress(source_code.encode('utf-8'))
     
