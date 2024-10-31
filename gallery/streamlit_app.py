@@ -19,15 +19,21 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 def get_extras_metadata() -> list:
     extras_metadata = list()
     for _extra in pkgutil.iter_modules(streamlit_extras.__path__):
-        module = import_module(f"streamlit_extras.{_extra.name}")
-        metadata = {
-            "module": module,
-            "name": _extra.name,
-            "title": module.__title__,
-            "icon": module.__icon__,
-            "examples": module.__examples__,
-            "playground": getattr(module, "__playground__", False),
-        }
+        if _extra.ispkg:
+            module = import_module(f"streamlit_extras.{_extra.name}")
+            metadata = {
+                "module": module,
+                "name": _extra.name,
+                "title": module.__title__,
+                "icon": module.__icon__,
+                "examples": module.__examples__,
+                "playground": getattr(module, "__playground__", False),
+            }
+
+            metadata["label"] = f"{metadata['icon']}  {metadata['title']}"
+            extras_metadata.append(metadata)
+    
+    return extras_metadata
 
 def show_extras():
     extra_names = [
