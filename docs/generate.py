@@ -251,8 +251,8 @@ def get_extra_metadata(module: ModuleType, module_name: str) -> dict:
 
 
 def generate_hash_for_playground_url(source_code: str) -> str:
-    import gzip
     import base64
+    import gzip
     import re
 
     # Pre-fix source code with 'import streamlit_extras'
@@ -260,14 +260,18 @@ def generate_hash_for_playground_url(source_code: str) -> str:
     source_code = "import streamlit_extras\n" + source_code
 
     # Compress the content using gzip
-    compressed = gzip.compress(source_code.encode('utf-8'))
-    
+    compressed = gzip.compress(source_code.encode("utf-8"))
+
     # Convert compressed data to base64
-    base64_encoded = base64.b64encode(compressed).decode('utf-8')
-    
+    base64_encoded = base64.b64encode(compressed).decode("utf-8")
+
     # Make URL-safe by replacing + with -, / with _, and removing padding '='
-    url_safe_base64 = re.sub(r'[\+\/=]', lambda x: '-' if x.group(0) == '+' else '_' if x.group(0) == '/' else '', base64_encoded)
-    
+    url_safe_base64 = re.sub(
+        r"[\+\/=]",
+        lambda x: "-" if x.group(0) == "+" else "_" if x.group(0) == "/" else "",
+        base64_encoded,
+    )
+
     return url_safe_base64
 
 
