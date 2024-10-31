@@ -108,7 +108,7 @@ STLITE_IFRAME_HTML = """
             <iframe srcdoc="{}" width="100%" id="iframe-{}" height="400" frameBorder="0" overflow="scroll"> <p> Just trying stuff </p> </iframe>
         </div>
         <div class="banner">
-                <p style="text-align: right; margin-right: 20px;">🎈 Powered by <a href="https://github.com/whitphx/stlite">stlite</a> • Edit in our <a href="https://extras.streamlit.app/#playground">playground</a></p>
+                <p style="text-align: right; margin-right: 20px;">🎈 Powered by <a href="https://github.com/whitphx/stlite">stlite</a> • Edit in <a href="https://streamlit.io/playground?template=blank&code={}">playground</a></p>
         </div>
     </div>
 </details>
@@ -240,6 +240,19 @@ def get_extra_metadata(module: ModuleType, module_name: str) -> dict:
     }
 
 
+def compress_and_encode(source_code: str) -> str:
+    # Compress the content using gzip
+    compressed = gzip.compress(source_code.encode('utf-8'))
+    
+    # Convert compressed data to base64
+    base64_encoded = base64.b64encode(compressed).decode('utf-8')
+    
+    # Make URL-safe by replacing + with -, / with _, and removing padding '='
+    url_safe_base64 = re.sub(r'[\+\/=]', lambda x: '-' if x.group(0) == '+' else '_' if x.group(0) == '/' else '', base64_encoded)
+    
+    return url_safe_base64
+
+
 for extra_module_name in extra_modules_names:
     mod = import_module(f"streamlit_extras.{extra_module_name}")
     extra_metadata = get_extra_metadata(mod, extra_module_name)
@@ -288,6 +301,7 @@ for extra_module_name in extra_modules_names:
                     iframe_html = STLITE_IFRAME_HTML.format(
                         html.escape(stlite_html),
                         example_function.__name__,
+                        compress_and_encode(STLITE_CODE),
                     )
 
                     example_function_names.append(example_function.__name__)
