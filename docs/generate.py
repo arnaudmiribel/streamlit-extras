@@ -12,7 +12,9 @@ import mkdocs_gen_files
 import streamlit_extras
 
 extra_modules_names = [
-    extra.name for extra in pkgutil.iter_modules(streamlit_extras.__path__)
+    extra.name
+    for extra in pkgutil.iter_modules(streamlit_extras.__path__)
+    if extra.ispkg
 ]
 
 STLITE_HTML_TO_IFRAME = """
@@ -27,12 +29,12 @@ STLITE_HTML_TO_IFRAME = """
     <title>Embedded Streamlit App</title>
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@stlite/mountable@0.45.0/build/stlite.css"
+      href="https://cdn.jsdelivr.net/npm/@stlite/mountable@0.57.0/build/stlite.css"
     >
   </head>
   <body>
     <div id="root"></div>
-    <script src="https://cdn.jsdelivr.net/npm/@stlite/mountable@0.45.0/build/stlite.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@stlite/mountable@0.57.0/build/stlite.js"></script>
     <script>
       if (window.location.search !== "?embed=true") {{
         window.location.search = "?embed=true";

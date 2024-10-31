@@ -11,7 +11,13 @@ def switch_page(page_name: str):
     Args:
         page_name (str): Target page name
     """
-    from streamlit.runtime.scriptrunner import RerunData, RerunException
+
+    try:
+        from streamlit.runtime.scriptrunner import RerunData, RerunException
+    except ModuleNotFoundError:  # For streamlit > 1.37
+        from streamlit.runtime.scriptrunner_utils.exceptions import RerunException
+        from streamlit.runtime.scriptrunner_utils.script_requests import RerunData
+
     from streamlit.source_util import get_pages
 
     def standardize_name(name: str) -> str:
@@ -43,7 +49,11 @@ def example():
 
 def test_switch_page():
     import pytest
-    from streamlit.runtime.scriptrunner import RerunException
+
+    try:
+        from streamlit.runtime.scriptrunner import RerunException
+    except ModuleNotFoundError:
+        from streamlit.runtime.scriptrunner_utils.exceptions import RerunException
 
     with pytest.raises(RerunException):
         switch_page("streamlit app")

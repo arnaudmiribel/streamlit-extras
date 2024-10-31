@@ -8,7 +8,13 @@ from io import StringIO
 from typing import Callable, TextIO
 
 import streamlit as st
-from streamlit.runtime.scriptrunner.script_run_context import get_script_run_ctx
+
+try:
+    from streamlit.runtime.scriptrunner.script_run_context import get_script_run_ctx
+except ModuleNotFoundError:  # from streamlit > 1.37
+    from streamlit.runtime.scriptrunner_utils.script_run_context import (
+        get_script_run_ctx,
+    )
 
 from streamlit_extras import extra
 

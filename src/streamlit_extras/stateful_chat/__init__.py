@@ -25,7 +25,12 @@ class ChatMessage(TypedDict):
 
 
 def _active_dg():
-    from streamlit.runtime.scriptrunner import get_script_run_ctx
+    try:
+        from streamlit.runtime.scriptrunner.script_run_context import get_script_run_ctx
+    except ModuleNotFoundError:  # from streamlit > 1.37
+        from streamlit.runtime.scriptrunner_utils.script_run_context import (
+            get_script_run_ctx,
+        )
 
     ctx = get_script_run_ctx()
     if ctx and len(ctx.dg_stack) > 0:

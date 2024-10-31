@@ -29,8 +29,15 @@ def get_extras_metadata() -> list:
             "playground": getattr(module, "__playground__", False),
         }
 
-        metadata["label"] = f"{metadata['icon']}  {metadata['title']}"
-        extras_metadata.append(metadata)
+def show_extras():
+    extra_names = [
+        extra.name
+        for extra in pkgutil.iter_modules(streamlit_extras.__path__)
+        if extra.ispkg
+    ]
+
+    metadata["label"] = f"{metadata['icon']}  {metadata['title']}"
+    extras_metadata.append(metadata)
     return extras_metadata
 
 
