@@ -123,6 +123,14 @@ with st.echo():
     {example_function}()
 """
 
+STLITE_CODE_FOR_PLAYGROUND = """
+from streamlit_extras.{extra_module_name} import *
+
+{example_function_source}
+
+{example_function_name}()
+"""
+
 EXTRA_EXAMPLE_MD_TEMPLATE = """
 ### `{func_name}`
 ``` py
@@ -242,10 +250,14 @@ def get_extra_metadata(module: ModuleType, module_name: str) -> dict:
     }
 
 
-def compress_and_encode(source_code: str) -> str:
+def generate_hash_for_playground_url(source_code: str) -> str:
     import gzip
     import base64
     import re
+
+    # Pre-fix source code with 'import streamlit_extras'
+    # To trigger the download of the package in the playground
+    source_code = "import streamlit_extras\n" + source_code
 
     # Compress the content using gzip
     compressed = gzip.compress(source_code.encode('utf-8'))
@@ -307,7 +319,13 @@ for extra_module_name in extra_modules_names:
                     iframe_html = STLITE_IFRAME_HTML.format(
                         html.escape(stlite_html),
                         example_function.__name__,
-                        compress_and_encode(STLITE_CODE),
+                        generate_hash_for_playground_url(
+                            STLITE_CODE_FOR_PLAYGROUND.format(
+                                extra_module_name=extra_module_name,
+                                example_function_source=func_source,
+                                example_function_name=example_function.__name__,
+                            )
+                        ),
                     )
 
                     example_function_names.append(example_function.__name__)
