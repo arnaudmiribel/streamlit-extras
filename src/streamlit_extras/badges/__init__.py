@@ -117,4 +117,4 @@ __examples__ = [
     example_buymeacoffee,
 ]
 __author__ = "Arnaud Miribel, ShruAgarwal"
-__experimental_playground__ = True
+__playground__ = True

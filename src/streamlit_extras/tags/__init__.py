@@ -234,7 +234,7 @@ __desc__ = "Display tags like github issues!"
 __icon__ = "🔖"
 __examples__ = [example]
 __author__ = "Maggie Liu"
-__experimental_playground__ = False
+__playground__ = True
 __tests__ = [
     test_invalid_color_length,
     test_color_html_list_in_palette,

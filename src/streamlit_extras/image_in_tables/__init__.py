@@ -83,7 +83,8 @@ def example(df: pd.DataFrame):
 
 
 __title__ = "Image in tables"
-__desc__ = "Transform URLs into images in your dataframes"
+__desc__ = """Transform URLs into images in your dataframes. **Note: you should now use
+st.column_config.ImageColumn straight within the native st.dataframe!** """
 __icon__ = "🚩"
 __examples__ = [example]
 __inputs__ = dict(df=df)
@@ -92,4 +93,4 @@ __streamlit_cloud_url__ = (
     "https://dataprofessor-st-demo-image-table-streamlit-app-1x7rnd.streamlitapp.com/"
 )
 __github_repo__ = "dataprofessor/st-demo-image-table"
-__stlite__ = False
+__playground__ = False

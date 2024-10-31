@@ -68,3 +68,4 @@ __desc__ = "Highlight words based on their importances. Inspired from captum lib
 __icon__ = "❗"
 __examples__ = [example]
 __author__ = "Arnaud Miribel"
+__playground__ = True

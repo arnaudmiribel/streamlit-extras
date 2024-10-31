@@ -40,3 +40,4 @@ __author__ = "tvst"
 __github_repo__ = "tvst/st-annotated-text"
 __pypi_name__ = "st-annotated-text"
 __package_name__ = "annotated_text"
+__playground__ = True

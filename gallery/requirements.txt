@@ -1,4 +1,6 @@
 streamlit
+streamlit-pills
+stlite-sandbox
 validators
 # Local install of streamlit-extras:
 -e ./

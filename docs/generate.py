@@ -110,7 +110,7 @@ STLITE_IFRAME_HTML = """
             <iframe srcdoc="{}" width="100%" id="iframe-{}" height="400" frameBorder="0" overflow="scroll"> <p> Just trying stuff </p> </iframe>
         </div>
         <div class="banner">
-                <p style="text-align: right; margin-right: 20px;">🎈 Powered by <a href="https://github.com/whitphx/stlite">stlite</a></p>
+                <p style="text-align: right; margin-right: 20px;">🎈 Powered by <a href="https://github.com/whitphx/stlite">stlite</a> • Edit in <a href="https://streamlit.io/playground?template=blank&code={}">playground</a></p>
         </div>
     </div>
 </details>
@@ -121,6 +121,14 @@ from streamlit_extras.{extra_module_name} import *
 
 with st.echo():
     {example_function}()
+"""
+
+STLITE_CODE_FOR_PLAYGROUND = """
+from streamlit_extras.{extra_module_name} import *
+
+{example_function_source}
+
+{example_function_name}()
 """
 
 EXTRA_EXAMPLE_MD_TEMPLATE = """
@@ -233,19 +241,38 @@ def get_extra_metadata(module: ModuleType, module_name: str) -> dict:
         "twitter_username": getattr(module, "__twitter_username__", None),
         "buymeacoffee_username": getattr(module, "__buymeacoffee_username__", None),
         "forum_url": getattr(module, "__forum_url__", None),
-        "experimental_playground": getattr(
-            module, "__experimental_playground__", False
-        ),
-        "experimental_playground_funcs": getattr(
-            module, "__experimental_playground_funcs__", None
-        ),
         "pretty_title": module.__icon__ + "  " + module.__title__,
         "module_name": module_name,
         "decorated_functions": find_decorated_functions(
             f"streamlit_extras.{module_name}"
         ),
-        "stlite": getattr(module, "__stlite__", True),
+        "playground": getattr(module, "__playground__", False),
     }
+
+
+def generate_hash_for_playground_url(source_code: str) -> str:
+    import base64
+    import gzip
+    import re
+
+    # Pre-fix source code with 'import streamlit_extras'
+    # To trigger the download of the package in the playground
+    source_code = "import streamlit_extras\n" + source_code
+
+    # Compress the content using gzip
+    compressed = gzip.compress(source_code.encode("utf-8"))
+
+    # Convert compressed data to base64
+    base64_encoded = base64.b64encode(compressed).decode("utf-8")
+
+    # Make URL-safe by replacing + with -, / with _, and removing padding '='
+    url_safe_base64 = re.sub(
+        r"[\+\/=]",
+        lambda x: "-" if x.group(0) == "+" else "_" if x.group(0) == "/" else "",
+        base64_encoded,
+    )
+
+    return url_safe_base64
 
 
 for extra_module_name in extra_modules_names:
@@ -284,7 +311,7 @@ for extra_module_name in extra_modules_names:
                     file=f,
                 )
 
-                if extra_metadata["stlite"]:
+                if extra_metadata["playground"]:
 
                     stlite_html = STLITE_HTML_TO_IFRAME.format(
                         code=STLITE_CODE.format(
@@ -296,13 +323,20 @@ for extra_module_name in extra_modules_names:
                     iframe_html = STLITE_IFRAME_HTML.format(
                         html.escape(stlite_html),
                         example_function.__name__,
+                        generate_hash_for_playground_url(
+                            STLITE_CODE_FOR_PLAYGROUND.format(
+                                extra_module_name=extra_module_name,
+                                example_function_source=func_source,
+                                example_function_name=example_function.__name__,
+                            )
+                        ),
                     )
 
                     example_function_names.append(example_function.__name__)
 
                     print(iframe_html, file=f)
 
-            if extra_metadata["stlite"]:
+            if extra_metadata["playground"]:
                 # This is needed to have all iframes auto-resize
                 auto_size_iframe_html = "<script>\n"
                 for example_function_name in example_function_names:
