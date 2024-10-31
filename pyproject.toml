@@ -4,11 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "streamlit-extras"
-<<<<<<< HEAD
-version = "0.4.1"
-=======
 version = "0.5.0"
->>>>>>> 8715ffc2ffdde7f434866b60f7cb8696866d73ca
 license = "Apache-2.0"
 description = "A library to discover, try, install and share Streamlit extras"
 authors = [
