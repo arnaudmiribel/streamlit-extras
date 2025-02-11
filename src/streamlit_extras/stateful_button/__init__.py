@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import streamlit as st
 
 try:
@@ -9,7 +11,7 @@ from .. import extra
 
 
 @extra
-def button(*args, key=None, **kwargs):
+def button(*args, key: str | None = None, **kwargs) -> bool:
     """
     Works just like a normal streamlit button, but it remembers its state, so that
     it works as a toggle button. If you click it, it will be pressed, and if you click
@@ -26,7 +28,9 @@ def button(*args, key=None, **kwargs):
     if "type" not in kwargs:
         kwargs["type"] = "primary" if st.session_state[key] else "secondary"
 
-    if st.button(*args, **kwargs):
+    derived_key = f"{key}_derived"
+
+    if st.button(*args, key=derived_key, **kwargs):
         st.session_state[key] = not st.session_state[key]
         rerun()
 
