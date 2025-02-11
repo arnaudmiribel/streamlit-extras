@@ -2,12 +2,14 @@ from __future__ import annotations
 
 import streamlit as st
 
-try:
-    from streamlit import rerun
-except ImportError:
-    from streamlit import experimental_rerun as rerun
-
 from .. import extra
+
+
+def toggle_state(key: str):
+    if key not in st.session_state:
+        st.session_state[key] = False
+
+    st.session_state[key] = not st.session_state[key]
 
 
 @extra
@@ -30,9 +32,19 @@ def button(*args, key: str | None = None, **kwargs) -> bool:
 
     derived_key = f"{key}_derived"
 
-    if st.button(*args, key=derived_key, **kwargs):
-        st.session_state[key] = not st.session_state[key]
-        rerun()
+    if "on_click" in kwargs:
+        original_on_click = kwargs["on_click"]
+    else:
+        original_on_click = None
+
+    def callback():
+        if original_on_click is not None:
+            original_on_click()
+        toggle_state(key)
+
+    kwargs["on_click"] = callback
+
+    st.button(*args, key=derived_key, **kwargs)
 
     return st.session_state[key]
 
