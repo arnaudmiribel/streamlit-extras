@@ -4,7 +4,12 @@ import time
 from typing import TYPE_CHECKING, Any, List, Sequence, Union
 
 import streamlit as st
-from streamlit.elements.image import AtomicImage
+
+try:
+    from streamlit.elements.lib.image_utils import AtomicImage
+except ImportError:
+    from streamlit.elements.image import AtomicImage
+
 from streamlit.errors import StreamlitAPIException
 from typing_extensions import Literal, Required, TypedDict
 
