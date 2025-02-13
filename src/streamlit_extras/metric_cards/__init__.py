@@ -1,13 +1,38 @@
 import streamlit as st
 
 from streamlit_extras import extra
+from streamlit_extras.theme import st_theme
+
+theme = st_theme()
+
+DEFAULT_BACKGROUND_COLOR_LIGHT = "#FFF"
+DEFAULT_BORDER_COLOR_LIGHT = "#CCC"
+
+DEFAULT_BACKGROUND_COLOR_DARK = "#1B1C24"
+DEFAULT_BORDER_COLOR_DARK = "#292D34"
+
+if theme:
+    DEFAULT_BACKGROUND_COLOR = (
+        DEFAULT_BACKGROUND_COLOR_DARK
+        if theme.get("base") == "dark"
+        else DEFAULT_BACKGROUND_COLOR_LIGHT
+    )
+    DEFAULT_BORDER_COLOR = (
+        DEFAULT_BORDER_COLOR_DARK
+        if theme.get("base") == "dark"
+        else DEFAULT_BORDER_COLOR_LIGHT
+    )
+
+else:
+    DEFAULT_BACKGROUND_COLOR = DEFAULT_BACKGROUND_COLOR_LIGHT
+    DEFAULT_BORDER_COLOR = DEFAULT_BORDER_COLOR_LIGHT
 
 
 @extra
 def style_metric_cards(
-    background_color: str = "#FFF",
+    background_color: str = DEFAULT_BACKGROUND_COLOR,
     border_size_px: int = 1,
-    border_color: str = "#CCC",
+    border_color: str = DEFAULT_BORDER_COLOR,
     border_radius_px: int = 5,
     border_left_color: str = "#9AD8E1",
     box_shadow: bool = True,
@@ -16,9 +41,9 @@ def style_metric_cards(
     Applies a custom style to st.metrics in the page
 
     Args:
-        background_color (str, optional): Background color. Defaults to "#FFF".
+        background_color (str, optional): Background color. Defaults to "#FFF" or "#292D34" in dark mode.
         border_size_px (int, optional): Border size in pixels. Defaults to 1.
-        border_color (str, optional): Border color. Defaults to "#CCC".
+        border_color (str, optional): Border color. Defaults to "#CCC" or "#292D34" in dark mode.
         border_radius_px (int, optional): Border radius in pixels. Defaults to 5.
         border_left_color (str, optional): Borfer left color. Defaults to "#9AD8E1".
         box_shadow (bool, optional): Whether a box shadow is applied. Defaults to True.
