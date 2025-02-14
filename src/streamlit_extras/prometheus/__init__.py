@@ -135,5 +135,4 @@ __desc__ = "Expose Prometheus metrics (https://prometheus.io) from your Streamli
 __icon__ = "📊"
 __examples__ = [example]
 __author__ = "Joshua Carroll"
-__experimental_playground__ = False
-__stlite__ = False
+__playground__ = False

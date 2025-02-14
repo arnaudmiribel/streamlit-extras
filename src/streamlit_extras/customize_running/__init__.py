@@ -43,4 +43,4 @@ __author__ = "koninhoo"
 __forum_url__ = (
     "https://discuss.streamlit.io/t/change-the-running-widget-position/30466"
 )
-__experimental_playground__ = False
+__playground__ = False

@@ -92,9 +92,10 @@ def _add_metric_card_cards():
 
 
 __title__ = "Metric Cards"
-__desc__ = "Restyle metrics as cards"
+__desc__ = """Restyle metrics as cards with custom styles. **Note: you can now also
+use the native st.container(border=True) to make nice cards with a border.**"""
 __icon__ = "♠️"
 __examples__ = [example]
 __author__ = "Chanin Nantasenamat"
-__experimental_playground__ = True
+__playground__ = True
 __experimental_playground_funcs__ = [_add_metric_card_cards]

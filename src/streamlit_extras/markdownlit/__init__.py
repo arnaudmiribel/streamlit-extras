@@ -61,4 +61,4 @@ __author__ = "Arnaud Miribel"
 __github_repo__ = "arnaudmiribel/markdownlit"
 __pypi_name__ = "markdownlit"
 __package_name__ = "markdownlit"
-__experimental_playground__ = True
+__playground__ = True

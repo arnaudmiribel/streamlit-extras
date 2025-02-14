@@ -80,4 +80,4 @@ selects both dates, the app will not run.
 __icon__ = "📅"
 __examples__ = [example]
 __author__ = "Zachary Blackwood"
-__experimental_playground__ = False
+__playground__ = True

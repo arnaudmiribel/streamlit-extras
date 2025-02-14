@@ -272,3 +272,4 @@ __examples__ = [example_one]
 __author__ = "Streamlit Data Team!"
 __streamlit_cloud_url__ = "https://st-filter-dataframe.streamlitapp.com/"
 __github_repo__ = "tylerjrichards/st-filter-dataframe"
+__playground__ = True

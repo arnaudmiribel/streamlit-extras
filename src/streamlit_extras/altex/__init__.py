@@ -559,5 +559,5 @@ __examples__ = {
     example_bar_normalized_custom: [bar_chart, get_barley_data],
 }
 __author__ = "Arnaud Miribel"
-__experimental_playground__ = False
+__playground__ = False
 __stlite__ = False

@@ -62,4 +62,4 @@ __icon__ = "🔛"
 __examples__ = [example]
 __author__ = "Zachary Blackwood"
 __forum_url__ = "https://discuss.streamlit.io/t/how-to-use-multiple-buttons-in-st-columns/35088/4?u=blackary"
-__experimental_playground__ = False
+__playground__ = True
