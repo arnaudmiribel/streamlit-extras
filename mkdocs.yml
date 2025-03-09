@@ -42,7 +42,7 @@ nav:
   - Streamlit Components: components.md
   - Contributing: contributing.md
   - Browse Extras: extras/
-
+  - Deprecated Extras: extras_deprecated/
 
 markdown_extensions:
   - attr_list
@@ -60,4 +60,4 @@ markdown_extensions:
   - pymdownx.details
   - pymdownx.superfences
   - toc:
-      toc_depth : "3"
+      toc_depth: "3"

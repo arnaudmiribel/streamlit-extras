@@ -278,8 +278,10 @@ def generate_hash_for_playground_url(source_code: str) -> str:
 for extra_module_name in extra_modules_names:
     mod = import_module(f"streamlit_extras.{extra_module_name}")
     extra_metadata = get_extra_metadata(mod, extra_module_name)
-
-    full_doc_path = Path(f"extras/{extra_module_name}.md")
+    if extra_metadata.get("deprecated"):
+        full_doc_path = Path(f"extras_deprecated/{extra_module_name}.md")
+    else:
+        full_doc_path = Path(f"extras/{extra_module_name}.md")
 
     decorated_functions = extra_metadata.get("decorated_functions", [])
     extra_metadata["functions_docstrings"] = "--- \n".join(
@@ -312,7 +314,6 @@ for extra_module_name in extra_modules_names:
                 )
 
                 if extra_metadata["playground"]:
-
                     stlite_html = STLITE_HTML_TO_IFRAME.format(
                         code=STLITE_CODE.format(
                             extra_module_name=extra_module_name,
