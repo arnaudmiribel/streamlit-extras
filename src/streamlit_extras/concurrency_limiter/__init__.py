@@ -1,4 +1,5 @@
 """Add concurrency_limiter decorator to your Streamlit app."""
+
 from __future__ import annotations
 
 import hashlib
@@ -128,7 +129,7 @@ def example():
         heavy_computation()
 
 
-__title__ = "Concurrency limiter for your Streamlit app"
+__title__ = "Concurrency limiter "
 __desc__ = """This decorator limit function execution concurrency with max_concurrency param."""
 __icon__ = "🚦"
 __examples__ = [example]
