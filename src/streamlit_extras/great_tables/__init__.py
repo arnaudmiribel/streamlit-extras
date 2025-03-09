@@ -69,7 +69,9 @@ def example():
 
 
 __title__ = "Great Tables"
-__desc__ = "Render [Great Tables](https://posit-dev.github.io/great-tables/articles/intro.html) objects in Streamlit"
+__desc__ = """Render [Great Tables](https://posit-dev.github.io/great-tables/articles/intro.html) objects in Streamlit.
+Great tables allows to implement wonderful-looking display tables in Python.
+"""
 __icon__ = "🧮"
 __examples__ = [example]
 __author__ = "Lukas Masuch"
