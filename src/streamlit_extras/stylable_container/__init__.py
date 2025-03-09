@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 @extra
 def stylable_container(key: str, css_styles: str | list[str]) -> "DeltaGenerator":
-    """List
+    """
     Insert a container into your app which you can style using CSS.
     This is useful to style specific elements in your app.
 
@@ -34,14 +34,14 @@ def stylable_container(key: str, css_styles: str | list[str]) -> "DeltaGenerator
     if isinstance(css_styles, str):
         css_styles = [css_styles]
 
-        # Remove unneeded spacing that is added by the html:
-        css_styles.append(
-            """
+    # Remove unneeded spacing that is added by the html:
+    css_styles.append(
+        """
 > div:first-child {
-    margin-bottom: -1rem;
+margin-bottom: -1rem;
 }
 """
-        )
+    )
 
     style_text = """
 <style>
