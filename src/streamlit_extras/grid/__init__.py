@@ -116,7 +116,7 @@ def example():
     my_grid.text_input("Your name")
     my_grid.button("Send", use_container_width=True)
     # Row 3:
-    my_grid.text_area("Your message", height=40)
+    my_grid.text_area("Your message", height=68)
     # Row 4:
     my_grid.button("Example 1", use_container_width=True)
     my_grid.button("Example 2", use_container_width=True)
