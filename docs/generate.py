@@ -247,6 +247,7 @@ def get_extra_metadata(module: ModuleType, module_name: str) -> dict:
             f"streamlit_extras.{module_name}"
         ),
         "playground": getattr(module, "__playground__", False),
+        "deprecated": getattr(module, "__deprecated__", False),
     }
 
 
