@@ -4,8 +4,9 @@ from typing import Literal, Optional, Sequence, Union
 
 import numpy as np
 import pandas as pd
+import streamlit as st
 
-from streamlit_extras import grid, stylable_container
+from streamlit_extras import grid
 
 from .. import extra
 
@@ -47,24 +48,11 @@ def row(
             A row container object. Elements can be added to this row by calling methods directly
             on the returned object.
     """
-    container = stylable_container.stylable_container(
-        key=f"row_{vertical_align}",
-        css_styles=[
-            """
-div[data-testid="column"] > div {
-height: 100%;
-}
-""",
-            f"""
-div[data-testid="column"] > div > div[data-testid="stVerticalBlock"] > div.element-container {{
-    {"margin-top: auto;" if vertical_align in ["center", "bottom"] else ""}
-    {"margin-bottom: auto;" if vertical_align == "center" else ""}
-}}
-""",
-        ],
-    )
+    container = st.container()
 
-    return grid.GridDeltaGenerator(parent_dg=container, spec=[spec], gap=gap)
+    return grid.GridDeltaGenerator(
+        parent_dg=container, spec=[spec], gap=gap, vertical_align=vertical_align
+    )
 
 
 def example():
