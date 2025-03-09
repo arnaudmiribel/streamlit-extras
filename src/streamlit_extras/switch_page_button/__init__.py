@@ -68,8 +68,9 @@ def test_switch_invalid_page():
 
 __title__ = "Switch page function"
 __desc__ = """Function to switch page programmatically in a MPA.
-**Note:** st.switch_page is now part of the Streamlit core API!"""
+**Note:** [st.switch_page](https://docs.streamlit.io/develop/api-reference/navigation/st.switch_page) has been released in Streamlit 1.37.0!"""
 __icon__ = "🖱️"
 __examples__ = [example]
 __author__ = "Zachary Blackwood"
 __tests__ = [test_switch_page, test_switch_invalid_page]
+__deprecated__ = True

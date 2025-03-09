@@ -46,8 +46,10 @@ def example():
 
 
 __title__ = "App logo"
-__desc__ = "Add a logo on top of the navigation bar of a multipage app"
+__desc__ = """Add a logo on top of the navigation bar of a multipage app.
+**Note:** [st.logo](https://docs.streamlit.io/develop/api-reference/media/st.logo) has been released in Streamlit 1.35.0!"""
 __icon__ = "🐱"
 __examples__ = [example]
 __author__ = "Zachary Blackwood"
 __playground__ = False
+__deprecated__ = True

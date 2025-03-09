@@ -83,8 +83,9 @@ def example(df: pd.DataFrame):
 
 
 __title__ = "Image in tables"
-__desc__ = """Transform URLs into images in your dataframes. **Note: you should now use
-st.column_config.ImageColumn straight within the native st.dataframe!** """
+__desc__ = """Transform URLs into images in your dataframes.
+**Note:** you should now use [st.column_config.ImageColumn](https://docs.streamlit.io/develop/api-reference/data/st.column_config/st.column_config.imagecolumn)
+straight within the native st.dataframe! Or you can put markdown in `st.table` cells."""
 __icon__ = "🚩"
 __examples__ = [example]
 __inputs__ = dict(df=df)
@@ -94,3 +95,4 @@ __streamlit_cloud_url__ = (
 )
 __github_repo__ = "dataprofessor/st-demo-image-table"
 __playground__ = False
+__deprecated__ = True

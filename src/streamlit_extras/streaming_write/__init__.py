@@ -127,8 +127,9 @@ non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 __title__ = "Streaming Write"
 __desc__ = """Drop-in replacement for `st.write` with streaming support.
-**Note:** `st.write_stream` was released in Streamlit 1.31.0!"""
+**Note:** [st.write_stream](https://docs.streamlit.io/develop/api-reference/write-magic/st.write_stream) was released in Streamlit 1.31.0!"""
 __icon__ = "🌊"
 __examples__ = [example]
 __author__ = "Lukas Masuch"
 __playground__ = True
+__deprecated__ = True
