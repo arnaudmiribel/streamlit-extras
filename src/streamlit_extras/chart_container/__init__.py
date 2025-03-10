@@ -64,7 +64,7 @@ def chart_container(
     if "chart_container_widget_key" not in st.session_state:
         st.session_state["chart_container_widget_key"] = 0
 
-    def _get_random_widget_key() -> str:
+    def _get_random_widget_key() -> int:
         st.session_state.chart_container_widget_key += 1
         return st.session_state.chart_container_widget_key
 
@@ -88,7 +88,7 @@ def chart_container(
                 data=exporter(export_data),
                 file_name="data" + extension,
                 mime=export_utils.get("mime"),
-                key=_get_random_widget_key(),
+                key=f"chart_container_download_{_get_random_widget_key()}",
             )
 
 
