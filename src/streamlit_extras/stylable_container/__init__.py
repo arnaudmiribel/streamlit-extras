@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, List
+import re
+from typing import TYPE_CHECKING
 
 import streamlit as st
 
@@ -11,7 +12,7 @@ if TYPE_CHECKING:
 
 
 @extra
-def stylable_container(key: str, css_styles: str | List[str]) -> "DeltaGenerator":
+def stylable_container(key: str, css_styles: str | list[str]) -> "DeltaGenerator":
     """
     Insert a container into your app which you can style using CSS.
     This is useful to style specific elements in your app.
@@ -26,14 +27,18 @@ def stylable_container(key: str, css_styles: str | List[str]) -> "DeltaGenerator
         DeltaGenerator: A container object. Elements can be added to this container using either the 'with'
             notation or by calling methods directly on the returned object.
     """
+
+    class_name = re.sub(r"[^a-zA-Z0-9_-]", "-", key.strip())
+    class_name = f"st-key-{class_name}"
+
     if isinstance(css_styles, str):
         css_styles = [css_styles]
 
-    # Remove unneeded spacing that is added by the style markdown:
+    # Remove unneeded spacing that is added by the html:
     css_styles.append(
         """
 > div:first-child {
-    margin-bottom: -1rem;
+margin-bottom: -1rem;
 }
 """
     )
@@ -45,18 +50,15 @@ def stylable_container(key: str, css_styles: str | List[str]) -> "DeltaGenerator
     for style in css_styles:
         style_text += f"""
 
-div[data-testid="stVerticalBlock"]:has(> div.element-container > div.stMarkdown > div[data-testid="stMarkdownContainer"] > p > span.{key}) {style}
-
+.st-key-{class_name} {style}
 """
 
-    style_text += f"""
+    style_text += """
     </style>
-
-<span class="{key}"></span>
 """
 
-    container = st.container()
-    container.markdown(style_text, unsafe_allow_html=True)
+    container = st.container(key=class_name)
+    container.html(style_text)
     return container
 
 
@@ -89,8 +91,11 @@ def example():
 
 
 __title__ = "Styleable Container"
-__desc__ = "A container that allows to style its child elements using CSS."
+__desc__ = """A container that allows to style its child elements using CSS.
+**Note:** the `key` argument in [st.container](https://docs.streamlit.io/develop/api-reference/layout/st.container)
+gets added as class name to the container. This is the preferred way to apply CSS styles for specific elements in Streamlit."""
 __icon__ = "🎨"
 __examples__ = [example]
 __author__ = "Lukas Masuch"
 __playground__ = False
+__deprecated__ = True

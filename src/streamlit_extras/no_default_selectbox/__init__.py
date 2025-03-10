@@ -88,3 +88,4 @@ __icon__ = "🗳️"
 __examples__ = [example]
 __author__ = "Zachary Blackwood"
 __playground__ = True
+__deprecated__ = True

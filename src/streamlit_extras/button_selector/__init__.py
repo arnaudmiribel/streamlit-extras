@@ -106,10 +106,13 @@ def example():
 
 
 __title__ = "Button Selector"
-__desc__ = (
-    "A button selector that can be used to select an item from a list of options."
-)
+__desc__ = """A button selector that can be used to select an item from a list of options.
+**Note:** [st.pills](https://docs.streamlit.io/develop/api-reference/widgets/st.pills) and
+[st.segmented_control](https://docs.streamlit.io/develop/api-reference/widgets/st.segmented_control)
+have been released in Streamlit 1.40.0!
+"""
 __icon__ = "🔢"
 __examples__ = [example]
 __author__ = "Zhijia Liu"
 __experimental_playground__ = False
+__deprecated__ = True

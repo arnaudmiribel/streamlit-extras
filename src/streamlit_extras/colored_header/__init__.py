@@ -1,4 +1,5 @@
 """Add colorful headers to your Streamlit app."""
+
 import itertools
 from typing import Literal
 
@@ -195,9 +196,10 @@ def example():
 
 __title__ = "Color ya Headers"
 __desc__ = """This function makes headers much prettier in Streamlit.
-           **Note that this now accessible in native Streamlit in st.header
-           with parameter `divider`!**"""
+           **Note:** this is now accessible in native Streamlit in [st.header](https://docs.streamlit.io/develop/api-reference/text/st.header)
+           with parameter `divider`!"""
 __icon__ = "🖌️"
 __examples__ = [example]
 __author__ = "Johannes Rieke / Tyler Richards"
 __playground__ = True
+__deprecated__ = True

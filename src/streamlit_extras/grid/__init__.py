@@ -7,8 +7,6 @@ import pandas as pd
 import streamlit as st
 from streamlit.errors import StreamlitAPIException
 
-from streamlit_extras import stylable_container
-
 from .. import extra
 
 if TYPE_CHECKING:
@@ -24,6 +22,7 @@ class GridDeltaGenerator:
         spec: List[SpecType],
         *,
         gap: Optional[str] = "small",
+        vertical_align: Literal["top", "center", "bottom"] = "top",
         repeat: bool = True,
     ):
         self._parent_dg = parent_dg
@@ -32,6 +31,7 @@ class GridDeltaGenerator:
         self._spec = spec
         self._gap = gap
         self._repeat = repeat
+        self._vertical_align = vertical_align
 
     def _get_next_cell_container(self) -> "DeltaGenerator":
         if not self._container_queue:
@@ -41,7 +41,11 @@ class GridDeltaGenerator:
             # Create a new row using st.columns:
             self._number_of_rows += 1
             spec = self._spec[self._number_of_rows % len(self._spec) - 1]
-            self._container_queue.extend(self._parent_dg.columns(spec, gap=self._gap))
+            self._container_queue.extend(
+                self._parent_dg.columns(
+                    spec, gap=self._gap, vertical_alignment=self._vertical_align
+                )
+            )
 
         return self._container_queue.pop(0)
 
@@ -89,36 +93,13 @@ def grid(
             Defaults to "top".
     """
 
-    container = stylable_container.stylable_container(
-        key=f"grid_{vertical_align}",
-        css_styles=[
-            """
-div[data-testid="column"] > div[data-testid="stVerticalBlockBorderWrapper"] > div {
-height: 100%;
-}
-""",
-            """
-div[data-testid="column"] > div {
-height: 100%;
-}
-""",
-            f"""
-div[data-testid="column"] > div[data-testid="stVerticalBlockBorderWrapper"] > div > div[data-testid="stVerticalBlock"] > div.element-container {{
-    {"margin-top: auto;" if vertical_align in ["center", "bottom"] else ""}
-    {"margin-bottom: auto;" if vertical_align == "center" else ""}
-}}
-""",
-            f"""
-div[data-testid="column"] > div > div[data-testid="stVerticalBlock"] > div.element-container {{
-    {"margin-top: auto;" if vertical_align in ["center", "bottom"] else ""}
-    {"margin-bottom: auto;" if vertical_align == "center" else ""}
-}}
-""",
-        ],
-    )
-
+    container = st.container()
     return GridDeltaGenerator(
-        parent_dg=container, spec=list(spec), gap=gap, repeat=True
+        parent_dg=container,
+        spec=list(spec),
+        gap=gap,
+        repeat=True,
+        vertical_align=vertical_align,
     )
 
 
@@ -135,7 +116,7 @@ def example():
     my_grid.text_input("Your name")
     my_grid.button("Send", use_container_width=True)
     # Row 3:
-    my_grid.text_area("Your message", height=40)
+    my_grid.text_area("Your message", height=68)
     # Row 4:
     my_grid.button("Example 1", use_container_width=True)
     my_grid.button("Example 2", use_container_width=True)
