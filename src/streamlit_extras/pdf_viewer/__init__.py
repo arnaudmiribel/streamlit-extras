@@ -20,11 +20,7 @@ PdfData = Union[
 
 @extra
 def pdf_viewer(
-    data: PdfData,
-    width: int | None = None,
-    height: int | None = None,
-    *,
-    scrolling: bool = True,
+    data: PdfData, width: int | None = None, height: int | None = None
 ) -> None:
     """Display a PDF document.
 
@@ -41,18 +37,10 @@ def pdf_viewer(
             container width.
 
         height (int or None): The height of the PDF viewer in CSS pixels. Defaults to 500.
-
-        scrolling (bool): Whether to allow scrolling in the PDF viewer. If this is ``True``
-            (default), Streamlit shows a scrollbar when the content is larger
-            than the iframe. If this is ``False``, Streamlit crops any content
-            larger than the iframe and does not show a scrollbar.å
     """
     # Process width and height for HTML
     width_style = f"width: {width}px;" if width is not None else "width: 100%;"
     height_style = f"height: {height}px;" if height is not None else "height: 500px;"
-
-    # Set scrolling attribute
-    scroll_attr = "yes" if scrolling else "no"
 
     # Check if data is a URL
     if isinstance(data, str) and (
@@ -95,7 +83,6 @@ def pdf_viewer(
     <iframe
         src="{pdf_url}"
         style="{width_style} {height_style}"
-        scrolling="{scroll_attr}"
         type="application/pdf"
         frameborder="0"
     ></iframe>
