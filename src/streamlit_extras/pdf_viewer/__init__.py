@@ -17,7 +17,6 @@ PdfData = Union[
     io.RawIOBase,
     io.BufferedReader,
     "npt.NDArray[Any]",
-    None,
 ]
 
 
