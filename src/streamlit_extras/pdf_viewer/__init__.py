@@ -100,7 +100,7 @@ def example():
 
 __title__ = "PDF Viewer"
 __desc__ = (
-    "Display PDF documents from URLs or local files using native browser rendering."
+    "Display PDF documents from URLs or local files using the native browser rendering."
 )
 __icon__ = "📄"
 __examples__ = [example]
