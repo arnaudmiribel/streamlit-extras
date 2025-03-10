@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import io
 from pathlib import Path
-from typing import Any, Union
+from typing import Union
 
-import numpy.typing as npt
 import streamlit as st
 
 from .. import extra
@@ -16,7 +15,6 @@ PdfData = Union[
     io.BytesIO,
     io.RawIOBase,
     io.BufferedReader,
-    "npt.NDArray[Any]",
 ]
 
 
