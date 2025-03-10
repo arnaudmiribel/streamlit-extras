@@ -68,7 +68,7 @@ def pdf_viewer(
         coordinates = st._main._get_delta_path_str()
 
         # Convert data to appropriate format
-        data_or_filename: Union[bytes, str]
+        data_or_filename: Union[bytes, str, None]
         if isinstance(data, (str, bytes)):
             # Pass strings and bytes through unchanged
             data_or_filename = data
@@ -79,14 +79,10 @@ def pdf_viewer(
             data_or_filename = data.getvalue()
         elif isinstance(data, (io.RawIOBase, io.BufferedReader)):
             data.seek(0)
-            read_data = data.read()
-            if read_data is None:
-                raise RuntimeError("Failed to read PDF data")
-            else:
-                data_or_filename = read_data
-        else:
-            raise RuntimeError(f"Invalid PDF data format: {type(data)}")
+            data_or_filename = data.read()
 
+        if data_or_filename is None:
+            raise RuntimeError(f"Cannot process provided data of type: {type(data)}")
         # Add to media file manager
         from streamlit.runtime import Runtime
 
