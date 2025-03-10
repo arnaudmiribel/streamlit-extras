@@ -56,9 +56,7 @@ def pdf_viewer(
 
     # Check if data is a URL
     if isinstance(data, str) and (
-        data.startswith("http://")
-        or data.startswith("https://")
-        or data.startswith("//")
+        data.startswith("http://") or data.startswith("https://")
     ):
         # For URLs, use HTML directly
         pdf_url = data
