@@ -1,4 +1,4 @@
-from typing import Any, Callable, Dict, Literal
+from typing import Any, Callable, Dict, Literal, Optional
 
 import streamlit as st
 
@@ -8,14 +8,14 @@ from .. import extra
 @extra
 def floating_button(
     label: str,
-    key: str | None = None,
-    help: str | None = None,
-    on_click: Callable | None = None,
-    args: tuple | None = None,
-    kwargs: Dict[str, Any] | None = None,
+    key: Optional[str] = None,
+    help: Optional[str] = None,
+    on_click: Optional[Callable] = None,
+    args: Optional[tuple] = None,
+    kwargs: Optional[Dict[str, Any]] = None,
     *,
     type: Literal["primary", "secondary"] = "secondary",
-    icon: str | None = None,
+    icon: Optional[str] = None,
     disabled: bool = False,
 ):
     """
