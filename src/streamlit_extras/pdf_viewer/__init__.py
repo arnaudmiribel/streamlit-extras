@@ -88,7 +88,6 @@ def pdf_viewer(
     ></iframe>
     """
 
-    # Display the PDF using st.html without height parameter
     st.markdown(html_content, unsafe_allow_html=True)
 
 
