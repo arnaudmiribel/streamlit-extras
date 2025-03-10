@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 import streamlit as st
 
@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 
 @extra
-def skeleton(height: Optional[int] = None) -> DeltaGenerator:
+def skeleton(height: int | None = None) -> DeltaGenerator:
     """
     Insert a single-element container which displays a "skeleton" placeholder.
 
