@@ -81,7 +81,7 @@ def pdf_viewer(
             data.seek(0)
             read_data = data.read()
             if read_data is None:
-                return None
+                raise RuntimeError("Failed to read PDF data")
             else:
                 data_or_filename = read_data
         else:
