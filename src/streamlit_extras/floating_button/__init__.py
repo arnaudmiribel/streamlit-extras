@@ -155,9 +155,6 @@ def example():
         chat_dialog()
 
 
-example()
-
-
 __title__ = "Floating button"
 __desc__ = """A button that stays fixed at the bottom right corner of the screen.
 Perfect for creating action buttons that are always accessible to users, such as chat
