@@ -21,34 +21,6 @@ def example():
     )
 
 
-def example_1():
-    image_path = "assets/image.png"
-    with open(image_path, "rb") as image_file:
-        image_base64 = base64.b64encode(image_file.read()).decode("utf-8")
-    image_url = f"data:image/png;base64,{image_base64}"
-
-    avatar(
-        [
-            {
-                "url": image_url,
-                "size": 50,
-                "title": "Sam",
-                "caption": "hello",
-                "key": "avatar1",
-            }
-        ],
-        [
-            {
-                "url": "https://picsum.photos/id/237/300/300",
-                "size": 40,
-                "title": "Sam",
-                "caption": "hello",
-                "key": "avatar2",
-            }
-        ],
-    )
-
-
 __title__ = "Avatar"  # title of your extra!
 __desc__ = "Streamlit Component, for a UI avatar"  # description of your extra!
 __icon__ = "👥"  # give your extra an icon!
