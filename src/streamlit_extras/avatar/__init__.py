@@ -43,7 +43,7 @@ def example_1():
                 "size": 40,
                 "title": "Sam",
                 "caption": "hello",
-                "key": "avatar1",
+                "key": "avatar2",
             }
         ],
     )
@@ -53,8 +53,7 @@ __title__ = "Avatar"  # title of your extra!
 __desc__ = "Streamlit Component, for a UI avatar"  # description of your extra!
 __icon__ = "👥"  # give your extra an icon!
 __examples__ = [
-    example,
-    example_1,
+    example
 ]  # create some examples to show how cool your extra is!
 __author__ = "Saijyoti Tripathy"
 __pypi_name__ = "streamlit-avatar"
