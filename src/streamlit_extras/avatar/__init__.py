@@ -1,5 +1,3 @@
-import base64
-
 from streamlit_avatar import avatar
 
 from .. import extra
@@ -24,9 +22,7 @@ def example():
 __title__ = "Avatar"  # title of your extra!
 __desc__ = "Streamlit Component, for a UI avatar"  # description of your extra!
 __icon__ = "👥"  # give your extra an icon!
-__examples__ = [
-    example
-]  # create some examples to show how cool your extra is!
+__examples__ = [example]  # create some examples to show how cool your extra is!
 __author__ = "Saijyoti Tripathy"
 __pypi_name__ = "streamlit-avatar"
 __package_name__ = "streamlit_avatar"
