@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-from typing import Optional, Tuple, cast
+from typing import Any, Tuple, cast
 
 import streamlit as st
 
@@ -8,46 +8,43 @@ from streamlit_extras import extra
 
 @extra
 def date_range_picker(
-    title: str,
-    default_start: Optional[date] = None,
-    default_end: Optional[date] = None,
-    min_date: Optional[date] = None,
-    max_date: Optional[date] = None,
+    label: str,
     error_message: str = "Please select start and end date",
-    key: Optional[str] = None,
+    **kwargs: Any,
 ) -> Tuple[date, date]:
     """
-    Working with date_input with a date range is frustrating becuase if you're
-    assuming you will get a start and end date out of it, your code can break (not
-    to mention your type hints), because if a user clicks on just one date, the app
-    will go ahead and run with a single output. This widget enforces a start and
-    end date being selected, and will stop the app if only one is chosen.
+    An extension of date_input. Working with date_input with a date range is
+    frustrating becuase if you're assuming you will get a start and end date out of
+    it, your code can break (not to mention your type hints), because if a user clicks
+    on just one date, the app will go ahead and run with a single output. This widget
+    enforces a start and end date being selected, and will stop the app if only one is chosen.
 
     Args:
-        title (str): Title of the date widget
-        default_start (Optional[date], optional): Default start date. Defaults to None.
-        default_end (Optional[date], optional): Default end date. Defaults to None.
-        min_date (Optional[date], optional): Minimum date. Defaults to None.
-        max_date (Optional[date], optional): Maximum date. Defaults to None.
+        label (str): Label of the date widget
         error_message (str, optional): Error message when only one date is chosen.
             Defaults to "Please select start and end date".
-        key (Optional[str], optional): Widget key. Defaults to None.
+        **kwargs (Any): Additional keyword arguments for `st.date_input`.
 
     Returns:
         Tuple[date, date]: Start and end date chosen in the widget
     """
 
-    if default_start is None:
-        default_start = date.today() - timedelta(days=30)
-    if default_end is None:
-        default_end = date.today()
+    default_start = date.today() - timedelta(days=30)
+    default_end = date.today()
+
+    if "value" not in kwargs:
+        kwargs["value"] = [default_start, default_end]
+    else:
+        if not isinstance(kwargs["value"], (list, tuple)):
+            st.error(
+                "date_range_picker requires a list or tuple"
+                " so as to enable date range functionality"
+            )
+            st.stop()
 
     val = st.date_input(
-        title,
-        value=[default_start, default_end],
-        min_value=min_date,
-        max_value=max_date,
-        key=key,
+        label=label,
+        **kwargs,
     )
     try:
         start_date, end_date = cast(Tuple[date, date], val)
@@ -79,5 +76,5 @@ selects both dates, the app will not run.
 """
 __icon__ = "📅"
 __examples__ = [example]
-__author__ = "Zachary Blackwood"
+__author__ = "Mohammad Junaid"
 __playground__ = True
