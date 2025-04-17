@@ -10,6 +10,12 @@ from .. import extra
 
 
 def _get_session() -> sp.Session:
+    """
+    Get or create a Snowpark session from the Streamlit connection.
+
+    Returns:
+        sp.Session: The Snowpark session object
+    """
     if "snowpark_session" not in st.session_state:
         connection = st.connection("snowflake")
         st.session_state["snowpark_session"] = connection.session()
@@ -26,12 +32,13 @@ def run_sql(
     Execute a SQL query and cache the results.
 
     Args:
-        query: The SQL query to execute
-        ttl: Time-to-live for the cache. Defaults to 2 hours.
+        query (str): The SQL query to execute
+        ttl (timedelta | int | None): Time-to-live for the cache. Defaults to 2 hours.
             Set to None to use the default cache invalidation.
+        lowercase_columns (bool): Whether to convert column names to lowercase. Defaults to True.
 
     Returns:
-        pandas.DataFrame: The query results as a pandas DataFrame
+        pd.DataFrame: The query results as a pandas DataFrame
     """
 
     @st.cache_data(ttl=ttl)
@@ -52,7 +59,18 @@ def run_snowpark(
     ttl: timedelta | int | None = timedelta(hours=2),
     lowercase_columns: bool = True,
 ) -> pd.DataFrame:
-    """Converts a snowpark dataframe to a pandas dataframe and caches the result."""
+    """
+    Convert a Snowpark DataFrame to a pandas DataFrame and cache the result.
+
+    Args:
+        df (sp.DataFrame): The Snowpark DataFrame to convert
+        ttl (timedelta | int | None): Time-to-live for the cache. Defaults to 2 hours.
+            Set to None to use the default cache invalidation.
+        lowercase_columns (bool): Whether to convert column names to lowercase. Defaults to True.
+
+    Returns:
+        pd.DataFrame: The converted pandas DataFrame with cached results
+    """
 
     @st.cache_data(ttl=ttl)
     def _run_snowpark(
@@ -74,7 +92,14 @@ def run_snowpark(
 @extra
 @st.cache_resource
 def get_table(table_name: str) -> sp.Table:
-    """Get a snowpark table for use in building a query. This caches
-    the result so that metadata is not re-fetched from the database.
+    """
+    Get a Snowpark table for use in building a query.
+
+    Args:
+        table_name (str): Name of the table to retrieve
+
+    Returns:
+        sp.Table: A cached Snowpark Table object that can be used for querying.
+            The result is cached so that metadata is not re-fetched from the database.
     """
     return _get_session().table(table_name)
