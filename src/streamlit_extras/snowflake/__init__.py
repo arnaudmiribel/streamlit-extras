@@ -1,6 +1,11 @@
 import streamlit as st
 
+from .. import extra
 from .connection import get_table, run_snowpark, run_sql
+
+get_table = extra(get_table)
+run_snowpark = extra(run_snowpark)
+run_sql = extra(run_sql)
 
 
 def snowpark_example():

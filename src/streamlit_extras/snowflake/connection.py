@@ -6,8 +6,6 @@ import pandas as pd
 import snowflake.snowpark as sp
 import streamlit as st
 
-from .. import extra
-
 
 def _get_session() -> sp.Session:
     if "snowpark_session" not in st.session_state:
@@ -16,7 +14,6 @@ def _get_session() -> sp.Session:
     return st.session_state["snowpark_session"]
 
 
-@extra
 def run_sql(
     query: str,
     ttl: timedelta | int | None = timedelta(hours=2),
@@ -46,7 +43,6 @@ def run_sql(
     return df
 
 
-@extra
 def run_snowpark(
     df: sp.DataFrame,
     ttl: timedelta | int | None = timedelta(hours=2),
@@ -71,7 +67,6 @@ def run_snowpark(
     return _run_snowpark(df, query, lowercase_columns=lowercase_columns)
 
 
-@extra
 @st.cache_resource
 def get_table(table_name: str) -> sp.Table:
     return _get_session().table(table_name)
