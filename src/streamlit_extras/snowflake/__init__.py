@@ -18,4 +18,7 @@ __title__ = "Snowflake Utilities"
 __desc__ = "Utilities for Streamlit-in-Snowflake"
 __icon__ = "❄️"
 __author__ = "Zachary Blackwood"
-__examples__ = [snowpark_example, sql_example]
+__examples__ = {
+    snowpark_example: [get_table, run_snowpark],
+    sql_example: [run_sql],
+}
