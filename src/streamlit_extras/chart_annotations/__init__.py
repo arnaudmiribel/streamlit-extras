@@ -30,8 +30,7 @@ def get_data() -> pd.DataFrame:
     source = pd.read_csv(
         "https://raw.githubusercontent.com/vega/vega-datasets/next/data/stocks.csv"
     )
-    source = source[source.date.gt("2004-01-01")]
-    return source
+    return source[source.date.gt("2004-01-01")]
 
 
 @cache_data(ttl=60 * 60 * 24)
@@ -125,7 +124,7 @@ def get_annotations_chart(
     if "url" in annotations_df.columns:
         encode_params["href"] = "url"
 
-    annotations_chart = (
+    return (
         alt.Chart(annotations_df)
         .mark_text(
             size=marker_size,
@@ -137,8 +136,6 @@ def get_annotations_chart(
         )
         .encode(**encode_params)
     )
-
-    return annotations_chart
 
 
 def example() -> None:

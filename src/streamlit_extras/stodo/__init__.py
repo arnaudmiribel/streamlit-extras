@@ -18,12 +18,12 @@ def to_do(st_commands, checkbox_id):
     cols = st.columns((1, 20))
     done = cols[0].checkbox(" ", key=checkbox_id)
     if done:
-        for (cmd, *args) in st_commands:
+        for cmd, *args in st_commands:
             with cols[1]:
                 if cmd == st.write:
                     text = args[0]
                     cols[1].write(
-                        "<s style='color: rgba(49, 51, 63, 0.4)'>" f" {text} </s>",
+                        f"<s style='color: rgba(49, 51, 63, 0.4)'> {text} </s>",
                         unsafe_allow_html=True,
                     )
                 else:
@@ -46,12 +46,11 @@ def to_do(st_commands, checkbox_id):
                         cmd(*args)
 
     else:
-        for (cmd, *args) in st_commands:
+        for cmd, *args in st_commands:
             with cols[1]:
                 if cmd == st.write:
                     st.write(*args, unsafe_allow_html=True)
                 else:
-
                     cmd(*args)
     st.write("")
     return done

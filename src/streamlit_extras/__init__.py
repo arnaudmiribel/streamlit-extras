@@ -13,7 +13,7 @@ try:
     from streamlit.runtime.metrics_util import gather_metrics as _gather_metrics
 except ImportError:
 
-    def _gather_metrics(name, func):  # type: ignore
+    def _gather_metrics(name, func):  # type: ignore # noqa: ARG001
         return func
 
 
@@ -28,23 +28,19 @@ F = TypeVar("F", bound=Callable[..., Any])
 @overload
 def extra(
     func: F,
-) -> F:
-    ...
+) -> F: ...
 
 
 @overload
 def extra(
     func: None = None,
-) -> Callable[[F], F]:
-    ...
+) -> Callable[[F], F]: ...
 
 
 def extra(
     func: Optional[F] = None,
 ) -> Union[Callable[[F], F], F]:
-
     if func:
-
         filename = inspect.stack()[1].filename
         submodule = Path(filename).parent.name
         extra_name = "streamlit_extras." + submodule

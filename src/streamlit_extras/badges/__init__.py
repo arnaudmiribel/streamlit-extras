@@ -50,8 +50,7 @@ def badge(type: _SUPPORTED_TYPES, name: str | None = None, url: str | None = Non
 
     if type == "github":
         assert name, (
-            "You must give a valid GitHub repository name! Something like"
-            " 'author/name'"
+            "You must give a valid GitHub repository name! Something like 'author/name'"
         )
         badge_html = str(
             a(href=f"https://github.com/{name}")(

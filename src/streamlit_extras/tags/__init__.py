@@ -46,7 +46,6 @@ def _get_html(
 ) -> str:
     tags_html = content + " "
     for i in range(len(tags)):
-
         color = _get_color(color_name, i, _DEFAULT_COLOR)
         text_color = _get_color(text_color_name, i, _DEFAULT_TEXT_COLOR)
 
@@ -130,7 +129,7 @@ def test_color_html_list_in_palette():
         == dedent(
             f"""
         foo <span style="display:inline-block;
-        background-color: {TAGGER_COLOR_PALETTE['blue']};
+        background-color: {TAGGER_COLOR_PALETTE["blue"]};
         padding: 0.1rem 0.5rem;
         font-size: 14px;
         font-weight: 400;
@@ -169,7 +168,7 @@ def test_color_html_str():
         == dedent(
             f"""
         foo <span style="display:inline-block;
-        background-color: {TAGGER_COLOR_PALETTE['blue']};
+        background-color: {TAGGER_COLOR_PALETTE["blue"]};
         padding: 0.1rem 0.5rem;
         font-size: 14px;
         font-weight: 400;
@@ -189,14 +188,14 @@ def test_color_html_str_multiple_tags():
         == dedent(
             f"""
         foo <span style="display:inline-block;
-        background-color: {TAGGER_COLOR_PALETTE['blue']};
+        background-color: {TAGGER_COLOR_PALETTE["blue"]};
         padding: 0.1rem 0.5rem;
         font-size: 14px;
         font-weight: 400;
         color:white;
         margin: 5px;
         border-radius: 1rem;">bar</span><span style="display:inline-block;
-        background-color: {TAGGER_COLOR_PALETTE['blue']};
+        background-color: {TAGGER_COLOR_PALETTE["blue"]};
         padding: 0.1rem 0.5rem;
         font-size: 14px;
         font-weight: 400;
@@ -209,7 +208,6 @@ def test_color_html_str_multiple_tags():
 
 
 def test_no_color_html():
-
     output = _get_html("foo", ["bar"])
 
     assert (

@@ -9,6 +9,7 @@ from types import ModuleType
 from typing import List
 
 import mkdocs_gen_files
+
 import streamlit_extras
 
 extra_modules_names = [
@@ -231,7 +232,7 @@ def get_extra_metadata(module: ModuleType, module_name: str) -> dict:
         "icon": module.__icon__,
         "funcs": module.__funcs__,
         "examples": module.__examples__,
-        "inputs": getattr(module, "__inputs__", dict()),
+        "inputs": getattr(module, "__inputs__", {}),
         "description": module.__desc__,
         "author": module.__author__,
         "github_repo": getattr(module, "__github_repo__", None),
@@ -267,13 +268,11 @@ def generate_hash_for_playground_url(source_code: str) -> str:
     base64_encoded = base64.b64encode(compressed).decode("utf-8")
 
     # Make URL-safe by replacing + with -, / with _, and removing padding '='
-    url_safe_base64 = re.sub(
+    return re.sub(
         r"[\+\/=]",
         lambda x: "-" if x.group(0) == "+" else "_" if x.group(0) == "/" else "",
         base64_encoded,
     )
-
-    return url_safe_base64
 
 
 for extra_module_name in extra_modules_names:

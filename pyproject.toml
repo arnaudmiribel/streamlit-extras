@@ -63,14 +63,24 @@ exclude = [".git", ".vscode", ".pytest_cache", ".mypy_cache", ".env"]
 line-length = 88
 
 [tool.ruff.lint]
-ignore = ["B008", "ISC001", "E501", "W191"]
+ignore = [
+  "B008",
+  "ISC001",
+  "E501",
+  "W191",
+  "SIM102",
+  "ERA001",
+  "B018",
+  "PT011",
+  "PT018",
+  "PT019",
+]
 select = [
   "B",
   "E",
   "F",
   "W",
   "I",
-  "N",
   "C4",
   "EXE",
   "ISC",
@@ -81,7 +91,6 @@ select = [
   "SIM",
   "ERA",
   "PLC",
-  "RUF",
   "ARG",
 ]
 
