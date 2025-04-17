@@ -1,11 +1,6 @@
 import streamlit as st
 
-from .. import extra
 from .connection import get_table, run_snowpark, run_sql
-
-get_table = extra(get_table)
-run_snowpark = extra(run_snowpark)
-run_sql = extra(run_sql)
 
 
 def snowpark_example():
@@ -18,6 +13,7 @@ def sql_example():
     st.dataframe(df)
 
 
+__funcs__ = [get_table, run_snowpark, run_sql]
 __all__ = ["get_table", "run_snowpark", "run_sql"]
 __title__ = "Snowflake Utilities"
 __desc__ = "Utilities for Streamlit-in-Snowflake"

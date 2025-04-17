@@ -186,7 +186,7 @@ def find_decorated_functions(
     module_name: str, decorator_name: str = "extra"
 ) -> List[str]:
     """
-    Finds functions that are either decorated with @extra or wrapped with extra()
+    Finds functions that are either decorated with @extra or in __funcs__
     We use this to identify the functions we want to show in the docs.
 
     Args:
@@ -197,6 +197,10 @@ def find_decorated_functions(
         List[str]: List of function names that use the extra decorator/wrapper
     """
     module = importlib.import_module(module_name)
+
+    if hasattr(module, "__funcs__"):
+        return [func.__name__ for func in module.__funcs__]
+
     decorated_functions = []
 
     assert module.__file__, f"Module {module_name} has no __file__ attribute"
@@ -206,22 +210,10 @@ def find_decorated_functions(
     parsed_module = ast.parse(module_source)
 
     for node in ast.walk(parsed_module):
-        # First find functions decorated with @extra
         if isinstance(node, ast.FunctionDef):
             for decorator in node.decorator_list:
                 if isinstance(decorator, ast.Name) and decorator.id == decorator_name:
                     decorated_functions.append(node.name)
-        # Find assignments where right side is extra(func)
-        elif isinstance(node, ast.Assign):
-            if isinstance(node.value, ast.Call):
-                if (
-                    isinstance(node.value.func, ast.Name)
-                    and node.value.func.id == decorator_name
-                ):
-                    # Get the name being assigned to
-                    for target in node.targets:
-                        if isinstance(target, ast.Name):
-                            decorated_functions.append(target.id)
 
     return decorated_functions
 
