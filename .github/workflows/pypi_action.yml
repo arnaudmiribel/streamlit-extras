@@ -1,5 +1,4 @@
-# This workflows will upload a Python Package using Poetry when a release is created
-
+# This workflow will upload a Python Package using uv when a release is created
 name: PyPI synchronization
 
 on:
@@ -12,7 +11,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Build and publish to pypi
-        uses: JRubics/poetry-publish@v1.17
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: "Set up Python"
+        uses: actions/setup-python@v5
         with:
-          pypi_token: ${{ secrets.PYPI_TOKEN }}
+          python-version-file: ".python-version"
+
+      - name: "Build package"
+        run: uv build
+
+      - name: Publish to PyPI
+        env:
+          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+        run: uv publish --token $PYPI_TOKEN
