@@ -4,12 +4,28 @@ from .connection import get_table, run_snowpark, run_sql
 
 
 def snowpark_example():
-    df = get_table("my_table").select("a", "b", "c").limit(10)
+    from snowflake.snowpark.functions import col
+
+    df = (
+        get_table("snowflake.information_schema.tables")
+        .select("table_name", "table_schema", "created")
+        .where(col("table_type") == "VIEW")
+        .limit(10)
+    )
+
     st.dataframe(run_snowpark(df))
 
 
 def sql_example():
-    df = run_sql("select a, b, c from my_table limit 10")
+    df = run_sql("""
+    select
+        table_name,
+        table_schema,
+        created
+    from snowflake.information_schema.tables
+    where table_type = 'VIEW'
+    limit 10
+    """)
     st.dataframe(df)
 
 
