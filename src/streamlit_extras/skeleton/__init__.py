@@ -30,10 +30,9 @@ def skeleton(height: int | None = None) -> DeltaGenerator:
     """
     if hasattr(st._main, "_skeleton"):
         return st._main._skeleton(height=height)
-    else:
-        raise Exception(
-            "The skeleton container is not supported in this Streamlit version."
-        )
+    raise Exception(
+        "The skeleton container is not supported in this Streamlit version."
+    )
 
 
 def example():

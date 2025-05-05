@@ -59,7 +59,9 @@ def chart_container(
 
     assert all(
         export_format in _SUPPORTED_EXPORTS for export_format in export_formats
-    ), f"Input format is not supported, please use one within {_SUPPORTED_EXPORTS.keys()}"
+    ), (
+        f"Input format is not supported, please use one within {_SUPPORTED_EXPORTS.keys()}"
+    )
 
     if "chart_container_widget_key" not in st.session_state:
         st.session_state["chart_container_widget_key"] = 0

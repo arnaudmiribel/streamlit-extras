@@ -23,9 +23,7 @@ def keyboard_to_url(
         url (str, optional): Opens the input URL in new tab. Defaults to None.
     """
 
-    assert not (
-        key and key_code
-    ), """You can not provide key and key_code.
+    assert not (key and key_code), """You can not provide key and key_code.
     Either give key and we'll try to find its associated key_code. Or directly
     provide the key_code."""
 
@@ -76,8 +74,7 @@ def example():
 
 __title__ = "Keyboard to URL"
 __desc__ = (
-    "Create bindings so that hitting a key on your keyboard opens an URL in a"
-    " new tab!"
+    "Create bindings so that hitting a key on your keyboard opens an URL in a new tab!"
 )
 __icon__ = "🎯"
 __examples__ = [example]

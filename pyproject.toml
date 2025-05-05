@@ -1,75 +1,100 @@
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.poetry]
+[project]
 name = "streamlit-extras"
-version = "0.6.0"
+version = "0.7.0"
 license = "Apache-2.0"
 description = "A library to discover, try, install and share Streamlit extras"
 authors = [
-  "Arnaud Miribel <arnaudmiribel@gmail.com>",
-  "Zachary Blackwood <zachary@streamlit.io>",
+  { name = "Arnaud Miribel", email = "arnaudmiribel@gmail.com" },
+  { name = "Zachary Blackwood", email = "zachary@streamlit.io" },
 ]
 readme = "README.md"
-packages = [{ include = "streamlit_extras", from = "src" }]
-exclude = ["gallery/"]
+#packages = [{ include = "streamlit_extras", from = "src" }]
+#exclude = ["gallery/"]
+requires-python = ">=3.9,<3.14"
 keywords = ["python", "streamlit", "ui", "data"]
+dependencies = [
+  "entrypoints == 0.4",
+  "htbuilder == 0.6.2",
+  "markdownlit == 0.0.7",
+  "plotly == 5.23.0",
+  "prometheus-client == 0.20.0",
+  "protobuf == 5.27.3",
+  "snowflake-snowpark-python[pandas]>=1.30.0",
+  "st-annotated-text == 4.0.1",
+  "st-theme == 1.2.3",
+  "streamlit == 1.37.0",
+  "streamlit-avatar == 0.1.3",
+  "streamlit-camera-input-live == 0.2.0",
+  "streamlit-card == 1.0.2",
+  "streamlit-embedcode == 0.1.2",
+  "streamlit-faker == 0.0.3",
+  "streamlit-image-coordinates == 0.1.9",
+  "streamlit-keyup == 0.2.4",
+  "streamlit-toggle-switch == 1.0.2",
+  "streamlit-vertical-slider == 2.5.5",
+  "validators == 0.33.0",
+]
 
-[tool.poetry.dependencies]
-python = ">=3.8,<3.9.7 || >3.9.7,<4.0"  # Apparently streamlit doesn't work with 3.9.7
-streamlit = ">=1.0.0"
-st-annotated-text = ">=3.0.0"
-streamlit-embedcode = ">=0.1.2"
-streamlit-keyup = ">=0.1.9"
-protobuf = "!=3.20.2"
-streamlit-camera-input-live = ">=0.2.0"
-streamlit-vertical-slider = ">=2.5.5"
-streamlit-toggle-switch = ">=1.0.2"
-htbuilder = ">=0.6.2"
-streamlit-faker = ">=0.0.2"
-streamlit-card = ">=0.0.4"
-markdownlit = ">=0.0.5"
-streamlit-image-coordinates = "^0.1.1"
-entrypoints = ">=0.4"
-prometheus-client = ">=0.14.0"
-st-theme = ">=1.0.1"
-validators = ">= 0.20.0"
-plotly = ">=1.0.0"
-streamlit-avatar = ">=0.1.3"
+[project.packages]
+include = ["streamlit_extras"]
+from = "src"
+exclude = ["gallery/"]
 
-[tool.poetry.group.dev.dependencies]
-pytest = "^7.1.3"
-black = "^22.8.0"
-isort = "^5.10.1"
-mypy = "^0.971"
-streamlit = ">=1.12.2"
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
-[tools.poetry.urls]
+[tool.uv]
+dev-dependencies = [
+  "pytest == 7.4.4",
+  "black == 22.12.0",
+  "isort == 5.13.2",
+  "mypy == 0.971",
+  "streamlit == 1.37.0",
+]
+
+[project.urls]
 "Homepage" = "https://github.com/arnaudmiribel/streamlit-extras"
 "Bug Tracker" = "https://github.com/arnaudmiribel/streamlit-extras/issues"
 
-[tool.isort]
-profile = "black"
-line_length = 88
-skip = ["./.venv", "./direnv", ".env"]
 
-[tool.black]
-exclude = '''
-(
-  /(
-      \.vscode
-    | \.git
-    | \.pytest_cache
-    | \.mypy_cache
-    | \.venv
-    | \.env
-    | \.direnv
-  )/
-)
-'''
-include = '\.pyi?$'
+[tool.ruff]
+exclude = [".git", ".vscode", ".pytest_cache", ".mypy_cache", ".env"]
 line-length = 88
+
+[tool.ruff.lint]
+ignore = [
+  "B008",
+  "ISC001",
+  "E501",
+  "W191",
+  "SIM102",
+  "ERA001",
+  "B018",
+  "PT011",
+  "PT018",
+  "PT019",
+]
+select = [
+  "B",
+  "E",
+  "F",
+  "W",
+  "I",
+  "C4",
+  "EXE",
+  "ISC",
+  "ICN",
+  "PIE",
+  "PT",
+  "RET",
+  "SIM",
+  "ERA",
+  "PLC",
+  "ARG",
+]
+
+# line-length = 88
 
 [tool.mypy]
 files = ["**/*.py"]
@@ -77,22 +102,3 @@ follow_imports = "silent"
 ignore_missing_imports = true
 scripts_are_modules = true
 python_version = "3.9"
-
-
-[tool.ruff]
-exclude = [
-  ".git",
-  ".vscode",
-  ".pytest_cache",
-  ".mypy_cache",
-  ".venv",
-  ".env",
-  ".direnv",
-  "streamlit_patches.py",
-]
-target-version = "py39"
-ignore = ["E501"]
-line-length = 88
-select = ["B", "E", "F", "W", "I"]
-
-[tool.ruff.per-file-ignores]

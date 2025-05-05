@@ -18,7 +18,7 @@ except ModuleNotFoundError:  # from streamlit > 1.37
 
 from streamlit_extras import extra
 
-__all__ = ["redirect", "stdout", "stderr", "logcapture"]
+__all__ = ["logcapture", "redirect", "stderr", "stdout"]
 
 
 @extra
@@ -258,7 +258,6 @@ def test_st_logging():
     with logcapture(fake_callback, terminator="foo"):
         logging.root.warning("test log")
         assert "WARNING test logfoo" in fake_callback.call_args[0][0]
-        pass
 
     # Test formatter
     with logcapture(

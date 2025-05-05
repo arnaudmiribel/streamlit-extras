@@ -32,10 +32,7 @@ def button(*args, key: str | None = None, **kwargs) -> bool:
 
     derived_key = f"{key}_derived"
 
-    if "on_click" in kwargs:
-        original_on_click = kwargs["on_click"]
-    else:
-        original_on_click = None
+    original_on_click = kwargs.get("on_click")
 
     def callback():
         if original_on_click is not None:
@@ -50,10 +47,9 @@ def button(*args, key: str | None = None, **kwargs) -> bool:
 
 
 def example():
-    if button("Button 1", key="button1"):
-        if button("Button 2", key="button2"):
-            if button("Button 3", key="button3"):
-                st.write("All 3 buttons are pressed")
+    if button("Button 1", key="button1") and button("Button 2", key="button2"):
+        if button("Button 3", key="button3"):
+            st.write("All 3 buttons are pressed")
 
 
 __title__ = "Stateful Button"

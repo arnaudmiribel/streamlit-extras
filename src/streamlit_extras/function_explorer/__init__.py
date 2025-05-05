@@ -11,7 +11,7 @@ from .. import extra
 def get_arg_details(func):
     signature = inspect.signature(func)
     return [
-        dict(argument=k, type_hint=v.annotation, default=v.default)
+        {"argument": k, "type_hint": v.annotation, "default": v.default}
         for k, v in signature.parameters.items()
     ]
 
@@ -21,9 +21,9 @@ def is_empty(argument_attribute):
 
 
 def get_arg_from_session_state(func_name: str, argument: str):
-    if func_name in st.session_state:
-        if "inputs" in st.session_state[func_name]:
-            return st.session_state[func_name]["inputs"][argument]
+    if func_name in st.session_state and "inputs" in st.session_state[func_name]:
+        return st.session_state[func_name]["inputs"][argument]
+    return None
 
 
 @extra
@@ -35,7 +35,7 @@ def function_explorer(func: Callable):
     """
 
     args = get_arg_details(func)
-    inputs: Dict[str, Any] = dict()
+    inputs: Dict[str, Any] = {}
 
     st.write("##### Inputs")
     st.write(
@@ -61,19 +61,19 @@ def function_explorer(func: Callable):
                 label += " (typing.Literal)"
             else:
                 raise Exception(f"Not sure how to handle {type_hint}")
-            if type_hint == int:
+            if type_hint is int:
                 default = get_arg_from_session_state(func.__name__, argument) or (
                     default if not is_empty(default) else 12
                 )
                 inputs[argument] = st.number_input(label, step=1, value=default)
-            elif type_hint == float:
+            elif type_hint is float:
                 default = (
                     get_arg_from_session_state(func.__name__, argument) or default
                     if not is_empty(default)
                     else 12.0
                 )
                 inputs[argument] = st.number_input(label, value=default)
-            elif type_hint == str:
+            elif type_hint is str:
                 if argument.endswith("_color"):
                     default = (
                         get_arg_from_session_state(func.__name__, argument) or default
@@ -88,14 +88,14 @@ def function_explorer(func: Callable):
                         else "Sample string"
                     )
                     inputs[argument] = st_keyup(label, value=default)
-            elif type_hint == bool:
+            elif type_hint is bool:
                 default = (
                     get_arg_from_session_state(func.__name__, argument) or default
                     if not is_empty(default)
                     else True
                 )
                 inputs[argument] = st.checkbox(label, value=default)
-            elif type_hint == pd.DataFrame:
+            elif type_hint is pd.DataFrame:
                 inputs[argument] = get_arg_from_session_state(
                     func.__name__, argument
                 ) or pd.DataFrame(["abcde"])

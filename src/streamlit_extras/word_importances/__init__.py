@@ -32,9 +32,7 @@ def format_word_importances(words: List[str], importances: List[float]) -> str:
         )
         tags.append(unwrapped_tag)
     tags.append("</td>")
-    html = "".join(tags)
-
-    return html
+    return "".join(tags)
 
 
 def _get_color(importance: float) -> str:
@@ -58,7 +56,25 @@ def example():
     )
     html = format_word_importances(
         words=text.split(),
-        importances=(0.1, 0.2, 0, -1, 0.1, 0, 0, 0.2, 0.3, 0.8, 0.9, 0.6, 0.3, 0.1, 0, 0, 0),  # fmt: skip
+        importances=(
+            0.1,
+            0.2,
+            0,
+            -1,
+            0.1,
+            0,
+            0,
+            0.2,
+            0.3,
+            0.8,
+            0.9,
+            0.6,
+            0.3,
+            0.1,
+            0,
+            0,
+            0,
+        ),  # fmt: skip
     )
     st.write(html, unsafe_allow_html=True)
 

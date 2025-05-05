@@ -68,8 +68,8 @@ def mention(label: str, url: str, icon: str = "🔗", write: bool = True):
     html = STYLE_HTML + str(mention_html)
     if write:
         st.write(html, unsafe_allow_html=True)
-    else:
-        return html
+        return None
+    return html
 
 
 def example_1():
@@ -113,7 +113,7 @@ def example_5():
     )
 
     st.write(
-        f"Here's how to use the mention inline:  {inline_mention}. Cool" " right?",
+        f"Here's how to use the mention inline:  {inline_mention}. Cool right?",
         unsafe_allow_html=True,
     )
 

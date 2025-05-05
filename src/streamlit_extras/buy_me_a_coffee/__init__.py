@@ -28,7 +28,8 @@ def button(
     coffee_color: str = "#000000",
     width: int = 220,
 ):
-    """
+    (
+        """
     Display a button which links to your Buy Me a Coffee page.
 
     Args:
@@ -41,7 +42,9 @@ def button(
         font_color (str, optional): Font color. Defaults to "#000000".
         coffee_color (str, optional): Coffee icon color. Defaults to "#000000".
         width (int, optional): Width of the button. Defaults to 220.
-    """ """"""
+    """
+        """"""
+    )
     button = f"""
         <script type="text/javascript"
             src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js"
