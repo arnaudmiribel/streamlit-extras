@@ -1,6 +1,6 @@
 [project]
 name = "streamlit-extras"
-version = "0.7.0"
+version = "0.7.1"
 license = "Apache-2.0"
 description = "A library to discover, try, install and share Streamlit extras"
 authors = [
@@ -13,26 +13,26 @@ readme = "README.md"
 requires-python = ">=3.9,<3.14"
 keywords = ["python", "streamlit", "ui", "data"]
 dependencies = [
-  "entrypoints == 0.4",
-  "htbuilder == 0.6.2",
-  "markdownlit == 0.0.7",
-  "plotly == 5.23.0",
-  "prometheus-client == 0.20.0",
-  "protobuf == 5.27.3",
+  "entrypoints >= 0.4",
+  "htbuilder >= 0.6.2",
+  "markdownlit >= 0.0.7",
+  "plotly >= 5.23.0",
+  "prometheus-client >= 0.20.0",
+  "protobuf >= 5.27.3",
   "snowflake-snowpark-python[pandas]>=1.30.0",
-  "st-annotated-text == 4.0.1",
-  "st-theme == 1.2.3",
-  "streamlit == 1.37.0",
-  "streamlit-avatar == 0.1.3",
-  "streamlit-camera-input-live == 0.2.0",
-  "streamlit-card == 1.0.2",
-  "streamlit-embedcode == 0.1.2",
-  "streamlit-faker == 0.0.3",
-  "streamlit-image-coordinates == 0.1.9",
-  "streamlit-keyup == 0.2.4",
-  "streamlit-toggle-switch == 1.0.2",
-  "streamlit-vertical-slider == 2.5.5",
-  "validators == 0.33.0",
+  "st-annotated-text >= 4.0.1",
+  "st-theme >= 1.2.3",
+  "streamlit >= 1.37.0",
+  "streamlit-avatar >= 0.1.3",
+  "streamlit-camera-input-live >= 0.2.0",
+  "streamlit-card >= 1.0.2",
+  "streamlit-embedcode >= 0.1.2",
+  "streamlit-faker >= 0.0.3",
+  "streamlit-image-coordinates >= 0.1.9",
+  "streamlit-keyup >= 0.2.4",
+  "streamlit-toggle-switch >= 1.0.2",
+  "streamlit-vertical-slider >= 2.5.5",
+  "validators >= 0.33.0",
 ]
 
 [project.packages]
@@ -45,13 +45,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.uv]
-dev-dependencies = [
-  "pytest == 7.4.4",
-  "black == 22.12.0",
-  "isort == 5.13.2",
-  "mypy == 0.971",
-  "streamlit == 1.37.0",
-]
+dev-dependencies = ["pytest >= 7.4.4", "isort >= 5.13.2", "mypy >= 0.971"]
 
 [project.urls]
 "Homepage" = "https://github.com/arnaudmiribel/streamlit-extras"
