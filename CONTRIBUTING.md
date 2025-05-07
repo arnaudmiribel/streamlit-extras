@@ -4,7 +4,7 @@ In this guide, you'll learn how to publish a new Streamlit extra, either from a 
 
 ## Requirements
 
-Set up linting to standardize your code by running `pre-commit install`, which will then check the formatting of the files you added. 
+Set up linting to standardize your code by running `pre-commit install`, which will then check the formatting of the files you added.
 
 ## Case 1: From a new function (not yet on PyPi)
 
@@ -32,7 +32,7 @@ __experimental_playground__ = False  # Optional
 
 ```
 
-3. To test it out, run `pip install -e .` in the `streamlit-extras` directory, and then `streamlit run gallery/streamlit_app.py` app.
+3. To test it out, run `uv sync --dev` in the `streamlit-extras` directory, and then `uv run streamlit run gallery/streamlit_app.py` app.
 
 4. Submit a PR and share your extra with the world! 🎉
 
@@ -70,7 +70,7 @@ __experimental_playground__ = False  # Optional
 
 2. (Optional) You can add a "featured-extra" badge to your original README.md if you like!
 
-3. To check that your package has all the required fields, run `poetry run pytest` from the repository.
+3. To check that your package has all the required fields, run `uv run pytest` from the repository.
 
 4. Submit a PR and share your extra with the world! 🎉
 

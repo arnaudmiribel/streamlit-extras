@@ -1,3 +1,4 @@
+import contextlib
 from typing import Any, Dict
 
 import pandas as pd
@@ -32,10 +33,8 @@ def dataframe_explorer(df: pd.DataFrame, case: bool = True) -> pd.DataFrame:
     # Try to convert datetimes into standard format (datetime, no timezone)
     for col in df.columns:
         if is_object_dtype(df[col]):
-            try:
+            with contextlib.suppress(Exception):
                 df[col] = pd.to_datetime(df[col])
-            except Exception:
-                pass
 
         if is_datetime64_any_dtype(df[col]):
             df[col] = df[col].dt.tz_localize(None)
@@ -48,7 +47,7 @@ def dataframe_explorer(df: pd.DataFrame, case: bool = True) -> pd.DataFrame:
             df.columns,
             key=f"{random_key_base}_multiselect",
         )
-        filters: Dict[str, Any] = dict()
+        filters: Dict[str, Any] = {}
         for column in to_filter_columns:
             left, right = st.columns((1, 20))
             # Treat columns with < 10 unique values as categorical
@@ -187,9 +186,7 @@ def generate_fake_dataframe(size, cols, col_names=None, intervals=None, seed=Non
     rng = np.random.default_rng(seed)
 
     first_c = default_intervals["c"][0]
-    categories_names = cycle(
-        [first_c] + [c for c in categories_dict.keys() if c != first_c]
-    )
+    categories_names = cycle([first_c] + [c for c in categories_dict if c != first_c])
     default_intervals["c"] = (categories_names, default_intervals["c"][1])
 
     if isinstance(col_names, list):
@@ -199,7 +196,7 @@ def generate_fake_dataframe(size, cols, col_names=None, intervals=None, seed=Non
         )
     elif col_names is None:
         suffix = {"c": "cat", "i": "int", "f": "float", "d": "date"}
-        col_names = [f"column_{str(i)}_{suffix.get(col)}" for i, col in enumerate(cols)]
+        col_names = [f"column_{i!s}_{suffix.get(col)}" for i, col in enumerate(cols)]
 
     if isinstance(intervals, list):
         assert len(intervals) == len(cols), (
@@ -208,9 +205,9 @@ def generate_fake_dataframe(size, cols, col_names=None, intervals=None, seed=Non
         )
     else:
         if isinstance(intervals, dict):
-            assert (
-                len(set(intervals.keys()) - set(default_intervals.keys())) == 0
-            ), "The intervals parameter has invalid keys"
+            assert len(set(intervals.keys()) - set(default_intervals.keys())) == 0, (
+                "The intervals parameter has invalid keys"
+            )
             default_intervals.update(intervals)
         intervals = [default_intervals[col] for col in cols]
     df = pd.DataFrame()
@@ -236,7 +233,7 @@ def generate_fake_dataframe(size, cols, col_names=None, intervals=None, seed=Non
                 cat_family, length = interval
                 if isinstance(cat_family, cycle):
                     cat_family = next(cat_family)
-                assert cat_family in categories_dict.keys(), (
+                assert cat_family in categories_dict, (
                     f"There are no samples for category '{cat_family}'."
                     " Consider passing a list of samples or use one of the"
                     f" available categories: {categories_dict.keys()}"

@@ -31,7 +31,7 @@ def convert_to_pil_image(image: str | np.ndarray | Image.Image) -> Image.Image:
     - ValueError: If the input type is not supported or the image cannot be opened.
     """
     if isinstance(image, str):
-        if image.startswith("http://") or image.startswith("https://"):
+        if image.startswith(("http://", "https://")):
             response = requests.get(image)
             if response.status_code == 200:
                 pil_image = Image.open(BytesIO(response.content))
@@ -85,12 +85,12 @@ def image_selector(
 
     fig.update_layout(
         dragmode=dragmode,
-        xaxis=dict(showticklabels=False),  # hide x-axis ticks
-        yaxis=dict(showticklabels=False),  # hide y-axis ticks
-        margin=dict(
-            t=0,
-            b=5,
-        ),
+        xaxis={"showticklabels": False},  # hide x-axis ticks
+        yaxis={"showticklabels": False},  # hide y-axis ticks
+        margin={
+            "t": 0,
+            "b": 5,
+        },
         width=width,
         height=height,
     )

@@ -1,4 +1,5 @@
 from prometheus_client import Counter, Histogram
+
 from streamlit_extras.prometheus import streamlit_registry
 
 registry = streamlit_registry()

@@ -36,10 +36,9 @@ def _url_to_dataframe(url: str) -> pd.DataFrame:
     """
     if url.endswith(".csv"):
         return pd.read_csv(url)
-    elif url.endswith(".json"):
+    if url.endswith(".json"):
         return pd.read_json(url)
-    else:
-        raise Exception("URL must end with .json or .csv")
+    raise Exception("URL must end with .json or .csv")
 
 
 weather_data_url = (
@@ -106,10 +105,9 @@ def _get_shorthand(param: Union[str, alt.X, alt.Y]):
     """
     if param is None:
         return None
-    elif not isinstance(param, str):
+    if not isinstance(param, str):
         return param.shorthand
-    else:
-        return param
+    return param
 
 
 def _update_axis_config(
@@ -135,10 +133,9 @@ def _update_axis_config(
         for key, value in updates.items():
             axis_config[key] = value
         return output_type(**axis_config)
-    elif isinstance(axis, str):
+    if isinstance(axis, str):
         return output_type(shorthand=axis, **updates)
-    else:
-        raise TypeError("Input x/y must be of type str or alt.X or alt.Y")
+    raise TypeError("Input x/y must be of type str or alt.X or alt.Y")
 
 
 @extra
@@ -231,9 +228,7 @@ def _chart(
         }
     )
 
-    chart = chart.encode(**encode_config)
-
-    return chart
+    return chart.encode(**encode_config)
 
 
 def chart(use_container_width: bool = True, **kwargs):

@@ -66,9 +66,7 @@ def table_with_images(df: pd.DataFrame, url_columns: Iterable) -> str:
     for column in url_columns:
         df_[column] = df_[column].apply(_path_to_image_html)
 
-    table_html = df_.to_html(escape=False)
-
-    return table_html
+    return df_.to_html(escape=False)
 
 
 df = get_dataframe()
@@ -88,7 +86,7 @@ __desc__ = """Transform URLs into images in your dataframes.
 straight within the native st.dataframe! Or you can put markdown in `st.table` cells."""
 __icon__ = "🚩"
 __examples__ = [example]
-__inputs__ = dict(df=df)
+__inputs__ = {"df": df}
 __author__ = "dataprofessor"
 __streamlit_cloud_url__ = (
     "https://dataprofessor-st-demo-image-table-streamlit-app-1x7rnd.streamlitapp.com/"

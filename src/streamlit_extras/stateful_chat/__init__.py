@@ -40,6 +40,7 @@ def _active_dg():
     ctx = get_script_run_ctx()
     if ctx and len(ctx.dg_stack) > 0:
         return ctx.dg_stack[-1]
+    return None
 
 
 def _display_message(

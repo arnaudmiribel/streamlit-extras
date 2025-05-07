@@ -28,7 +28,7 @@ def _transform_arguments(*args, **kwargs) -> tuple[str, Iterable[Any], dict[str,
             options = options.iloc[:, 0]
             options = list(pd.concat([pd.Series([no_selection_label]), options]))
         else:
-            options = [no_selection_label] + list(options)
+            options = [no_selection_label, *list(options)]
         kwargs["options"] = options
 
     return no_selection_label, _args, kwargs

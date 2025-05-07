@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-from typing import Optional, Tuple, cast
+from typing import Any, Optional, Tuple, cast
 
 import streamlit as st
 
@@ -14,7 +14,7 @@ def date_range_picker(
     min_date: Optional[date] = None,
     max_date: Optional[date] = None,
     error_message: str = "Please select start and end date",
-    key: Optional[str] = None,
+    **kwargs: Any,
 ) -> Tuple[date, date]:
     """
     Working with date_input with a date range is frustrating becuase if you're
@@ -31,7 +31,7 @@ def date_range_picker(
         max_date (Optional[date], optional): Maximum date. Defaults to None.
         error_message (str, optional): Error message when only one date is chosen.
             Defaults to "Please select start and end date".
-        key (Optional[str], optional): Widget key. Defaults to None.
+        **kwargs (Any): Additional keyword arguments for `st.date_input`.
 
     Returns:
         Tuple[date, date]: Start and end date chosen in the widget
@@ -47,7 +47,7 @@ def date_range_picker(
         value=[default_start, default_end],
         min_value=min_date,
         max_value=max_date,
-        key=key,
+        **kwargs,
     )
     try:
         start_date, end_date = cast(Tuple[date, date], val)
@@ -79,5 +79,5 @@ selects both dates, the app will not run.
 """
 __icon__ = "📅"
 __examples__ = [example]
-__author__ = "Zachary Blackwood"
+__author__ = "Mohammad Junaid"
 __playground__ = True

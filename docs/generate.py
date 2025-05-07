@@ -9,6 +9,7 @@ from types import ModuleType
 from typing import List
 
 import mkdocs_gen_files
+
 import streamlit_extras
 
 extra_modules_names = [
@@ -185,22 +186,24 @@ def find_decorated_functions(
     module_name: str, decorator_name: str = "extra"
 ) -> List[str]:
     """
-    Parses a module to find out which functions are decorated with a given decorator
-    We use this to identify the functions we want to show in the docs, which are
-    decorated with `@extra`.
+    Finds functions that are either decorated with @extra or in __funcs__
+    We use this to identify the functions we want to show in the docs.
 
     Args:
         module_name (str): Name of the module
         decorator_name (str, optional): Name of the decorator. Defaults to "extra".
 
     Returns:
-        List[str]: Decorated functions with @decorator_name
+        List[str]: List of function names that use the extra decorator/wrapper
     """
     module = importlib.import_module(module_name)
+
+    if hasattr(module, "__funcs__"):
+        return [func.__name__ for func in module.__funcs__]
+
     decorated_functions = []
 
     assert module.__file__, f"Module {module_name} has no __file__ attribute"
-
     with open(module.__file__, "r") as module_file:
         module_source = module_file.read()
 
@@ -231,7 +234,7 @@ def get_extra_metadata(module: ModuleType, module_name: str) -> dict:
         "icon": module.__icon__,
         "funcs": module.__funcs__,
         "examples": module.__examples__,
-        "inputs": getattr(module, "__inputs__", dict()),
+        "inputs": getattr(module, "__inputs__", {}),
         "description": module.__desc__,
         "author": module.__author__,
         "github_repo": getattr(module, "__github_repo__", None),
@@ -267,13 +270,11 @@ def generate_hash_for_playground_url(source_code: str) -> str:
     base64_encoded = base64.b64encode(compressed).decode("utf-8")
 
     # Make URL-safe by replacing + with -, / with _, and removing padding '='
-    url_safe_base64 = re.sub(
+    return re.sub(
         r"[\+\/=]",
         lambda x: "-" if x.group(0) == "+" else "_" if x.group(0) == "/" else "",
         base64_encoded,
     )
-
-    return url_safe_base64
 
 
 for extra_module_name in extra_modules_names:
