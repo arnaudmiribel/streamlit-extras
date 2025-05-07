@@ -18,14 +18,19 @@ def switch_page(page_name: str):
         from streamlit.runtime.scriptrunner_utils.exceptions import RerunException
         from streamlit.runtime.scriptrunner_utils.script_requests import RerunData
 
-    from streamlit.source_util import get_pages
 
     def standardize_name(name: str) -> str:
         return name.lower().replace("_", " ")
 
     page_name = standardize_name(page_name)
 
-    pages = get_pages("streamlit_app.py")  # OR whatever your main page is called
+    try:
+        from streamlit.source_util import get_pages
+        pages = get_pages("streamlit_app.py")  # OR whatever your main page is called
+    except ImportError: # For streamlit > 1.43.2
+        from streamlit.runtime.scriptrunner import get_script_run_ctx
+        ctx = get_script_run_ctx()
+        pages = ctx.pages_manager.get_pages()
 
     for page_hash, config in pages.items():
         if standardize_name(config["page_name"]) == page_name:
