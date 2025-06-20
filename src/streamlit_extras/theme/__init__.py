@@ -37,7 +37,7 @@ def example_2():
 __title__ = "Theme"
 __desc__ = """A component that returns the active theme of the Streamlit app.
 
-**Deprecation note: With Streamlit 1.46.0 you can now detect if the viewer is in light mode or dark 
+**Deprecation note: With Streamlit 1.46.0 you can now detect if the viewer is in light mode or dark
 mode at runtime with st.context.theme.**
 """
 __icon__ = "🌗"
