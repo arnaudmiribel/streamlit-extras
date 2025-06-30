@@ -281,15 +281,15 @@ def example_bar_grouped():
 
 # For streamlit-extras framework compatibility
 __funcs__ = [
-    "line_chart",
-    "bar_chart",
-    "area_chart",
-    "scatter_chart",
-    "hist_chart",
-    "sparkline_chart",
-    "sparkbar_chart",
-    "sparkarea_chart",
-    "sparkhist_chart",
+    line_chart,
+    bar_chart,
+    area_chart,
+    scatter_chart,
+    hist_chart,
+    sparkline_chart,
+    sparkbar_chart,
+    sparkarea_chart,
+    sparkhist_chart,
 ]
 
 # Streamlit-extras metadata
