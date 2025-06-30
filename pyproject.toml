@@ -1,6 +1,6 @@
 [project]
 name = "streamlit-extras"
-version = "0.7.1"
+version = "0.7.5"
 license = "Apache-2.0"
 description = "A library to discover, try, install and share Streamlit extras"
 authors = [
@@ -13,6 +13,7 @@ readme = "README.md"
 requires-python = ">=3.9,<3.14"
 keywords = ["python", "streamlit", "ui", "data"]
 dependencies = [
+  "altex>=0.2.0",
   "entrypoints >= 0.4",
   "htbuilder >= 0.6.2",
   "markdownlit >= 0.0.7",
@@ -45,7 +46,17 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.uv]
-dev-dependencies = ["pytest >= 7.4.4", "isort >= 5.13.2", "mypy >= 0.971"]
+dev-dependencies = [
+  "pytest >= 7.4.4",
+  "mypy >= 0.971",
+  "pre-commit >= 3.0.0",
+  "ruff >= 0.1.0",
+  "types-requests",
+  "types-python-dateutil",
+  "types-pytz",
+  "types-PyYAML",
+  "types-toml",
+]
 
 [project.urls]
 "Homepage" = "https://github.com/arnaudmiribel/streamlit-extras"

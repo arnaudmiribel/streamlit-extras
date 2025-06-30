@@ -1,4 +1,3 @@
-
 <a href="https://extras.streamlitapp.com" title="Python Version"><img src="https://static.streamlit.io/badges/streamlit_badge_black_white.svg"></a><br>
 <a href="https://github.com/arnaudmiribel/streamlit-extras/" title="Python Version"><img src="https://img.shields.io/badge/Python-3.9%2B-blue&style=flat"></a>
 <a href="https://badge.fury.io/py/streamlit-extras"><img src="https://badge.fury.io/py/streamlit-extras.svg" alt="PyPI version" height="18"></a>
@@ -25,8 +24,14 @@
 
 ### Installation
 
-```
+```bash
 pip install streamlit-extras
+```
+
+Or with [uv](https://docs.astral.sh/uv/):
+
+```bash
+uv add streamlit-extras
 ```
 
 ### Usage
@@ -42,6 +47,26 @@ stoggle(
 ```
 
 <img src="https://user-images.githubusercontent.com/16867691/192553812-f91c801b-e820-470b-84c6-4563504c6ce5.gif"></img>
+
+## Development
+
+This project uses [uv](https://docs.astral.sh/uv/) for dependency management.
+
+```bash
+# Install uv
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Clone and setup
+git clone https://github.com/arnaudmiribel/streamlit-extras.git
+cd streamlit-extras
+uv sync
+
+# Run tests
+uv run pytest
+
+# Run the gallery
+uv run streamlit run gallery/streamlit_app.py
+```
 
 ## Documentation
 
