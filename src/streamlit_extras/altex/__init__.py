@@ -5,9 +5,6 @@ This module provides a bridge to the standalone altex package,
 decorating all chart functions with @extra for streamlit-extras framework.
 """
 
-import functools
-from typing import Any, Callable
-
 import altair as alt
 import altex
 import pandas as pd
@@ -20,27 +17,16 @@ except ImportError:
 
 from .. import extra
 
-
-def _wrap_with_extra(func: Callable) -> Callable:
-    """Wrap an altex function with the @extra decorator."""
-
-    @extra
-    @functools.wraps(func)
-    def wrapper(*args: Any, **kwargs: Any) -> Any:
-        return func(*args, **kwargs)
-
-    return wrapper
-
-
 # Chart functions from altex, wrapped with @extra
-line_chart = _wrap_with_extra(altex.line_chart)
-bar_chart = _wrap_with_extra(altex.bar_chart)
-area_chart = _wrap_with_extra(altex.area_chart)
-scatter_chart = _wrap_with_extra(altex.scatter_chart)
-histogram = _wrap_with_extra(altex.histogram)
-sparkline = _wrap_with_extra(altex.sparkline)
-sparkbar = _wrap_with_extra(altex.sparkbar)
-sparkarea = _wrap_with_extra(altex.sparkarea)
+line_chart = extra(altex.line_chart)
+bar_chart = extra(altex.bar_chart)
+area_chart = extra(altex.area_chart)
+scatter_chart = extra(altex.scatter_chart)
+hist_chart = extra(altex.hist_chart)
+sparkline_chart = extra(altex.sparkline_chart)
+sparkbar_chart = extra(altex.sparkbar_chart)
+sparkarea_chart = extra(altex.sparkarea_chart)
+sparkhist_chart = extra(altex.sparkhist_chart)
 
 # Data utilities (re-exported as-is)
 get_stocks_data = altex.get_stocks_data
@@ -88,7 +74,7 @@ def example_bar():
 @cache_data
 def example_hist():
     stocks = get_stocks_data()
-    histogram(
+    hist_chart(
         data=stocks.assign(price=stocks.price.round(0)),
         x="price",
         title="A beautiful histogram",
@@ -158,7 +144,7 @@ def example_scatter():
 @cache_data
 def example_hist_time():
     weather = get_weather_data()
-    histogram(
+    hist_chart(
         data=weather,
         x="week(date):T",
         y="day(date):T",
@@ -173,7 +159,7 @@ def example_hist_time():
 @cache_data
 def example_sparkline():
     stocks = get_stocks_data()
-    sparkline(
+    sparkline_chart(
         data=stocks.query("symbol == 'GOOG'"),
         x="date",
         y="price",
@@ -189,7 +175,7 @@ def example_minisparklines():
     with left:
         data = stocks.query("symbol == 'GOOG'")
         st.metric("GOOG", int(data["price"].mean()))
-        sparkline(
+        sparkline_chart(
             data=data,
             x="date",
             y="price:Q",
@@ -197,7 +183,7 @@ def example_minisparklines():
     with middle:
         data = stocks.query("symbol == 'MSFT'")
         st.metric("MSFT", int(data["price"].mean()))
-        sparkline(
+        sparkline_chart(
             data=data,
             x="date",
             y="price:Q",
@@ -205,7 +191,7 @@ def example_minisparklines():
     with right:
         data = stocks.query("symbol == 'AAPL'")
         st.metric("AAPL", int(data["price"].mean()))
-        sparkline(
+        sparkline_chart(
             data=data,
             x="date",
             y="price:Q",
@@ -215,7 +201,7 @@ def example_minisparklines():
 @cache_data
 def example_sparkbar():
     stocks = get_stocks_data()
-    sparkbar(
+    sparkbar_chart(
         data=stocks.query("symbol == 'GOOG'"),
         x="date",
         y="price",
@@ -232,7 +218,7 @@ def example_sparkarea():
         value_vars=list("abcdefg"),
     )
 
-    sparkarea(
+    sparkarea_chart(
         data=df,
         x="index",
         y="value",
@@ -299,10 +285,11 @@ __funcs__ = [
     "bar_chart",
     "area_chart",
     "scatter_chart",
-    "histogram",
-    "sparkline",
-    "sparkbar",
-    "sparkarea",
+    "hist_chart",
+    "sparkline_chart",
+    "sparkbar_chart",
+    "sparkarea_chart",
+    "sparkhist_chart",
 ]
 
 # Streamlit-extras metadata
@@ -317,13 +304,13 @@ __examples__ = {
     example_line: [line_chart, get_stocks_data],
     example_multi_line: [line_chart, get_stocks_data],
     example_bar: [bar_chart, get_stocks_data],
-    example_hist: [histogram, get_stocks_data],
+    example_hist: [hist_chart, get_stocks_data],
     example_scatter: [scatter_chart, get_weather_data],
-    example_sparkline: [sparkline, get_stocks_data],
-    example_minisparklines: [sparkline, get_stocks_data],
-    example_sparkbar: [sparkbar, get_stocks_data],
-    example_sparkarea: [sparkarea, get_random_data],
-    example_hist_time: [histogram, get_weather_data],
+    example_sparkline: [sparkline_chart, get_stocks_data],
+    example_minisparklines: [sparkline_chart, get_stocks_data],
+    example_sparkbar: [sparkbar_chart, get_stocks_data],
+    example_sparkarea: [sparkarea_chart, get_random_data],
+    example_hist_time: [hist_chart, get_weather_data],
     example_bar_sorted: [bar_chart, get_weather_data],
     example_bar_normalized: [bar_chart, get_barley_data],
     example_bar_grouped: [bar_chart, get_barley_data],
