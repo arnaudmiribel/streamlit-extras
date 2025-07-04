@@ -6,7 +6,7 @@ from .. import extra
 
 def get_mode():
     if hasattr(st.context, "theme"):
-        return st.content.theme["type"]
+        return st.context.theme["type"]
     else:
         return "light"
 
