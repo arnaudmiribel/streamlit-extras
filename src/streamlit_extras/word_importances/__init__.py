@@ -4,6 +4,11 @@ import streamlit as st
 
 from .. import extra
 
+def get_mode():
+    if hasattr(st.context, "theme"):
+        return st.content.theme["type"]
+    else:
+        return "light"
 
 @extra
 def format_word_importances(words: List[str], importances: List[float]) -> str:
@@ -24,7 +29,7 @@ def format_word_importances(words: List[str], importances: List[float]) -> str:
 
     tags = ["<td>"]
     for word, importance in zip(words, importances[: len(words)]):
-        mode = st.context.theme["type"]
+        mode = get_mode()
         color = _get_color(importance, mode)
         font_color = "black" if mode == "light" else "white"
         unwrapped_tag = (
@@ -40,7 +45,7 @@ def format_word_importances(words: List[str], importances: List[float]) -> str:
 
 
 def _get_color(importance: float, mode=None) -> str:
-    mode = mode or st.context.theme["type"]
+    mode = mode or get_mode()
     # clip values to prevent CSS errors (Values should be from [-1,1])
     importance = max(-1, min(1, importance))
     if importance > 0:
