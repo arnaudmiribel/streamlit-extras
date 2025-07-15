@@ -4,11 +4,11 @@ import streamlit as st
 
 from .. import extra
 
+
 def get_mode():
     if hasattr(st.context, "theme"):
         return st.context.theme["type"]
-    else:
-        return "light"
+    return "light"
 
 @extra
 def format_word_importances(words: List[str], importances: List[float]) -> str:
@@ -56,10 +56,7 @@ def _get_color(importance: float, mode=None) -> str:
         hue = 0
         sat = 75
         lig_mod = int(-40 * importance)
-    if mode == "dark":
-        lig = 0 + lig_mod
-    else:
-        lig = 100 - lig_mod
+    lig = 0 + lig_mod if mode == "dark" else 100 - lig_mod
 
     return "hsl({}, {}%, {}%)".format(hue, sat, lig)
 
