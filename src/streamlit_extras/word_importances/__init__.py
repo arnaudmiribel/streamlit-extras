@@ -5,6 +5,11 @@ import streamlit as st
 from .. import extra
 
 
+def get_mode():
+    if hasattr(st.context, "theme"):
+        return st.context.theme["type"]
+    return "light"
+
 @extra
 def format_word_importances(words: List[str], importances: List[float]) -> str:
     """Adds a background color to each word based on its importance (float from -1 to 1)
@@ -24,28 +29,35 @@ def format_word_importances(words: List[str], importances: List[float]) -> str:
 
     tags = ["<td>"]
     for word, importance in zip(words, importances[: len(words)]):
-        color = _get_color(importance)
+        mode = get_mode()
+        color = _get_color(importance, mode)
+        font_color = "black" if mode == "light" else "white"
         unwrapped_tag = (
             '<mark style="background-color: {color}; opacity:1.0;             '
-            '        line-height:1.75"><font color="black"> {word}            '
-            "        </font></mark>".format(color=color, word=word)
+            '        line-height:1.75"><font color="{font_color}"> {word}            '
+            "        </font></mark>".format(
+                color=color, word=word, font_color=font_color
+            )
         )
         tags.append(unwrapped_tag)
     tags.append("</td>")
     return "".join(tags)
 
 
-def _get_color(importance: float) -> str:
+def _get_color(importance: float, mode=None) -> str:
+    mode = mode or get_mode()
     # clip values to prevent CSS errors (Values should be from [-1,1])
     importance = max(-1, min(1, importance))
     if importance > 0:
         hue = 120
         sat = 75
-        lig = 100 - int(50 * importance)
+        lig_mod = int(50 * importance)
     else:
         hue = 0
         sat = 75
-        lig = 100 - int(-40 * importance)
+        lig_mod = int(-40 * importance)
+    lig = 0 + lig_mod if mode == "dark" else 100 - lig_mod
+
     return "hsl({}, {}%, {}%)".format(hue, sat, lig)
 
 
