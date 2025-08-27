@@ -1,6 +1,6 @@
 [project]
 name = "streamlit-extras"
-version = "0.7.6"
+version = "0.7.7"
 license = "Apache-2.0"
 description = "A library to discover, try, install and share Streamlit extras"
 authors = [
@@ -20,7 +20,7 @@ dependencies = [
   "plotly >= 5.23.0",
   "prometheus-client >= 0.20.0",
   "protobuf >= 5.27.3",
-  "snowflake-snowpark-python[pandas]>=1.30.0",
+  "snowflake-snowpark-python[pandas]>=1.30.0; sys.platform != 'emscripten'",
   "st-annotated-text >= 4.0.1",
   "st-theme >= 1.2.3",
   "streamlit >= 1.37.0",
