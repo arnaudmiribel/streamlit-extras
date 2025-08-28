@@ -27,7 +27,7 @@ def run_sql(
     query: str,
     ttl: timedelta | int | None = timedelta(hours=2),
     lowercase_columns: bool = True,
-):
+) -> pd.DataFrame:
     """
     Execute a SQL query and cache the results.
 
