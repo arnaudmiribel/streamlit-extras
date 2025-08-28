@@ -28,8 +28,9 @@ plugins:
         python:
           options:
             show_signature_annotations: false
-            show_types_in_signature: true
             separate_signature: false
+            extra:
+              show_types_in_signature: true
   - literate-nav:
       nav_file: SUMMARY.md
   - gen-files:
@@ -47,8 +48,8 @@ nav:
 markdown_extensions:
   - attr_list
   - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
