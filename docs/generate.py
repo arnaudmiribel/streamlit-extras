@@ -30,13 +30,13 @@ STLITE_HTML_TO_IFRAME = """
     <title>Embedded Streamlit App</title>
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@stlite/mountable@0.57.0/build/stlite.css"
+      href="https://cdn.jsdelivr.net/npm/@stlite/browser@0.85.1/build/stlite.css"
     >
   </head>
   <body>
     <div id="root"></div>
-    <script src="https://cdn.jsdelivr.net/npm/@stlite/mountable@0.57.0/build/stlite.js"></script>
-    <script>
+    <script type="module">
+      import * as stlite from "https://cdn.jsdelivr.net/npm/@stlite/browser@0.85.1/build/stlite.js";
       if (window.location.search !== "?embed=true") {{
         window.location.search = "?embed=true";
       }}
