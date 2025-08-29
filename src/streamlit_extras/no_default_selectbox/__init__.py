@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Iterable
+from typing import Any, Iterable, Optional
 
 import pandas as pd
 import streamlit as st
@@ -8,8 +8,10 @@ import streamlit as st
 from streamlit_extras import extra
 
 
-def _transform_arguments(*args, **kwargs) -> tuple[str, Iterable[Any], dict[str, Any]]:
-    no_selection_label = kwargs.pop("no_selection_label", "---")
+def _transform_arguments(
+    *args: Any, **kwargs: Any
+) -> tuple[str, Iterable[Any], dict[str, Any]]:
+    no_selection_label: str = kwargs.pop("no_selection_label", "---")
 
     _args = list(args)
 
@@ -35,7 +37,11 @@ def _transform_arguments(*args, **kwargs) -> tuple[str, Iterable[Any], dict[str,
 
 
 @extra
-def selectbox(*args, **kwargs):
+def selectbox(
+    *args: Any,
+    no_selection_label: str = "---",
+    **kwargs: Any,
+) -> Optional[Any]:
     """
     A selectbox that returns None unless the user has explicitly selected one of the
     options. All arguments are passed to st.selectbox except for `no_selection_label`, which is
@@ -44,7 +50,9 @@ def selectbox(*args, **kwargs):
     Args:
         no_selection_label (str): The label to use for the no-selection option. Defaults to "---".
     """
-    no_selection_label, _args, _kwargs = _transform_arguments(*args, **kwargs)
+    no_selection_label, _args, _kwargs = _transform_arguments(
+        *args, no_selection_label=no_selection_label, **kwargs
+    )
 
     result = st.selectbox(*_args, **_kwargs)
     if result == no_selection_label:
