@@ -75,7 +75,7 @@ def floating_button(
         key = "fab"
 
     # Create CSS for the floating button
-    st.markdown(
+    st.html(
         f"""
         <style>
             .st-key-{key} button {{
@@ -88,10 +88,10 @@ def floating_button(
                 box-shadow: rgba(0, 0, 0, 0.16) 0px 4px 16px;
                 z-index: 999;
                 border-radius: 1rem;
+                max-width: fit-content;
             }}
         </style>
         """,
-        unsafe_allow_html=True,
     )
 
     # Create the button
