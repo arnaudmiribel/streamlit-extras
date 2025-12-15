@@ -42,6 +42,7 @@ STLITE_HTML_TO_IFRAME = """
       }}
       stlite.mount(
   {{
+    sharedWorker: true,
     requirements: ["streamlit", "streamlit-extras"], // Packages to install
     entrypoint: "streamlit_app.py",
     files: {{
