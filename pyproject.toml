@@ -8,9 +8,7 @@ authors = [
   { name = "Zachary Blackwood", email = "zachary@streamlit.io" },
 ]
 readme = "README.md"
-#packages = [{ include = "streamlit_extras", from = "src" }]
-#exclude = ["gallery/"]
-requires-python = ">=3.9,<3.14"
+requires-python = ">=3.9"
 keywords = ["python", "streamlit", "ui", "data"]
 dependencies = [
   "altex>=0.2.0",
@@ -37,17 +35,8 @@ dependencies = [
   "streamlit-notify >= 0.3.1",
 ]
 
-[project.packages]
-include = ["streamlit_extras"]
-from = "src"
-exclude = ["gallery/"]
-
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
   "pytest >= 7.4.4",
   "mypy >= 0.971",
   "pre-commit >= 3.0.0",
@@ -58,6 +47,15 @@ dev-dependencies = [
   "types-PyYAML",
   "types-toml",
 ]
+
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# if needed
+# [tool.hatch.build.targets.wheel]
+# packages = ["src/streamlit_extras"]
 
 [project.urls]
 "Homepage" = "https://github.com/arnaudmiribel/streamlit-extras"

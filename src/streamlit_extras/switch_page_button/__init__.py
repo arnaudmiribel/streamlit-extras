@@ -18,7 +18,14 @@ def switch_page(page_name: str):
         from streamlit.runtime.scriptrunner_utils.exceptions import RerunException
         from streamlit.runtime.scriptrunner_utils.script_requests import RerunData
 
-    from streamlit.source_util import get_pages
+    try:
+        from streamlit.source_util import get_pages
+    except ImportError as err:
+        raise ImportError(
+            "switch_page is no longer supported with this version of Streamlit. "
+            "Please use st.switch_page() instead: "
+            "https://docs.streamlit.io/develop/api-reference/navigation/st.switch_page"
+        ) from err
 
     def standardize_name(name: str) -> str:
         return name.lower().replace("_", " ")
@@ -51,6 +58,13 @@ def test_switch_page():
     import pytest
 
     try:
+        from streamlit.source_util import get_pages  # noqa: F401
+    except ImportError:
+        pytest.skip(
+            "streamlit.source_util.get_pages removed; use st.switch_page() instead"
+        )
+
+    try:
         from streamlit.runtime.scriptrunner import RerunException
     except ModuleNotFoundError:
         from streamlit.runtime.scriptrunner_utils.exceptions import RerunException
@@ -61,6 +75,13 @@ def test_switch_page():
 
 def test_switch_invalid_page():
     import pytest
+
+    try:
+        from streamlit.source_util import get_pages  # noqa: F401
+    except ImportError:
+        pytest.skip(
+            "streamlit.source_util.get_pages removed; use st.switch_page() instead"
+        )
 
     with pytest.raises(ValueError):
         switch_page("non existent page")

@@ -1,14 +1,39 @@
-from typing import List, NamedTuple
+from typing import List, Mapping, NamedTuple, Sequence, Union
 
 from prometheus_client import CollectorRegistry
 from prometheus_client.openmetrics.exposition import generate_latest
-from streamlit.runtime.stats import CacheStatsProvider
 
 from .. import extra
+
+# Streamlit >= 1.50 replaced CacheStatsProvider with StatsProvider
+try:
+    from streamlit.runtime.stats import CacheStatsProvider as _BaseProvider
+
+    _USE_LEGACY_STATS = True
+except ImportError:
+    _USE_LEGACY_STATS = False
+
+_PROMETHEUS_FAMILY = "prometheus_custom"
 
 
 class CustomStat(NamedTuple):
     metric_str: str = ""
+
+    @property
+    def family_name(self) -> str:
+        return _PROMETHEUS_FAMILY
+
+    @property
+    def type(self) -> str:
+        return "gauge"
+
+    @property
+    def unit(self) -> str:
+        return ""
+
+    @property
+    def help(self) -> str:
+        return "Custom Prometheus metrics"
 
     def to_metric_str(self) -> str:
         return self.metric_str
@@ -30,24 +55,62 @@ class CustomStat(NamedTuple):
         metric_point.gauge_value.int_value = 0
 
 
-class PrometheusMetricsProvider(CacheStatsProvider):
-    def __init__(self, registry: CollectorRegistry):
-        self.registry = registry
+def _build_stats(registry: CollectorRegistry) -> List[CustomStat]:
+    """
+    Use generate_latest() method provided by prometheus to produce the
+    appropriately formatted OpenMetrics text encoding for all the stored metrics.
 
-    def get_stats(self) -> List[CustomStat]:
-        """
-        Use generate_latest() method provided by prometheus to produce the
-        appropriately formatted OpenMetrics text encoding for all the stored metrics.
+    Then do a bit of string manipulation to package it in the format expected
+    by Streamlit's stats handler, so the final output looks the way we expect.
+    """
+    DUPLICATE_SUFFIX = "\n# EOF\n"
+    output_str = generate_latest(registry).decode(encoding="utf-8")
+    if not output_str.endswith(DUPLICATE_SUFFIX):
+        raise ValueError("Unexpected output from OpenMetrics text encoding")
+    output = CustomStat(metric_str=output_str[: -len(DUPLICATE_SUFFIX)])
+    return [output]
 
-        Then do a bit of string manipulation to package it in the format expected
-        by Streamlit's stats handler, so the final output looks the way we expect.
-        """
-        DUPLICATE_SUFFIX = "\n# EOF\n"
-        output_str = generate_latest(self.registry).decode(encoding="utf-8")
-        if not output_str.endswith(DUPLICATE_SUFFIX):
-            raise ValueError("Unexpected output from OpenMetrics text encoding")
-        output = CustomStat(metric_str=output_str[: -len(DUPLICATE_SUFFIX)])
-        return [output]
+
+if _USE_LEGACY_STATS:
+
+    class PrometheusMetricsProvider(_BaseProvider):  # type: ignore[misc]
+        def __init__(self, registry: CollectorRegistry):
+            self.registry = registry
+
+        def get_stats(self) -> List[CustomStat]:  # type: ignore[override]
+            return _build_stats(self.registry)
+
+else:
+
+    class PrometheusMetricsProvider:  # type: ignore[no-redef]
+        """StatsProvider-compatible provider for Streamlit >= 1.50."""
+
+        def __init__(self, registry: CollectorRegistry):
+            self.registry = registry
+
+        @property
+        def stats_families(self) -> Sequence[str]:
+            return [_PROMETHEUS_FAMILY]
+
+        def get_stats(
+            self,
+            family_names: Union[Sequence[str], None] = None,  # noqa: ARG002
+        ) -> Mapping[str, Sequence[CustomStat]]:
+            return {_PROMETHEUS_FAMILY: _build_stats(self.registry)}
+
+
+def _find_existing_provider(stats) -> "PrometheusMetricsProvider | None":
+    """Find an already-registered PrometheusMetricsProvider in the stats manager."""
+    if _USE_LEGACY_STATS:
+        for prv in stats._cache_stats_providers:
+            if isinstance(prv, PrometheusMetricsProvider):
+                return prv
+    else:
+        for providers in stats._providers_by_family.values():
+            for prv in providers:
+                if isinstance(prv, PrometheusMetricsProvider):
+                    return prv
+    return None
 
 
 @extra
@@ -77,9 +140,9 @@ def streamlit_registry() -> CollectorRegistry:
     stats = runtime.get_instance().stats_mgr
 
     # Did we already register it elsewhere? If so, return that copy
-    for prv in stats._cache_stats_providers:
-        if isinstance(prv, PrometheusMetricsProvider):
-            return prv.registry
+    existing = _find_existing_provider(stats)
+    if existing is not None:
+        return existing.registry
 
     # This is the function was called, so create the registry
     # and hook it into Streamlit stats
