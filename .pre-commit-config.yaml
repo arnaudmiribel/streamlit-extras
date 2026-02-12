@@ -26,6 +26,6 @@ repos:
           - types-requests
           - types-toml
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.1.0 # Use the ref you want to point at
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
