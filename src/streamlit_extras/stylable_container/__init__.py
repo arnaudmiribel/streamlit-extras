@@ -4,6 +4,7 @@ import re
 from typing import TYPE_CHECKING
 
 import streamlit as st
+from streamlit.deprecation_util import show_deprecation_warning
 
 from .. import extra
 
@@ -26,7 +27,17 @@ def stylable_container(key: str, css_styles: str | list[str]) -> "DeltaGenerator
     Returns:
         DeltaGenerator: A container object. Elements can be added to this container using either the 'with'
             notation or by calling methods directly on the returned object.
+
+    .. deprecated::
+        Use `key` parameter with `st.container` to target containers with CSS instead.
+        See https://docs.streamlit.io/develop/api-reference/layout/st.container
     """
+    show_deprecation_warning(
+        "stylable_container is deprecated. Use the `key` parameter with `st.container` "
+        "to target containers with CSS instead. "
+        "See https://docs.streamlit.io/develop/api-reference/layout/st.container",
+        show_once=True,
+    )
 
     class_name = re.sub(r"[^a-zA-Z0-9_-]", "-", key.strip())
     class_name = f"st-key-{class_name}"

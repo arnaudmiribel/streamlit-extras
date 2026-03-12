@@ -3,7 +3,6 @@ from typing import Any, Callable, Dict, get_args
 
 import pandas as pd
 import streamlit as st
-from st_keyup import st_keyup
 
 from .. import extra
 
@@ -87,7 +86,7 @@ def function_explorer(func: Callable):
                         if not is_empty(default)
                         else "Sample string"
                     )
-                    inputs[argument] = st_keyup(label, value=default)
+                    inputs[argument] = st.text_input(label, value=default)
             elif type_hint is bool:
                 default = (
                     get_arg_from_session_state(func.__name__, argument) or default

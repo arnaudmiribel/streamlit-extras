@@ -5,6 +5,7 @@ from typing import Literal, Optional, Sequence, Union
 import numpy as np
 import pandas as pd
 import streamlit as st
+from streamlit.deprecation_util import show_deprecation_warning
 
 from streamlit_extras import grid
 
@@ -47,7 +48,16 @@ def row(
         grid.GridDeltaGenerator: RowContainer
             A row container object. Elements can be added to this row by calling methods directly
             on the returned object.
+
+    .. deprecated::
+        Use `st.container(horizontal=True)` instead.
+        See https://docs.streamlit.io/develop/api-reference/layout/st.container
     """
+    show_deprecation_warning(
+        "row is deprecated. Use `st.container(horizontal=True)` instead. "
+        "See https://docs.streamlit.io/develop/api-reference/layout/st.container",
+        show_once=True,
+    )
     container = st.container()
 
     return grid.GridDeltaGenerator(
@@ -59,14 +69,14 @@ def example():
     random_df = pd.DataFrame(np.random.randn(20, 3), columns=["a", "b", "c"])
 
     row1 = row(2, vertical_align="center")
-    row1.dataframe(random_df, use_container_width=True)
-    row1.line_chart(random_df, use_container_width=True)
+    row1.dataframe(random_df, width="stretch")
+    row1.line_chart(random_df, width="stretch")
 
     row2 = row([2, 4, 1], vertical_align="bottom")
 
     row2.selectbox("Select Country", ["Germany", "Italy", "Japan", "USA"])
     row2.text_input("Your name")
-    row2.button("Send", use_container_width=True)
+    row2.button("Send", width="stretch")
 
 
 __title__ = "Row Layout"
@@ -75,3 +85,4 @@ __icon__ = "🟰"
 __examples__ = [example]
 __author__ = "Lukas Masuch"
 __playground__ = True
+__deprecated__ = True

@@ -4,11 +4,7 @@ from typing import Generator, Sequence
 import numpy as np
 import pandas as pd
 import streamlit as st
-
-try:
-    from streamlit import cache_data  # streamlit >= 1.18.0
-except ImportError:
-    from streamlit import experimental_memo as cache_data  # streamlit >= 0.89
+from streamlit import cache_data
 
 from .. import extra
 
@@ -43,9 +39,9 @@ _SUPPORTED_EXPORT_KEYS = list(_SUPPORTED_EXPORTS.keys())
 def chart_container(
     data: pd.DataFrame,
     tabs: Sequence[str] = (
-        "Chart 📈",
-        "Dataframe 📄",
-        "Export 📁",
+        ":material/show_chart: Chart",
+        ":material/table: Dataframe",
+        ":material/download: Export",
     ),
     export_formats: Sequence[str] = _SUPPORTED_EXPORT_KEYS,
 ) -> Generator:
@@ -53,7 +49,7 @@ def chart_container(
 
     Args:
         data (pd.DataFrame): Dataframe used in the dataframe tab.
-        tabs (Sequence, optional): Tab labels. Defaults to ("Chart 📈", "Dataframe 📄", "Export 📁").
+        tabs (Sequence, optional): Tab labels. Defaults to (":material/show_chart: Chart", ":material/table: Dataframe", ":material/download: Export").
         export_formats (Sequence, optional): Export file formats. Defaults to ("CSV", "Parquet")
     """
 
@@ -76,7 +72,7 @@ def chart_container(
         yield
 
     with tab_2:
-        st.dataframe(data, use_container_width=True)
+        st.dataframe(data, width="stretch")
 
     with tab_3:
         st.caption("Export limited to 1 million rows.")

@@ -1,6 +1,4 @@
 import streamlit as st
-from htbuilder import details, div, p, styles
-from htbuilder import summary as smry
 
 from .. import extra
 
@@ -15,16 +13,8 @@ def stoggle(summary: str, content: str):
         content (str): Content shown after toggling
     """
 
-    st.write(
-        str(
-            div(
-                style=styles(
-                    line_height=1.8,
-                )
-            )(details(smry(summary), p(content)))
-        ),
-        unsafe_allow_html=True,
-    )
+    html = f'<div style="line-height:1.8"><details><summary>{summary}</summary><p>{content}</p></details></div>'
+    st.html(html)
 
 
 def example():

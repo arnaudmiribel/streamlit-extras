@@ -255,7 +255,7 @@ def example_one():
         size=500, cols="dfc", col_names=("date", "income", "person"), seed=1
     )
     filtered_df = dataframe_explorer(dataframe, case=False)
-    st.dataframe(filtered_df, use_container_width=True)
+    st.dataframe(filtered_df, width="stretch")
 
 
 __title__ = "Dataframe explorer UI"

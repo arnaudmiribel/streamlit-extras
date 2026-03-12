@@ -1,8 +1,7 @@
 import streamlit as st
-from htbuilder import a, img, span
-from validators import url as validate_url
 
 from .. import extra
+from ..utils import is_url
 
 GITHUB_ICON = "https://cdn-icons-png.flaticon.com/512/25/25231.png"
 NOTION_ICON = "https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png"
@@ -39,35 +38,16 @@ def mention(label: str, url: str, icon: str = "🔗", write: bool = True):
     elif icon.lower() == "streamlit":
         icon = STREAMLIT_ICON
 
-    if validate_url(icon):
-        icon_html = img(
-            src=icon,
-            style="width:1em;height:1em;vertical-align:-0.15em;border-radius:3px;margin-right:0.3em",
-        )
+    if is_url(icon):
+        icon_html = f'<img src="{icon}" style="width:1em;height:1em;vertical-align:-0.15em;border-radius:3px;margin-right:0.3em">'
     else:
-        icon_html = icon + "  "
+        icon_html = icon + "  "
 
-    mention_html = a(
-        contenteditable=False,
-        href=url,
-        rel="noopener noreferrer",
-        style="color:inherit;text-decoration:inherit; height:auto!important",
-        target="_blank",
-    )(
-        span(),
-        icon_html,
-        span(
-            style=(
-                "border-bottom:0.05em solid"
-                " rgba(55,53,47,0.25);font-weight:500;flex-shrink:0"
-            )
-        )(label),
-        span(),
-    )
+    mention_html = f'<a contenteditable="false" href="{url}" rel="noopener noreferrer" style="color:inherit;text-decoration:inherit;height:auto!important" target="_blank"><span></span>{icon_html}<span style="border-bottom:0.05em solid rgba(55,53,47,0.25);font-weight:500;flex-shrink:0">{label}</span><span></span></a>'
 
-    html = STYLE_HTML + str(mention_html)
+    html = STYLE_HTML + mention_html
     if write:
-        st.write(html, unsafe_allow_html=True)
+        st.html(html)
         return None
     return html
 

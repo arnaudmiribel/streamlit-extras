@@ -88,7 +88,7 @@ def example():
             0,
         ),  # fmt: skip
     )
-    st.write(html, unsafe_allow_html=True)
+    st.html(html)
 
 
 __title__ = "Word importances"

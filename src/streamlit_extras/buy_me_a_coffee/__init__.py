@@ -63,7 +63,7 @@ def button(
     html(button, height=70, width=width)
 
     if floating:
-        st.markdown(
+        st.html(
             f"""
             <style>
                 iframe[width="{width}"] {{
@@ -72,8 +72,7 @@ def button(
                     right: 40px;
                 }}
             </style>
-            """,
-            unsafe_allow_html=True,
+            """
         )
 
 

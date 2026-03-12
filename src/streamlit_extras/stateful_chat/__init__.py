@@ -1,19 +1,15 @@
 from __future__ import annotations
 
+import inspect
 import time
-from typing import TYPE_CHECKING, Any, List, Sequence, Union
+from contextlib import contextmanager
+from contextvars import ContextVar
+from typing import TYPE_CHECKING, Any, Generator, List, Sequence, Union
 
 import streamlit as st
-
-try:
-    from streamlit.elements.lib.image_utils import AtomicImage
-except ImportError:
-    from streamlit.elements.image import AtomicImage
-
+from streamlit.elements.lib.image_utils import AtomicImage
 from streamlit.errors import StreamlitAPIException
 from typing_extensions import Literal, Required, TypedDict
-
-from streamlit_extras import streaming_write
 
 from .. import extra
 
@@ -21,6 +17,85 @@ if TYPE_CHECKING:
     from streamlit.delta_generator import DeltaGenerator
 
 SpecType = Union[int, Sequence[Union[int, float]]]
+
+# Context variable to track the active chat container
+_active_chat_container: ContextVar[Any] = ContextVar("active_chat_container", default=None)
+
+
+def _streaming_write(*args: Any, unsafe_allow_html: bool = False, **kwargs) -> List[Any]:
+    """Internal streaming write implementation for stateful chat."""
+    if not args:
+        return []
+
+    written_content: List[Any] = []
+    string_buffer: List[str] = []
+
+    def flush_buffer():
+        if string_buffer:
+            text_content = " ".join(string_buffer)
+            text_container = st.empty()
+            text_container.markdown(text_content)
+            written_content.append(text_content)
+            string_buffer[:] = []
+
+    for arg in args:
+        if isinstance(arg, str):
+            string_buffer.append(arg)
+        elif callable(arg) or inspect.isgenerator(arg):
+            flush_buffer()
+            if inspect.isgeneratorfunction(arg) or inspect.isgenerator(arg):
+                stream_container = None
+                streamed_response = ""
+
+                def flush_stream_response():
+                    nonlocal streamed_response
+                    nonlocal stream_container
+                    if streamed_response and stream_container:
+                        stream_container.write(
+                            streamed_response,
+                            unsafe_allow_html=unsafe_allow_html,
+                            **kwargs,
+                        )
+                        written_content.append(streamed_response)
+                        stream_container = None
+                        streamed_response = ""
+
+                generator = arg() if inspect.isgeneratorfunction(arg) else arg
+                for chunk in generator:
+                    if isinstance(chunk, str):
+                        first_text = False
+                        if not stream_container:
+                            stream_container = st.empty()
+                            first_text = True
+                        streamed_response += chunk
+                        stream_container.write(
+                            streamed_response + ("" if first_text else " ▌"),
+                            unsafe_allow_html=unsafe_allow_html,
+                            **kwargs,
+                        )
+                    elif callable(chunk):
+                        flush_stream_response()
+                        chunk()
+                        written_content.append(chunk)
+                    else:
+                        flush_stream_response()
+                        st.write(chunk, unsafe_allow_html=unsafe_allow_html, **kwargs)
+                        written_content.append(chunk)
+                flush_stream_response()
+            else:
+                return_value = arg()
+                written_content.append(arg)
+                if return_value is not None:
+                    flush_buffer()
+                    st.write(
+                        return_value, unsafe_allow_html=unsafe_allow_html, **kwargs
+                    )
+        else:
+            flush_buffer()
+            st.write(arg, unsafe_allow_html=unsafe_allow_html, **kwargs)
+            written_content.append(arg)
+    flush_buffer()
+    return written_content
 
 
 class ChatMessage(TypedDict):
@@ -30,17 +105,7 @@ class ChatMessage(TypedDict):
 
 
 def _active_dg():
-    try:
-        from streamlit.runtime.scriptrunner.script_run_context import get_script_run_ctx
-    except ModuleNotFoundError:  # from streamlit > 1.37
-        from streamlit.runtime.scriptrunner_utils.script_run_context import (
-            get_script_run_ctx,
-        )
-
-    ctx = get_script_run_ctx()
-    if ctx and len(ctx.dg_stack) > 0:
-        return ctx.dg_stack[-1]
-    return None
+    return _active_chat_container.get()
 
 
 def _display_message(
@@ -49,7 +114,7 @@ def _display_message(
     avatar: str | AtomicImage | None = None,
 ) -> List[Any]:
     with st.chat_message(name, avatar=avatar):
-        return streaming_write.write(*args)
+        return _streaming_write(*args)
 
 
 @extra
@@ -96,7 +161,8 @@ def add_message(
 
 
 @extra
-def chat(key: str = "chat_messages") -> "DeltaGenerator":
+@contextmanager
+def chat(key: str = "chat_messages") -> Generator["DeltaGenerator", None, None]:
     """
     Insert a stateful chat container into your app.
     This chat container automatically keeps track of the chat history when you use
@@ -126,7 +192,13 @@ def chat(key: str = "chat_messages") -> "DeltaGenerator":
                 message["author"], *message["content"], avatar=message["avatar"]
             )
 
-    return chat_container
+    # Set the active chat container for add_message to use
+    token = _active_chat_container.set(chat_container)
+    try:
+        with chat_container:
+            yield chat_container
+    finally:
+        _active_chat_container.reset(token)
 
 
 def example():

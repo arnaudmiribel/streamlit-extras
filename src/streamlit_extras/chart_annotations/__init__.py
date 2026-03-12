@@ -6,18 +6,10 @@ from typing import Iterable, Tuple
 import altair as alt
 import pandas as pd
 import streamlit as st
-
-try:
-    from streamlit import cache_data  # streamlit >= 1.18.0
-except ImportError:
-    from streamlit import experimental_memo as cache_data  # streamlit >= 0.89
+from altair.utils.plugin_registry import NoSuchEntryPoint
+from streamlit import cache_data
 
 from .. import extra
-
-try:
-    from altair.utils.plugin_registry import NoSuchEntryPoint
-except ImportError:
-    from entrypoints import NoSuchEntryPoint
 
 try:
     alt.themes.enable("streamlit")
@@ -151,7 +143,7 @@ def example() -> None:
         ],
     )
 
-    st.altair_chart(chart, use_container_width=True)  # type: ignore
+    st.altair_chart(chart, width="stretch")  # type: ignore
 
 
 __title__ = "Chart annotations"

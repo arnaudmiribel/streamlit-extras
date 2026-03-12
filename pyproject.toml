@@ -10,31 +10,11 @@ authors = [
 readme = "README.md"
 #packages = [{ include = "streamlit_extras", from = "src" }]
 #exclude = ["gallery/"]
-requires-python = ">=3.9,<3.14"
+requires-python = ">=3.10,<3.14"
 keywords = ["python", "streamlit", "ui", "data"]
 dependencies = [
-  "altex>=0.2.0",
-  "entrypoints >= 0.4",
-  "htbuilder >= 0.6.2",
-  "markdownlit >= 0.0.7",
   "plotly >= 5.23.0",
-  "prometheus-client >= 0.20.0",
-  "protobuf >= 5.27.3",
-  "snowflake-snowpark-python[pandas]>=1.30.0; sys.platform != 'emscripten'",
-  "st-annotated-text >= 4.0.1",
-  "st-theme >= 1.2.3",
-  "streamlit >= 1.37.0",
-  "streamlit-avatar >= 0.1.3",
-  "streamlit-camera-input-live >= 0.2.0",
-  "streamlit-card >= 1.0.2",
-  "streamlit-embedcode >= 0.1.2",
-  "streamlit-faker >= 0.0.3",
-  "streamlit-image-coordinates >= 0.1.9",
-  "streamlit-keyup >= 0.2.4",
-  "streamlit-toggle-switch >= 1.0.2",
-  "streamlit-vertical-slider >= 2.5.5",
-  "validators >= 0.33.0",
-  "streamlit-notify >= 0.3.1",
+  "streamlit >= 1.54.0",
 ]
 
 [project.packages]
@@ -107,4 +87,4 @@ files = ["**/*.py"]
 follow_imports = "silent"
 ignore_missing_imports = true
 scripts_are_modules = true
-python_version = "3.9"
+python_version = "3.10"

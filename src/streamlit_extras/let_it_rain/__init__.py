@@ -25,7 +25,7 @@ def rain(
     if isinstance(animation_length, int):
         animation_length = f"{animation_length}"
 
-    st.write(
+    st.html(
         f"""
     <style>
 
@@ -163,11 +163,10 @@ def rain(
     }}
 
     </style>
-    """,
-        unsafe_allow_html=True,
+    """
     )
 
-    st.write(
+    st.html(
         f"""
     <!--get emojis from https://getemoji.com-->
     <div class="emojis">
@@ -205,8 +204,7 @@ def rain(
             {emoji}
         </div>
     </div>
-    """,
-        unsafe_allow_html=True,
+    """
     )
 
 

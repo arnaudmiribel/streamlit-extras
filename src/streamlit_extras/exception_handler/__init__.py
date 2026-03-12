@@ -43,46 +43,49 @@ def set_global_exception_handler(f: Callable) -> None:
     parent_module.handle_uncaught_app_exception.__code__ = f.__code__
 
 
+def _custom_exception_handler(exception: Exception) -> None:
+    """Custom handler that logs exception data and sends notifications.
+
+    This is defined at module level to avoid closure variables, which would
+    cause issues when replacing the code object of Streamlit's handler.
+    """
+    import traceback
+    from datetime import datetime
+
+    import streamlit as st
+
+    # Still show the exception to the user (default behavior)
+    st.exception(exception)
+
+    # Collect context about the exception
+    exception_data = {
+        "exception_name": str(exception),
+        "traceback": str(traceback.format_exc()).strip(),
+        "user_name": (
+            getattr(st.user, "user_name", "unknown")
+            if hasattr(st, "user")
+            else "unknown"
+        ),
+        "timestamp": datetime.now().isoformat(),
+        "app_name": "your_app_name",  # Replace with real app identification
+        "page_name": "current_page",  # Replace with real page identification
+    }
+
+    # Log the exception (choose your method)
+    st.toast(exception_data)
+
+
 def example() -> None:
     """Demonstrate installing a custom handler and triggering an exception.
 
     Includes a sample handler that logs context and still surfaces the exception to the user.
     """
-    import traceback
-    from datetime import datetime
-
     st.write(
         "Install a custom handler that logs context and shows the exception to the user."
     )
 
-    def custom_exception_handler(exception: Exception) -> None:
-        """Custom handler that logs exception data and sends notifications.
-
-        You can customize the logging destination and notification methods.
-        """
-
-        # Still show the exception to the user (default behavior)
-        st.exception(exception)
-
-        # Collect context about the exception
-        exception_data = {
-            "exception_name": str(exception),
-            "traceback": str(traceback.format_exc()).strip(),
-            "user_name": (
-                getattr(st.user, "user_name", "unknown")
-                if hasattr(st, "user")
-                else "unknown"
-            ),
-            "timestamp": datetime.now().isoformat(),
-            "app_name": "your_app_name",  # Replace with real app identification
-            "page_name": "current_page",  # Replace with real page identification
-        }
-
-        # Log the exception (choose your method)
-        st.toast(exception_data)
-
     if st.button("Install custom handler"):
-        set_global_exception_handler(custom_exception_handler)
+        set_global_exception_handler(_custom_exception_handler)
         st.success("Custom handler installed for this app run.")
 
     if st.button("Trigger an exception"):

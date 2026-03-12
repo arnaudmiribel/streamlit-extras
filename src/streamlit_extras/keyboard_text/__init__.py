@@ -1,11 +1,10 @@
 import streamlit as st
-from htbuilder import span
 
 from .. import extra
 
 
 def load_key_css():
-    st.write(
+    st.html(
         """<style>
         .keyx {
         background-color: #eee;
@@ -20,8 +19,7 @@ def load_key_css():
         padding: 2px 4px;
         white-space: nowrap;
     }
-    </style>""",
-        unsafe_allow_html=True,
+    </style>"""
     )
 
 
@@ -37,10 +35,10 @@ def key(text: str, write: bool = True) -> str:
         str: HTML of the text, styled as a key
     """
 
-    key_html = str(span(_class="keyx")(text))
+    key_html = f'<span class="keyx">{text}</span>'
 
     if write:
-        st.write(key_html, unsafe_allow_html=True)
+        st.html(key_html)
 
     return key_html
 

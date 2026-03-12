@@ -4,6 +4,7 @@ import itertools
 from typing import Literal
 
 import streamlit as st
+from streamlit.deprecation_util import show_deprecation_warning
 
 from .. import extra
 
@@ -173,14 +174,23 @@ def colored_header(
         color_name (_SUPPORTED_COLORS, optional): Color of the underline. Defaults to "red-70".
             Supported colors are "light-blue-70", "orange-70", "blue-green-70", "blue-70", "violet-70",
             "red-70", "green-70", "yellow-80".
+
+    .. deprecated::
+        Use the `divider` parameter in `st.header`, `st.title`, or `st.subheader` instead.
+        See https://docs.streamlit.io/develop/api-reference/text/st.header
     """
+    show_deprecation_warning(
+        "colored_header is deprecated. Use the `divider` parameter in `st.header`, "
+        "`st.title`, or `st.subheader` instead. "
+        "See https://docs.streamlit.io/develop/api-reference/text/st.header",
+        show_once=True,
+    )
     if color_name is None:
         color_name = next(HEADER_COLOR_CYCLE)
     st.subheader(label)
-    st.write(
+    st.html(
         f'<hr style="background-color: {color(color_name)}; margin-top: 0;'
-        ' margin-bottom: 0; height: 3px; border: none; border-radius: 3px;">',
-        unsafe_allow_html=True,
+        ' margin-bottom: 0; height: 3px; border: none; border-radius: 3px;">'
     )
     if description:
         st.caption(description)

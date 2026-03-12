@@ -3,6 +3,7 @@ from __future__ import annotations
 from textwrap import dedent
 
 import streamlit as st
+from streamlit.deprecation_util import show_deprecation_warning
 
 from .. import extra
 
@@ -81,7 +82,16 @@ def tagger_component(
         color_name: A list or a string that indicates the color of tags.
             Choose from lightblue, orange, bluegreen, blue, violet, red, green, yellow
         text_color_name: A list or a string that indicates the text color of tags.
+
+    .. deprecated::
+        Use `st.badge` or badges in markdown syntax instead.
+        See https://docs.streamlit.io/develop/api-reference/text/st.badge
     """
+    show_deprecation_warning(
+        "tagger_component is deprecated. Use `st.badge` or badges in markdown syntax "
+        "instead. See https://docs.streamlit.io/develop/api-reference/text/st.badge",
+        show_once=True,
+    )
     if isinstance(color_name, list) and len(color_name) != len(tags):
         raise ValueError(
             f"color_name must be the same length as tags. "
@@ -94,7 +104,7 @@ def tagger_component(
         )
     tags_html = _get_html(content, tags, color_name, text_color_name)
 
-    st.write(tags_html, unsafe_allow_html=True)
+    st.html(tags_html)
 
 
 def example():
@@ -233,6 +243,7 @@ __icon__ = "🔖"
 __examples__ = [example]
 __author__ = "Maggie Liu"
 __playground__ = True
+__deprecated__ = True
 __tests__ = [
     test_invalid_color_length,
     test_color_html_list_in_palette,
