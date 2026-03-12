@@ -24,13 +24,14 @@ def star_rating(rating: float, color: str = "#FFD700"):
 
     def render_star(star_type="full"):
         star_color = color if star_type != "empty" else "lightgrey"
-        base_style = f"color:{star_color};font-size:24px;border-radius:5px;margin-right:2px;cursor:default;user-select:none;"
+        base_style = (
+            f"color:{star_color};font-size:24px;border-radius:5px;margin-right:2px;cursor:default;user-select:none;"
+        )
 
         if star_type == "half":
             # Half star with overlay effect
             return f'<span style="color:lightgrey;font-size:24px;position:relative;user-select:none;">★<span style="position:absolute;left:0;width:12px;overflow:hidden;color:{color};user-select:none;">★</span></span>'
-        else:
-            return f'<span style="{base_style}">★</span>'
+        return f'<span style="{base_style}">★</span>'
 
     # Create HTML content
     stars_html = (

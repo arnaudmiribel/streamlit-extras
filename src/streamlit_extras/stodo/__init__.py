@@ -26,24 +26,23 @@ def to_do(st_commands, checkbox_id):
                         f"<s style='color: rgba(49, 51, 63, 0.4)'> {text} </s>",
                         unsafe_allow_html=True,
                     )
+                elif cmd in (
+                    st.slider,
+                    st.button,
+                    st.checkbox,
+                    st.time_input,
+                    st.color_picker,
+                    st.selectbox,
+                    st.camera_input,
+                    st.radio,
+                    st.date_input,
+                    st.multiselect,
+                    st.text_area,
+                    st.text_input,
+                ):
+                    cmd(*args, disabled=True)
                 else:
-                    if cmd in (
-                        st.slider,
-                        st.button,
-                        st.checkbox,
-                        st.time_input,
-                        st.color_picker,
-                        st.selectbox,
-                        st.camera_input,
-                        st.radio,
-                        st.date_input,
-                        st.multiselect,
-                        st.text_area,
-                        st.text_input,
-                    ):
-                        cmd(*args, disabled=True)
-                    else:
-                        cmd(*args)
+                    cmd(*args)
 
     else:
         for cmd, *args in st_commands:

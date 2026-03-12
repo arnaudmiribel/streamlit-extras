@@ -4,28 +4,42 @@ exclude: >
   )$
 
 repos:
-  - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.11.6
+  # General file hygiene
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+        args: [--unsafe]  # Allow Python-specific YAML tags in mkdocs.yml
+      - id: check-toml
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: check-case-conflict
+      - id: fix-byte-order-marker
+
+  # Ruff linting and formatting
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.6
     hooks:
       - id: ruff
         args: [--fix, --unsafe-fixes]
       - id: ruff-format
+
+  # Type checking with mypy
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: "v1.15.0"
+    rev: v1.15.0
     hooks:
       - id: mypy
         args:
           - --ignore-missing-imports
-          - --follow-imports=silent
-          - --python-version=3.9
+          - --check-untyped-defs
+          - --python-version=3.10
+        files: ^(src|gallery)/
         additional_dependencies:
-          - types-croniter
           - types-python-dateutil
           - types-pytz
           - types-PyYAML
           - types-requests
           - types-toml
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.1.0 # Use the ref you want to point at
-    hooks:
-      - id: trailing-whitespace

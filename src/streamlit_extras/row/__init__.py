@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Literal, Optional, Sequence, Union
+from collections.abc import Sequence
+from typing import TYPE_CHECKING, Literal
 
 import numpy as np
 import pandas as pd
@@ -11,13 +12,16 @@ from streamlit_extras import grid
 
 from .. import extra
 
-SpecType = Union[int, Sequence[Union[int, float]]]
+if TYPE_CHECKING:
+    from streamlit_extras.grid import GapSize
+
+SpecType = int | Sequence[int | float]
 
 
 @extra
 def row(
     spec: SpecType,
-    gap: Optional[str] = "small",
+    gap: GapSize = "small",
     vertical_align: Literal["top", "center", "bottom"] = "top",
 ) -> grid.GridDeltaGenerator:
     """
@@ -60,9 +64,7 @@ def row(
     )
     container = st.container()
 
-    return grid.GridDeltaGenerator(
-        parent_dg=container, spec=[spec], gap=gap, vertical_align=vertical_align
-    )
+    return grid.GridDeltaGenerator(parent_dg=container, spec=[spec], gap=gap, vertical_align=vertical_align)
 
 
 def example():

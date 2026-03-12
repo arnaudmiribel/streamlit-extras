@@ -1,7 +1,8 @@
 import inspect
+from collections.abc import Callable
 from importlib import import_module
 from pathlib import Path
-from typing import Any, Callable, Optional, TypeVar, Union, overload
+from typing import Any, Optional, TypeVar, Union, overload
 
 from streamlit.runtime.metrics_util import gather_metrics as _gather_metrics
 
@@ -33,8 +34,8 @@ def extra(
 
 
 def extra(
-    func: Optional[F] = None,
-) -> Union[Callable[[F], F], F]:
+    func: F | None = None,
+) -> Callable[[F], F] | F:
     if func:
         filename = inspect.stack()[1].filename
         submodule = Path(filename).parent.name

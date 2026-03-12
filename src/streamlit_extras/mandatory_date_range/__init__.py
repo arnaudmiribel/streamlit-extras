@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-from typing import Any, Optional, Tuple, cast
+from typing import Any, cast
 
 import streamlit as st
 
@@ -9,13 +9,13 @@ from streamlit_extras import extra
 @extra
 def date_range_picker(
     title: str,
-    default_start: Optional[date] = None,
-    default_end: Optional[date] = None,
-    min_date: Optional[date] = None,
-    max_date: Optional[date] = None,
+    default_start: date | None = None,
+    default_end: date | None = None,
+    min_date: date | None = None,
+    max_date: date | None = None,
     error_message: str = "Please select start and end date",
     **kwargs: Any,
-) -> Tuple[date, date]:
+) -> tuple[date, date]:
     """
     Working with date_input with a date range is frustrating becuase if you're
     assuming you will get a start and end date out of it, your code can break (not
@@ -50,7 +50,7 @@ def date_range_picker(
         **kwargs,
     )
     try:
-        start_date, end_date = cast(Tuple[date, date], val)
+        start_date, end_date = cast("tuple[date, date]", val)
     except ValueError:
         st.error(error_message)
         st.stop()

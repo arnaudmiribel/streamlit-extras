@@ -23,9 +23,7 @@ _DEFAULT_COLOR = "#808495"
 _DEFAULT_TEXT_COLOR = "white"
 
 
-def _get_color(
-    color_name: list[str] | str | None, index: int, default_color: str
-) -> str:
+def _get_color(color_name: list[str] | str | None, index: int, default_color: str) -> str:
     if color_name is None:
         return default_color
     if isinstance(color_name, list):
@@ -34,9 +32,7 @@ def _get_color(
         return TAGGER_COLOR_PALETTE.get(color_name[index], color_name[index])
     if isinstance(color_name, str):
         return TAGGER_COLOR_PALETTE.get(color_name, color_name)
-    raise ValueError(
-        f"color_name must be a list, a string, or None. Got {type(color_name)}"
-    )
+    raise ValueError(f"color_name must be a list, a string, or None. Got {type(color_name)}")
 
 
 def _get_html(
@@ -94,8 +90,7 @@ def tagger_component(
     )
     if isinstance(color_name, list) and len(color_name) != len(tags):
         raise ValueError(
-            f"color_name must be the same length as tags. "
-            f"len(color_name) = {len(color_name)}, len(tags) = {len(tags)}"
+            f"color_name must be the same length as tags. len(color_name) = {len(color_name)}, len(tags) = {len(tags)}"
         )
     if isinstance(text_color_name, list) and len(text_color_name) != len(tags):
         raise ValueError(

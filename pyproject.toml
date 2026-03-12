@@ -26,12 +26,13 @@ exclude = ["gallery/"]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
   "pytest >= 7.4.4",
-  "mypy >= 0.971",
+  "mypy >= 1.10.0",
+  "ty >= 0.0.1",
   "pre-commit >= 3.0.0",
-  "ruff >= 0.1.0",
+  "ruff == 0.15.6",
   "types-requests",
   "types-python-dateutil",
   "types-pytz",
@@ -44,47 +45,109 @@ dev-dependencies = [
 "Bug Tracker" = "https://github.com/arnaudmiribel/streamlit-extras/issues"
 
 
+# =============================================================================
+# Ruff configuration (linting + formatting)
+# =============================================================================
 [tool.ruff]
-exclude = [".git", ".vscode", ".pytest_cache", ".mypy_cache", ".env"]
-line-length = 88
+line-length = 120
 
 [tool.ruff.lint]
+preview = true
+select = ["ALL"]
+extend-safe-fixes = ["TC002", "TC003"]
 ignore = [
-  "B008",
-  "ISC001",
-  "E501",
-  "W191",
-  "SIM102",
-  "ERA001",
-  "B018",
-  "PT011",
-  "PT018",
-  "PT019",
-]
-select = [
-  "B",
-  "E",
-  "F",
-  "W",
-  "I",
-  "C4",
-  "EXE",
-  "ISC",
-  "ICN",
-  "PIE",
-  "PT",
-  "RET",
-  "SIM",
-  "ERA",
-  "PLC",
-  "ARG",
+  # === Rule sets to ignore ===
+  "ANN",    # Annotations - would require adding types to ~110 functions
+  "D",      # Docstrings - existing docstrings don't follow strict convention
+  "DTZ",    # Datetime timezone
+  "C90",    # McCabe complexity
+  "SLF",    # Private member access
+  "BLE",    # Blind except
+  "CPY",    # Copyright
+  "DOC",    # Docstring format
+  "FBT",    # Boolean positional args
+  "TID252", # Relative imports
+  "S101",   # Assert statements
+  "TRY",    # Try/except style
+  "EM",     # Exception message style
+  "NPY",    # NumPy legacy random
+  "PGH003", # Blanket type:ignore
+  # === Individual rules ===
+  "COM812", "COM819",  # Trailing comma (conflicts with formatter)
+  "E501",   # Line too long
+  "ERA001", # Commented out code
+  "FIX002", # TODO comments
+  "FURB152",
+  "PLC0415", "PLC2701",
+  "PLR0904", "PLR0911", "PLR0912", "PLR0913", "PLR0914", "PLR0915", "PLR0916", "PLR0917", "PLR1702", "PLR2004", "PLR6301",
+  "RET504",
+  "RUF052",
+  "SIM117", "SIM102",
+  "T201",   # Print statements
+  "TD002", "TD003",
+  "TRY300",
+  "B008",   # Function call in default argument (common pattern in Streamlit)
+  "B018",   # Useless expression (used for examples)
+  "PT011", "PT018", "PT019",
+  "A002",   # Builtin argument shadowing (type, help - common in Streamlit APIs)
+  "S324",   # Insecure hash (md5 used for non-security purposes)
+  "S110",   # try-except-pass
+  "S113",   # requests without timeout (example code)
+  "PLR6201", # literal-membership (tuple vs set - minor)
+  "PLW2901", # redefined-loop-name
+  "RUF028",  # invalid-formatter-suppression-comment
+  "RUF067",  # __init__ module should only contain re-exports (project uses __init__.py for main code)
+  "PD901",   # Avoid generic variable name `df` for DataFrames (common convention)
 ]
 
-# line-length = 88
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["ANN", "ARG", "D", "INP", "N", "PERF", "S", "TRY"]
+"gallery/**" = ["INP001", "PERF203"]  # Gallery is an app, not a package
+"docs/**" = ["INP001", "T201", "RUF001"]  # Docs scripts
+"**/__init__.py" = ["F401"]  # Allow re-exports
 
+[tool.ruff.lint.isort]
+known-first-party = ["streamlit_extras"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.flake8-unused-arguments]
+ignore-variadic-names = true
+
+[tool.ruff.lint.flake8-comprehensions]
+allow-dict-calls-with-keyword-arguments = true
+
+[tool.ruff.format]
+docstring-code-format = true
+
+# =============================================================================
+# mypy configuration (type checking)
+# =============================================================================
 [tool.mypy]
-files = ["**/*.py"]
-follow_imports = "silent"
-ignore_missing_imports = true
-scripts_are_modules = true
+files = ["src", "gallery"]
 python_version = "3.10"
+ignore_missing_imports = true
+check_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = "docs.*"
+ignore_errors = true
+
+# =============================================================================
+# ty configuration (type checking)
+# =============================================================================
+[tool.ty.src]
+include = ["src", "gallery"]
+
+[tool.ty.rules]
+unused-ignore-comment = "ignore"  # Allow mypy-compatible ignore comments
+unresolved-import = "ignore"  # Optional dependencies may not be installed
+unresolved-attribute = "ignore"  # Some dynamic attributes from decorators
+invalid-argument-type = "warn"  # Downgrade to warning - ty is stricter than mypy
+invalid-assignment = "warn"  # Downgrade to warning - complex type inference issues
+no-matching-overload = "warn"  # Downgrade to warning - numpy overload issues

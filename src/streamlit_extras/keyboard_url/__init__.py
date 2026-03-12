@@ -73,9 +73,7 @@ def example():
 
 
 __title__ = "Keyboard to URL"
-__desc__ = (
-    "Create bindings so that hitting a key on your keyboard opens an URL in a new tab!"
-)
+__desc__ = "Create bindings so that hitting a key on your keyboard opens an URL in a new tab!"
 __icon__ = "🎯"
 __examples__ = [example]
 __author__ = "Arnaud Miribel"

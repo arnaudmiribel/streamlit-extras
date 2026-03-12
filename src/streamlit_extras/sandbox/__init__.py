@@ -2,18 +2,21 @@ from __future__ import annotations
 
 import inspect
 import textwrap
-from typing import Callable, List
+from typing import TYPE_CHECKING
 
 from streamlit.components.v1 import html
 
 from .. import extra
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 @extra
 def sandbox(
     code: str | Callable[[], None],
     stlite_version: str | None = None,
-    requirements: List[str] | None = None,
+    requirements: list[str] | None = None,
     height: int = 700,
     scrolling: bool = False,
 ) -> None:
@@ -49,12 +52,8 @@ def sandbox(
         Defaults to False.
     """
 
-    stlite_css_url = (
-        "https://cdn.jsdelivr.net/npm/@stlite/mountable@0.45.0/build/stlite.css"
-    )
-    stlite_js_url = (
-        "https://cdn.jsdelivr.net/npm/@stlite/mountable@0.45.0/build/stlite.js"
-    )
+    stlite_css_url = "https://cdn.jsdelivr.net/npm/@stlite/mountable@0.45.0/build/stlite.css"
+    stlite_js_url = "https://cdn.jsdelivr.net/npm/@stlite/mountable@0.45.0/build/stlite.js"
 
     if stlite_version is not None:
         stlite_css_url = f"https://cdn.jsdelivr.net/npm/@stlite/mountable@{stlite_version}/build/stlite.css"

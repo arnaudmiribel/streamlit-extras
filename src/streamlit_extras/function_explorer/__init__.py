@@ -1,5 +1,6 @@
 import inspect
-from typing import Any, Callable, Dict, get_args
+from collections.abc import Callable
+from typing import Any, get_args
 
 import pandas as pd
 import streamlit as st
@@ -9,10 +10,7 @@ from .. import extra
 
 def get_arg_details(func):
     signature = inspect.signature(func)
-    return [
-        {"argument": k, "type_hint": v.annotation, "default": v.default}
-        for k, v in signature.parameters.items()
-    ]
+    return [{"argument": k, "type_hint": v.annotation, "default": v.default} for k, v in signature.parameters.items()]
 
 
 def is_empty(argument_attribute):
@@ -34,13 +32,10 @@ def function_explorer(func: Callable):
     """
 
     args = get_arg_details(func)
-    inputs: Dict[str, Any] = {}
+    inputs: dict[str, Any] = {}
 
     st.write("##### Inputs")
-    st.write(
-        f"Go ahead and play with `{func.__name__}` parameters, see how"
-        " they change the output!"
-    )
+    st.write(f"Go ahead and play with `{func.__name__}` parameters, see how they change the output!")
 
     for argument_info in args:
         argument, type_hint, default = argument_info.values()
@@ -67,9 +62,7 @@ def function_explorer(func: Callable):
                 inputs[argument] = st.number_input(label, step=1, value=default)
             elif type_hint is float:
                 default = (
-                    get_arg_from_session_state(func.__name__, argument) or default
-                    if not is_empty(default)
-                    else 12.0
+                    get_arg_from_session_state(func.__name__, argument) or default if not is_empty(default) else 12.0
                 )
                 inputs[argument] = st.number_input(label, value=default)
             elif type_hint is str:
@@ -89,15 +82,11 @@ def function_explorer(func: Callable):
                     inputs[argument] = st.text_input(label, value=default)
             elif type_hint is bool:
                 default = (
-                    get_arg_from_session_state(func.__name__, argument) or default
-                    if not is_empty(default)
-                    else True
+                    get_arg_from_session_state(func.__name__, argument) or default if not is_empty(default) else True
                 )
                 inputs[argument] = st.checkbox(label, value=default)
             elif type_hint is pd.DataFrame:
-                inputs[argument] = get_arg_from_session_state(
-                    func.__name__, argument
-                ) or pd.DataFrame(["abcde"])
+                inputs[argument] = get_arg_from_session_state(func.__name__, argument) or pd.DataFrame(["abcde"])
             elif str(type_hint).startswith("typing.Literal"):
                 options = get_args(type_hint)
                 default = (

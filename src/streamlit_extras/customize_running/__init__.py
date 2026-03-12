@@ -40,7 +40,5 @@ __desc__ = "Customize the running widget"
 __icon__ = "🏃‍♂️"
 __examples__ = [example]
 __author__ = "koninhoo"
-__forum_url__ = (
-    "https://discuss.streamlit.io/t/change-the-running-widget-position/30466"
-)
+__forum_url__ = "https://discuss.streamlit.io/t/change-the-running-widget-position/30466"
 __playground__ = False

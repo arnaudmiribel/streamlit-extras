@@ -10,12 +10,14 @@ from collections import Counter
 from dataclasses import dataclass
 from functools import partial, wraps
 from threading import Condition, Lock, Semaphore
-from types import FunctionType
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import streamlit as st
 
 from .. import extra
+
+if TYPE_CHECKING:
+    from types import FunctionType
 
 
 @dataclass
@@ -36,9 +38,7 @@ def _make_function_key(func: FunctionType, max_concurrency: int) -> str:
     the function's source code changes.
     """
 
-    hashlib_kwargs: dict[str, Any] = (
-        {"usedforsecurity": False} if sys.version_info >= (3, 9) else {}
-    )
+    hashlib_kwargs: dict[str, Any] = {"usedforsecurity": False} if sys.version_info >= (3, 9) else {}
     func_hasher = hashlib.new("md5", **hashlib_kwargs)
 
     func_hasher.update(func.__module__.encode("utf-8"))

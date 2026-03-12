@@ -2,33 +2,34 @@ from __future__ import annotations
 
 import inspect
 import time
+from collections.abc import Generator, Sequence
 from contextlib import contextmanager
 from contextvars import ContextVar
-from typing import TYPE_CHECKING, Any, Generator, List, Sequence, Union
+from typing import TYPE_CHECKING, Any, Literal
 
 import streamlit as st
-from streamlit.elements.lib.image_utils import AtomicImage
 from streamlit.errors import StreamlitAPIException
-from typing_extensions import Literal, Required, TypedDict
+from typing_extensions import Required, TypedDict
 
 from .. import extra
 
 if TYPE_CHECKING:
     from streamlit.delta_generator import DeltaGenerator
+    from streamlit.elements.lib.image_utils import AtomicImage
 
-SpecType = Union[int, Sequence[Union[int, float]]]
+SpecType = int | Sequence[int | float]
 
 # Context variable to track the active chat container
 _active_chat_container: ContextVar[Any] = ContextVar("active_chat_container", default=None)
 
 
-def _streaming_write(*args: Any, unsafe_allow_html: bool = False, **kwargs) -> List[Any]:
+def _streaming_write(*args: Any, unsafe_allow_html: bool = False, **kwargs) -> list[Any]:
     """Internal streaming write implementation for stateful chat."""
     if not args:
         return []
 
-    written_content: List[Any] = []
-    string_buffer: List[str] = []
+    written_content: list[Any] = []
+    string_buffer: list[str] = []
 
     def flush_buffer():
         if string_buffer:
@@ -48,8 +49,7 @@ def _streaming_write(*args: Any, unsafe_allow_html: bool = False, **kwargs) -> L
                 streamed_response = ""
 
                 def flush_stream_response():
-                    nonlocal streamed_response
-                    nonlocal stream_container
+                    nonlocal streamed_response, stream_container
                     if streamed_response and stream_container:
                         stream_container.write(
                             streamed_response,
@@ -87,9 +87,7 @@ def _streaming_write(*args: Any, unsafe_allow_html: bool = False, **kwargs) -> L
                 written_content.append(arg)
                 if return_value is not None:
                     flush_buffer()
-                    st.write(
-                        return_value, unsafe_allow_html=unsafe_allow_html, **kwargs
-                    )
+                    st.write(return_value, unsafe_allow_html=unsafe_allow_html, **kwargs)
         else:
             flush_buffer()
             st.write(arg, unsafe_allow_html=unsafe_allow_html, **kwargs)
@@ -101,7 +99,7 @@ def _streaming_write(*args: Any, unsafe_allow_html: bool = False, **kwargs) -> L
 class ChatMessage(TypedDict):
     author: Required[str]
     avatar: Required[str | AtomicImage | None]
-    content: Required[List[Any]]
+    content: Required[list[Any]]
 
 
 def _active_dg():
@@ -112,14 +110,14 @@ def _display_message(
     name: str,
     *args: Any,
     avatar: str | AtomicImage | None = None,
-) -> List[Any]:
+) -> list[Any]:
     with st.chat_message(name, avatar=avatar):
         return _streaming_write(*args)
 
 
 @extra
 def add_message(
-    name: Literal["user", "assistant"] | str,
+    name: str,
     *args: Any,
     avatar: str | AtomicImage | None = None,
 ):
@@ -146,9 +144,7 @@ def add_message(
     active_dg = _active_dg()
 
     if not hasattr(active_dg, "chat_history"):
-        raise StreamlitAPIException(
-            "The `add_message` command can only be used inside a `chat` container."
-        )
+        raise StreamlitAPIException("The `add_message` command can only be used inside a `chat` container.")
 
     displayed_elements = _display_message(name, *args, avatar=avatar)
     active_dg.chat_history.append(
@@ -162,7 +158,7 @@ def add_message(
 
 @extra
 @contextmanager
-def chat(key: str = "chat_messages") -> Generator["DeltaGenerator", None, None]:
+def chat(key: str = "chat_messages") -> Generator[DeltaGenerator, None, None]:
     """
     Insert a stateful chat container into your app.
     This chat container automatically keeps track of the chat history when you use
@@ -182,15 +178,13 @@ def chat(key: str = "chat_messages") -> Generator["DeltaGenerator", None, None]:
 
     if key not in st.session_state:
         st.session_state[key] = []
-    chat_history: List[ChatMessage] = st.session_state[key]
+    chat_history: list[ChatMessage] = st.session_state[key]
 
     chat_container.chat_history = chat_history  # type: ignore
 
     with chat_container:
         for message in chat_history:
-            _display_message(
-                message["author"], *message["content"], avatar=message["avatar"]
-            )
+            _display_message(message["author"], *message["content"], avatar=message["avatar"])
 
     # Set the active chat container for add_message to use
     token = _active_chat_container.set(chat_container)

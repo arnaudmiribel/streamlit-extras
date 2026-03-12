@@ -2,15 +2,18 @@ from __future__ import annotations
 
 import logging
 import sys
-import unittest.mock as mock
 from contextlib import contextmanager
 from io import StringIO
-from typing import Callable, TextIO
+from typing import TYPE_CHECKING, TextIO
+from unittest import mock
 
 import streamlit as st
 from streamlit.runtime.scriptrunner_utils.script_run_context import get_script_run_ctx
 
 from streamlit_extras import extra
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 __all__ = ["logcapture", "redirect", "stderr", "stdout"]
 
@@ -115,9 +118,7 @@ def logcapture(
         from_logger = logging.getLogger()  # root logger
 
     # Special-case loguru
-    using_loguru = (
-        "loguru" in sys.modules and sys.modules["loguru"].logger is from_logger
-    )
+    using_loguru = "loguru" in sys.modules and sys.modules["loguru"].logger is from_logger
 
     with StringIO() as buffer:
         new_handler = StreamlitLoggingHandler(buffer)
@@ -162,9 +163,7 @@ def example_stderr():
     output = st.empty()
     with stderr(output.code, terminator=""):
         print("This is some captured stderr", file=sys.stderr)
-        print(
-            "For this example, though, there aren't any problems...yet", file=sys.stderr
-        )
+        print("For this example, though, there aren't any problems...yet", file=sys.stderr)
         if st.button("Throw an error!"):
             print("ERROR: Task failed successfully", file=sys.stderr)
             print("Psst....stdout isn't captured here")
@@ -254,9 +253,7 @@ def test_st_logging():
         assert "WARNING test logfoo" in fake_callback.call_args[0][0]
 
     # Test formatter
-    with logcapture(
-        fake_callback, formatter=logging.Formatter("%(message)s %(levelname)s")
-    ):
+    with logcapture(fake_callback, formatter=logging.Formatter("%(message)s %(levelname)s")):
         logging.root.warning("test log")
         assert "test log WARNING" in fake_callback.call_args[0][0]
 

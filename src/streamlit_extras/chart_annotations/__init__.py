@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from functools import partial
-from typing import Iterable, Tuple
+from typing import TYPE_CHECKING
 
 import altair as alt
 import pandas as pd
@@ -11,17 +11,18 @@ from streamlit import cache_data
 
 from .. import extra
 
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+
 try:
     alt.themes.enable("streamlit")
 except NoSuchEntryPoint:
-    st.altair_chart = partial(st.altair_chart, theme="streamlit")
+    st.altair_chart = partial(st.altair_chart, theme="streamlit")  # type: ignore[assignment]
 
 
 @cache_data
 def get_data() -> pd.DataFrame:
-    source = pd.read_csv(
-        "https://raw.githubusercontent.com/vega/vega-datasets/next/data/stocks.csv"
-    )
+    source = pd.read_csv("https://raw.githubusercontent.com/vega/vega-datasets/next/data/stocks.csv")
     return source[source.date.gt("2004-01-01")]
 
 
@@ -68,7 +69,7 @@ def get_chart(data: pd.DataFrame) -> alt.Chart:
 
 @extra
 def get_annotations_chart(
-    annotations: Iterable[Tuple],
+    annotations: Iterable[tuple],
     y: float = 0,
     min_date: str | None = None,
     max_date: str | None = None,

@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 
 @extra
-def stylable_container(key: str, css_styles: str | list[str]) -> "DeltaGenerator":
+def stylable_container(key: str, css_styles: str | list[str]) -> DeltaGenerator:
     """
     Insert a container into your app which you can style using CSS.
     This is useful to style specific elements in your app.

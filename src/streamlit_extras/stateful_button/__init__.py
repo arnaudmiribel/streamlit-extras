@@ -41,7 +41,7 @@ def button(*args, key: str | None = None, **kwargs) -> bool:
 
     kwargs["on_click"] = callback
 
-    st.button(*args, key=derived_key, **kwargs)
+    st.button(*args, key=derived_key, **kwargs)  # type: ignore[misc]
 
     return st.session_state[key]
 

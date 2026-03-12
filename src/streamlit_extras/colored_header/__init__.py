@@ -15,8 +15,7 @@ def color(name):
         hue, intensity = name.rsplit("-", 1)
     except (ValueError, KeyError):
         st.error(
-            "Input color_name must contain a name (red, orange, ...) and"
-            " intensity (10, 20, ... 100) e.g. 'red-70'"
+            "Input color_name must contain a name (red, orange, ...) and intensity (10, 20, ... 100) e.g. 'red-70'"
         )
         st.stop()
     return ST_COLOR_PALETTE[hue][intensity]

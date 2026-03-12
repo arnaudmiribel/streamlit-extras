@@ -1,4 +1,5 @@
-from typing import Any, Callable, Dict, Literal, Optional
+from collections.abc import Callable
+from typing import Any, Literal
 
 import streamlit as st
 
@@ -8,14 +9,14 @@ from .. import extra
 @extra
 def floating_button(
     label: str,
-    key: Optional[str] = None,
-    help: Optional[str] = None,
-    on_click: Optional[Callable] = None,
-    args: Optional[tuple] = None,
-    kwargs: Optional[Dict[str, Any]] = None,
+    key: str | None = None,
+    help: str | None = None,
+    on_click: Callable | None = None,
+    args: tuple | None = None,
+    kwargs: dict[str, Any] | None = None,
     *,
     type: Literal["primary", "secondary"] = "secondary",
-    icon: Optional[str] = None,
+    icon: str | None = None,
     disabled: bool = False,
 ):
     """
@@ -115,9 +116,7 @@ def example():
 
     # Initialize chat messages in session state
     if "messages" not in st.session_state:
-        st.session_state.messages = [
-            {"role": "assistant", "content": "Hello! How can I help you today?"}
-        ]
+        st.session_state.messages = [{"role": "assistant", "content": "Hello! How can I help you today?"}]
 
     # Chat dialog using decorator
     @st.dialog("Chat Support", width="large")
@@ -140,9 +139,7 @@ def example():
             st.session_state.messages.append({"role": "user", "content": user_input})
 
             # Add bot response to chat history
-            messages_container.chat_message("assistant").write(
-                "Thanks for your message! This is a demo response."
-            )
+            messages_container.chat_message("assistant").write("Thanks for your message! This is a demo response.")
             st.session_state.messages.append(
                 {
                     "role": "assistant",

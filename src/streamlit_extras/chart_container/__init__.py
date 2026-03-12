@@ -1,5 +1,6 @@
+from collections.abc import Callable, Generator, Sequence
 from contextlib import contextmanager
-from typing import Generator, Sequence
+from typing import TypedDict
 
 import numpy as np
 import pandas as pd
@@ -9,17 +10,23 @@ from streamlit import cache_data
 from .. import extra
 
 
+class ExportConfig(TypedDict, total=False):
+    function: Callable[[pd.DataFrame], bytes]
+    extension: str
+    mime: str
+
+
 @cache_data
-def _to_csv(data: pd.DataFrame):
+def _to_csv(data: pd.DataFrame) -> bytes:
     return data.to_csv().encode("utf-8")
 
 
 @cache_data
-def _to_parquet(data: pd.DataFrame):
+def _to_parquet(data: pd.DataFrame) -> bytes:
     return data.to_parquet()
 
 
-_SUPPORTED_EXPORTS = {
+_SUPPORTED_EXPORTS: dict[str, ExportConfig] = {
     "CSV": {
         "function": _to_csv,
         "extension": ".csv",
@@ -53,9 +60,7 @@ def chart_container(
         export_formats (Sequence, optional): Export file formats. Defaults to ("CSV", "Parquet")
     """
 
-    assert all(
-        export_format in _SUPPORTED_EXPORTS for export_format in export_formats
-    ), (
+    assert all(export_format in _SUPPORTED_EXPORTS for export_format in export_formats), (
         f"Input format is not supported, please use one within {_SUPPORTED_EXPORTS.keys()}"
     )
 

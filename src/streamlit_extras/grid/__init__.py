@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, List, Literal, Optional, Sequence, Union
+from collections.abc import Sequence
+from typing import TYPE_CHECKING, Literal
 
 import numpy as np
 import pandas as pd
@@ -12,28 +13,29 @@ from .. import extra
 if TYPE_CHECKING:
     from streamlit.delta_generator import DeltaGenerator
 
-SpecType = Union[int, Sequence[Union[int, float]]]
+SpecType = int | Sequence[int | float]
+GapSize = Literal["xxsmall", "xsmall", "small", "medium", "large", "xlarge", "xxlarge"] | None
 
 
 class GridDeltaGenerator:
     def __init__(
         self,
-        parent_dg: "DeltaGenerator",
-        spec: List[SpecType],
+        parent_dg: DeltaGenerator,
+        spec: list[SpecType],
         *,
-        gap: Optional[str] = "small",
+        gap: GapSize = "small",
         vertical_align: Literal["top", "center", "bottom"] = "top",
         repeat: bool = True,
     ):
         self._parent_dg = parent_dg
-        self._container_queue: List["DeltaGenerator"] = []
+        self._container_queue: list[DeltaGenerator] = []
         self._number_of_rows = 0
         self._spec = spec
         self._gap = gap
         self._repeat = repeat
         self._vertical_align = vertical_align
 
-    def _get_next_cell_container(self) -> "DeltaGenerator":
+    def _get_next_cell_container(self) -> DeltaGenerator:
         if not self._container_queue:
             if not self._repeat and self._number_of_rows > 0:
                 raise StreamlitAPIException("The row is already filled up.")
@@ -42,9 +44,7 @@ class GridDeltaGenerator:
             self._number_of_rows += 1
             spec = self._spec[self._number_of_rows % len(self._spec) - 1]
             self._container_queue.extend(
-                self._parent_dg.columns(
-                    spec, gap=self._gap, vertical_alignment=self._vertical_align
-                )
+                self._parent_dg.columns(spec, gap=self._gap, vertical_alignment=self._vertical_align)
             )
 
         return self._container_queue.pop(0)
@@ -63,7 +63,7 @@ class GridDeltaGenerator:
 @extra
 def grid(
     *spec: SpecType,
-    gap: Optional[str] = "small",
+    gap: GapSize = "small",
     vertical_align: Literal["top", "center", "bottom"] = "top",
 ):
     """

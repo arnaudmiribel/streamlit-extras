@@ -52,9 +52,7 @@ def echo_expander(code_location="above", expander=True, label="Show code"):
                 map_ast(b)
 
         map_ast(ap)
-        lines_to_display = source_lines[
-            ap_map[start_line].body[0].lineno - 1 : ap_map[start_line].end_lineno
-        ]
+        lines_to_display = source_lines[ap_map[start_line].body[0].lineno - 1 : ap_map[start_line].end_lineno]
         code_string = textwrap.dedent("".join(lines_to_display))
 
         # Run the echoed code...
@@ -67,7 +65,7 @@ def echo_expander(code_location="above", expander=True, label="Show code"):
             placeholder.code(code_string, "python")
 
     except FileNotFoundError as err:
-        placeholder.warning("Unable to display code. %s" % err)
+        placeholder.warning(f"Unable to display code. {err}")
 
 
 def example1():

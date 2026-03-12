@@ -37,7 +37,7 @@ def show_extras_icons(extras):
     for i in range(0, len(extra_items), 10):
         batch = extra_items[i : i + 10]
         cols = st.columns(len(batch))
-        for col, (extra_name, info) in zip(cols, batch):
+        for col, (extra_name, info) in zip(cols, batch, strict=False):
             col.link_button(
                 info["icon"],
                 f"https://arnaudmiribel.github.io/streamlit-extras/extras/{extra_name}/",
@@ -116,7 +116,7 @@ if selected_extra:
     examples = getattr(mod, "__examples__", [])
     if examples:
         st.markdown("**Example:**")
-        for i, example_func in enumerate(examples):
+        for example_func in examples:
             try:
                 with st.container(border=True):
                     example_func()

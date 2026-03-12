@@ -23,8 +23,7 @@ def badge(type: _SUPPORTED_TYPES, name: str | None = None, url: str | None = Non
     assert type, "Type must be given!"
 
     assert type in get_args(_SUPPORTED_TYPES), (
-        f"Input type '{type}' is not supported! Supported types are"
-        f" {get_args(_SUPPORTED_TYPES)}"
+        f"Input type '{type}' is not supported! Supported types are {get_args(_SUPPORTED_TYPES)}"
     )
 
     badge_html = None
@@ -35,12 +34,12 @@ def badge(type: _SUPPORTED_TYPES, name: str | None = None, url: str | None = Non
 
     if type == "streamlit":
         assert url, "You must provide a valid URL for the Streamlit app"
-        badge_html = f'<a href="{url}"><img src="https://static.streamlit.io/badges/streamlit_badge_black_white.svg"></a>'
+        badge_html = (
+            f'<a href="{url}"><img src="https://static.streamlit.io/badges/streamlit_badge_black_white.svg"></a>'
+        )
 
     if type == "github":
-        assert name, (
-            "You must give a valid GitHub repository name! Something like 'author/name'"
-        )
+        assert name, "You must give a valid GitHub repository name! Something like 'author/name'"
         badge_html = f'<a href="https://github.com/{name}"><img src="https://img.shields.io/github/stars/{name}.svg?style=social&label=Star&maxAge=2592000"></a>'
 
     if type == "twitter":
