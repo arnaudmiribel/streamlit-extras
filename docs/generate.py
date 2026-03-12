@@ -6,17 +6,12 @@ import pkgutil
 from importlib import import_module
 from pathlib import Path
 from types import ModuleType
-from typing import List
 
 import mkdocs_gen_files
 
 import streamlit_extras
 
-extra_modules_names = [
-    extra.name
-    for extra in pkgutil.iter_modules(streamlit_extras.__path__)
-    if extra.ispkg
-]
+extra_modules_names = [extra.name for extra in pkgutil.iter_modules(streamlit_extras.__path__) if extra.ispkg]
 
 STLITE_HTML_TO_IFRAME = """
 <html>
@@ -182,9 +177,7 @@ Visit the [PyPI page](https://pypi.org/project/{pypi_name}/) for more informatio
 """
 
 
-def find_decorated_functions(
-    module_name: str, decorator_name: str = "extra"
-) -> List[str]:
+def find_decorated_functions(module_name: str, decorator_name: str = "extra") -> list[str]:
     """
     Finds functions that are either decorated with @extra or in __funcs__
     We use this to identify the functions we want to show in the docs.
@@ -204,16 +197,17 @@ def find_decorated_functions(
     decorated_functions = []
 
     assert module.__file__, f"Module {module_name} has no __file__ attribute"
-    with open(module.__file__, "r") as module_file:
-        module_source = module_file.read()
+    module_source = Path(module.__file__).read_text(encoding="utf-8")
 
     parsed_module = ast.parse(module_source)
 
     for node in ast.walk(parsed_module):
         if isinstance(node, ast.FunctionDef):
-            for decorator in node.decorator_list:
-                if isinstance(decorator, ast.Name) and decorator.id == decorator_name:
-                    decorated_functions.append(node.name)
+            decorated_functions.extend(
+                node.name
+                for decorator in node.decorator_list
+                if isinstance(decorator, ast.Name) and decorator.id == decorator_name
+            )
 
     return decorated_functions
 
@@ -246,9 +240,7 @@ def get_extra_metadata(module: ModuleType, module_name: str) -> dict:
         "forum_url": getattr(module, "__forum_url__", None),
         "pretty_title": module.__icon__ + "  " + module.__title__,
         "module_name": module_name,
-        "decorated_functions": find_decorated_functions(
-            f"streamlit_extras.{module_name}"
-        ),
+        "decorated_functions": find_decorated_functions(f"streamlit_extras.{module_name}"),
         "playground": getattr(module, "__playground__", False),
         "deprecated": getattr(module, "__deprecated__", False),
     }
@@ -287,18 +279,12 @@ for extra_module_name in extra_modules_names:
 
     decorated_functions = extra_metadata.get("decorated_functions", [])
     extra_metadata["functions_docstrings"] = "--- \n".join(
-        EXTRA_FUNCTIONS_MD_TEMPLATE.format(
-            module_name=extra_module_name, func_name=decorated_function
-        )
+        EXTRA_FUNCTIONS_MD_TEMPLATE.format(module_name=extra_module_name, func_name=decorated_function)
         for decorated_function in decorated_functions
     )
 
     with mkdocs_gen_files.open(full_doc_path, "w") as f:
-        template = (
-            EXTRA_MD_TEMPLATE_IF_PYPI
-            if extra_metadata.get("pypi_name")
-            else EXTRA_MD_TEMPLATE
-        )
+        template = EXTRA_MD_TEMPLATE_IF_PYPI if extra_metadata.get("pypi_name") else EXTRA_MD_TEMPLATE
 
         print(template.format(**extra_metadata), file=f)
 
@@ -343,7 +329,9 @@ for extra_module_name in extra_modules_names:
                 # This is needed to have all iframes auto-resize
                 auto_size_iframe_html = "<script>\n"
                 for example_function_name in example_function_names:
-                    auto_size_iframe_html += f'iFrameResize({{ log: true, checkOrigin: false }}, "#iframe-{example_function_name}")\n'
+                    auto_size_iframe_html += (
+                        f'iFrameResize({{ log: true, checkOrigin: false }}, "#iframe-{example_function_name}")\n'
+                    )
                 auto_size_iframe_html += "</script>"
 
             print(auto_size_iframe_html, file=f)
