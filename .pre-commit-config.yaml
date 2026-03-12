@@ -27,19 +27,18 @@ repos:
         args: [--fix, --unsafe-fixes]
       - id: ruff-format
 
-  # Type checking with mypy
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.15.0
+  # Project-wide checks that should run on every commit
+  - repo: local
     hooks:
-      - id: mypy
-        args:
-          - --ignore-missing-imports
-          - --check-untyped-defs
-          - --python-version=3.10
-        files: ^(src|gallery)/
-        additional_dependencies:
-          - types-python-dateutil
-          - types-pytz
-          - types-PyYAML
-          - types-requests
-          - types-toml
+      - id: ty-check
+        name: ty (full app type check)
+        entry: uv run ty check
+        language: system
+        pass_filenames: false
+        always_run: true
+      - id: mypy-check
+        name: mypy (full app type check)
+        entry: uv run mypy
+        language: system
+        pass_filenames: false
+        always_run: true
