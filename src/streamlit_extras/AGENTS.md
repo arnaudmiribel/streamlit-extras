@@ -60,3 +60,7 @@ This document provides an overview of all available extras and their implementat
 | `tags` | Display GitHub-style tags | st.html |
 | `word_importances` | Highlight words based on importance scores | st.html |
 
+## Development Tips
+
+- Prefer `st.html` over `st.markdown(unsafe_allow_html=True)`. Only use `st.markdown` with `unsafe_allow_html` when you need both markdown rendering and HTML in the same content.
+- When working on **components v2** extras, use the `/building-streamlit-custom-components-v2` skill for guidance on the v2 component API, state management, and theming.
