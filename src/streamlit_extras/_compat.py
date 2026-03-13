@@ -10,7 +10,4 @@ def require_ccv2() -> None:
         ImportError: If Streamlit version does not support CCv2.
     """
     if not hasattr(st.components, "v2"):
-        raise ImportError(
-            "Custom Components v2 requires Streamlit >= 1.46.0. "
-            f"Current version: {st.__version__}"
-        )
+        raise ImportError(f"Custom Components v2 requires Streamlit >= 1.46.0. Current version: {st.__version__}")
