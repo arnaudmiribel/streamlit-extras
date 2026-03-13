@@ -174,10 +174,10 @@ def colored_header(
             Supported colors are "light-blue-70", "orange-70", "blue-green-70", "blue-70",
             "violet-70", "red-70", "green-70", "yellow-80".
 
-    .. deprecated::
-        This function is deprecated. Use the ``divider`` parameter in ``st.header``,
-        ``st.title``, or ``st.subheader`` instead
-        (https://docs.streamlit.io/develop/api-reference/text/st.header).
+    !!! warning "Deprecated"
+        This function is deprecated. Use the
+        [`divider`](https://docs.streamlit.io/develop/api-reference/text/st.header)
+        parameter in `st.header`, `st.title`, or `st.subheader` instead.
     """
     show_deprecation_warning(
         "colored_header is deprecated. Use the `divider` parameter in `st.header`, "

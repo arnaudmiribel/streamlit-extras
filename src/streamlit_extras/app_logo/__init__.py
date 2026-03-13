@@ -18,9 +18,10 @@ def add_logo(logo_url: str, height: int = 120) -> None:
     Args:
         logo_url (str): URL/local path of the logo
 
-    .. deprecated::
-        This function is deprecated. Use ``st.logo()`` instead
-        (https://docs.streamlit.io/develop/api-reference/media/st.logo).
+    !!! warning "Deprecated"
+        This function is deprecated. Use
+        [`st.logo()`](https://docs.streamlit.io/develop/api-reference/media/st.logo)
+        instead.
     """
     show_deprecation_warning(
         "add_logo is deprecated. Use `st.logo()` instead. "

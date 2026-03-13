@@ -51,9 +51,10 @@ def row(
         grid.GridDeltaGenerator: A row container object. Elements can be added to this
             row by calling methods directly on the returned object.
 
-    .. deprecated::
-        This function is deprecated. Use ``st.container(horizontal=True)`` instead
-        (https://docs.streamlit.io/develop/api-reference/layout/st.container).
+    !!! warning "Deprecated"
+        This function is deprecated. Use
+        [`st.container(horizontal=True)`](https://docs.streamlit.io/develop/api-reference/layout/st.container)
+        instead.
     """
     show_deprecation_warning(
         "row is deprecated. Use `st.container(horizontal=True)` instead. "

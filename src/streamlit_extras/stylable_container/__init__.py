@@ -29,10 +29,10 @@ def stylable_container(key: str, css_styles: str | list[str]) -> DeltaGenerator:
             either the 'with' notation or by calling methods directly on the returned
             object.
 
-    .. deprecated::
-        This function is deprecated. Use ``key`` parameter with ``st.container`` to
-        target containers with CSS instead
-        (https://docs.streamlit.io/develop/api-reference/layout/st.container).
+    !!! warning "Deprecated"
+        This function is deprecated. Use the `key` parameter with
+        [`st.container`](https://docs.streamlit.io/develop/api-reference/layout/st.container)
+        to target containers with CSS instead.
     """
     show_deprecation_warning(
         "stylable_container is deprecated. Use the `key` parameter with `st.container` "

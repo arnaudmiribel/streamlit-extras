@@ -12,9 +12,10 @@ def add_vertical_space(num_lines: int = 1) -> None:
         num_lines (int, optional): Height of the vertical space (given in number of lines).
             Defaults to 1.
 
-    .. deprecated::
-        This function is deprecated. Use ``st.space(height)`` instead
-        (https://docs.streamlit.io/develop/api-reference/layout/st.space).
+    !!! warning "Deprecated"
+        This function is deprecated. Use
+        [`st.space(height)`](https://docs.streamlit.io/develop/api-reference/layout/st.space)
+        instead.
     """
     show_deprecation_warning(
         "add_vertical_space is deprecated. Use `st.space(height)` instead. "

@@ -81,9 +81,10 @@ def tagger_component(
     Raises:
         ValueError: If the length of color_name or text_color_name lists don't match tags.
 
-    .. deprecated::
-        This function is deprecated. Use ``st.badge`` or badges in markdown syntax
-        instead (https://docs.streamlit.io/develop/api-reference/text/st.badge).
+    !!! warning "Deprecated"
+        This function is deprecated. Use
+        [`st.badge`](https://docs.streamlit.io/develop/api-reference/text/st.badge)
+        or badges in markdown syntax instead.
     """
     show_deprecation_warning(
         "tagger_component is deprecated. Use `st.badge` or badges in markdown syntax "
