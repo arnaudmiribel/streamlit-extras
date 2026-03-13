@@ -60,14 +60,3 @@ This document provides an overview of all available extras and their implementat
 | `tags` | Display GitHub-style tags | st.html |
 | `word_importances` | Highlight words based on importance scores | st.html |
 
-## Component Type Summary
-
-| Component Type | Count |
-|----------------|-------|
-| pure python | 18 |
-| st.html | 14 |
-| st.markdown(unsafe_allow_html) | 2 |
-| components v1: html | 2 |
-| components v1: iframe | 1 |
-| components v2: inline | 2 |
-| components v2: static assets | 1 |
