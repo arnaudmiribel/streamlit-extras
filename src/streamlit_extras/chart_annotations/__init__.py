@@ -144,7 +144,7 @@ def example() -> None:
         ],
     )
 
-    st.altair_chart(chart, width="stretch")  # type: ignore
+    st.altair_chart(chart, width="stretch")
 
 
 __title__ = "Chart annotations"

@@ -126,8 +126,16 @@ docstring-code-format = true
 [tool.mypy]
 files = ["src", "gallery"]
 python_version = "3.10"
-ignore_missing_imports = true
-check_untyped_defs = true
+cache_dir = ".mypy_cache"
+incremental = true
+warn_return_any = false                 # Don't warn when returning Any from typed function
+warn_unused_ignores = true              # Warn about unused # type: ignore comments
+check_untyped_defs = true               # Type check inside untyped functions
+ignore_missing_imports = true           # Silence errors for imports without stubs
+disallow_any_generics = false           # Allow generic types without type parameters
+disallow_untyped_defs = true            # Require type annotations on all functions
+disallow_incomplete_defs = true         # Require full signatures (no partial annotations)
+disable_error_code = ["import-untyped"] # Disable error code for imports without stubs
 
 [[tool.mypy.overrides]]
 module = "tests.*"

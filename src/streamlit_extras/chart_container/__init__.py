@@ -41,7 +41,7 @@ _SUPPORTED_EXPORTS: dict[str, ExportConfig] = {
 _SUPPORTED_EXPORT_KEYS = list(_SUPPORTED_EXPORTS.keys())
 
 
-@extra  # type: ignore
+@extra
 @contextmanager
 def chart_container(
     data: pd.DataFrame,

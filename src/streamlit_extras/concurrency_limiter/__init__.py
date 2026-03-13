@@ -107,7 +107,7 @@ def concurrency_limiter(
                     func_info.semaphore.release()
                 func_info.condition.notify_all()
 
-    return wrapper  # type: ignore[return-value]
+    return wrapper
 
 
 def example() -> None:

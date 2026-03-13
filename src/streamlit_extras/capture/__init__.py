@@ -76,7 +76,7 @@ def stderr(dst: Callable[..., Any], terminator: str = "\n") -> Generator[None, N
         yield
 
 
-class StreamlitLoggingHandler(logging.StreamHandler):  # type: ignore[type-arg]
+class StreamlitLoggingHandler(logging.StreamHandler):
     """Extension of Stream Handler that passes the value of the stream IO buffer to a callback function on every log."""
 
     def set_callback(self, func: Callable[..., Any]) -> None:
