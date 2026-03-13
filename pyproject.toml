@@ -10,7 +10,7 @@ authors = [
 readme = "README.md"
 #packages = [{ include = "streamlit_extras", from = "src" }]
 #exclude = ["gallery/"]
-requires-python = ">=3.10,<3.14"
+requires-python = ">=3.10"
 keywords = ["python", "streamlit", "ui", "data"]
 dependencies = [
   "plotly >= 5.23.0",
