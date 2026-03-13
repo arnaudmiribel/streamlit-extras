@@ -9,8 +9,6 @@ from typing import Any
 
 import streamlit as st
 
-from streamlit_extras._compat import require_ccv2
-
 
 def _load_asset(assets_dir: Path, filename: str) -> str:
     """Load a text file from the assets directory.
@@ -67,8 +65,6 @@ def register_file_component(
         )
         ```
     """
-    require_ccv2()
-
     assets_dir = package_dir / "assets"
     html = _load_asset(assets_dir, html_file)
     css = _load_asset(assets_dir, css_file) if css_file else None

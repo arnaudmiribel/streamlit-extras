@@ -1,6 +1,6 @@
 """Evaluate JavaScript expressions in the browser and return results to Python.
 
-A Streamlit Custom Component v2 (CCv2) example that evaluates a JavaScript expression
+A Streamlit Custom Component v2 (CCv2) that evaluates a JavaScript expression
 in the browser and returns the result to Python. The component itself is hidden.
 """
 
@@ -9,9 +9,6 @@ from typing import Any
 import streamlit as st
 
 from streamlit_extras import extra
-from streamlit_extras._compat import require_ccv2
-
-require_ccv2()
 
 _JAVASCRIPT_EVAL_COMPONENT = st.components.v2.component(
     name="streamlit_extras.eval_javascript",
