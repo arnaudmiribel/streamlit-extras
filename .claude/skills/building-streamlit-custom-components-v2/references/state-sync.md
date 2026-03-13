@@ -146,4 +146,3 @@ Safe patterns:
 - **Python updates don’t reflect in UI**: confirm you pass the updated values via `data` every run; avoid initial-only hydration guards if you want true sync.
 - **`default` raises**: ensure every default key has a corresponding `on_<key>_change` callback parameter.
 - **Session state mutation error**: move `st.session_state[key][...] = ...` earlier in the script (before mount), or restructure into a two-run flow (set state then rerun).
-
