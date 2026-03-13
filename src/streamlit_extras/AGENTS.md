@@ -13,6 +13,7 @@ This document provides an overview of all available extras and their implementat
 - **components v1: iframe**: Uses `streamlit.components.v1.iframe()` to show a URL in an iframe
 - **components v2: inline**: Uses `st.components.v2.component()` with inline code
 - **components v2: static assets**: Uses `st.components.v2.component()` with dedicated asset files (e.g. `.js`, `.html`, `.css`)
+- **components v2: react**: Uses `st.components.v2.component()` with a full React frontend
 
 ## Extras Table
 
