@@ -1,9 +1,19 @@
 import pkgutil
 from importlib import import_module
+from typing import TypedDict
 
 import streamlit as st
 
 import streamlit_extras
+
+
+class ExtraInfo(TypedDict):
+    icon: str
+    title: str
+    desc: str
+    author: str
+    deprecated: bool
+
 
 st.set_page_config(layout="centered", page_icon=":knot:", page_title="streamlit-extras")
 
@@ -11,9 +21,9 @@ st.set_page_config(layout="centered", page_icon=":knot:", page_title="streamlit-
 
 
 @st.cache_resource
-def get_extras_info():
+def get_extras_info() -> dict[str, ExtraInfo]:
     """Load all extras and their metadata."""
-    extras = {}
+    extras: dict[str, ExtraInfo] = {}
     for extra in pkgutil.iter_modules(streamlit_extras.__path__):
         if extra.ispkg:
             try:
@@ -30,7 +40,7 @@ def get_extras_info():
     return extras
 
 
-def show_extras_icons(extras):
+def show_extras_icons(extras: dict[str, ExtraInfo]) -> None:
     """Display icon buttons for all extras."""
     extra_items = list(extras.items())
     # Display in rows of 10

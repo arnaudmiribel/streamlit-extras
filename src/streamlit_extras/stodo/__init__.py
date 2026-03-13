@@ -1,10 +1,13 @@
+from collections.abc import Callable, Sequence
+from typing import Any
+
 import streamlit as st
 
 from .. import extra
 
 
 @extra
-def to_do(st_commands, checkbox_id):
+def to_do(st_commands: Sequence[Sequence[Any]], checkbox_id: str) -> bool:
     """Create a to_do item
 
     Args:
@@ -55,7 +58,7 @@ def to_do(st_commands, checkbox_id):
     return done
 
 
-def example():
+def example() -> None:
     to_do(
         [(st.write, "☕ Take my coffee")],
         "coffee",

@@ -34,7 +34,7 @@ def great_tables(table: GT, width: int | Literal["stretch", "content"] = "stretc
     st.html(table.as_raw_html())
 
 
-def example():
+def example() -> None:
     try:
         from great_tables import GT
         from great_tables.data import sp500

@@ -27,7 +27,7 @@ def button(
     font_color: str = "#000000",
     coffee_color: str = "#000000",
     width: int = 220,
-):
+) -> None:
     (
         """
     Display a button which links to your Buy Me a Coffee page.
@@ -76,7 +76,7 @@ def button(
         )
 
 
-def example():
+def example() -> None:
     button(username="fake-username", floating=False, width=221)
 
 

@@ -33,7 +33,7 @@ def skeleton(height: int | None = None) -> DeltaGenerator:
     raise Exception("The skeleton container is not supported in this Streamlit version.")
 
 
-def example():
+def example() -> None:
     st.write("This is the main container")
 
     # Example 1: Basic usage

@@ -100,7 +100,13 @@ def dataframe_explorer(df: pd.DataFrame, case: bool = True) -> pd.DataFrame:
     return df
 
 
-def generate_fake_dataframe(size, cols, col_names=None, intervals=None, seed=None):
+def generate_fake_dataframe(
+    size: int,
+    cols: str,
+    col_names: list[str] | tuple[str, ...] | None = None,
+    intervals: list[Any] | dict[str, Any] | None = None,
+    seed: int | None = None,
+) -> pd.DataFrame:
     from itertools import cycle
 
     import numpy as np
@@ -245,7 +251,7 @@ def generate_fake_dataframe(size, cols, col_names=None, intervals=None, seed=Non
     return df
 
 
-def example_one():
+def example_one() -> None:
     dataframe = generate_fake_dataframe(size=500, cols="dfc", col_names=("date", "income", "person"), seed=1)
     filtered_df = dataframe_explorer(dataframe, case=False)
     st.dataframe(filtered_df, width="stretch")

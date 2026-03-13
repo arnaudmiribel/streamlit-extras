@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+from typing import Any
+
 import streamlit as st
 
 from .. import extra
 
 
-def toggle_state(key: str):
+def toggle_state(key: str) -> None:
     if key not in st.session_state:
         st.session_state[key] = False
 
@@ -13,7 +15,7 @@ def toggle_state(key: str):
 
 
 @extra
-def button(*args, key: str | None = None, **kwargs) -> bool:
+def button(*args: Any, key: str | None = None, **kwargs: Any) -> bool:
     """
     Works just like a normal streamlit button, but it remembers its state, so that
     it works as a toggle button. If you click it, it will be pressed, and if you click
@@ -34,7 +36,7 @@ def button(*args, key: str | None = None, **kwargs) -> bool:
 
     original_on_click = kwargs.get("on_click")
 
-    def callback():
+    def callback() -> None:
         if original_on_click is not None:
             original_on_click()
         toggle_state(key)
@@ -46,7 +48,7 @@ def button(*args, key: str | None = None, **kwargs) -> bool:
     return st.session_state[key]
 
 
-def example():
+def example() -> None:
     if button("Button 1", key="button1") and button("Button 2", key="button2"):
         if button("Button 3", key="button3"):
             st.write("All 3 buttons are pressed")

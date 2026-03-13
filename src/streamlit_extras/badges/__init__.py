@@ -10,7 +10,7 @@ _SUPPORTED_TYPES = Literal["pypi", "streamlit", "github", "twitter", "buymeacoff
 
 
 @extra
-def badge(type: _SUPPORTED_TYPES, name: str | None = None, url: str | None = None):
+def badge(type: _SUPPORTED_TYPES, name: str | None = None, url: str | None = None) -> None:
     """Easily create a visual badge for PyPI, GitHub, Streamlit Cloud or other social platforms.
 
     Args:
@@ -54,24 +54,24 @@ def badge(type: _SUPPORTED_TYPES, name: str | None = None, url: str | None = Non
         st.html(badge_html)
 
 
-def example_pypi():
+def example_pypi() -> None:
     badge(type="pypi", name="plost")
     badge(type="pypi", name="streamlit")
 
 
-def example_streamlit():
+def example_streamlit() -> None:
     badge(type="streamlit", url="https://plost.streamlitapp.com")
 
 
-def example_github():
+def example_github() -> None:
     badge(type="github", name="streamlit/streamlit")
 
 
-def example_twitter():
+def example_twitter() -> None:
     badge(type="twitter", name="streamlit")
 
 
-def example_buymeacoffee():
+def example_buymeacoffee() -> None:
     badge(type="buymeacoffee", name="andfanilo")
 
 

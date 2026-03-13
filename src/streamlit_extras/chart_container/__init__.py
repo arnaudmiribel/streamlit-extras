@@ -95,19 +95,19 @@ def chart_container(
             )
 
 
-def get_random_data():
+def get_random_data() -> pd.DataFrame:
     np.random.seed(42)
     return pd.DataFrame(np.random.randn(20, 3), columns=list("abc"))
 
 
-def example_one():
+def example_one() -> None:
     chart_data = get_random_data()
     with chart_container(chart_data):
         st.write("Here's a cool chart")
         st.area_chart(chart_data)
 
 
-def example_two():
+def example_two() -> None:
     chart_data = get_random_data()
     with chart_container(chart_data):
         st.write(

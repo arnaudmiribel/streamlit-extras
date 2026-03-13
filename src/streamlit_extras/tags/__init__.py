@@ -68,7 +68,7 @@ def tagger_component(
     tags: list[str],
     color_name: list[str] | str | None = None,
     text_color_name: list[str] | str | None = None,
-):
+) -> None:
     """
     Displays tags next to your text.
 
@@ -102,7 +102,7 @@ def tagger_component(
     st.html(tags_html)
 
 
-def example():
+def example() -> None:
     tagger_component("Here is a feature request", ["p2", "🚩triaged", "backlog"])
     tagger_component(
         "Here are colored tags",
@@ -116,7 +116,7 @@ def example():
     )
 
 
-def test_invalid_color_length():
+def test_invalid_color_length() -> None:
     import pytest
 
     with pytest.raises(ValueError):
@@ -127,7 +127,7 @@ def test_invalid_color_length():
         )
 
 
-def test_color_html_list_in_palette():
+def test_color_html_list_in_palette() -> None:
     output = _get_html("foo", ["bar"], color_name=["blue"])
     assert (
         output
@@ -146,7 +146,7 @@ def test_color_html_list_in_palette():
     )
 
 
-def test_color_html_list_not_in_palette():
+def test_color_html_list_not_in_palette() -> None:
     output = _get_html("foo", ["bar"], color_name=["pink"])
     assert (
         output
@@ -165,7 +165,7 @@ def test_color_html_list_not_in_palette():
     )
 
 
-def test_color_html_str():
+def test_color_html_str() -> None:
     output = _get_html("foo", ["bar"], color_name="blue")
 
     assert (
@@ -185,7 +185,7 @@ def test_color_html_str():
     )
 
 
-def test_color_html_str_multiple_tags():
+def test_color_html_str_multiple_tags() -> None:
     output = _get_html("foo", ["bar", "foo"], color_name="blue")
     print(output)
     assert (
@@ -212,7 +212,7 @@ def test_color_html_str_multiple_tags():
     )
 
 
-def test_no_color_html():
+def test_no_color_html() -> None:
     output = _get_html("foo", ["bar"])
 
     assert (

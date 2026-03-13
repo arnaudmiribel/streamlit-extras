@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING, Any, Literal
 
 import numpy as np
 import pandas as pd
@@ -26,7 +26,7 @@ class GridDeltaGenerator:
         gap: GapSize = "small",
         vertical_align: Literal["top", "center", "bottom"] = "top",
         repeat: bool = True,
-    ):
+    ) -> None:
         self._parent_dg = parent_dg
         self._container_queue: list[DeltaGenerator] = []
         self._number_of_rows = 0
@@ -49,7 +49,7 @@ class GridDeltaGenerator:
 
         return self._container_queue.pop(0)
 
-    def __getattr__(self, name):
+    def __getattr__(self, name: str) -> Any:
         return getattr(self._get_next_cell_container(), name)
 
     # TODO: context manager support doesn't work yet
@@ -65,7 +65,7 @@ def grid(
     *spec: SpecType,
     gap: GapSize = "small",
     vertical_align: Literal["top", "center", "bottom"] = "top",
-):
+) -> GridDeltaGenerator:
     """
     Insert a multi-element, grid container into your app.
 
@@ -103,7 +103,7 @@ def grid(
     )
 
 
-def example():
+def example() -> None:
     random_df = pd.DataFrame(np.random.randn(20, 3), columns=["a", "b", "c"])
 
     my_grid = grid(2, [2, 4, 1], 1, 4, vertical_align="bottom")

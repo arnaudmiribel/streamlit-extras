@@ -5,7 +5,7 @@ from .. import extra
 
 
 @extra
-def star_rating(rating: float, color: str = "#FFD700"):
+def star_rating(rating: float, color: str = "#FFD700") -> None:
     """
     Renders a read-only star rating component for Streamlit.
 
@@ -22,7 +22,7 @@ def star_rating(rating: float, color: str = "#FFD700"):
     half_star = 1 if rating - full_stars >= 0.5 else 0
     empty_stars = 5 - full_stars - half_star
 
-    def render_star(star_type="full"):
+    def render_star(star_type: str = "full") -> str:
         star_color = color if star_type != "empty" else "lightgrey"
         base_style = (
             f"color:{star_color};font-size:24px;border-radius:5px;margin-right:2px;cursor:default;user-select:none;"
@@ -45,7 +45,7 @@ def star_rating(rating: float, color: str = "#FFD700"):
     html(html_content, height=47, width=150)
 
 
-def example():
+def example() -> None:
     st.text("10/10 would watching")
     star_rating(5)
 

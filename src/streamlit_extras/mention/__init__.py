@@ -18,7 +18,7 @@ a:hover {
 
 
 @extra
-def mention(label: str, url: str, icon: str = "🔗", write: bool = True):
+def mention(label: str, url: str, icon: str = "🔗", write: bool = True) -> str | None:
     """Mention a link with a label and icon.
 
     Args:
@@ -52,7 +52,7 @@ def mention(label: str, url: str, icon: str = "🔗", write: bool = True):
     return html
 
 
-def example_1():
+def example_1() -> None:
     mention(
         label="An awesome Streamlit App",
         icon="streamlit",  # Some icons are available... like Streamlit!
@@ -60,7 +60,7 @@ def example_1():
     )
 
 
-def example_2():
+def example_2() -> None:
     mention(
         label="streamlit-extras",
         icon="🪢",  # You can also just use an emoji
@@ -68,7 +68,7 @@ def example_2():
     )
 
 
-def example_3():
+def example_3() -> None:
     mention(
         label="example-app-cv-model",
         icon="github",  # GitHub is also featured!
@@ -76,7 +76,7 @@ def example_3():
     )
 
 
-def example_4():
+def example_4() -> None:
     mention(
         label="That page somewhere in Notion",
         icon="notion",  # Notion is also featured!
@@ -84,7 +84,7 @@ def example_4():
     )
 
 
-def example_5():
+def example_5() -> None:
     inline_mention = mention(
         label="streamlit",
         icon="twitter",  # Twitter is also featured!

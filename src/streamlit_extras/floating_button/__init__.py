@@ -11,14 +11,14 @@ def floating_button(
     label: str,
     key: str | None = None,
     help: str | None = None,
-    on_click: Callable | None = None,
-    args: tuple | None = None,
+    on_click: Callable[..., None] | None = None,
+    args: tuple[Any, ...] | None = None,
     kwargs: dict[str, Any] | None = None,
     *,
     type: Literal["primary", "secondary"] = "secondary",
     icon: str | None = None,
     disabled: bool = False,
-):
+) -> bool:
     """
     Display a floating action button that stays fixed at the bottom right corner of the
     screen.
@@ -109,7 +109,7 @@ def floating_button(
     )
 
 
-def example():
+def example() -> None:
     """Example usage of the floating_button function."""
     st.title("Floating action button demo")
     st.write("See in the bottom right corner :wink:")
@@ -120,7 +120,7 @@ def example():
 
     # Chat dialog using decorator
     @st.dialog("Chat Support", width="large")
-    def chat_dialog():
+    def chat_dialog() -> None:
         # Create a container for chat messages with fixed height
         messages_container = st.container(height=400, border=False)
 

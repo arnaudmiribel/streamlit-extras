@@ -4,7 +4,7 @@ from .. import extra
 
 
 @extra
-def stoggle(summary: str, content: str):
+def stoggle(summary: str, content: str) -> None:
     """
     Displays a toggle widget in Streamlit
 
@@ -17,7 +17,7 @@ def stoggle(summary: str, content: str):
     st.html(html)
 
 
-def example():
+def example() -> None:
     stoggle(
         "Click me!",
         """🥷 Surprise! Here's some additional content""",

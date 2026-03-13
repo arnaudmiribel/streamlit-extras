@@ -73,7 +73,7 @@ margin-bottom: -1rem;
     return container
 
 
-def example():
+def example() -> None:
     with stylable_container(
         key="green_button",
         css_styles="""

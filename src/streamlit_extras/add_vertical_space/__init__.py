@@ -24,7 +24,7 @@ def add_vertical_space(num_lines: int = 1) -> None:
         st.write("")  # This is just a way to do a line break!
 
 
-def example():
+def example() -> None:
     add_n_lines = st.slider("Add n vertical lines below this", 1, 20, 5)
     add_vertical_space(add_n_lines)
     st.write("Here is text after the nth line!")

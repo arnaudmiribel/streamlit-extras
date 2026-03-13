@@ -3,7 +3,7 @@ import streamlit as st
 from .. import extra
 
 
-def load_key_css():
+def load_key_css() -> None:
     st.html(
         """<style>
         .keyx {
@@ -43,12 +43,12 @@ def key(text: str, write: bool = True) -> str:
     return key_html
 
 
-def example_default():
+def example_default() -> None:
     load_key_css()
     key("⌘+K")
 
 
-def example_inline():
+def example_inline() -> None:
     load_key_css()
     st.write(
         f"Also works inline! Example: {key('⌘+K', write=False)}",

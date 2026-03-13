@@ -12,7 +12,7 @@ def keyboard_to_url(
     key: str | None = None,
     key_code: int | None = None,
     url: str | None = None,
-):
+) -> None:
     """
 
     Map a keyboard key to open a new tab with a given URL.
@@ -61,7 +61,7 @@ doc.addEventListener('keydown', function(e) {{
     )
 
 
-def example():
+def example() -> None:
     # Main function
     keyboard_to_url(key="S", url="https://www.github.com/streamlit/streamlit")
 

@@ -67,7 +67,7 @@ def row(
     return grid.GridDeltaGenerator(parent_dg=container, spec=[spec], gap=gap, vertical_align=vertical_align)
 
 
-def example():
+def example() -> None:
     random_df = pd.DataFrame(np.random.randn(20, 3), columns=["a", "b", "c"])
 
     row1 = row(2, vertical_align="center")

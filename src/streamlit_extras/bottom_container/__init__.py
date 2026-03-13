@@ -23,7 +23,7 @@ def bottom() -> DeltaGenerator:
     raise Exception("The bottom container is not supported in this Streamlit version.")
 
 
-def example():
+def example() -> None:
     st.write("This is the main container")
 
     with bottom():

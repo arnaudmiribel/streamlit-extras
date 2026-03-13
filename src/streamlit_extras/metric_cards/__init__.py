@@ -9,7 +9,7 @@ DEFAULT_BACKGROUND_COLOR_DARK = "#1B1C24"
 DEFAULT_BORDER_COLOR_DARK = "#292D34"
 
 
-def _get_theme_colors():
+def _get_theme_colors() -> tuple[str, str]:
     """Get default colors based on the current theme."""
     try:
         theme = st.context.theme
@@ -68,7 +68,7 @@ def style_metric_cards(
     )
 
 
-def example():
+def example() -> None:
     col1, col2, col3 = st.columns(3)
 
     col1.metric(label="Gain", value=5000, delta=1000)
@@ -78,7 +78,7 @@ def example():
     style_metric_cards()
 
 
-def _add_metric_card_cards():
+def _add_metric_card_cards() -> None:
     """For playground"""
     col1, col2, col3 = st.columns(3)
 

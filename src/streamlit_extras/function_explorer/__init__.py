@@ -8,23 +8,23 @@ import streamlit as st
 from .. import extra
 
 
-def get_arg_details(func):
+def get_arg_details(func: Callable[..., Any]) -> list[dict[str, Any]]:
     signature = inspect.signature(func)
     return [{"argument": k, "type_hint": v.annotation, "default": v.default} for k, v in signature.parameters.items()]
 
 
-def is_empty(argument_attribute):
+def is_empty(argument_attribute: Any) -> bool:
     return argument_attribute is inspect.Parameter.empty
 
 
-def get_arg_from_session_state(func_name: str, argument: str):
+def get_arg_from_session_state(func_name: str, argument: str) -> Any:
     if func_name in st.session_state and "inputs" in st.session_state[func_name]:
         return st.session_state[func_name]["inputs"][argument]
     return None
 
 
 @extra
-def function_explorer(func: Callable):
+def function_explorer(func: Callable[..., Any]) -> None:
     """Gives a Streamlit UI to any function.
 
     Args:
@@ -106,8 +106,8 @@ def function_explorer(func: Callable):
     st.session_state[func.__name__]["inputs"] = inputs
 
 
-def example():
-    def foo(age: int, name: str, image_url: str = "http://placekitten.com/120/120"):
+def example() -> None:
+    def foo(age: int, name: str, image_url: str = "http://placekitten.com/120/120") -> None:
         st.write(f"Hey! My name is {name} and I'm {age} years old")
         st.write("Here's a picture")
         st.image(image_url)

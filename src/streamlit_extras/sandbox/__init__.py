@@ -120,15 +120,15 @@ st.markdown('<style>[data-baseweb~="modal"]{{visibility: hidden;}}</style>', uns
     )
 
 
-def example():
-    def embedded_app():
+def example() -> None:
+    def embedded_app() -> None:
         import numpy as np
         import pandas as pd
         import plotly.express as px
         import streamlit as st
 
         @st.cache_data
-        def get_data():
+        def get_data() -> pd.DataFrame:
             dates = pd.date_range(start="01-01-2020", end="01-01-2023")
             data = np.random.randn(len(dates), 1).cumsum(axis=0)
             return pd.DataFrame(data, index=dates, columns=["Value"])

@@ -9,7 +9,7 @@ from streamlit.deprecation_util import show_deprecation_warning
 from .. import extra
 
 
-def color(name):
+def color(name: str) -> str:
     """Returns a color from the streamlit color palette, e.g. red-100, as hex."""
     try:
         hue, intensity = name.rsplit("-", 1)
@@ -163,7 +163,7 @@ def colored_header(
     label: str = "Nice title",
     description: str = "Cool description",
     color_name: _SUPPORTED_COLORS = "red-70",
-):
+) -> None:
     """
     Shows a header with a colored underline and an optional description.
 
@@ -195,7 +195,7 @@ def colored_header(
         st.caption(description)
 
 
-def example():
+def example() -> None:
     colored_header(
         label="My New Pretty Colored Header",
         description="This is a description",

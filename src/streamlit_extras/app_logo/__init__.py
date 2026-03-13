@@ -9,7 +9,7 @@ from ..utils import is_url
 
 
 @extra
-def add_logo(logo_url: str, height: int = 120):
+def add_logo(logo_url: str, height: int = 120) -> None:
     """Add a logo (from logo_url) on the top of the navigation page of a multipage app.
     Taken from [the Streamlit forum](https://discuss.streamlit.io/t/put-logo-and-title-above-on-top-of-page-navigation-in-sidebar-of-multipage-app/28213/6)
     The url can either be a url to the image, or a local path to the image.
@@ -45,7 +45,7 @@ def add_logo(logo_url: str, height: int = 120):
     )
 
 
-def example():
+def example() -> None:
     if st.checkbox("Use url", value=True):
         add_logo("http://placekitten.com/120/120")
     else:

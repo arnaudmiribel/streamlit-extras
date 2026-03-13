@@ -57,7 +57,6 @@ select = ["ALL"]
 extend-safe-fixes = ["TC002", "TC003"]
 ignore = [
   # === Rule sets to ignore ===
-  "ANN",    # Annotations - would require adding types to ~110 functions
   "D",      # Docstrings - existing docstrings don't follow strict convention
   "DTZ",    # Datetime timezone
   "C90",    # McCabe complexity
@@ -73,6 +72,7 @@ ignore = [
   "NPY",    # NumPy legacy random
   "PGH003", # Blanket type:ignore
   # === Individual rules ===
+  "ANN401", # Any type - needed for decorators and generic wrappers
   "COM812", "COM819",  # Trailing comma (conflicts with formatter)
   "E501",   # Line too long
   "ERA001", # Commented out code
@@ -97,7 +97,6 @@ ignore = [
   "PLW2901", # redefined-loop-name
   "RUF028",  # invalid-formatter-suppression-comment
   "RUF067",  # __init__ module should only contain re-exports (project uses __init__.py for main code)
-  "PD901",   # Avoid generic variable name `df` for DataFrames (common convention)
 ]
 
 [tool.ruff.lint.per-file-ignores]

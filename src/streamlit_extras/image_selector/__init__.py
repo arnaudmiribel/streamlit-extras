@@ -158,7 +158,7 @@ def show_selection(
         st.image(selection_img)
 
 
-def example():
+def example() -> None:
     response = requests.get(
         "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
     )

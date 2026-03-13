@@ -58,7 +58,7 @@ def date_range_picker(
     return start_date, end_date
 
 
-def example():
+def example() -> None:
     st.write(
         """
         This is an example of a date range picker that *always* returns a start and

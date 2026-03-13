@@ -23,7 +23,7 @@ SpecType = int | Sequence[int | float]
 _active_chat_container: ContextVar[Any] = ContextVar("active_chat_container", default=None)
 
 
-def _streaming_write(*args: Any, unsafe_allow_html: bool = False, **kwargs) -> list[Any]:
+def _streaming_write(*args: Any, unsafe_allow_html: bool = False, **kwargs: Any) -> list[Any]:
     """Internal streaming write implementation for stateful chat."""
     if not args:
         return []
@@ -31,7 +31,7 @@ def _streaming_write(*args: Any, unsafe_allow_html: bool = False, **kwargs) -> l
     written_content: list[Any] = []
     string_buffer: list[str] = []
 
-    def flush_buffer():
+    def flush_buffer() -> None:
         if string_buffer:
             text_content = " ".join(string_buffer)
             text_container = st.empty()
@@ -48,7 +48,7 @@ def _streaming_write(*args: Any, unsafe_allow_html: bool = False, **kwargs) -> l
                 stream_container = None
                 streamed_response = ""
 
-                def flush_stream_response():
+                def flush_stream_response() -> None:
                     nonlocal streamed_response, stream_container
                     if streamed_response and stream_container:
                         stream_container.write(
@@ -102,7 +102,7 @@ class ChatMessage(TypedDict):
     content: Required[list[Any]]
 
 
-def _active_dg():
+def _active_dg() -> Any:
     return _active_chat_container.get()
 
 
@@ -120,7 +120,7 @@ def add_message(
     name: str,
     *args: Any,
     avatar: str | AtomicImage | None = None,
-):
+) -> None:
     """
     Adds a chat message to the chat container.
     This command can only be used inside the `chat` container. The message
@@ -195,12 +195,12 @@ def chat(key: str = "chat_messages") -> Generator[DeltaGenerator, None, None]:
         _active_chat_container.reset(token)
 
 
-def example():
+def example() -> None:
     with chat(key="my_chat"):
         if prompt := st.chat_input():
             add_message("user", prompt, avatar="🧑‍💻")
 
-            def stream_echo():
+            def stream_echo() -> Generator[str, None, None]:
                 for word in prompt.split():
                     yield word + " "
                     time.sleep(0.15)

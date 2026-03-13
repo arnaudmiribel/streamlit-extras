@@ -3,7 +3,7 @@ import streamlit as st
 from .. import extra
 
 
-def get_mode():
+def get_mode() -> str:
     if hasattr(st.context, "theme"):
         return st.context.theme["type"]
     return "light"
@@ -41,7 +41,7 @@ def format_word_importances(words: list[str], importances: list[float]) -> str:
     return "".join(tags)
 
 
-def _get_color(importance: float, mode=None) -> str:
+def _get_color(importance: float, mode: str | None = None) -> str:
     mode = mode or get_mode()
     # clip values to prevent CSS errors (Values should be from [-1,1])
     importance = max(-1, min(1, importance))
@@ -58,7 +58,7 @@ def _get_color(importance: float, mode=None) -> str:
     return f"hsl({hue}, {sat}%, {lig}%)"
 
 
-def example():
+def example() -> None:
     text = "Streamlit Extras is a library to help you discover, learn, share and use Streamlit bits of code!"
     html = format_word_importances(
         words=text.split(),

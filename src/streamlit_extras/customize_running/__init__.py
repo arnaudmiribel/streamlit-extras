@@ -21,14 +21,14 @@ div[class*="StatusWidget"]{
 
 
 @extra
-def center_running():
+def center_running() -> None:
     """
     Have the "running man" animation in the center of the screen instead of the top right corner.
     """
     st.html(center_css)
 
 
-def example():
+def example() -> None:
     click = st.button("Observe where the 🏃‍♂️ running widget is now!")
     if click:
         center_running()
