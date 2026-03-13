@@ -64,18 +64,18 @@ Rules and context for AI coding agents working on streamlit-extras.
 | `__author__` | Yes | `str` | Author name |
 | `__examples__` | Yes | `list` or `dict` | Example functions (dict if multiple `@extra` funcs) |
 | `__funcs__` | Auto | `list` | Auto-populated by `@extra` decorator |
-| `__playground__` | No | `bool` | Enable playground in gallery (commonly used) |
+| `__playground__` | No | `bool` | Enable playground in gallery |
 | `__tests__` | No | `list` | Test functions to run |
 | `__github_repo__` | No | `str` | GitHub repository URL |
 | `__streamlit_cloud_url__` | No | `str` | Demo app URL (must contain "streamlit") |
 | `__forum_url__` | No | `str` | Streamlit forum discussion URL |
 | `__experimental_playground__` | No | `bool` | Enable experimental playground |
 | `__experimental_playground_funcs__` | No | `list` | Functions for experimental playground |
-| `__inputs__` | No | `dict` | Playground input config (supported, unused) |
+| `__inputs__` | No | `dict` | Playground input config |
 | `__pypi_name__` | No | `str` | PyPI package name (requires `__package_name__`) |
 | `__package_name__` | No | `str` | Import name for external package |
-| `__twitter_username__` | No | `str` | Author's Twitter handle (supported, unused) |
-| `__buymeacoffee_username__` | No | `str` | Buy Me a Coffee username (supported, unused) |
+| `__twitter_username__` | No | `str` | Author's Twitter handle |
+| `__buymeacoffee_username__` | No | `str` | Buy Me a Coffee username |
 
 ### Example
 

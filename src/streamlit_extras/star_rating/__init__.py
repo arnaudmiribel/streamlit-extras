@@ -1,5 +1,4 @@
-from streamlit import streamlit as st
-from streamlit.components.v1 import html
+import streamlit as st
 
 from .. import extra
 
@@ -42,7 +41,7 @@ def star_rating(rating: float, color: str = "#FFD700") -> None:
 
     html_content = "".join(stars_html)
 
-    html(html_content, height=47, width=150)
+    st.html(html_content, width="content")
 
 
 def example() -> None:
