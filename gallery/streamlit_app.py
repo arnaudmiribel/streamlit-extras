@@ -22,7 +22,11 @@ st.set_page_config(layout="centered", page_icon=":knot:", page_title="streamlit-
 
 @st.cache_resource
 def get_extras_info() -> dict[str, ExtraInfo]:
-    """Load all extras and their metadata."""
+    """Load all extras and their metadata.
+
+    Returns:
+        A dictionary mapping extra names to their metadata.
+    """
     extras: dict[str, ExtraInfo] = {}
     for extra in pkgutil.iter_modules(streamlit_extras.__path__):
         if extra.ispkg:
