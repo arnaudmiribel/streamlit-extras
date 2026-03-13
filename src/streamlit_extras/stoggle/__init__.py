@@ -1,3 +1,5 @@
+import html
+
 import streamlit as st
 
 from .. import extra
@@ -13,8 +15,10 @@ def stoggle(summary: str, content: str) -> None:
         content (str): Content shown after toggling
     """
 
-    html = f'<div style="line-height:1.8"><details><summary>{summary}</summary><p>{content}</p></details></div>'
-    st.html(html)
+    summary_escaped = html.escape(summary)
+    content_escaped = html.escape(content)
+    html_str = f'<div style="line-height:1.8"><details><summary>{summary_escaped}</summary><p>{content_escaped}</p></details></div>'
+    st.html(html_str)
 
 
 def example() -> None:

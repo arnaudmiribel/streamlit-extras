@@ -1,3 +1,5 @@
+import html
+
 import streamlit as st
 
 from .. import extra
@@ -42,17 +44,20 @@ def mention(label: str, url: str, icon: str = "🔗", write: bool = True) -> str
         icon = STREAMLIT_ICON
 
     if is_url(icon):
-        icon_html = f'<img src="{icon}" style="width:1em;height:1em;vertical-align:-0.15em;border-radius:3px;margin-right:0.3em">'
+        icon_escaped = html.escape(icon, quote=True)
+        icon_html = f'<img src="{icon_escaped}" style="width:1em;height:1em;vertical-align:-0.15em;border-radius:3px;margin-right:0.3em">'
     else:
-        icon_html = icon + "  "
+        icon_html = html.escape(icon) + "  "
 
-    mention_html = f'<a contenteditable="false" href="{url}" rel="noopener noreferrer" style="color:inherit;text-decoration:inherit;height:auto!important" target="_blank"><span></span>{icon_html}<span style="border-bottom:0.05em solid rgba(55,53,47,0.25);font-weight:500;flex-shrink:0">{label}</span><span></span></a>'
+    url_escaped = html.escape(url, quote=True)
+    label_escaped = html.escape(label)
+    mention_html = f'<a contenteditable="false" href="{url_escaped}" rel="noopener noreferrer" style="color:inherit;text-decoration:inherit;height:auto!important" target="_blank"><span></span>{icon_html}<span style="border-bottom:0.05em solid rgba(55,53,47,0.25);font-weight:500;flex-shrink:0">{label_escaped}</span><span></span></a>'
 
-    html = STYLE_HTML + mention_html
+    html_output = STYLE_HTML + mention_html
     if write:
-        st.html(html)
+        st.html(html_output)
         return None
-    return html
+    return html_output
 
 
 def example_1() -> None:

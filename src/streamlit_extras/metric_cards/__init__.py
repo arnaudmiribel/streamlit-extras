@@ -41,7 +41,7 @@ def style_metric_cards(
         border_size_px (int, optional): Border size in pixels. Defaults to 1.
         border_color (str, optional): Border color. Defaults to "#CCC" or "#292D34" in dark mode.
         border_radius_px (int, optional): Border radius in pixels. Defaults to 5.
-        border_left_color (str, optional): Borfer left color. Defaults to "#9AD8E1".
+        border_left_color (str, optional): Border left color. Defaults to "#9AD8E1".
         box_shadow (bool, optional): Whether a box shadow is applied. Defaults to True.
     """
     default_bg, default_border = _get_theme_colors()
