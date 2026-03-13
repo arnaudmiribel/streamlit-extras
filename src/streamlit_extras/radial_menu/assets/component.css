@@ -1,0 +1,113 @@
+.radial-menu {
+  position: relative;
+  display: inline-block;
+  font-family: var(--st-font);
+}
+
+/* The circular selector button and menu items*/
+.menu-selector,
+.menu-item {
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 50%;
+  border: 2px solid var(--st-border-color);
+  cursor: pointer;
+  background: var(--st-secondary-background-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  font-size: 1.5rem;
+}
+
+.menu-selector:hover {
+  transform: scale(1.05);
+  border-color: var(--st-primary-color);
+}
+
+/* Overlay container */
+.menu-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  pointer-events: none;
+}
+
+/* The ring of menu items */
+.menu-ring {
+  position: relative;
+  width: 13rem;
+  height: 13rem;
+  transform: scale(0);
+  opacity: 0;
+  transition:
+    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 0.2s ease;
+}
+
+.menu-ring.open {
+  transform: scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Menu items arranged in a circle */
+.menu-item {
+  --angle: calc(var(--i) * (360deg / var(--total)) - 90deg);
+  --radius: 4rem;
+
+  background: var(--st-background-color);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -1.6125rem;
+  transform: rotate(var(--angle)) translate(var(--radius))
+    rotate(calc(-1 * var(--angle)));
+}
+
+.menu-item:hover {
+  transform: rotate(var(--angle)) translate(var(--radius))
+    rotate(calc(-1 * var(--angle))) scale(1.15);
+  border-color: var(--st-primary-color);
+  background: var(--st-secondary-background-color);
+}
+
+.menu-item.selected {
+  border-color: var(--st-primary-color);
+  background: var(--st-secondary-background-color);
+}
+
+/* Backdrop when menu is open (must be outside .menu-overlay to avoid
+   its transform creating a containing block for position: fixed) */
+.menu-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: var(--st-background-color);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 99;
+}
+
+.menu-backdrop.open {
+  display: block;
+  opacity: 0.7;
+}
+
+/* Center decoration */
+.menu-ring::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2rem;
+  height: 2rem;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--st-secondary-background-color);
+  border: 2px dashed var(--st-border-color);
+  opacity: 0.6;
+  box-sizing: border-box;
+}
