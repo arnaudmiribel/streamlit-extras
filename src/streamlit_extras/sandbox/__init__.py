@@ -135,11 +135,13 @@ def example() -> None:
 
         data = get_data()
 
+        min_val = int(data["Value"].min())
+        max_val = int(data["Value"].max())
         value = st.slider(
             "Select a range of values",
-            int(data.min()),
-            int(data.max()),
-            (int(data.min()), int(data.max())),
+            min_val,
+            max_val,
+            (min_val, max_val),
         )
         filtered_data = data[(data["Value"] >= value[0]) & (data["Value"] <= value[1])]
         st.plotly_chart(px.line(filtered_data, y="Value"))

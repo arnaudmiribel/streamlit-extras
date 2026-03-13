@@ -26,7 +26,10 @@ def mention(label: str, url: str, icon: str = "🔗", write: bool = True) -> str
         icon (str): Icon to use. Can be an emoji or a URL. Default '🔗'
         url (str): Target URL of the mention
         write (bool): Writes the mention directly. If False, returns the raw HTML.
-                      Useful if mention is used inline.
+            Useful if mention is used inline.
+
+    Returns:
+        str | None: The HTML string if write is False, otherwise None.
     """
 
     if icon.lower() == "github":

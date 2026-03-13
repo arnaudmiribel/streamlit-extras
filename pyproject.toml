@@ -38,6 +38,7 @@ dev = [
   "types-pytz",
   "types-PyYAML",
   "types-toml",
+  "pandas-stubs>=2.3.3.260113",
 ]
 
 [project.urls]
@@ -63,7 +64,6 @@ ignore = [
   "SLF",    # Private member access
   "BLE",    # Blind except
   "CPY",    # Copyright
-  "DOC",    # Docstring format
   "FBT",    # Boolean positional args
   "TID252", # Relative imports
   "S101",   # Assert statements
@@ -152,9 +152,10 @@ ignore_errors = true
 include = ["src", "gallery"]
 
 [tool.ty.rules]
-unused-ignore-comment = "ignore"  # Allow mypy-compatible ignore comments
-unresolved-import = "ignore"  # Optional dependencies may not be installed
-unresolved-attribute = "ignore"  # Some dynamic attributes from decorators
-invalid-argument-type = "warn"  # Downgrade to warning - ty is stricter than mypy
-invalid-assignment = "warn"  # Downgrade to warning - complex type inference issues
-no-matching-overload = "warn"  # Downgrade to warning - numpy overload issues
+unused-ignore-comment = "ignore"  # Allow mypy-compatible type:ignore comments (ty doesn't need them)
+unresolved-import = "ignore"      # Optional dependencies may not be installed
+unresolved-attribute = "ignore"   # Dynamic attributes from decorators/modules
+# Downgrade to warnings - these are false positives from incomplete pandas/numpy type stubs
+invalid-argument-type = "warn"    # pandas DataFrame columns parameter
+invalid-assignment = "warn"       # Complex type inference in example code
+no-matching-overload = "warn"     # numpy random method overloads

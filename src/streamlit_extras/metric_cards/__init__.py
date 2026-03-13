@@ -10,7 +10,11 @@ DEFAULT_BORDER_COLOR_DARK = "#292D34"
 
 
 def _get_theme_colors() -> tuple[str, str]:
-    """Get default colors based on the current theme."""
+    """Get default colors based on the current theme.
+
+    Returns:
+        tuple[str, str]: A tuple of (background_color, border_color).
+    """
     try:
         theme = st.context.theme
         if theme and theme.get("base") == "dark":

@@ -32,8 +32,12 @@ COUNTERS: Counter = Counter()
 
 def _make_function_key(func: Callable[..., Any], max_concurrency: int) -> str:
     """Create the unique key for a function's cache.
+
     A function's key is stable across reruns of the app, and changes when
     the function's source code changes.
+
+    Returns:
+        str: A hex digest uniquely identifying the function.
     """
 
     hashlib_kwargs: dict[str, Any] = {"usedforsecurity": False} if sys.version_info >= (3, 9) else {}
@@ -60,9 +64,13 @@ def concurrency_limiter(
     """Decorator that limits function concurrent execution in Stremalit app.
 
     Args:
-        max_concurrency (int): The number of allowed instances of the decorated function to be run simultaneously
-             Defaults to 1.
-        show_spinner (bool): If True, a spinner will be shown while waiting for the function to be executed.
+        max_concurrency (int): The number of allowed instances of the decorated function
+            to be run simultaneously. Defaults to 1.
+        show_spinner (bool): If True, a spinner will be shown while waiting for the
+            function to be executed.
+
+    Returns:
+        Callable: The decorated function with concurrency limiting applied.
     """
 
     if func is None:

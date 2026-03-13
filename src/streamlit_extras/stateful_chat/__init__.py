@@ -24,7 +24,11 @@ _active_chat_container: ContextVar[Any] = ContextVar("active_chat_container", de
 
 
 def _streaming_write(*args: Any, unsafe_allow_html: bool = False, **kwargs: Any) -> list[Any]:
-    """Internal streaming write implementation for stateful chat."""
+    """Internal streaming write implementation for stateful chat.
+
+    Returns:
+        list[Any]: A list of written content items.
+    """
     if not args:
         return []
 
@@ -121,15 +125,15 @@ def add_message(
     *args: Any,
     avatar: str | AtomicImage | None = None,
 ) -> None:
-    """
-    Adds a chat message to the chat container.
+    """Adds a chat message to the chat container.
+
     This command can only be used inside the `chat` container. The message
     will be displayed in the UI and added to the chat history so that the same
     message will be automatically displayed on reruns.
 
     Args:
         name (Literal["user", "assistant"] | str):
-            The name of the message author. Can be “user” or “assistant” to
+            The name of the message author. Can be "user" or "assistant" to
             enable preset styling and avatars.
             Currently, the name is not shown in the UI but is only set as an
             accessibility label. For accessibility reasons, you should not use
@@ -140,6 +144,9 @@ def add_message(
         *args (Any):
             The content of the message. This can be any number of elements that are supported by
             `st.write` as well as generator functions to stream content to the UI.
+
+    Raises:
+        StreamlitAPIException: If called outside of a `chat` container.
     """
     active_dg = _active_dg()
 
@@ -159,8 +166,8 @@ def add_message(
 @extra
 @contextmanager
 def chat(key: str = "chat_messages") -> Generator[DeltaGenerator, None, None]:
-    """
-    Insert a stateful chat container into your app.
+    """Insert a stateful chat container into your app.
+
     This chat container automatically keeps track of the chat history when you use
     the `add_message` command to add messages to the chat.
 
@@ -168,10 +175,9 @@ def chat(key: str = "chat_messages") -> Generator[DeltaGenerator, None, None]:
         key (str, optional): The key that is used to keep track of the chat history in session state.
             Defaults to "chat_messages".
 
-    Returns:
-        DeltaGenerator: Chat Container
-            The chat container that can be used together with `add_message` to automatically
-            keep track of the chat history.
+    Yields:
+        DeltaGenerator: The chat container that can be used together with `add_message` to
+            automatically keep track of the chat history.
     """
 
     chat_container = st.container()

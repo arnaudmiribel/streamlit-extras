@@ -66,8 +66,7 @@ def grid(
     gap: GapSize = "small",
     vertical_align: Literal["top", "center", "bottom"] = "top",
 ) -> GridDeltaGenerator:
-    """
-    Insert a multi-element, grid container into your app.
+    """Insert a multi-element, grid container into your app.
 
     This function inserts a container into your app that arranges
     multiple elements in a grid layout as defined by the provided spec.
@@ -75,22 +74,26 @@ def grid(
     on the returned object.
 
     Args:
-        *spec (int | Iterable[int]): One or many row specs controlling the number and width of cells in each row.
-            Each spec can be one of:
-                * An integer specifying the number of cells. In this case, all cells have equal
-                width.
-                * An iterable of numbers (int or float) specifying the relative width of
-                each cell. E.g., ``[0.7, 0.3]`` creates two cells, the first
-                one occupying 70% of the available width and the second one 30%.
-                Or, ``[1, 2, 3]`` creates three cells where the second one is twice
-                as wide as the first one, and the third one is three times that width.
-                The function iterates over the provided specs in a round-robin order. Upon filling a row,
-                it moves on to the next spec, or the first spec if there are no
-                more specs.
-        gap (Optional[str], optional): The size of the gap between cells, specified as "small", "medium", or "large".
-            This parameter defines the visual space between grid cells. Defaults to "small".
-        vertical_align (Literal["top", "center", "bottom"], optional): The vertical alignment of the cells in the row.
-            Defaults to "top".
+        *spec (int | Iterable[int]): One or many row specs controlling the number and
+            width of cells in each row. Each spec can be one of:
+
+            * An integer specifying the number of cells. In this case, all cells have
+              equal width.
+            * An iterable of numbers (int or float) specifying the relative width of
+              each cell. E.g., ``[0.7, 0.3]`` creates two cells, the first one occupying
+              70% of the available width and the second one 30%. Or, ``[1, 2, 3]`` creates
+              three cells where the second one is twice as wide as the first one, and
+              the third one is three times that width. The function iterates over the
+              provided specs in a round-robin order. Upon filling a row, it moves on to
+              the next spec, or the first spec if there are no more specs.
+        gap (Optional[str], optional): The size of the gap between cells, specified as
+            "small", "medium", or "large". Defaults to "small".
+        vertical_align (Literal["top", "center", "bottom"], optional): The vertical
+            alignment of the cells in the row. Defaults to "top".
+
+    Returns:
+        GridDeltaGenerator: A grid container object. Elements can be added to this grid
+            by calling methods directly on the returned object.
     """
 
     container = st.container()

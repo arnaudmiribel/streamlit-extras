@@ -105,12 +105,12 @@ def get_annotations_chart(
         columns=["date", "annotation"],
     )
 
-    annotations_df.date = pd.to_datetime(annotations_df.date)
+    annotations_df["date"] = pd.to_datetime(annotations_df["date"])
     annotations_df["y"] = y
     if min_date:
-        annotations_df = annotations_df[annotations_df.date.gt(min_date)]
+        annotations_df = annotations_df[annotations_df["date"].gt(min_date)]
     if max_date:
-        annotations_df = annotations_df[annotations_df.date.lt(max_date)]
+        annotations_df = annotations_df[annotations_df["date"].lt(max_date)]
 
     encode_params = {"x": "date:T", "y": alt.Y("y:Q"), "tooltip": "annotation"}
 

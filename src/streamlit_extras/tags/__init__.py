@@ -69,8 +69,7 @@ def tagger_component(
     color_name: list[str] | str | None = None,
     text_color_name: list[str] | str | None = None,
 ) -> None:
-    """
-    Displays tags next to your text.
+    """Displays tags next to your text.
 
     Args:
         content (str): Content to be tagged
@@ -79,9 +78,12 @@ def tagger_component(
             Choose from lightblue, orange, bluegreen, blue, violet, red, green, yellow
         text_color_name: A list or a string that indicates the text color of tags.
 
+    Raises:
+        ValueError: If the length of color_name or text_color_name lists don't match tags.
+
     .. deprecated::
-        Use `st.badge` or badges in markdown syntax instead.
-        See https://docs.streamlit.io/develop/api-reference/text/st.badge
+        This function is deprecated. Use ``st.badge`` or badges in markdown syntax
+        instead (https://docs.streamlit.io/develop/api-reference/text/st.badge).
     """
     show_deprecation_warning(
         "tagger_component is deprecated. Use `st.badge` or badges in markdown syntax "

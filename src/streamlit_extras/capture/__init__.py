@@ -137,14 +137,14 @@ def logcapture(
             )
         handler_id = None
         if using_loguru:
-            handler_id = from_logger.add(new_handler)  # type: ignore
+            handler_id = from_logger.add(new_handler)  # type: ignore[attr-defined]
         else:
             from_logger.addHandler(new_handler)
         try:
             yield
         finally:
             if using_loguru:
-                from_logger.remove(handler_id)  # type: ignore
+                from_logger.remove(handler_id)  # type: ignore[attr-defined]
             else:
                 from_logger.removeHandler(new_handler)
 

@@ -43,9 +43,9 @@ def extra(
         module = import_module(extra_name)
 
         if hasattr(module, "__funcs__"):
-            module.__funcs__ += [func]  # type: ignore
+            module.__funcs__ += [func]  # type: ignore[attr-defined]
         else:
-            module.__funcs__ = [func]  # type: ignore
+            module.__funcs__ = [func]  # type: ignore[attr-defined]
 
         profiling_name = f"{submodule}.{func.__name__}"
         return _gather_metrics(name=profiling_name, func=func)

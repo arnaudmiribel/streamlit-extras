@@ -6,14 +6,15 @@ from .. import extra
 
 @extra
 def add_vertical_space(num_lines: int = 1) -> None:
-    """
-    Add vertical space to your Streamlit app.
+    """Add vertical space to your Streamlit app.
 
     Args:
-        num_lines (int, optional): Height of the vertical space (given in number of lines). Defaults to 1.
+        num_lines (int, optional): Height of the vertical space (given in number of lines).
+            Defaults to 1.
 
     .. deprecated::
-        Use `st.space(height)` instead. See https://docs.streamlit.io/develop/api-reference/layout/st.space
+        This function is deprecated. Use ``st.space(height)`` instead
+        (https://docs.streamlit.io/develop/api-reference/layout/st.space).
     """
     show_deprecation_warning(
         "add_vertical_space is deprecated. Use `st.space(height)` instead. "

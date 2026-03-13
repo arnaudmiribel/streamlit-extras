@@ -19,50 +19,39 @@ def floating_button(
     icon: str | None = None,
     disabled: bool = False,
 ) -> bool:
-    """
-    Display a floating action button that stays fixed at the bottom right corner of the
-    screen.
+    """Display a floating action button that stays fixed at the bottom right corner.
 
     This is similar to st.button but creates a button that floats above the content and
     remains visible even when scrolling. Only one floating button can be shown at a time.
 
-    Parameters
-    ----------
-    label : str
-        A short label explaining to the user what this button is for. The label can
-        optionally contain GitHub-flavored Markdown.
-    key : str or int, optional
-        An optional string or integer to use as the unique key for the widget.
-        If this is omitted, a key will be generated for the widget based on its content.
-    help : str, optional
-        A tooltip that gets displayed when the button is hovered over.
-    on_click : callable, optional
-        An optional callback invoked when this button is clicked.
-    args : tuple, optional
-        An optional tuple of args to pass to the callback.
-    kwargs : dict, optional
-        An optional dict of kwargs to pass to the callback.
-    type : str, optional
-        The button type, either "primary" or "secondary" (default: "secondary").
-        Note that "tertiary" is not supported for floating buttons.
-    icon : str, optional
-        An optional emoji or Material icon to display next to the button label.
-        For Material icons, use the format ":material/icon_name:".
-    disabled : bool, optional
-        An optional boolean that disables the button if set to True (default: False).
+    Args:
+        label (str): A short label explaining to the user what this button is for.
+            The label can optionally contain GitHub-flavored Markdown.
+        key (str | None, optional): An optional string to use as the unique key for the
+            widget. If omitted, a key will be generated based on its content.
+        help (str | None, optional): A tooltip that gets displayed when the button is
+            hovered over.
+        on_click (Callable | None, optional): An optional callback invoked when this
+            button is clicked.
+        args (tuple | None, optional): An optional tuple of args to pass to the callback.
+        kwargs (dict | None, optional): An optional dict of kwargs to pass to the callback.
+        type (str, optional): The button type, either "primary" or "secondary".
+            Defaults to "secondary". Note that "tertiary" is not supported.
+        icon (str | None, optional): An optional emoji or Material icon to display next to
+            the button label. For Material icons, use the format ":material/icon_name:".
+        disabled (bool, optional): If True, disables the button. Defaults to False.
 
-    Returns
-    -------
-    bool
-        True if the button was clicked on the last run of the app, False otherwise.
+    Returns:
+        bool: True if the button was clicked on the last run of the app, False otherwise.
 
-    Examples
-    --------
-    >>> if st.floating_button(":material/chat:"):
-    ...     st.write("Chat button clicked!")
-    >>>
-    >>> if st.floating_button("Add", icon=":material/add:"):
-    ...     st.write("Add button clicked!")
+    Raises:
+        ValueError: If the type parameter is not "primary" or "secondary".
+
+    Examples:
+        >>> if st.floating_button(":material/chat:"):
+        ...     st.write("Chat button clicked!")
+        >>> if st.floating_button("Add", icon=":material/add:"):
+        ...     st.write("Add button clicked!")
     """
     # Validate type parameter
     if type not in ["primary", "secondary"]:

@@ -12,11 +12,16 @@ if TYPE_CHECKING:
 
 @extra
 def bottom() -> DeltaGenerator:
-    """
-    Insert a multi-element container that sticks to the bottom of the app.
+    """Insert a multi-element container that sticks to the bottom of the app.
 
     Note that this can only be in the main body of the app, and not in
-    other parts e.g. st.sidebar
+    other parts e.g. st.sidebar.
+
+    Returns:
+        DeltaGenerator: A container that sticks to the bottom of the app.
+
+    Raises:
+        Exception: If the bottom container is not supported in the Streamlit version.
     """
     if hasattr(st, "_bottom"):
         return st._bottom

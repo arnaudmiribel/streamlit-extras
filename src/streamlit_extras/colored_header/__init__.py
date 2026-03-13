@@ -164,19 +164,20 @@ def colored_header(
     description: str = "Cool description",
     color_name: _SUPPORTED_COLORS = "red-70",
 ) -> None:
-    """
-    Shows a header with a colored underline and an optional description.
+    """Shows a header with a colored underline and an optional description.
 
     Args:
         label (str, optional): Header label. Defaults to "Nice title".
-        description (str, optional): Description shown under the header. Defaults to "Cool description".
+        description (str, optional): Description shown under the header.
+            Defaults to "Cool description".
         color_name (_SUPPORTED_COLORS, optional): Color of the underline. Defaults to "red-70".
-            Supported colors are "light-blue-70", "orange-70", "blue-green-70", "blue-70", "violet-70",
-            "red-70", "green-70", "yellow-80".
+            Supported colors are "light-blue-70", "orange-70", "blue-green-70", "blue-70",
+            "violet-70", "red-70", "green-70", "yellow-80".
 
     .. deprecated::
-        Use the `divider` parameter in `st.header`, `st.title`, or `st.subheader` instead.
-        See https://docs.streamlit.io/develop/api-reference/text/st.header
+        This function is deprecated. Use the ``divider`` parameter in ``st.header``,
+        ``st.title``, or ``st.subheader`` instead
+        (https://docs.streamlit.io/develop/api-reference/text/st.header).
     """
     show_deprecation_warning(
         "colored_header is deprecated. Use the `divider` parameter in `st.header`, "

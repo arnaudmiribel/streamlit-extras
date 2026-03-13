@@ -78,6 +78,9 @@ def example() -> None:
     """Demonstrate installing a custom handler and triggering an exception.
 
     Includes a sample handler that logs context and still surfaces the exception to the user.
+
+    Raises:
+        RuntimeError: A demo exception to demonstrate the custom handler.
     """
     st.write("Install a custom handler that logs context and shows the exception to the user.")
 

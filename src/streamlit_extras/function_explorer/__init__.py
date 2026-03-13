@@ -29,6 +29,9 @@ def function_explorer(func: Callable[..., Any]) -> None:
 
     Args:
         func (callable): Python function
+
+    Raises:
+        Exception: If a type hint is encountered that is not supported.
     """
 
     args = get_arg_details(func)

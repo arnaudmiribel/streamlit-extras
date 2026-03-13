@@ -16,22 +16,18 @@ if TYPE_CHECKING:
 
 
 def convert_to_pil_image(image: str | np.ndarray | Image.Image) -> Image.Image:
-    """
-    Converts an image from various sources (URL, local path, numpy array, or PIL.Image) to a PIL.Image object.
+    """Convert an image from various sources to a PIL.Image object.
 
-    Parameters:
-    - image: Union[str, np.ndarray, Image.Image]
-        The input image which can be:
-        - URL (str) pointing to the image
-        - Local file path (str)
-        - Numpy array (np.ndarray)
-        - PIL.Image.Image object
+    Args:
+        image (str | np.ndarray | Image.Image): The input image which can be a URL (str)
+            pointing to the image, a local file path (str), a NumPy array (np.ndarray),
+            or a PIL.Image.Image object.
 
     Returns:
-    - Image.Image: The converted PIL.Image object.
+        Image.Image: The converted PIL.Image object.
 
     Raises:
-    - ValueError: If the input type is not supported or the image cannot be opened.
+        ValueError: If the input type is not supported or the image cannot be opened.
     """
     pil_image: Image.Image
     if isinstance(image, str):

@@ -26,11 +26,13 @@ def load_key_css() -> None:
 @extra
 def key(text: str, write: bool = True) -> str:
     """Applies a custom CSS to input text which makes it look like a keyboard key.
+
     To be used after running load_key_css() at least once in the app!
 
     Args:
         text (str): Text that will be styled as a key
         write (bool): If True, this will st.write() the key
+
     Returns:
         str: HTML of the text, styled as a key
     """

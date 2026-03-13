@@ -1,3 +1,5 @@
+from collections.abc import Sequence
+
 import streamlit as st
 
 from .. import extra
@@ -10,7 +12,7 @@ def get_mode() -> str:
 
 
 @extra
-def format_word_importances(words: list[str], importances: list[float]) -> str:
+def format_word_importances(words: Sequence[str], importances: Sequence[float]) -> str:
     """Adds a background color to each word based on its importance (float from -1 to 1)
 
     Args:

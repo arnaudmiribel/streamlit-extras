@@ -16,11 +16,22 @@ def toggle_state(key: str) -> None:
 
 @extra
 def button(*args: Any, key: str | None = None, **kwargs: Any) -> bool:
-    """
+    """Create a toggle button that remembers its state.
+
     Works just like a normal streamlit button, but it remembers its state, so that
     it works as a toggle button. If you click it, it will be pressed, and if you click
-    it again, it will be unpressed. Args and output are the same as for
-    [st.button](https://docs.streamlit.io/library/api-reference/widgets/st.button)
+    it again, it will be unpressed. Args and output are the same as for st.button.
+
+    Args:
+        *args: Positional arguments passed to st.button.
+        key (str | None): Required unique key for the button. Must not be None.
+        **kwargs: Keyword arguments passed to st.button.
+
+    Returns:
+        bool: True if the button is currently in pressed state, False otherwise.
+
+    Raises:
+        ValueError: If key is not provided.
     """
 
     if key is None:
