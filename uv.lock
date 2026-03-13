@@ -1075,12 +1075,12 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "mypy", specifier = ">=1.10.0" },
+    { name = "mypy", specifier = "==1.19.1" },
     { name = "pandas-stubs", specifier = ">=2.3.3.260113" },
     { name = "pre-commit", specifier = ">=3.0.0" },
     { name = "pytest", specifier = ">=7.4.4" },
     { name = "ruff", specifier = "==0.15.6" },
-    { name = "ty", specifier = ">=0.0.1" },
+    { name = "ty", specifier = "==0.0.22" },
     { name = "types-python-dateutil" },
     { name = "types-pytz" },
     { name = "types-pyyaml" },
