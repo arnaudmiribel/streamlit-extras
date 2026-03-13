@@ -7,13 +7,13 @@ This document provides an overview of all available extras and their implementat
 ## Component Types
 
 - **pure python**: Pure Python using standard Streamlit API
-- **st.html**: Uses `st.html()` to inject HTML/CSS/JS
-- **st.markdown(unsafe_allow_html)**: Uses `st.markdown()` with `unsafe_allow_html=True` to inject markdown with integrated HTML
-- **components v1: html**: Uses `streamlit.components.v1.html()` to show HTML in an iframe
-- **components v1: iframe**: Uses `streamlit.components.v1.iframe()` to show a URL in an iframe
-- **components v2: inline**: Uses `st.components.v2.component()` with inline code
-- **components v2: static assets**: Uses `st.components.v2.component()` with dedicated asset files (e.g. `.js`, `.html`, `.css`)
-- **components v2: react**: Uses `st.components.v2.component()` with a full React frontend
+- **st.html**: Uses [`st.html()`](https://docs.streamlit.io/develop/api-reference/text/st.html) to inject HTML/CSS/JS
+- **st.markdown(unsafe_allow_html)**: Uses [`st.markdown()`](https://docs.streamlit.io/develop/api-reference/text/st.markdown) with `unsafe_allow_html=True` to inject markdown with integrated HTML
+- **components v1: html**: Uses [`streamlit.components.v1.html()`](https://docs.streamlit.io/develop/api-reference/custom-components/st.components.v1.html) to show HTML in an iframe
+- **components v1: iframe**: Uses [`streamlit.components.v1.iframe()`](https://docs.streamlit.io/develop/api-reference/custom-components/st.components.v1.iframe) to show a URL in an iframe
+- **components v2: inline**: Uses [`st.components.v2.component()`](https://docs.streamlit.io/develop/api-reference/custom-components/st.components.v2.component) with inline code
+- **components v2: static assets**: Uses [`st.components.v2.component()`](https://docs.streamlit.io/develop/api-reference/custom-components/st.components.v2.component) with dedicated asset files (e.g. `.js`, `.html`, `.css`) in an `assets/` folder
+- **components v2: react**: Uses [`st.components.v2.component()`](https://docs.streamlit.io/develop/tutorials/custom-components/template-react) with a full React frontend
 
 ## Extras Table
 
