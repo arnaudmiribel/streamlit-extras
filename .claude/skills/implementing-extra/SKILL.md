@@ -89,7 +89,6 @@ __desc__ = "Short description of what it does."
 __icon__ = "..."  # Single emoji
 __author__ = "Your Name"
 __examples__ = [example]
-__streamlit_min_version__ = "1.46.0"  # If using recent features
 ```
 
 ## Step 4: Verify
@@ -98,17 +97,15 @@ Run these checks before committing:
 
 ```bash
 # Linting and formatting
-uv run ruff check --fix src/streamlit_extras/<extra_name>/
-uv run ruff format src/streamlit_extras/<extra_name>/
+uv run ruff check --fix
+uv run ruff format
 
 # Type checking
-uv run mypy src/streamlit_extras/<extra_name>/
+uv run mypy
+uv run ty check
 
 # Tests (validates metadata)
-uv run pytest tests/test_extras.py -k <extra_name>
-
-# Gallery test
-uv run streamlit run gallery/streamlit_app.py
+uv run pytest
 ```
 
 **For CCv2 React components**, also verify the build:
