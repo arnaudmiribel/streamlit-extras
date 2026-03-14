@@ -117,5 +117,6 @@ ls src/streamlit_extras/<extra_name>/frontend/build/
 
 - **Spec template**: [references/spec-template.md](references/spec-template.md)
 - **Metadata attributes**: [references/metadata.md](references/metadata.md)
+- **API design principles**: https://raw.githubusercontent.com/streamlit/streamlit/refs/heads/develop/specs/AGENTS.md
 - **CCv2 components**: Use `/building-streamlit-custom-components-v2` skill
 - **Extras overview**: `src/streamlit_extras/AGENTS.md`
