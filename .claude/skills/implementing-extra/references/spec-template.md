@@ -55,10 +55,6 @@ def <function_name>(
 - What state is persisted (if any)?
 -->
 
-### Design
-
-<!-- Optional: mockups, screenshots, or Figma links -->
-
 ### Examples
 
 <!-- Code snippets showing common use cases -->
@@ -85,16 +81,6 @@ result = <function_name>(
 
 - Feature X (future consideration)
 - Feature Y (out of scope)
-
-## Checklist
-
-| Item                         | ✅ or comment          |
-|------------------------------|------------------------|
-| Component type decided       |                        |
-| No new heavy dependencies    |                        |
-| Works with Streamlit >=1.46  |                        |
-| Example function included    |                        |
-| Gallery tested               |                        |
 ```
 
 ## API Design Principles

@@ -30,7 +30,6 @@ Use the template in [references/spec-template.md](references/spec-template.md) w
 2. **Problem** - Motivation, user requests, pain points
 3. **Proposal** - API design, behavior, examples
 4. **Out of Scope** - Features not included in v1
-5. **Checklist** - Verification items
 
 **Key API design principles:**
 - Most common use case = fewest arguments
