@@ -8,7 +8,6 @@ version = "0.0.1"
 [[tool.streamlit.component.components]]
 name = "click_counter"
 asset_dir = "click_counter/frontend/build"
-
 [[tool.streamlit.component.components]]
 name = "json_editor"
 asset_dir = "json_editor/frontend/build"

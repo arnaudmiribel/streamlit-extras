@@ -8,6 +8,7 @@ from functools import cache
 from typing import Any, TypedDict, cast
 
 import streamlit as st
+import streamlit.components.v2
 
 from streamlit_extras import extra
 
@@ -23,7 +24,7 @@ def _get_component() -> Any:
     Returns:
         The component callable.
     """
-    return st.components.v2.component(
+    return streamlit.components.v2.component(
         "streamlit-extras.click_counter",
         js="index-*.js",
         html='<div class="react-root"></div>',
@@ -74,8 +75,6 @@ def click_counter(
 
 def example() -> None:
     """Example usage of the click counter component."""
-    import streamlit as st
-
     st.write("Click the button below to increment the counter:")
 
     result = click_counter(

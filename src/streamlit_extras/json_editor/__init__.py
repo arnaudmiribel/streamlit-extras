@@ -8,6 +8,7 @@ from functools import cache
 from typing import Any, TypedDict, cast
 
 import streamlit as st
+import streamlit.components.v2
 
 from streamlit_extras import extra
 
@@ -23,7 +24,7 @@ def _get_component() -> Any:
     Returns:
         The component callable.
     """
-    return st.components.v2.component(
+    return streamlit.components.v2.component(
         "streamlit-extras.json_editor",
         js="index-*.js",
         html='<div class="react-root"></div>',
@@ -117,8 +118,6 @@ def json_editor(
 
 def example() -> None:
     """Example usage of the JSON editor component."""
-    import streamlit as st
-
     st.write("Edit the JSON below:")
 
     sample_data = {
