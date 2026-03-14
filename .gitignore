@@ -183,3 +183,6 @@ yarn-error.log*
 
 # Built frontend assets (built in CI before publishing to PyPI)
 src/streamlit_extras/*/frontend/build/
+
+# Temporary working directory for AI agents
+work-tmp/

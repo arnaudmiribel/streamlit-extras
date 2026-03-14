@@ -17,6 +17,7 @@ Rules and context for AI coding agents working on streamlit-extras.
 - `tests/`: Pytest tests (validates extra metadata)
 - `docs/`: MkDocs documentation source
 - `pyproject.toml`: Dependencies, ruff/mypy config
+- `work-tmp/`: Temporary files, specs, and scripts (gitignored)
 
 ## Essential Commands
 
