@@ -24,49 +24,20 @@ Implementation Progress:
 
 Create a spec in `work-tmp/<extra_name>-spec.md` before coding.
 
-**Spec structure:**
+Use the template in [references/spec-template.md](references/spec-template.md) which follows Streamlit's product spec format:
 
-```markdown
-# <Extra Name> Spec
+1. **Summary** - 2-3 sentences describing the extra
+2. **Problem** - Motivation, user requests, pain points
+3. **Proposal** - API design, behavior, examples
+4. **Out of Scope** - Features not included in v1
+5. **Checklist** - Verification items
 
-## Problem
-Why does this extra need to exist? Link to user requests or pain points.
-
-## API Design
-
-### Simplest Usage
-\```python
-from streamlit_extras.<extra_name> import <function_name>
-<function_name>()  # minimal args
-\```
-
-### Full API
-\```python
-def <function_name>(
-    required_param: str,  # Essential params first
-    *,
-    common_option: str = "default",  # Common options (keyword-only)
-    advanced_option: bool = False,  # Advanced options last
-    key: str | None = None,
-) -> ReturnType:
-    ...
-\```
-
-## Behavior
-- What happens on first render?
-- What happens on user interaction?
-- What state is persisted?
-
-## Out of Scope
-- Features explicitly NOT included in v1
-```
-
-**API design principles** (from Streamlit guidelines):
+**Key API design principles:**
 - Most common use case = fewest arguments
 - Sensible defaults for 80% of cases
-- Start minimal (you can add params later, never remove)
-- Use `Literal` types over booleans for future expansion
-- Only 1-3 positional params; rest keyword-only
+- Start minimal (add params later, never remove)
+- Use `Literal` types over booleans
+- Only 1-3 positional params; rest keyword-only (`*,`)
 
 ## Step 2: Decide Component Type
 
@@ -153,6 +124,7 @@ ls src/streamlit_extras/<extra_name>/frontend/build/
 
 ## References
 
+- **Spec template**: [references/spec-template.md](references/spec-template.md)
 - **Metadata attributes**: [references/metadata.md](references/metadata.md)
 - **CCv2 components**: Use `/building-streamlit-custom-components-v2` skill
 - **Extras overview**: `src/streamlit_extras/AGENTS.md`
