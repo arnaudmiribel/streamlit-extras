@@ -142,5 +142,5 @@ __title__ = "JSON Editor"
 __desc__ = "An interactive JSON viewer/editor component built with React and CCv2."
 __icon__ = "📝"
 __examples__ = [example]
-__author__ = "streamlit-extras"
+__author__ = "Lukas Masuch"
 __streamlit_min_version__ = "1.46.0"
