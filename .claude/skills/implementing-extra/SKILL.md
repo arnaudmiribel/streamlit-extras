@@ -31,12 +31,7 @@ Use the template in [references/spec-template.md](references/spec-template.md) w
 3. **Proposal** - API design, behavior, examples
 4. **Out of Scope** - Features not included in v1
 
-**Key API design principles:**
-- Most common use case = fewest arguments
-- Sensible defaults for 80% of cases
-- Start minimal (add params later, never remove)
-- Use `Literal` types over booleans
-- Only 1-3 positional params; rest keyword-only (`*,`)
+Follow the Streamlit API design principles from: https://raw.githubusercontent.com/streamlit/streamlit/refs/heads/develop/specs/AGENTS.md
 
 ## Step 2: Decide Component Type
 

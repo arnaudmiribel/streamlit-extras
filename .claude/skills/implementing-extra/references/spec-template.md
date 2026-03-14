@@ -85,11 +85,4 @@ result = <function_name>(
 
 ## API Design Principles
 
-Follow these when designing the API:
-
-1. **Most common use case = fewest arguments** - The simplest usage should require minimal parameters
-2. **Sensible defaults** - Every optional parameter should work for 80% of use cases
-3. **Start minimal** - You can add parameters later, but never remove them
-4. **Use `Literal` over `bool`** - Enables graceful expansion (e.g., `mode: Literal["single", "multi"]` not `multi: bool`)
-5. **Limit positional args** - Only 1-3 essential params; rest must be keyword-only (`*,`)
-6. **Consistent vocabulary** - Use standard names: `label`, `key`, `help`, `on_change`
+Follow the Streamlit API design principles from: https://raw.githubusercontent.com/streamlit/streamlit/refs/heads/develop/specs/AGENTS.md
