@@ -25,7 +25,7 @@ class FrontendBuildHook(BuildHookInterface):
 
     PLUGIN_NAME = "frontend-build"
 
-    def initialize(self, version: str, build_data: dict[str, Any]) -> None:
+    def initialize(self, _version: str, _build_data: dict[str, Any]) -> None:
         """Build all React CCv2 frontends before the wheel is packaged."""
         extras = self._find_react_extras()
 
@@ -41,9 +41,7 @@ class FrontendBuildHook(BuildHookInterface):
 
     def _find_react_extras(self) -> list[Path]:
         """Find all React-based CCv2 extras."""
-        react_extras = []
-        for package_json in EXTRAS_DIR.glob("*/frontend/package.json"):
-            react_extras.append(package_json.parent.parent)
+        react_extras = [package_json.parent.parent for package_json in EXTRAS_DIR.glob("*/frontend/package.json")]
         return sorted(react_extras)
 
     def _build_frontend(self, extra_dir: Path) -> None:
@@ -70,13 +68,12 @@ class FrontendBuildHook(BuildHookInterface):
 
     def _update_shared_manifest(self, extras: list[Path]) -> None:
         """Update the shared pyproject.toml manifest."""
-        entries = []
-        for extra_dir in extras:
-            entries.append(
-                f'[[tool.streamlit.component.components]]\n'
-                f'name = "{extra_dir.name}"\n'
-                f'asset_dir = "{extra_dir.name}/frontend/build"'
-            )
+        entries = [
+            f"[[tool.streamlit.component.components]]\n"
+            f'name = "streamlit-extras.{extra_dir.name}"\n'
+            f'asset_dir = "{extra_dir.name}/frontend/build"'
+            for extra_dir in extras
+        ]
 
         content = (
             "# CCv2 component manifest for react-based extras\n"

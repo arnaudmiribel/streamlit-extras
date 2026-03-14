@@ -4,6 +4,7 @@ An interactive JSON viewer/editor built with React and CCv2.
 Uses @microlink/react-json-view for rendering and editing JSON data.
 """
 
+from functools import cache
 from typing import Any, TypedDict, cast
 
 import streamlit as st
@@ -15,11 +16,18 @@ def _on_data_change() -> None:
     """Callback function for when the JSON data changes in the frontend."""
 
 
-_COMPONENT = st.components.v2.component(
-    "streamlit-extras.json_editor",
-    js="index-*.js",
-    html='<div class="react-root"></div>',
-)
+@cache
+def _get_component() -> Any:
+    """Lazily initialize the CCv2 component.
+
+    Returns:
+        The component callable.
+    """
+    return st.components.v2.component(
+        "streamlit-extras.json_editor",
+        js="index-*.js",
+        html='<div class="react-root"></div>',
+    )
 
 
 class JsonEditorState(TypedDict):
@@ -85,9 +93,10 @@ def json_editor(
     else:
         parsed_data = data
 
+    component = _get_component()
     return cast(
         "JsonEditorState",
-        _COMPONENT(
+        component(
             key=key,
             data={
                 "json_data": parsed_data,

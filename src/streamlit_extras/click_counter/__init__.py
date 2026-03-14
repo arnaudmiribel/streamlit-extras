@@ -4,7 +4,8 @@ A simple interactive counter built with React and CCv2.
 This is an example of a Type E CCv2 extra (React + Vite bundling).
 """
 
-from typing import TypedDict
+from functools import cache
+from typing import Any, TypedDict, cast
 
 import streamlit as st
 
@@ -13,14 +14,20 @@ from streamlit_extras import extra
 
 def _on_count_change() -> None:
     """Callback function for when the count changes in the frontend."""
-    pass
 
 
-_COMPONENT = st.components.v2.component(
-    "streamlit-extras.click_counter",
-    js="index-*.js",
-    html='<div class="react-root"></div>',
-)
+@cache
+def _get_component() -> Any:
+    """Lazily initialize the CCv2 component.
+
+    Returns:
+        The component callable.
+    """
+    return st.components.v2.component(
+        "streamlit-extras.click_counter",
+        js="index-*.js",
+        html='<div class="react-root"></div>',
+    )
 
 
 class ClickCounterState(TypedDict):
@@ -53,11 +60,15 @@ def click_counter(
         >>> result = click_counter(label="Click to increment!", key="my_counter")
         >>> st.write(f"Count: {result['count']}")
     """
-    return _COMPONENT(
-        key=key,
-        data={"label": label},
-        default={"count": initial_count},
-        on_count_change=_on_count_change,
+    component = _get_component()
+    return cast(
+        "ClickCounterState",
+        component(
+            key=key,
+            data={"label": label},
+            default={"count": initial_count},
+            on_count_change=_on_count_change,
+        ),
     )
 
 
