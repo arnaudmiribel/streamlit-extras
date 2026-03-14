@@ -70,7 +70,7 @@ class FrontendBuildHook(BuildHookInterface):
         """Update the shared pyproject.toml manifest."""
         entries = [
             f"[[tool.streamlit.component.components]]\n"
-            f'name = "streamlit-extras.{extra_dir.name}"\n'
+            f'name = "{extra_dir.name}"\n'
             f'asset_dir = "{extra_dir.name}/frontend/build"'
             for extra_dir in extras
         ]

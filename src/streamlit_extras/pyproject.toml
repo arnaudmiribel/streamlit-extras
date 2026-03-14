@@ -6,8 +6,9 @@ name = "streamlit-extras"
 version = "0.0.1"
 
 [[tool.streamlit.component.components]]
-name = "streamlit-extras.click_counter"
+name = "click_counter"
 asset_dir = "click_counter/frontend/build"
+
 [[tool.streamlit.component.components]]
-name = "streamlit-extras.json_editor"
+name = "json_editor"
 asset_dir = "json_editor/frontend/build"
