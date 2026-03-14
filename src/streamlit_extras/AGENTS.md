@@ -2,8 +2,6 @@
 
 This document provides an overview of all available extras and their implementation approach.
 
-**Important:** Update this table when adding or modifying extras.
-
 ## Component Types
 
 - **pure python**: Pure Python using standard Streamlit API
@@ -15,7 +13,24 @@ This document provides an overview of all available extras and their implementat
 - **components v2: static assets**: Uses [`st.components.v2.component()`](https://docs.streamlit.io/develop/api-reference/custom-components/st.components.v2.component) with dedicated asset files (e.g. `.js`, `.html`, `.css`) in an `assets/` folder
 - **components v2: react**: Uses [`st.components.v2.component()`](https://docs.streamlit.io/develop/tutorials/custom-components/template-react) with a full React frontend
 
-## Extras Table
+## Choosing a Component Type
+
+Use this guide to select the appropriate implementation approach:
+
+| Requirement | Recommended Type |
+|-------------|------------------|
+| No UI changes or frontend script execution | **pure python** |
+| Requires only HTML and/or CSS | **st.html** |
+| Needs to combine markdown with HTML elements | **st.markdown(unsafe_allow_html)** |
+| Requires rendering a URL in an iframe | **components v1: iframe** |
+| Requires rendering full HTML in an iframe | **components v1: html** |
+| Requires JavaScript execution on frontend (no complex UI) | **components v2: inline** |
+| Basic UI with pure JS/HTML/CSS | **components v2: inline** (low complexity) or **components v2: static assets** |
+| Complex UI requiring React or npm dependencies | **components v2: react** |
+
+## Extras Overview
+
+**Important:** Update this table when adding or modifying extras.
 
 | Extra | Description | Component Type |
 |-------|-------------|----------------|
@@ -27,6 +42,7 @@ This document provides an overview of all available extras and their implementat
 | `capture` | Capture utility extensions for Streamlit | pure python |
 | `chart_annotations` | Add annotations to Altair time series charts | pure python |
 | `chart_container` | Embed charts in tabs with data exploration | pure python |
+| `click_counter` | Interactive click counter built with React | components v2: react |
 | `colored_header` | Create colorful, styled headers | st.html |
 | `concurrency_limiter` | Limit function execution concurrency | pure python |
 | `cookie_manager` | Read/write browser cookies from Python | components v2: inline |
@@ -40,6 +56,7 @@ This document provides an overview of all available extras and their implementat
 | `great_tables` | Render Great Tables objects in Streamlit | st.html |
 | `grid` | Place elements on a specified grid layout | pure python |
 | `image_selector` | Select images from a gallery | pure python |
+| `json_editor` | Interactive JSON viewer/editor built with React | components v2: react |
 | `jupyterlite` | Add a Jupyterlite sandbox to your app | components v1: iframe |
 | `keyboard_text` | Create keyboard-styled text | st.html |
 | `keyboard_url` | Keyboard shortcuts that open URLs | st.markdown(unsafe_allow_html) |
@@ -64,3 +81,74 @@ This document provides an overview of all available extras and their implementat
 
 - Prefer `st.html` over `st.markdown(unsafe_allow_html=True)`. Only use `st.markdown` with `unsafe_allow_html` when you need both markdown rendering and HTML in the same content.
 - When working on **components v2** extras, use the `/building-streamlit-custom-components-v2` skill for guidance on the v2 component API, state management, and theming.
+
+## Building React-based CCv2 Components
+
+For **components v2: react** extras, the frontend is built with React/TypeScript and Vite. Use the `click_counter` extra as a reference implementation.
+
+### Directory Structure
+
+```
+src/streamlit_extras/
+  pyproject.toml             # Shared CCv2 manifest (auto-generated during build)
+  <extra_name>/
+    __init__.py              # Python wrapper with @extra decorator
+    frontend/
+      package.json           # npm dependencies
+      tsconfig.json          # TypeScript config
+      vite.config.ts         # Vite build config
+      src/
+        index.tsx            # React root / FrontendRenderer
+        <Component>.tsx      # React component
+      build/                 # Built assets (generated during uv build)
+        index-<hash>.js
+```
+
+### Build Process
+
+1. Run `uv build` to build the wheel - frontends are compiled automatically via hatch hook
+2. The hook auto-detects extras with `frontend/package.json`
+3. Built assets are generated during build (not committed to repo)
+4. The wheel includes only the compiled JS bundles, not frontend source
+
+### Registration
+
+React-based CCv2 components must be registered in `src/streamlit_extras/pyproject.toml`:
+
+```toml
+[[tool.streamlit.component.components]]
+name = "your_extra_name"
+asset_dir = "your_extra_name/frontend/build"
+```
+
+### Key Files
+
+- **`src/streamlit_extras/pyproject.toml`**: Shared CCv2 manifest for all React-based components (auto-generated during build)
+- **`__init__.py`**: Uses `st.components.v2.component()` with `js="index-*.js"` glob
+- **`frontend/src/index.tsx`**: Implements `FrontendRenderer` interface, manages React roots
+- **`frontend/src/<Component>.tsx`**: React component using `setStateValue()` for state
+
+### Theming
+
+Use CSS custom properties for Streamlit theme integration (e.g. `var(--st-primary-color)`). See the [Theming and styling guide](https://docs.streamlit.io/develop/concepts/custom-components/components-v2/theming) for all available variables.
+
+### References
+
+**Concepts:**
+- [Quick start examples](https://docs.streamlit.io/develop/concepts/custom-components/components-v2/examples)
+- [Component registration](https://docs.streamlit.io/develop/concepts/custom-components/components-v2/register)
+- [Mounting components](https://docs.streamlit.io/develop/concepts/custom-components/components-v2/mount)
+- [State vs trigger values](https://docs.streamlit.io/develop/concepts/custom-components/components-v2/state-and-triggers)
+- [Bidirectional communication](https://docs.streamlit.io/develop/concepts/custom-components/components-v2/communicate)
+- [Theming and styling](https://docs.streamlit.io/develop/concepts/custom-components/components-v2/theming)
+- [Package-based components](https://docs.streamlit.io/develop/concepts/custom-components/components-v2/package-based)
+
+**API Reference (Python):**
+- [`st.components.v2.component`](https://docs.streamlit.io/develop/api-reference/custom-components/st.components.v2.component)
+- [`ComponentRenderer`](https://docs.streamlit.io/develop/api-reference/custom-components/st.components.v2.types.componentrenderer)
+
+**API Reference (Frontend):**
+- [`FrontendRendererArgs`](https://docs.streamlit.io/develop/api-reference/custom-components/component-v2-lib-frontendrendererargs)
+- [`FrontendRenderer`](https://docs.streamlit.io/develop/api-reference/custom-components/component-v2-lib-frontendrenderer)
+- [`FrontendState`](https://docs.streamlit.io/develop/api-reference/custom-components/component-v2-lib-frontendstate)
+- [`CleanupFunction`](https://docs.streamlit.io/develop/api-reference/custom-components/component-v2-lib-cleanupfunction)
