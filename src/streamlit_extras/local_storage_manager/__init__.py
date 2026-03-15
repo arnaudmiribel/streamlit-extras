@@ -8,7 +8,9 @@ JSON serialization.
 from __future__ import annotations
 
 import json
+import time
 from collections.abc import Iterator, MutableMapping
+from datetime import timedelta  # noqa: TC003 - used at runtime
 from typing import Any
 
 import streamlit as st
@@ -18,6 +20,7 @@ from streamlit_extras import extra
 
 _MAX_VALUE_SIZE_BYTES = 1_000_000  # 1MB soft limit per value
 _STORAGE_PREFIX = "st_extras_"
+_EXPIRY_WRAPPER_KEY = "__st_expires_at__"
 
 
 _LOCAL_STORAGE_COMPONENT = st.components.v2.component(
@@ -215,20 +218,30 @@ class LocalStorageManager(MutableMapping[str, Any]):
         """
         return self._ready
 
-    def set(self, name: str, value: Any) -> None:
+    def set(self, name: str, value: Any, *, expires_in: timedelta | None = None) -> None:
         """Set a value in localStorage.
 
         Args:
             name: The storage key.
             value: Any JSON-serializable value (dict, list, str, int, float, bool, None).
+            expires_in: Optional expiration duration. If set, the value will be
+                automatically treated as expired after this duration and return None
+                on read. The actual deletion is queued when the expired value is accessed.
         """
         _validate_key(name)
         _validate_value(value)
 
+        # Wrap value with expiration metadata if expires_in is set
+        if expires_in is not None:
+            expires_at = time.time() + expires_in.total_seconds()
+            stored_value = {_EXPIRY_WRAPPER_KEY: expires_at, "value": value}
+        else:
+            stored_value = value
+
         self._queue_operation(
             operation_type="set",
             name=name,
-            value=value,
+            value=stored_value,
         )
 
     def delete(self, name: str) -> None:
@@ -274,8 +287,45 @@ class LocalStorageManager(MutableMapping[str, Any]):
             }
         )
 
+    def _unwrap_value(self, key: str, raw_value: Any) -> tuple[Any, bool]:
+        """Unwrap a stored value, checking for expiration.
+
+        Returns:
+            A tuple of (value, is_expired). If expired, queues deletion.
+        """
+        # Check if this is a wrapped value with expiration
+        if isinstance(raw_value, dict) and _EXPIRY_WRAPPER_KEY in raw_value and "value" in raw_value:
+            expires_at = raw_value[_EXPIRY_WRAPPER_KEY]
+            if time.time() > expires_at:
+                # Value has expired - queue deletion
+                self.delete(key)
+                return None, True
+            return raw_value["value"], False
+
+        # Regular value without expiration
+        return raw_value, False
+
     def __getitem__(self, key: str) -> Any:
-        return self._snapshot[key]
+        raw_value = self._snapshot[key]
+        value, is_expired = self._unwrap_value(key, raw_value)
+        if is_expired:
+            raise KeyError(key)
+        return value
+
+    def get(self, key: str, default: Any = None) -> Any:
+        """Get a value from localStorage with an optional default.
+
+        Args:
+            key: The storage key.
+            default: Value to return if key is not found or expired.
+
+        Returns:
+            The stored value, or default if not found or expired.
+        """
+        try:
+            return self[key]
+        except KeyError:
+            return default
 
     def __setitem__(self, key: str, value: Any) -> None:
         self.set(key, value)
@@ -285,14 +335,29 @@ class LocalStorageManager(MutableMapping[str, Any]):
             raise KeyError(key)
         self.delete(key)
 
+    def __contains__(self, key: object) -> bool:
+        if not isinstance(key, str) or key not in self._snapshot:
+            return False
+        # Check if the value is expired
+        raw_value = self._snapshot[key]
+        _, is_expired = self._unwrap_value(key, raw_value)
+        return not is_expired
+
     def __iter__(self) -> Iterator[str]:
-        return iter(self._snapshot)
+        # Filter out expired keys
+        for key in self._snapshot:
+            raw_value = self._snapshot[key]
+            _, is_expired = self._unwrap_value(key, raw_value)
+            if not is_expired:
+                yield key
 
     def __len__(self) -> int:
-        return len(self._snapshot)
+        # Count only non-expired keys
+        return sum(1 for _ in self)
 
     def __repr__(self) -> str:
-        return repr(self._snapshot)
+        # Show only non-expired values
+        return repr({k: self[k] for k in self})
 
 
 @extra
@@ -316,6 +381,9 @@ def local_storage_manager(*, key: str = "local_storage_manager") -> LocalStorage
     - ``manager.keys()``, ``manager.values()``, ``manager.items()`` - iterate
     - ``manager.clear()`` - remove all items for this app
 
+    For values that should auto-expire, use ``manager.set(key, value, expires_in=...)``
+    instead of dict-style assignment.
+
     Data is automatically namespaced per-app (based on URL path) to prevent
     collisions between different Streamlit apps on the same domain.
 
@@ -331,6 +399,7 @@ def local_storage_manager(*, key: str = "local_storage_manager") -> LocalStorage
         - Use ``st.stop()`` on first load while waiting for sync
         - After setting/deleting values, call ``st.rerun()`` to see changes
         - Data persists across page refreshes and browser sessions
+        - Expired values return ``None`` (via ``.get()``) or raise ``KeyError``
 
     Example:
         >>> manager = local_storage_manager()
@@ -342,11 +411,12 @@ def local_storage_manager(*, key: str = "local_storage_manager") -> LocalStorage
         ...     manager["settings"] = settings
         ...     st.rerun()
 
-    Example with progress tracking:
+    Example with expiration:
+        >>> from datetime import timedelta
         >>> manager = local_storage_manager()
         >>> if manager.ready():
-        ...     progress = manager.get("game_progress", {"level": 1, "score": 0})
-        ...     st.write(f"Level {progress['level']}, Score: {progress['score']}")
+        ...     # Cache data for 1 hour
+        ...     manager.set("cache", expensive_data, expires_in=timedelta(hours=1))
     """
     return LocalStorageManager(key=key)
 
@@ -408,6 +478,8 @@ def example() -> None:
     st.subheader("Basic usage")
     st.code(
         """
+from datetime import timedelta
+
 manager = local_storage_manager()
 
 if not manager.ready():
@@ -422,13 +494,11 @@ if st.button("Use dark theme"):
     manager["settings"] = settings
     st.rerun()
 
-# Track user progress
-progress = manager.get("progress", {"level": 1, "score": 0})
-if st.button("Complete level"):
-    progress["level"] += 1
-    progress["score"] += 100
-    manager["progress"] = progress
-    st.rerun()
+# Store with expiration (auto-expires after duration)
+manager.set("session_cache", {"user": "alice"}, expires_in=timedelta(hours=1))
+
+# Expired values return None via .get() or raise KeyError via []
+cached = manager.get("session_cache")  # None if expired
 """.strip(),
         language="python",
     )
