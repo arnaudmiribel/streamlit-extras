@@ -137,16 +137,18 @@ def redirect(
     """
     validated_url = _validate_url(url)
 
-    _REDIRECT_COMPONENT(
-        data={
-            "url": validated_url,
-            "target": target,
-            "replace_history": replace_history,
-            "request_id": 1,
-        },
-        width="stretch",
-        height=0,
-    )
+    # Use st._event container to avoid adding any visual space to the UI
+    with st._event:
+        _REDIRECT_COMPONENT(
+            data={
+                "url": validated_url,
+                "target": target,
+                "replace_history": replace_history,
+                "request_id": 1,
+            },
+            width="stretch",
+            height=0,
+        )
 
 
 def example_same_tab() -> None:
