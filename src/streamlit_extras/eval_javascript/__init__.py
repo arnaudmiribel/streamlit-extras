@@ -234,29 +234,31 @@ def eval_javascript(expression: str, *, key: str) -> Any | None:
     current_status = component_state.get("status", "idle")
     completed_request_id = component_state.get("completed_request_id", -1)
 
-    _JAVASCRIPT_EVAL_COMPONENT(
-        key=key,
-        data={
-            "expression": expression,
-            "request_id": request_id,
-            "result": current_result,
-            "error": current_error,
-            "status": current_status,
-            "completed_request_id": completed_request_id,
-        },
-        default={
-            "result": current_result,
-            "error": current_error,
-            "status": current_status,
-            "completed_request_id": completed_request_id,
-        },
-        on_result_change=lambda: None,
-        on_error_change=lambda: None,
-        on_status_change=lambda: None,
-        on_completed_request_id_change=lambda: None,
-        width="stretch",
-        height=0,
-    )
+    # Use st._event container to avoid adding any visual space to the UI
+    with st._event:
+        _JAVASCRIPT_EVAL_COMPONENT(
+            key=key,
+            data={
+                "expression": expression,
+                "request_id": request_id,
+                "result": current_result,
+                "error": current_error,
+                "status": current_status,
+                "completed_request_id": completed_request_id,
+            },
+            default={
+                "result": current_result,
+                "error": current_error,
+                "status": current_status,
+                "completed_request_id": completed_request_id,
+            },
+            on_result_change=lambda: None,
+            on_error_change=lambda: None,
+            on_status_change=lambda: None,
+            on_completed_request_id_change=lambda: None,
+            width="stretch",
+            height=0,
+        )
 
     if completed_request_id != request_id:
         return None

@@ -190,22 +190,24 @@ class LocalStorageManager(MutableMapping[str, Any]):
         default_snapshot_json = component_state.get("snapshot_json", "{}")
         default_ready = component_state.get("ready", False)
 
-        self._result = _LOCAL_STORAGE_COMPONENT(
-            key=key,
-            data={
-                "operations": self._store["pending_operations"],
-                "last_processed_operation_id": last_processed_operation_id,
-            },
-            default={
-                "ready": default_ready,
-                "snapshot_json": default_snapshot_json,
-                "last_processed_operation_id": last_processed_operation_id,
-            },
-            on_ready_change=lambda: None,
-            on_snapshot_json_change=lambda: None,
-            on_last_processed_operation_id_change=lambda: None,
-            height=0,
-        )
+        # Use st._event container to avoid adding any visual space to the UI
+        with st._event:
+            self._result = _LOCAL_STORAGE_COMPONENT(
+                key=key,
+                data={
+                    "operations": self._store["pending_operations"],
+                    "last_processed_operation_id": last_processed_operation_id,
+                },
+                default={
+                    "ready": default_ready,
+                    "snapshot_json": default_snapshot_json,
+                    "last_processed_operation_id": last_processed_operation_id,
+                },
+                on_ready_change=lambda: None,
+                on_snapshot_json_change=lambda: None,
+                on_last_processed_operation_id_change=lambda: None,
+                height=0,
+            )
 
         self._ready = bool(self._result.ready)
         self._snapshot = json.loads(self._result.snapshot_json or "{}")
