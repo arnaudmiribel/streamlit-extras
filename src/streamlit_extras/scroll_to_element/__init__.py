@@ -25,7 +25,7 @@ _SCROLL_COMPONENT = st.components.v2.component(
 
         const className = data?.class_name ?? "";
         const scrollMode = data?.scroll_mode ?? "smooth";
-        const alignment = data?.alignment ?? "start";
+        const alignment = data?.alignment ?? "center";
         const requestId = data?.request_id ?? 0;
 
         // Skip if no class name or already processed this request
@@ -93,7 +93,7 @@ def scroll_to_element(
     key: str,
     *,
     scroll_mode: Literal["smooth", "instant", "auto"] = "smooth",
-    alignment: Literal["start", "center", "end", "nearest"] = "start",
+    alignment: Literal["start", "center", "end", "nearest"] = "center",
 ) -> None:
     """Scroll the page to an element with the specified key.
 
@@ -108,7 +108,7 @@ def scroll_to_element(
             jumps immediately, "auto" uses browser preference. Default is "smooth".
         alignment: Where to position the element in the viewport after scrolling.
             "start" aligns to the top, "center" centers it, "end" aligns to the
-            bottom, "nearest" scrolls the minimum distance. Default is "start".
+            bottom, "nearest" scrolls the minimum distance. Default is "center".
 
     Example:
         >>> st.text_input("Name", key="name_field")
@@ -174,7 +174,7 @@ def example_basic() -> None:
             scroll_to_element("intro_section")
 
         if st.button("Go to Name Input", key="nav_name"):
-            scroll_to_element("name_input", alignment="center")
+            scroll_to_element("name_input")
 
         if st.button("Go to Middle Section", key="nav_middle"):
             scroll_to_element("middle_section")
@@ -206,8 +206,8 @@ def example_smooth_vs_instant() -> None:
             scroll_to_element("scroll_target", scroll_mode="instant")
 
     with col3:
-        if st.button("Center in view", key="center_btn"):
-            scroll_to_element("scroll_target", scroll_mode="smooth", alignment="center")
+        if st.button("Align to top", key="center_btn"):
+            scroll_to_element("scroll_target", alignment="start")
 
 
 __title__ = "Scroll to Element"
