@@ -3,6 +3,7 @@ import ReactJson, {
   InteractionProps,
   ThemeKeys,
 } from "@microlink/react-json-view";
+import Color from "color";
 import {
   FC,
   ReactElement,
@@ -10,8 +11,24 @@ import {
   useMemo,
   useState,
   useRef,
+  useEffect,
   CSSProperties,
 } from "react";
+
+/**
+ * Determine if a background color is "light" based on luminosity.
+ * Uses the Color library which handles any CSS color format.
+ */
+function hasLightBackgroundColor(backgroundColor: string): boolean {
+  try {
+    const color = Color(backgroundColor);
+    // luminosity() returns 0-1 scale using WCAG relative luminance
+    return color.luminosity() > 0.5;
+  } catch {
+    // Default to light if we can't parse the color
+    return true;
+  }
+}
 
 export type JsonEditorStateShape = {
   data: unknown;
@@ -61,6 +78,7 @@ const JsonEditor: FC<JsonEditorProps> = ({
 }): ReactElement => {
   // Track if we've initialized to avoid resetting user edits
   const isInitialized = useRef(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Local state to track the current data (including edits)
   // Initialize with json_data on first render
@@ -70,6 +88,29 @@ const JsonEditor: FC<JsonEditorProps> = ({
     setStateValue("data", json_data);
     return json_data;
   });
+
+  // Auto-detect theme based on background color
+  const [detectedTheme, setDetectedTheme] = useState<ThemeKeys>("rjv-default");
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    // Get the host element (shadow root host) or fall back to container
+    const host =
+      (containerRef.current.getRootNode() as ShadowRoot)?.host ??
+      containerRef.current;
+    const backgroundColor = getComputedStyle(host)
+      .getPropertyValue("--st-background-color")
+      .trim();
+
+    if (backgroundColor) {
+      const isLight = hasLightBackgroundColor(backgroundColor);
+      setDetectedTheme(isLight ? "rjv-default" : "monokai");
+    }
+  }, []);
+
+  // Use provided theme if specified, otherwise use auto-detected theme
+  const effectiveTheme = theme || detectedTheme;
 
   const containerStyle = useMemo<CSSProperties>(
     () => ({
@@ -120,12 +161,12 @@ const JsonEditor: FC<JsonEditorProps> = ({
   const rootName = name === null ? false : name;
 
   return (
-    <div style={containerStyle}>
+    <div ref={containerRef} style={containerStyle}>
       <ReactJson
         src={currentData as object}
         name={rootName}
         collapsed={collapsed}
-        theme={theme as ThemeKeys}
+        theme={effectiveTheme as ThemeKeys}
         displayDataTypes={display_data_types}
         displayObjectSize={display_object_size}
         enableClipboard={enable_clipboard}

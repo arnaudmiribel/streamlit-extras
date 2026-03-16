@@ -153,7 +153,10 @@ def add_message(
     if not hasattr(active_dg, "chat_history"):
         raise StreamlitAPIException("The `add_message` command can only be used inside a `chat` container.")
 
-    displayed_elements = _display_message(name, *args, avatar=avatar)
+    # Write to the active container (new_messages_container)
+    with active_dg:
+        displayed_elements = _display_message(name, *args, avatar=avatar)
+
     active_dg.chat_history.append(
         ChatMessage(
             author=name,
@@ -186,14 +189,20 @@ def chat(key: str = "chat_messages") -> Generator[DeltaGenerator, None, None]:
         st.session_state[key] = []
     chat_history: list[ChatMessage] = st.session_state[key]
 
-    chat_container.chat_history = chat_history  # type: ignore
-
     with chat_container:
+        # Display existing messages from history
         for message in chat_history:
             _display_message(message["author"], *message["content"], avatar=message["avatar"])
 
+        # Create a container for new messages BEFORE yielding
+        # This ensures new messages appear above any content (like chat_input)
+        # that the user adds in the yielded block
+        new_messages_container = st.container()
+
+    new_messages_container.chat_history = chat_history  # type: ignore
+
     # Set the active chat container for add_message to use
-    token = _active_chat_container.set(chat_container)
+    token = _active_chat_container.set(new_messages_container)
     try:
         with chat_container:
             yield chat_container

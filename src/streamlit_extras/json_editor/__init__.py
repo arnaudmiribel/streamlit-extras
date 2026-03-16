@@ -43,7 +43,7 @@ def json_editor(
     *,
     name: str | None = "root",
     collapsed: bool | int = False,
-    theme: str = "rjv-default",
+    theme: str | None = None,
     display_data_types: bool = True,
     display_object_size: bool = True,
     enable_clipboard: bool = True,
@@ -64,7 +64,9 @@ def json_editor(
             - False: Expand all nodes
             - True: Collapse all nodes
             - int: Collapse nodes at depth > int
-        theme: Color theme for the viewer. Options include:
+        theme: Color theme for the viewer. If None (default), auto-detects
+            based on whether the Streamlit theme is light or dark.
+            Options include:
             "rjv-default", "monokai", "solarized", "ocean", "hopscotch",
             "summerfruit", "tomorrow", "ashes", "bespin", "brewer",
             "bright", "chalk", "codeschool", "colors", "eighties",
@@ -103,7 +105,7 @@ def json_editor(
                 "json_data": parsed_data,
                 "name": name,
                 "collapsed": collapsed,
-                "theme": theme,
+                "theme": theme or "",  # Empty string triggers auto-detect
                 "display_data_types": display_data_types,
                 "display_object_size": display_object_size,
                 "enable_clipboard": enable_clipboard,
@@ -137,7 +139,6 @@ def example() -> None:
         sample_data,
         name="user",
         collapsed=False,
-        theme="monokai",
         editable=True,
         key="demo_editor",
     )
