@@ -91,22 +91,37 @@ const JsonEditor: FC<JsonEditorProps> = ({
 
   // Auto-detect theme based on background color
   const [detectedTheme, setDetectedTheme] = useState<ThemeKeys>("rjv-default");
+  const lastBackgroundColor = useRef<string>("");
 
   useEffect(() => {
     if (!containerRef.current) return;
 
     // Get the host element (shadow root host) or fall back to container
-    const host =
-      (containerRef.current.getRootNode() as ShadowRoot)?.host ??
-      containerRef.current;
-    const backgroundColor = getComputedStyle(host)
-      .getPropertyValue("--st-background-color")
-      .trim();
+    const root = containerRef.current.getRootNode() as ShadowRoot;
+    const host = root?.host ?? containerRef.current;
 
-    if (backgroundColor) {
-      const isLight = hasLightBackgroundColor(backgroundColor);
-      setDetectedTheme(isLight ? "rjv-default" : "monokai");
-    }
+    // Function to detect and update theme based on background color
+    const updateThemeFromBackground = () => {
+      const backgroundColor = getComputedStyle(host)
+        .getPropertyValue("--st-background-color")
+        .trim();
+
+      // Only update if the background color actually changed
+      if (backgroundColor && backgroundColor !== lastBackgroundColor.current) {
+        lastBackgroundColor.current = backgroundColor;
+        const isLight = hasLightBackgroundColor(backgroundColor);
+        setDetectedTheme(isLight ? "rjv-default" : "monokai");
+      }
+    };
+
+    // Initial detection
+    updateThemeFromBackground();
+
+    // Poll for CSS variable changes since MutationObserver doesn't catch
+    // inherited/cascading CSS custom property changes
+    const intervalId = setInterval(updateThemeFromBackground, 100);
+
+    return () => clearInterval(intervalId);
   }, []);
 
   // Use provided theme if specified, otherwise use auto-detected theme
