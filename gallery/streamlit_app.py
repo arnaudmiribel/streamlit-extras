@@ -15,9 +15,9 @@ class ExtraInfo(TypedDict):
     deprecated: bool
 
 
-st.set_page_config(layout="centered", page_icon=":knot:", page_title="streamlit-extras")
+st.set_page_config(layout="centered", page_icon=":material/extension:", page_title="streamlit-extras")
 
-""" # :knot: streamlit-extras """
+""" # :material/extension: streamlit-extras """
 
 
 @st.cache_resource
