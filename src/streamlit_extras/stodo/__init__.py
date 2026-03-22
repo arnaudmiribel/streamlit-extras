@@ -18,7 +18,7 @@ def to_do(st_commands: Sequence[Sequence[Any]], checkbox_id: str) -> bool:
     Returns:
         None: Prints the to do list
     """
-    cols = st.columns((1, 20))
+    cols = st.columns((1, 20), vertical_alignment="center")
     done = cols[0].checkbox(" ", key=checkbox_id)
     if done:
         for cmd, *args in st_commands:
