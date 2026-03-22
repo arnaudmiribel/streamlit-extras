@@ -105,6 +105,8 @@ if selected_extra is None:
     right.markdown("Choose an extra first.")
     st.stop()
 
+assert selected_extra is not None  # for type checker (st.stop() doesn't return)
+
 with right:
     info = extras[selected_extra]
     mod = import_module(f"streamlit_extras.{selected_extra}")

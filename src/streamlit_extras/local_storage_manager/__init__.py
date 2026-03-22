@@ -14,6 +14,7 @@ from datetime import timedelta  # noqa: TC003 - used at runtime
 from typing import Any
 
 import streamlit as st
+import streamlit.components.v2
 from streamlit.errors import StreamlitAPIException
 
 from streamlit_extras import extra

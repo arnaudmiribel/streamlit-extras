@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any
 
 import streamlit as st
+import streamlit.components.v2
 
 
 def _load_asset(assets_dir: Path, filename: str) -> str:

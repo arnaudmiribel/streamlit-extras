@@ -7,6 +7,7 @@ in the browser and returns the result to Python. The component itself is hidden.
 from typing import Any
 
 import streamlit as st
+import streamlit.components.v2
 
 from streamlit_extras import extra
 

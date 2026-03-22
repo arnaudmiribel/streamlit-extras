@@ -13,6 +13,7 @@ from typing import Literal, cast
 from urllib.parse import quote
 
 import streamlit as st
+import streamlit.components.v2
 from streamlit.errors import StreamlitAPIException
 
 from streamlit_extras import extra

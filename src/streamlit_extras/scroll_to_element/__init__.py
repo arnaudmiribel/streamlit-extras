@@ -11,6 +11,7 @@ import re
 from typing import Literal
 
 import streamlit as st
+import streamlit.components.v2
 
 from streamlit_extras import extra
 
