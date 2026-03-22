@@ -42,7 +42,6 @@ Use this guide to select the appropriate implementation approach:
 | `capture` | Capture utility extensions for Streamlit | pure python |
 | `chart_annotations` | Add annotations to Altair time series charts | pure python |
 | `chart_container` | Embed charts in tabs with data exploration | pure python |
-| `click_counter` | Interactive click counter built with React | components v2: react |
 | `colored_header` | Create colorful, styled headers | st.html |
 | `concurrency_limiter` | Limit function execution concurrency | pure python |
 | `cookie_manager` | Read/write browser cookies from Python | components v2: inline |
@@ -91,9 +90,8 @@ For **components v2: react** extras, the frontend is built with React/TypeScript
 
 ### Current React Extras
 
-- `click_counter/` - Simple interactive counter (demo/reference)
-- `json_editor/` - Interactive JSON viewer/editor (most feature-complete example)
-- `pagination/` - Pagination widget with prev/next arrows and page numbers
+- `pagination/` - Pagination widget (recommended reference for new React extras)
+- `json_editor/` - Interactive JSON viewer/editor
 
 ### Creating a React Extra
 
