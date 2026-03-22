@@ -136,6 +136,8 @@ npm run build     # Production build
 npm run dev       # Watch mode for development
 ```
 
+The `npm run dev` command watches for changes to your frontend code and rebuilds automatically. When you make changes, refresh your Streamlit app to see them.
+
 ### Registration
 
 React-based CCv2 components must be registered in `src/streamlit_extras/pyproject.toml`:
