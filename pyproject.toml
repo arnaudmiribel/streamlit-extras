@@ -172,7 +172,7 @@ include = ["src", "gallery"]
 unused-type-ignore-comment = "ignore"  # Allow mypy-compatible type:ignore comments (ty doesn't need them)
 unresolved-import = "ignore"      # Optional dependencies may not be installed
 unresolved-attribute = "ignore"   # Dynamic attributes from decorators/modules
-# Downgrade to warnings - these are false positives from incomplete pandas/numpy type stubs
-invalid-argument-type = "warn"    # pandas DataFrame columns parameter
-invalid-assignment = "warn"       # Complex type inference in example code
-no-matching-overload = "warn"     # numpy random method overloads
+# Ignore - these are false positives from incomplete pandas/numpy type stubs
+invalid-argument-type = "ignore"    # pandas DataFrame columns parameter
+invalid-assignment = "ignore"       # Complex type inference in example code
+no-matching-overload = "ignore"     # numpy random method overloads
