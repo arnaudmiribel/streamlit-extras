@@ -62,6 +62,7 @@ Use this guide to select the appropriate implementation approach:
 | `keyboard_url` | Keyboard shortcuts that open URLs | st.markdown(unsafe_allow_html) |
 | `let_it_rain` | Create emoji rain animations | st.html |
 | `mandatory_date_range` | Date range picker requiring both dates | pure python |
+| `pagination` | Pagination widget with prev/next arrows and page numbers | components v2: react |
 | `mention` | Create Notion-style mention links with icons | st.html |
 | `metric_cards` | Restyle metrics as styled cards | st.html |
 | `radial_menu` | Circular menu around a central button | components v2: static assets |
@@ -92,6 +93,7 @@ For **components v2: react** extras, the frontend is built with React/TypeScript
 
 - `click_counter/` - Simple interactive counter (demo/reference)
 - `json_editor/` - Interactive JSON viewer/editor (most feature-complete example)
+- `pagination/` - Pagination widget with prev/next arrows and page numbers
 
 ### Creating a React Extra
 
