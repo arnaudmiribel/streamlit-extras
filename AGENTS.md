@@ -113,7 +113,6 @@ Some extras use React frontends via Streamlit's Custom Components v2 (CCv2) API.
 
 - `click_counter/` - Simple interactive counter (demo/reference)
 - `json_editor/` - Interactive JSON viewer/editor
-- `dataframe_filter/` - Filter bar widget for pandas DataFrames
 
 ### Directory Structure
 

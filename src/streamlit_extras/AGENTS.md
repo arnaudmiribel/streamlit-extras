@@ -48,7 +48,6 @@ Use this guide to select the appropriate implementation approach:
 | `cookie_manager` | Read/write browser cookies from Python | components v2: inline |
 | `customize_running` | Customize the running widget appearance | st.html |
 | `dataframe_explorer` | Interactive dataframe filtering UI | pure python |
-| `dataframe_filter` | Filter bar widget for filtering DataFrames | components v2: react |
 | `echo_expander` | Show executed code in an expander | pure python |
 | `eval_javascript` | Evaluate JavaScript in browser, return to Python | components v2: inline |
 | `exception_handler` | Override Streamlit's uncaught exception handler | pure python |
