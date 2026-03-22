@@ -169,7 +169,7 @@ ignore_errors = true
 include = ["src", "gallery"]
 
 [tool.ty.rules]
-unused-ignore-comment = "ignore"  # Allow mypy-compatible type:ignore comments (ty doesn't need them)
+unused-type-ignore-comment = "ignore"  # Allow mypy-compatible type:ignore comments (ty doesn't need them)
 unresolved-import = "ignore"      # Optional dependencies may not be installed
 unresolved-attribute = "ignore"   # Dynamic attributes from decorators/modules
 # Downgrade to warnings - these are false positives from incomplete pandas/numpy type stubs
