@@ -86,7 +86,22 @@ Use this guide to select the appropriate implementation approach:
 
 ## Building React-based CCv2 Components
 
-For **components v2: react** extras, the frontend is built with React/TypeScript and Vite. Use the `click_counter` extra as a reference implementation.
+For **components v2: react** extras, the frontend is built with React/TypeScript and Vite.
+
+### Current React Extras
+
+- `click_counter/` - Simple interactive counter (demo/reference)
+- `json_editor/` - Interactive JSON viewer/editor (most feature-complete example)
+
+### Creating a React Extra
+
+1. Copy `component-template/` to `src/streamlit_extras/<extra_name>/`
+2. Rename `component_template/` subdirectory to `frontend/`
+3. Update `package.json` name and dependencies
+4. Implement your React component in `frontend/src/`
+5. Create Python wrapper in `__init__.py` using `st.components.v2.component()`
+6. Add standard extra metadata (`__title__`, `__icon__`, etc.)
+7. Register in `src/streamlit_extras/pyproject.toml` (see Registration below)
 
 ### Directory Structure
 
@@ -108,10 +123,18 @@ src/streamlit_extras/
 
 ### Build Process
 
-1. Run `uv build` to build the wheel - frontends are compiled automatically via hatch hook
+1. Run `uv build` to build the wheel - frontends are compiled automatically via `scripts/hatch_build.py`
 2. The hook auto-detects extras with `frontend/package.json`
 3. Built assets are generated during build (not committed to repo)
 4. The wheel includes only the compiled JS bundles, not frontend source
+
+**For development:** Build manually:
+```bash
+cd src/streamlit_extras/<extra_name>/frontend
+npm install
+npm run build     # Production build
+npm run dev       # Watch mode for development
+```
 
 ### Registration
 

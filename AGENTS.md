@@ -107,57 +107,14 @@ __examples__ = [example]
 
 ## React-Based Extras (CCv2)
 
-Some extras use React frontends via Streamlit's Custom Components v2 (CCv2) API. These require Node.js and npm to build.
+Some extras use React frontends via Streamlit's Custom Components v2 (CCv2) API. These require Node.js (>=18 LTS) and npm to build.
 
-### Current React Extras
+For detailed CCv2 documentation (directory structure, build process, registration, theming), see `src/streamlit_extras/AGENTS.md`.
 
-- `click_counter/` - Simple interactive counter (demo/reference)
-- `json_editor/` - Interactive JSON viewer/editor
-
-### Directory Structure
-
-```
-<extra_name>/
-├── __init__.py           # Python wrapper (uses st.components.v2.component)
-└── frontend/
-    ├── package.json      # npm dependencies
-    ├── package-lock.json # Lockfile for reproducible builds
-    ├── vite.config.ts    # Vite bundler config
-    ├── tsconfig.json     # TypeScript config
-    ├── src/
-    │   ├── index.tsx     # React entry point
-    │   └── *.tsx         # Component files
-    └── build/            # Compiled output (generated)
-```
-
-### Build System
-
-The build process is automated via `scripts/hatch_build.py`:
-
-1. **During `uv build`:** The Hatch build hook automatically:
-   - Discovers React extras by finding `*/frontend/package.json` files
-   - Runs `npm ci` (or `npm install` if no lockfile)
-   - Runs `npm run build` to compile the frontend
-   - Updates `src/streamlit_extras/pyproject.toml` manifest
-
-2. **For development:** Build manually:
-   ```bash
-   cd src/streamlit_extras/<extra_name>/frontend
-   npm install
-   npm run build     # Production build
-   npm run dev       # Watch mode for development
-   ```
-
-### Creating a React Extra
-
-1. Copy `component-template/` to `src/streamlit_extras/<extra_name>/`
-2. Rename `component_template/` subdirectory to `frontend/`
-3. Update `package.json` name and dependencies
-4. Implement your React component in `frontend/src/`
-5. Create Python wrapper in `__init__.py` using `st.components.v2.component()`
-6. Add standard extra metadata (`__title__`, `__icon__`, etc.)
-
-See existing React extras for patterns: `json_editor/` is the most feature-complete example.
+**Quick commands:**
+- `cd src/streamlit_extras/<extra>/frontend && npm install && npm run build` - Build frontend
+- `cd src/streamlit_extras/<extra>/frontend && npm run dev` - Watch mode for development
+- `uv build` - Build wheel (auto-compiles all React frontends via hatch hook)
 
 ## Code Style
 
