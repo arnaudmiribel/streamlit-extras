@@ -14,18 +14,26 @@ Rules and context for AI coding agents working on streamlit-extras.
   - `__init__.py`: The `@extra` decorator (registers functions)
   - `<extra_name>/`: Each extra is its own directory with an `__init__.py`
 - `gallery/`: Demo Streamlit app showcasing all extras
+- `component-template/`: Template for creating new React-based (CCv2) extras
 - `tests/`: Pytest tests (validates extra metadata)
 - `docs/`: MkDocs documentation source
 - `pyproject.toml`: Dependencies, ruff/mypy config
+- `packages.txt`: System dependencies (nodejs/npm) for Community Cloud
+- `hatch_build.py`: Build hook that auto-compiles React frontends
 - `work-tmp/`: Temporary files, specs, and scripts (gitignored)
 
 ## Essential Commands
 
 **Setup:**
-- `uv sync`: Install dependencies
+- `uv sync`: Install Python dependencies
+- `cd src/streamlit_extras/<extra>/frontend && npm install`: Install npm deps for React extras
 
 **Development:**
 - `uv run streamlit run gallery/streamlit_app.py`: Run demo app
+- `cd src/streamlit_extras/<extra>/frontend && npm run dev`: Watch mode for React extras
+
+**Building:**
+- `uv build`: Build wheel (auto-compiles React frontends via hatch hook)
 
 **Quality checks:**
 - `uv run pytest`: Run tests
@@ -42,6 +50,7 @@ Rules and context for AI coding agents working on streamlit-extras.
 
 - **Python 3.10+** with **uv** for dependency management
 - **Streamlit** (>=1.54.0) as the core framework
+- **Node.js** (>=18 LTS) with npm for React-based extras
 - **Ruff** for linting and formatting
 - **mypy** + **ty** for type checking
 - **pytest** for testing
@@ -96,6 +105,67 @@ __icon__ = "🎯"
 __author__ = "Your Name"
 __examples__ = [example]
 ```
+
+## React-Based Extras (CCv2)
+
+Some extras use React frontends via Streamlit's Custom Components v2 (CCv2) API. These require Node.js and npm to build.
+
+### Current React Extras
+
+- `click_counter/` - Simple interactive counter (demo/reference)
+- `json_editor/` - Interactive JSON viewer/editor
+- `dataframe_filter/` - Filter bar widget for pandas DataFrames
+
+### Directory Structure
+
+```
+<extra_name>/
+├── __init__.py           # Python wrapper (uses st.components.v2.component)
+└── frontend/
+    ├── package.json      # npm dependencies
+    ├── package-lock.json # Lockfile for reproducible builds
+    ├── vite.config.ts    # Vite bundler config
+    ├── tsconfig.json     # TypeScript config
+    ├── src/
+    │   ├── index.tsx     # React entry point
+    │   └── *.tsx         # Component files
+    └── build/            # Compiled output (generated)
+```
+
+### Build System
+
+The build process is automated via `hatch_build.py`:
+
+1. **During `uv build`:** The Hatch build hook automatically:
+   - Discovers React extras by finding `*/frontend/package.json` files
+   - Runs `npm ci` (or `npm install` if no lockfile)
+   - Runs `npm run build` to compile the frontend
+   - Updates `src/streamlit_extras/pyproject.toml` manifest
+
+2. **For development:** Build manually:
+   ```bash
+   cd src/streamlit_extras/<extra_name>/frontend
+   npm install
+   npm run build     # Production build
+   npm run dev       # Watch mode for development
+   ```
+
+### Creating a React Extra
+
+1. Copy `component-template/` to `src/streamlit_extras/<extra_name>/`
+2. Rename `component_template/` subdirectory to `frontend/`
+3. Update `package.json` name and dependencies
+4. Implement your React component in `frontend/src/`
+5. Create Python wrapper in `__init__.py` using `st.components.v2.component()`
+6. Add standard extra metadata (`__title__`, `__icon__`, etc.)
+
+See existing React extras for patterns: `json_editor/` is the most feature-complete example.
+
+### Deployment Requirements
+
+For Streamlit Community Cloud (or any deployment that builds from source):
+- Add `nodejs` and `npm` to `packages.txt` for apt-get installation
+- The repo includes `packages.txt` in the root directory for this purpose
 
 ## Code Style
 

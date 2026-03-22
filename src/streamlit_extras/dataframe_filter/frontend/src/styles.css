@@ -1,0 +1,286 @@
+/* Streamlit theme integration - use :host for shadow DOM */
+:host {
+  --filter-primary: var(--st-primary-color, #ff4b4b);
+  --filter-bg: var(--st-background-color, #ffffff);
+  --filter-bg-secondary: var(--st-secondary-background-color, #f0f2f6);
+  --filter-text: var(--st-text-color, #262730);
+  --filter-text-muted: rgba(102, 102, 102, 1);
+  --filter-border: rgba(128, 128, 128, 0.2);
+  --filter-border-hover: rgba(128, 128, 128, 0.4);
+  --filter-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --filter-radius: 20px;
+  --filter-radius-sm: 4px;
+  --filter-font-size: 14px;
+  --filter-spacing: 8px;
+}
+
+/* Main container */
+.filter-container {
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: var(--filter-font-size, 14px);
+  color: var(--filter-text, #262730);
+  line-height: 1.5;
+  width: 100%;
+}
+
+/* Filter bar - horizontal layout */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--filter-spacing, 8px);
+  padding: 4px 0;
+}
+
+/* Filter chip - pill style with readable text */
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px 6px 12px;
+  background: var(--filter-bg-secondary, #f0f2f6);
+  border: none;
+  border-radius: var(--filter-radius, 20px);
+  font-size: var(--filter-font-size, 14px);
+  transition: background-color 0.15s ease;
+}
+
+.filter-chip:hover {
+  background: rgba(128, 128, 128, 0.15);
+}
+
+.filter-chip-content {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.filter-chip-label {
+  font-weight: 600;
+  color: var(--filter-text, #262730);
+}
+
+.filter-chip-label::after {
+  content: ":";
+}
+
+.filter-chip-operator {
+  color: var(--filter-text, #262730);
+}
+
+.filter-chip-value {
+  color: var(--filter-text, #262730);
+}
+
+/* Remove filter button - small × */
+.filter-remove-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  margin-left: 2px;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  color: var(--filter-text-muted, #666);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.filter-remove-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: var(--filter-text, #262730);
+}
+
+/* Add filter button - small pill with + */
+.filter-add-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: transparent;
+  border: 1px dashed var(--filter-border, rgba(128, 128, 128, 0.3));
+  border-radius: 50%;
+  color: var(--filter-text-muted, #666);
+  font-size: 18px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.filter-add-btn:hover {
+  border-color: var(--filter-primary, #ff4b4b);
+  border-style: solid;
+  color: var(--filter-primary, #ff4b4b);
+}
+
+.filter-add-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Clear all button */
+.filter-clear-btn {
+  padding: 4px 8px;
+  background: transparent;
+  border: none;
+  border-radius: var(--filter-radius-sm, 4px);
+  color: var(--filter-text-muted, #666);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.filter-clear-btn:hover {
+  color: var(--filter-primary, #ff4b4b);
+}
+
+/* Selects and inputs inside filter chips */
+.filter-select,
+.filter-input {
+  padding: 4px 8px;
+  background: var(--filter-bg, #ffffff);
+  border: 1px solid var(--filter-border, rgba(128, 128, 128, 0.2));
+  border-radius: var(--filter-radius-sm, 4px);
+  color: var(--filter-text, #262730);
+  font-size: var(--filter-font-size, 14px);
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.filter-select:focus,
+.filter-input:focus {
+  border-color: var(--filter-primary, #ff4b4b);
+  box-shadow: 0 0 0 2px rgba(255, 75, 75, 0.15);
+}
+
+.filter-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5' stroke='%23666' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 6px center;
+  padding-right: 24px;
+}
+
+.filter-select-column {
+  font-weight: 500;
+  max-width: 120px;
+}
+
+.filter-input {
+  width: 100px;
+}
+
+.filter-input-small {
+  width: 70px;
+}
+
+.filter-input[type="number"] {
+  width: 70px;
+}
+
+.filter-input[type="date"] {
+  width: 120px;
+}
+
+/* Between values layout */
+.filter-between {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.filter-between-separator {
+  color: var(--filter-text-muted, #666);
+  font-size: 12px;
+}
+
+/* Multi-select dropdown */
+.filter-multiselect {
+  position: relative;
+}
+
+.filter-multiselect-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  min-width: 80px;
+  padding: 4px 8px;
+  background: var(--filter-bg, #ffffff);
+  border: 1px solid var(--filter-border, rgba(128, 128, 128, 0.2));
+  border-radius: var(--filter-radius-sm, 4px);
+  color: var(--filter-text, #262730);
+  font-size: var(--filter-font-size, 14px);
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.filter-multiselect-trigger:hover {
+  border-color: var(--filter-border-hover, rgba(128, 128, 128, 0.4));
+}
+
+.filter-multiselect-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 100;
+  min-width: 150px;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 4px;
+  background: var(--filter-bg, #ffffff);
+  border: 1px solid var(--filter-border, rgba(128, 128, 128, 0.2));
+  border-radius: 8px;
+  box-shadow: var(--filter-shadow, 0 4px 12px rgba(0, 0, 0, 0.1));
+}
+
+.filter-multiselect-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.1s ease;
+}
+
+.filter-multiselect-option:hover {
+  background: var(--filter-bg-secondary, #f0f2f6);
+}
+
+.filter-multiselect-option input[type="checkbox"] {
+  margin: 0;
+  cursor: pointer;
+  accent-color: var(--filter-primary, #ff4b4b);
+}
+
+.filter-multiselect-option span {
+  font-size: var(--filter-font-size, 14px);
+  color: var(--filter-text, #262730);
+}
+
+/* Scrollbar styling for dropdowns */
+.filter-multiselect-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.filter-multiselect-dropdown::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.filter-multiselect-dropdown::-webkit-scrollbar-thumb {
+  background: var(--filter-border, rgba(128, 128, 128, 0.3));
+  border-radius: 3px;
+}
+
+.filter-multiselect-dropdown::-webkit-scrollbar-thumb:hover {
+  background: var(--filter-border-hover, rgba(128, 128, 128, 0.5));
+}

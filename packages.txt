@@ -1,0 +1,4 @@
+# System dependencies for Streamlit Community Cloud
+# Required to build React-based CCv2 extras from source
+nodejs
+npm
