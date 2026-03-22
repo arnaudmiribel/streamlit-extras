@@ -1,6 +1,6 @@
 ---
 name: building-streamlit-custom-components-v2
-description: Builds bidirectional Streamlit Custom Components v2 (CCv2) using `st.components.v2.component`. Use when authoring inline HTML/CSS/JS components or packaged components (manifest `asset_dir`, js/css globs), wiring state/trigger callbacks, theming via `--st-*` CSS variables, or bundling with Vite / `component-template` v2.
+description: Builds bidirectional Streamlit Custom Components v2 (CCv2) using `st.components.v2.component`. Use when authoring inline HTML/CSS/JS components or packaged components (manifest `asset_dir`, js/css globs), wiring state/trigger callbacks, theming via `--st-*` CSS variables, or bundling with Vite. For streamlit-extras, use the `pagination` extra as a reference implementation.
 license: Apache-2.0
 ---
 

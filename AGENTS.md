@@ -14,7 +14,6 @@ Rules and context for AI coding agents working on streamlit-extras.
   - `__init__.py`: The `@extra` decorator (registers functions)
   - `<extra_name>/`: Each extra is its own directory with an `__init__.py`
 - `gallery/`: Demo Streamlit app showcasing all extras
-- `component-template/`: Template for creating new React-based (CCv2) extras
 - `tests/`: Pytest tests (validates extra metadata)
 - `docs/`: MkDocs documentation source
 - `pyproject.toml`: Dependencies, ruff/mypy config

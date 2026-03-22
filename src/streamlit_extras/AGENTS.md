@@ -95,11 +95,13 @@ For **components v2: react** extras, the frontend is built with React/TypeScript
 
 ### Creating a React Extra
 
-1. Copy `component-template/` to `src/streamlit_extras/<extra_name>/`
-2. Rename `component_template/` subdirectory to `frontend/`
-3. Update `package.json` name and dependencies
+Use the `pagination/` extra as a reference implementation. Copy its structure and adapt:
+
+1. Copy the `pagination/` directory to `src/streamlit_extras/<extra_name>/`
+2. Rename files and update references to your extra name
+3. Update `frontend/package.json` with your extra's name
 4. Implement your React component in `frontend/src/`
-5. Create Python wrapper in `__init__.py` using `st.components.v2.component()`
+5. Update the Python wrapper in `__init__.py`
 6. Add standard extra metadata (`__title__`, `__icon__`, etc.)
 7. Register in `src/streamlit_extras/pyproject.toml` (see Registration below)
 
