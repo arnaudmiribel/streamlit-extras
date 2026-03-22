@@ -18,8 +18,7 @@ Rules and context for AI coding agents working on streamlit-extras.
 - `tests/`: Pytest tests (validates extra metadata)
 - `docs/`: MkDocs documentation source
 - `pyproject.toml`: Dependencies, ruff/mypy config
-- `packages.txt`: System dependencies (nodejs/npm) for Community Cloud
-- `hatch_build.py`: Build hook that auto-compiles React frontends
+- `scripts/hatch_build.py`: Build hook that auto-compiles React frontends
 - `work-tmp/`: Temporary files, specs, and scripts (gitignored)
 
 ## Essential Commands
@@ -134,7 +133,7 @@ Some extras use React frontends via Streamlit's Custom Components v2 (CCv2) API.
 
 ### Build System
 
-The build process is automated via `hatch_build.py`:
+The build process is automated via `scripts/hatch_build.py`:
 
 1. **During `uv build`:** The Hatch build hook automatically:
    - Discovers React extras by finding `*/frontend/package.json` files
@@ -160,12 +159,6 @@ The build process is automated via `hatch_build.py`:
 6. Add standard extra metadata (`__title__`, `__icon__`, etc.)
 
 See existing React extras for patterns: `json_editor/` is the most feature-complete example.
-
-### Deployment Requirements
-
-For Streamlit Community Cloud (or any deployment that builds from source):
-- Add `nodejs` and `npm` to `packages.txt` for apt-get installation
-- The repo includes `packages.txt` in the root directory for this purpose
 
 ## Code Style
 

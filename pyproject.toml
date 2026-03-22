@@ -40,7 +40,7 @@ exclude = [
 
 [tool.hatch.build.targets.wheel.hooks.custom]
 # Build React frontends automatically during wheel packaging
-path = "hatch_build.py"
+path = "scripts/hatch_build.py"
 
 [dependency-groups]
 dev = [
@@ -120,7 +120,7 @@ ignore = [
 "gallery/**" = ["INP001", "PERF203"]  # Gallery is an app, not a package
 "docs/**" = ["INP001", "T201", "RUF001"]  # Docs scripts
 "**/__init__.py" = ["F401"]  # Allow re-exports
-"hatch_build.py" = ["S404", "S603", "S607", "DOC201", "DOC501"]  # Build script needs subprocess
+"scripts/hatch_build.py" = ["S404", "S603", "S607", "DOC201", "DOC501"]  # Build script needs subprocess
 
 [tool.ruff.lint.isort]
 known-first-party = ["streamlit_extras"]
