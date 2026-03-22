@@ -1,4 +1,6 @@
+import inspect
 import pkgutil
+import textwrap
 from importlib import import_module
 from typing import TypedDict
 
@@ -15,9 +17,24 @@ class ExtraInfo(TypedDict):
     deprecated: bool
 
 
-st.set_page_config(layout="centered", page_icon=":material/extension:", page_title="streamlit-extras")
+st.set_page_config(layout="wide", page_icon=":material/extension:", page_title="streamlit-extras")
 
-""" # :material/extension: streamlit-extras """
+with st.container(horizontal=True, vertical_alignment="bottom"):
+    st.markdown("# :material/extension: streamlit-extras", width="content")
+    with st.container(horizontal=True, horizontal_alignment="right", vertical_alignment="center"):
+        st.link_button(
+            "GitHub",
+            "https://arnaudmiribel.github.io/streamlit-extras/",
+            width="content",
+            icon=":material/code_blocks:",
+        )
+        st.link_button(
+            "Documentation",
+            "https://arnaudmiribel.github.io/streamlit-extras/",
+            width="content",
+            icon=":material/book_2:",
+            type="primary",
+        )
 
 
 @st.cache_resource
@@ -44,97 +61,76 @@ def get_extras_info() -> dict[str, ExtraInfo]:
     return extras
 
 
-def show_extras_icons(extras: dict[str, ExtraInfo]) -> None:
-    """Display icon buttons for all extras."""
-    extra_items = list(extras.items())
-    # Display in rows of 10
-    for i in range(0, len(extra_items), 10):
-        batch = extra_items[i : i + 10]
-        cols = st.columns(len(batch))
-        for col, (extra_name, info) in zip(cols, batch, strict=False):
-            col.link_button(
-                info["icon"],
-                f"https://arnaudmiribel.github.io/streamlit-extras/extras/{extra_name}/",
-                help=info["title"],
-                width="stretch",
-            )
 
+"""A library to add some extra touches to your Streamlit apps. Get started easily:"""
 
-st.markdown(
-    "streamlit-extras is a Python library putting together useful Streamlit bits of code. It"
-    " includes > 40 (count emojis below!) functional or visual additions to Streamlit that will"
-    " make your life easier or your apps nicer. We call them *extras* and anyone's welcome to add"
-    " their owns!"
-)
+with st.container(horizontal=True, vertical_alignment="center"):
+    st.code("pip install streamlit-extras    ", width="content")
+    st.space("small")
+    st.markdown("Or use uv", width="content")
+    st.code("uv add streamlit-extras    ", width="content")
 
-st.space(1)
+"""Play with the demos below to discover some extras."""
 
 extras = get_extras_info()
-show_extras_icons(extras)
+extras_unsuited_to_demos = {
+    "bottom_container",
+    "concurrency_limiter",
+    "floating_button",
+    "great_tables",
+    "jupyterlite",
+    "scroll_to_element",  # Uses sidebar
+    "customize_running",
+}
+extra_options = {
+    name: f"{info['icon']} {info['title']}" 
+    for name, info in extras.items() 
+    if not info['deprecated']
+    and name not in extras_unsuited_to_demos}
 
-st.space(1)
-st.markdown(
-    """
-#### Get started
-```
-pip install streamlit-extras
-```
-"""
-)
+left, right = st.columns((2.5, 3))
 
-st.space(1)
-st.markdown("#### Learn more")
-col1, col2 = st.columns(2)
-col1.link_button(
-    "📖  Visit our documentation",
-    "https://arnaudmiribel.github.io/streamlit-extras/",
-    width="stretch",
-)
-col2.link_button(
-    "🐙  Visit our repository",
-    "https://github.com/arnaudmiribel/streamlit-extras",
-    width="stretch",
-)
+with left.expander("**Choose extra**", expanded=True, icon=":material/extension:"):
+    selected_extra = st.pills(
+        "Select extra for a demo", 
+        options=list(extra_options.keys()),
+        format_func=lambda x: extra_options[x],
+        label_visibility="collapsed", 
+        bind="query-params", 
+        key="extra",
+        default="radial_menu",
+    )
 
-# Explorer section
-st.space(2)
-st.markdown("#### Explore extras")
+if selected_extra is None:
+    right.markdown("Choose an extra first.")
+    st.stop()
 
-# Build options for selectbox with icons and titles
-extra_options = {name: f"{info['icon']} {info['title']}" for name, info in extras.items()}
-
-selected_extra = st.selectbox(
-    "Select an extra to explore",
-    options=list(extra_options.keys()),
-    format_func=lambda x: extra_options[x],
-    index=None,
-    placeholder="Choose an extra...",
-)
-
-if selected_extra:
+with right:
     info = extras[selected_extra]
     mod = import_module(f"streamlit_extras.{selected_extra}")
 
     # Show metadata
-    st.markdown(f"### {info['icon']} {info['title']}")
+    with st.expander(f"**{info['title']}** demo by :material/person: {info['author']}", expanded=True, icon=info['icon']):
 
-    if info["deprecated"]:
-        st.warning("This extra is deprecated.")
+        if info["desc"]:
+            st.markdown(info["desc"])
 
-    if info["desc"]:
-        st.markdown(info["desc"])
 
-    st.caption(f"Author: {info['author']}")
+        # Run examples
+        examples = getattr(mod, "__examples__", [])
+        if examples:
+            for example_func in list(examples)[:1]:
+                try:
+                    with st.expander("Example code"):
+                        function_code = inspect.getsource(example_func)
 
-    # Run examples
-    examples = getattr(mod, "__examples__", [])
-    if examples:
-        st.markdown("**Example:**")
-        for example_func in examples:
-            try:
-                with st.container(border=True):
-                    example_func()
-            except Exception as e:
-                st.error(f"Error running example: {e}")
-    else:
-        st.info("No examples available for this extra.")
+                        # Drop function wrapper in function code
+                        function_code = textwrap.dedent("\n".join(function_code.splitlines()[1:]))
+                        code = f"from streamlit_extras.{selected_extra} import *\n\n{function_code}"
+                        st.code(code, language="python")
+                    with st.expander("Example output", expanded=True):
+                        example_func()
+                except Exception as e:
+                    st.error(f"Error running example: {e}")
+        else:
+            st.info("No examples available for this extra.")
