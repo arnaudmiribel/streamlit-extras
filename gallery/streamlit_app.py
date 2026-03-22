@@ -61,42 +61,42 @@ def get_extras_info() -> dict[str, ExtraInfo]:
     return extras
 
 
-
 """A library to add some extra touches to your Streamlit apps. Get started easily:"""
 
 with st.container(horizontal=True, vertical_alignment="center"):
-    st.code("pip install streamlit-extras    ", width="content")
+    st.code("pip install streamlit-extras", width="content")
     st.space("small")
     st.markdown("Or use uv", width="content")
-    st.code("uv add streamlit-extras    ", width="content")
+    st.code("uv add streamlit-extras", width="content")
 
 """Play with the demos below to discover some extras."""
 
 extras = get_extras_info()
 extras_unsuited_to_demos = {
-    "bottom_container",
-    "concurrency_limiter",
-    "floating_button",
-    "great_tables",
-    "jupyterlite",
+    "bottom_container",  # Out of context
+    "concurrency_limiter",  # Nothing visual
+    "floating_button",  # Out of context
+    "great_tables",  # Requires extra package
+    "jupyterlite",  # Doesn't look great
     "scroll_to_element",  # Uses sidebar
-    "customize_running",
+    "customize_running",  # Content overlaps
 }
+
 extra_options = {
-    name: f"{info['icon']} {info['title']}" 
-    for name, info in extras.items() 
-    if not info['deprecated']
-    and name not in extras_unsuited_to_demos}
+    name: f"{info['icon']} {info['title']}"
+    for name, info in extras.items()
+    if not info["deprecated"] and name not in extras_unsuited_to_demos
+}
 
 left, right = st.columns((2.5, 3))
 
 with left.expander("**Choose extra**", expanded=True, icon=":material/extension:"):
     selected_extra = st.pills(
-        "Select extra for a demo", 
+        "Select extra for a demo",
         options=list(extra_options.keys()),
         format_func=lambda x: extra_options[x],
-        label_visibility="collapsed", 
-        bind="query-params", 
+        label_visibility="collapsed",
+        bind="query-params",
         key="extra",
         default="radial_menu",
     )
@@ -110,11 +110,11 @@ with right:
     mod = import_module(f"streamlit_extras.{selected_extra}")
 
     # Show metadata
-    with st.expander(f"**{info['title']}** demo by :material/person: {info['author']}", expanded=True, icon=info['icon']):
-
+    with st.expander(
+        f"**{info['title']}** demo by :material/person: {info['author']}", expanded=True, icon=info["icon"]
+    ):
         if info["desc"]:
             st.markdown(info["desc"])
-
 
         # Run examples
         examples = getattr(mod, "__examples__", [])
