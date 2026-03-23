@@ -122,9 +122,9 @@ with right:
         examples = getattr(mod, "__examples__", [])
         if examples:
             if len(examples) > 1:
-                example_func = st.selectbox("Choose example", examples, format_func=lambda x: str(x))
+                example_func = st.selectbox("Choose example", examples, format_func=str)
             else:
-                example_func = list(examples)[0]
+                example_func = next(iter(examples))
             try:
                 with st.expander("Example code"):
                     function_code = inspect.getsource(example_func)

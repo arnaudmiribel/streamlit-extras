@@ -1,9 +1,19 @@
 from collections.abc import Callable, Sequence
-from typing import Any
+from typing import Any, Literal
 
 import streamlit as st
 
 from .. import extra
+
+
+@extra
+def _to_do(
+    label: str,
+    key: str,
+    bind: Literal["query-params"] | None = None,
+) -> bool:
+    with st.container(horizontal=True, vertical_alignment="top"):
+        st.checkbox(label=label, label_visibility="collapsed", width="stretch", bind=bind, key=key)
 
 
 @extra
@@ -18,7 +28,7 @@ def to_do(st_commands: Sequence[Sequence[Any]], checkbox_id: str) -> bool:
     Returns:
         None: Prints the to do list
     """
-    cols = st.columns((1, 20), vertical_alignment="center")
+    cols = st.columns((1, 20), vertical_alignment="bottom")
     done = cols[0].checkbox(" ", key=checkbox_id)
     if done:
         for cmd, *args in st_commands:
@@ -59,6 +69,8 @@ def to_do(st_commands: Sequence[Sequence[Any]], checkbox_id: str) -> bool:
 
 
 def example() -> None:
+    _to_do("Take a coffee boy", "coffee")
+
     to_do(
         [(st.write, "☕ Take my coffee")],
         "coffee",
