@@ -11,13 +11,10 @@ Design principles (matching native ``st.text_input`` precisely):
 - Border            → none at rest; thin ``--st-primary-color`` line on focus,
                       NO glow/box-shadow (matches Streamlit exactly)
 - Label             → normal weight (not bold), same as native
-- Icon              → Python-side ``st.markdown(":material/icon_name:")``
-                      renders via Streamlit's own Material icon pipeline;
-                      for the inner SVG adornments (prefix/suffix area) we
-                      keep lightweight inline SVG that inherits ``currentColor``
-- Help tooltip      → ``help`` parameter, rendered as a native
-                      ``st.help``-style tooltip via a small ℹ️ rendered with
-                      ``st.markdown`` next to the label (matches native API)
+- Icon              → inside-input SVG adornments (in the prefix/suffix area)
+                      inherit ``currentColor``; no icon is prefixed in the label
+- Help tooltip      → ``help`` parameter, rendered as a right-aligned (?) icon
+                      with a hover tooltip (component-rendered)
 - Dark mode         → uses only ``--st-*`` CSS vars, adapts automatically
 
 Public API (mirrors ``st.text_input``)
@@ -41,14 +38,17 @@ import re
 from typing import TYPE_CHECKING, Any, Literal
 
 import streamlit as st
+from streamlit.components.v2 import component
+
+from .. import extra
 
 if TYPE_CHECKING:
     from collections.abc import Callable
 
 # ---------------------------------------------------------------------------
 # Inline SVG adornment icons (used only INSIDE the input for prefix/suffix
-# area icons — not for the label, which uses st.markdown :material/...: )
-# 20×20 viewport, filled, inherits currentColor.
+# area icons; the label has no prefixed icon)
+# 20x20 viewport, filled, inherits currentColor.
 # ---------------------------------------------------------------------------
 _ADORNMENT_ICONS: dict[str, str] = {
     "phone": (
@@ -159,10 +159,12 @@ _COMPONENT_CSS = r"""
     display: flex;
     align-items: center;
     gap: 0.3em;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.15rem;
     min-height: 1.4em;
 }
 .si-label {
+    flex: 1 1 auto;
+    min-width: 0;
     font-size: 0.875em;
     font-weight: 400;              /* ← NOT bold, matching native Streamlit */
     color: var(--st-text-color, #31333f);
@@ -179,6 +181,7 @@ _COMPONENT_CSS = r"""
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    margin-left: auto;
     color: var(--st-gray-color, #9ea3b0);
     cursor: help;
     flex-shrink: 0;
@@ -188,21 +191,28 @@ _COMPONENT_CSS = r"""
 .si-help-bubble {
     display: none;
     position: absolute;
-    bottom: calc(100% + 6px);
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--st-text-color, #31333f);
-    color: var(--st-background-color, #fff);
-    font-size: 0.8em;
-    line-height: 1.4;
-    padding: 0.4em 0.6em;
-    border-radius: 4px;
+    bottom: calc(100% + 8px);
+    right: 0;
+    left: auto;
+    transform: none;
+
+    /* Native-like tooltip: light surface, dark text */
+    background: var(--st-background-color, #fff);
+    color: var(--st-text-color, #31333f);
+
+    font-size: 0.85em;
+    line-height: 1.2;
+    padding: 0.45em 0.65em;
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--st-text-color, #31333f) 10%, transparent);
+
+    /* Native tooltip is compact and mostly single-line */
+    max-width: 240px;
     white-space: nowrap;
-    max-width: 220px;
-    white-space: normal;
+
     pointer-events: none;
     z-index: 9999;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
 }
 .si-help:hover .si-help-bubble { display: block; }
 
@@ -255,24 +265,29 @@ _COMPONENT_CSS = r"""
     padding: 0 0.5rem 0 0.65rem;
     font-size: 0.85em;
     color: var(--st-text-color, #31333f);
-    /* Overlay a semi-transparent layer on secondaryBackgroundColor
-       to get a "darker gray" without a hard-coded color */
-    background: color-mix(in srgb, var(--st-border-color, #ccc) 40%, var(--st-secondary-background-color, #f0f2f6) 60%);
-    border-right: 1px solid var(--st-border-color, #ccc);
+    /* Closer to st.chat_input: a subtle text-color tint over secondary bg */
+    background: var(
+        --st-chat-input-background-color,
+        color-mix(in srgb, var(--st-text-color, #31333f) 8%, var(--st-secondary-background-color, #f0f2f6) 92%)
+    );
     white-space: nowrap;
 }
 .si-adornment.si-suffix-text {
     padding: 0 0.65rem 0 0.5rem;
     font-size: 0.85em;
     color: var(--st-text-color, #31333f);
-    background: color-mix(in srgb, var(--st-border-color, #ccc) 40%, var(--st-secondary-background-color, #f0f2f6) 60%);
-    border-left: 1px solid var(--st-border-color, #ccc);
+    background: var(
+        --st-chat-input-background-color,
+        color-mix(in srgb, var(--st-text-color, #31333f) 8%, var(--st-secondary-background-color, #f0f2f6) 92%)
+    );
     white-space: nowrap;
 }
 
 /* Icon-only adornment (leading icon inside the field) */
 .si-adornment.si-icon-adornment {
-    padding: 0 0.35rem 0 0.6rem;
+    width: 2.4rem;
+    min-width: 2.4rem;
+    padding: 0;
     color: var(--st-gray-color, #9ea3b0);
 }
 
@@ -299,13 +314,17 @@ _COMPONENT_CSS = r"""
     font-family: inherit;
     font-size: inherit;
     color: var(--st-text-color, #31333f);
-    padding: 0 0.75rem;
+    padding: 0 0.65rem;
     min-height: 2.4rem;
     line-height: 1;
     caret-color: var(--st-primary-color, #ff4b4b);
 }
 .si-input::placeholder {
-    color: var(--st-gray-color, #9ea3b0);
+    /* Match st.chat_input placeholder tint (muted text, not "gray") */
+    color: var(
+        --st-secondary-text-color,
+        color-mix(in srgb, var(--st-text-color, #31333f) 45%, transparent)
+    );
     opacity: 1;
 }
 .si-input:disabled { cursor: not-allowed; }
@@ -351,8 +370,8 @@ export default function (component) {
         const helpEl = document.createElement('span');
         helpEl.id = 'si-help';
         helpEl.className = 'si-help';
-        // Info icon SVG
-        helpEl.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg><span class="si-help-bubble" id="si-help-bubble"></span>`;
+        // Help icon SVG: match native outline style
+        helpEl.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg><span class="si-help-bubble" id="si-help-bubble"></span>`;
 
         labelRow.appendChild(labelEl);
         labelRow.appendChild(helpEl);
@@ -431,6 +450,7 @@ export default function (component) {
     const incoming = String(data.value ?? '');
     if (input.value !== incoming) input.value = incoming;
 
+
     /* ── Leading adornment ──────────────────────────────────────────── */
     leading.innerHTML = '';
     leading.className = 'si-adornment';
@@ -455,21 +475,48 @@ export default function (component) {
         trailing.classList.add('si-visible', 'si-btn');
         trailing.title = 'Toggle visibility';
 
+        // Keep latest state on the element so the one-time handler can use it.
+        trailing._pwdDisabled = disabled;
+        trailing._pwdIconVis = data.icon_visibility;
+        trailing._pwdIconVisOff = data.icon_visibility_off;
+
+        trailing._getPwdInput = () => root.querySelector('#si-input');
+
         const renderEye = () => {
-            trailing.innerHTML = input.type === 'text'
-                ? data.icon_visibility_off
-                : data.icon_visibility;
+            const inp = trailing._getPwdInput?.();
+            if (!inp) return;
+            trailing.innerHTML = inp.type === 'text'
+                ? trailing._pwdIconVisOff
+                : trailing._pwdIconVis;
         };
         trailing._renderEye = renderEye;
         renderEye();
 
         if (!trailing._pwdInit) {
             trailing._pwdInit = true;
+
+            // Prevent the click from blurring the input (blur triggers setStateValue → rerun).
+            trailing.addEventListener('pointerdown', (e) => e.preventDefault());
+
             trailing.addEventListener('click', () => {
-                if (disabled) return;
-                input.type = input.type === 'password' ? 'text' : 'password';
-                trailing._renderEye();
-                input.focus();
+                if (trailing._pwdDisabled) return;
+                const inp = trailing._getPwdInput?.();
+                if (!inp) return;
+
+                const start = inp.selectionStart;
+                const end = inp.selectionEnd;
+
+                inp.type = inp.type === 'password' ? 'text' : (inp.dataset.baseType || 'password');
+                trailing._renderEye?.();
+
+                inp.focus();
+                if (start !== null && end !== null) {
+                    try {
+                        inp.setSelectionRange(start, end);
+                    } catch {
+                        // Some browsers disallow restoring selection after type toggle.
+                    }
+                }
             });
         }
     } else if (data.suffix) {
@@ -492,21 +539,9 @@ export default function (component) {
         errorMsg.classList.remove('si-visible');
     }
 
-    /* ── Event wiring (clone to drop stale listeners) ───────────────── */
-    const fresh = input.cloneNode(true);
-    input.parentNode.replaceChild(fresh, input);
-    // Re-attach eye-render if password toggle exists
-    if (trailing._renderEye) {
-        const origRender = trailing._renderEye;
-        trailing._renderEye = () => {
-            trailing.innerHTML = fresh.type === 'text'
-                ? data.icon_visibility_off
-                : data.icon_visibility;
-        };
-    }
-
-    fresh.onblur    = () => setStateValue('value', fresh.value);
-    fresh.onkeydown = (e) => { if (e.key === 'Enter') setStateValue('value', fresh.value); };
+    /* ── Event wiring ───────────────────────────────────────────────── */
+    input.onblur = () => setStateValue('value', input.value);
+    input.onkeydown = (e) => { if (e.key === 'Enter') setStateValue('value', input.value); };
 }
 """
 
@@ -516,56 +551,12 @@ export default function (component) {
 #   • SVG currentColor inherits the Streamlit text color
 #   • no @font-face piercing issue
 # ---------------------------------------------------------------------------
-_specialized_input_component = st.components.v2.component(
+_specialized_input_component = component(
     name="specialized_input",
     css=_COMPONENT_CSS,
     js=_COMPONENT_JS,
     isolate_styles=False,
 )
-
-
-# ---------------------------------------------------------------------------
-# Label renderer — uses st.markdown so :material/icon_name: works natively
-# ---------------------------------------------------------------------------
-def _render_label(
-    label: str,
-    label_visibility: str,
-    icon: str | None,
-    help: str | None,
-) -> None:
-    """
-    Render the widget label above the component using native Streamlit markdown.
-
-    This gives us:
-    • The :material/icon_name: icon rendered by Streamlit's own pipeline
-    • Native label font, weight, and color (not overridden by us)
-    • help= tooltip rendered natively via st.caption / tooltip pattern
-    • Correct label_visibility behaviour
-
-    The component's own internal label is set to "" so it's invisible;
-    only this st.markdown label is shown.
-    """
-    if label_visibility == "collapsed":
-        return
-
-    icon_md = f":material/{icon}: " if icon else ""
-    help_md = (
-        f'<span title="{help}" style="cursor:help;color:var(--st-gray-color,#9ea3b0);font-size:0.85em;margin-left:0.25em;">ⓘ</span>'
-        if help
-        else ""
-    )
-
-    vis_style = "visibility:hidden;" if label_visibility == "hidden" else ""
-
-    # Render label using st.markdown for native :material/...: icon support
-    st.markdown(
-        f'<label style="font-size:0.875em;font-weight:400;'
-        f"color:var(--st-text-color,#31333f);line-height:1.6;display:block;"
-        f'margin-bottom:0;{vis_style}">'
-        f"{icon_md}{label}{help_md}"
-        f"</label>",
-        unsafe_allow_html=True,
-    )
 
 
 # ---------------------------------------------------------------------------
@@ -582,7 +573,8 @@ def _mount(
     kwargs: dict | None,
     disabled: bool,
     label_visibility: Literal["visible", "hidden", "collapsed"],
-    icon: str | None,  # label icon, e.g. "phone" → :material/phone:
+    icon: str | None,  # deprecated: label-prefixed icon is intentionally not rendered
+    # ruff: noqa: ARG001
     adornment_icon: str | None,  # inside-input leading icon (SVG key)
     prefix: str | None,
     suffix: str | None,
@@ -599,21 +591,16 @@ def _mount(
         if isinstance(state, dict):
             current_value = state.get("value", value)
 
-    # Render the label natively (above the component iframe)
-    _render_label(label, label_visibility, icon, help)
-
     data = {
-        # Pass empty label to component — label is rendered natively above
-        "label": "",
-        "label_visibility": "collapsed",  # always hide internal label
+        "label": label,
+        "label_visibility": label_visibility,
         "value": current_value,
         "placeholder": placeholder,
         "disabled": disabled,
         "icon_svg": _ADORNMENT_ICONS.get(adornment_icon) if adornment_icon else None,
         "prefix": prefix,
         "suffix": suffix,
-        # help is shown in the native label row, not inside the component
-        "help": None,
+        "help": help,
         "error": error,
         "input_type": input_type,
         "is_password": is_password,
@@ -644,6 +631,7 @@ def _mount(
 # ---------------------------------------------------------------------------
 
 
+@extra
 def specialized_text_input(
     label: str,
     value: str = "",
@@ -668,18 +656,17 @@ def specialized_text_input(
     Parameters
     ----------
     label : str
-        Widget label. Rendered natively above the input so ``:material/...:``
-        icon syntax works (e.g. ``":material/phone: Phone number"``).
+        Widget label.
     icon : str | None
-        Material icon name for the label (e.g. ``"phone"``, ``"mail"``).
-        Rendered as ``:material/{icon}:`` via Streamlit markdown.
+        Deprecated. Present for API compatibility, but label-prefixed icons are
+        intentionally not rendered. Use ``adornment_icon`` (via the convenience
+        wrappers) to show an icon inside the input field.
     prefix : str | None
         Text badge inside the left of the input border (e.g. ``"$"``).
     suffix : str | None
         Text badge inside the right of the input border (e.g. ``".com"``).
     help : str | None
-        Tooltip text shown on hover of an ⓘ icon next to the label,
-        exactly like the ``help=`` parameter in native Streamlit widgets.
+        Tooltip text shown on hover of a right-aligned (?) icon next to the label.
     error : str | bool | None
         ``True`` → red border. ``str`` → red border + inline message.
     input_type : str
@@ -729,8 +716,8 @@ def phone_input(
     """
     Phone number input.
 
-    The label is rendered with ``:material/phone:`` via Streamlit's own icon
-    pipeline. A small phone SVG icon also appears inside the input field.
+    The label has no prefixed icon. A small phone SVG icon appears inside the
+    input field.
 
     Returns
     -------
@@ -751,7 +738,7 @@ def phone_input(
         kwargs=kwargs,
         disabled=disabled,
         label_visibility=label_visibility,
-        icon="phone",
+        icon=None,
         adornment_icon="phone",
         prefix=None,
         suffix=None,
@@ -799,7 +786,7 @@ def email_input(
         kwargs=kwargs,
         disabled=disabled,
         label_visibility=label_visibility,
-        icon="mail",
+        icon=None,
         adornment_icon="mail",
         prefix=None,
         suffix=None,
@@ -853,7 +840,7 @@ def url_input(
         kwargs=kwargs,
         disabled=disabled,
         label_visibility=label_visibility,
-        icon="language",
+        icon=None,
         adornment_icon=None,
         prefix="https://" if show_prefix else None,
         suffix=None,
@@ -897,7 +884,7 @@ def money_input(
     --------
     >>> amount = money_input("Amount", currency="€", key="amount")
     """
-    str_val = "" if value == "" else str(value)
+    str_val = "" if not value else str(value)
     raw = _mount(
         label=label,
         value=str_val,
@@ -908,7 +895,7 @@ def money_input(
         kwargs=kwargs,
         disabled=disabled,
         label_visibility=label_visibility,
-        icon="payments",
+        icon=None,
         adornment_icon=None,
         prefix=currency,
         suffix=None,
@@ -962,7 +949,7 @@ def search_input(
         kwargs=kwargs,
         disabled=disabled,
         label_visibility=label_visibility,
-        icon="search",
+        icon=None,
         adornment_icon="search",
         prefix=None,
         suffix=None,
@@ -1010,7 +997,7 @@ def password_input(
         kwargs=kwargs,
         disabled=disabled,
         label_visibility=label_visibility,
-        icon="lock",
+        icon=None,
         adornment_icon="lock",
         prefix=None,
         suffix=None,
@@ -1061,7 +1048,6 @@ def example() -> None:
 
     specialized_text_input(
         "Bluesky handle",
-        icon="alternate_email",
         suffix=".bsky.social",
         placeholder="yourhandle",
         help="Enter your handle without the @",

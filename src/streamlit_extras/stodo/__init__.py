@@ -13,7 +13,13 @@ def _to_do(
     bind: Literal["query-params"] | None = None,
 ) -> bool:
     with st.container(horizontal=True, vertical_alignment="top"):
-        st.checkbox(label=label, label_visibility="collapsed", width="stretch", bind=bind, key=key)
+        return st.checkbox(
+            label=label,
+            label_visibility="collapsed",
+            width="stretch",
+            bind=bind,
+            key=key,
+        )
 
 
 @extra
@@ -88,7 +94,9 @@ def example() -> None:
 __title__ = "To-do items"
 __desc__ = "Simple Python function to create to-do items in Streamlit!"
 __icon__ = "✔️"
-__examples__ = [example]
+__examples__ = {
+    example: [to_do],
+}
 __author__ = "Arnaud Miribel"
 __github_repo__ = "arnaudmiribel/stodo"
 __streamlit_cloud_url__ = "http://stodoo.streamlitapp.com"
