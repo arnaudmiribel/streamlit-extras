@@ -121,18 +121,21 @@ with right:
         # Run examples
         examples = getattr(mod, "__examples__", [])
         if examples:
-            for example_func in list(examples)[:1]:
-                try:
-                    with st.expander("Example code"):
-                        function_code = inspect.getsource(example_func)
+            if len(examples) > 1:
+                example_func = st.selectbox("Choose example", examples, format_func=lambda x: str(x))
+            else:
+                example_func = list(examples)[0]
+            try:
+                with st.expander("Example code"):
+                    function_code = inspect.getsource(example_func)
 
-                        # Drop function wrapper in function code
-                        function_code = textwrap.dedent("\n".join(function_code.splitlines()[1:]))
-                        code = f"from streamlit_extras.{selected_extra} import *\n\n{function_code}"
-                        st.code(code, language="python")
-                    with st.expander("Example output", expanded=True):
-                        example_func()
-                except Exception as e:
-                    st.error(f"Error running example: {e}")
+                    # Drop function wrapper in function code
+                    function_code = textwrap.dedent("\n".join(function_code.splitlines()[1:]))
+                    code = f"from streamlit_extras.{selected_extra} import *\n\n{function_code}"
+                    st.code(code, language="python")
+                with st.expander("Example output", expanded=True):
+                    example_func()
+            except Exception as e:
+                st.error(f"Error running example: {e}")
         else:
             st.info("No examples available for this extra.")
