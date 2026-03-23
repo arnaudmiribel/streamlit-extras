@@ -79,17 +79,11 @@ def pagination(
     """
     # Validate inputs
     if num_pages < 1:
-        raise streamlit.errors.StreamlitAPIException(
-            f"num_pages must be >= 1, got {num_pages}"
-        )
+        raise streamlit.errors.StreamlitAPIException(f"num_pages must be >= 1, got {num_pages}")
     if default < 1 or default > num_pages:
-        raise streamlit.errors.StreamlitAPIException(
-            f"default must be between 1 and {num_pages}, got {default}"
-        )
+        raise streamlit.errors.StreamlitAPIException(f"default must be between 1 and {num_pages}, got {default}")
     if max_visible_pages is not None and max_visible_pages < 0:
-        raise streamlit.errors.StreamlitAPIException(
-            f"max_visible_pages must be >= 0 or None, got {max_visible_pages}"
-        )
+        raise streamlit.errors.StreamlitAPIException(f"max_visible_pages must be >= 0 or None, got {max_visible_pages}")
 
     # Handle callback wrapper for on_change
     callback_fn = _on_page_change
