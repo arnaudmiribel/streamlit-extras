@@ -474,7 +474,7 @@ def cookie_manager(*, key: str = "cookie_manager") -> CookieManager:
 
 def example() -> None:
     """Example usage of the cookie_manager component."""
-    st.warning("This component can only manage JavaScript-accessible cookies. HttpOnly cookies are not supported.")
+    st.info("This component can only manage JavaScript-accessible cookies. HttpOnly cookies are not supported.")
 
     manager = cookie_manager(key="demo_cookie_manager")
 

@@ -78,7 +78,6 @@ extras_unsuited_to_demos = {
     "floating_button",  # Out of context
     "great_tables",  # Requires extra package
     "jupyterlite",  # Doesn't look great
-    "scroll_to_element",  # Uses sidebar
     "customize_running",  # Content overlaps
 }
 
@@ -122,7 +121,7 @@ with right:
         examples = getattr(mod, "__examples__", [])
         if examples:
             if len(examples) > 1:
-                example_func = st.selectbox("Choose example", examples, format_func=str)
+                example_func = st.selectbox("Choose example", examples, format_func=lambda f: f.__name__)
             else:
                 example_func = next(iter(examples))
             try:

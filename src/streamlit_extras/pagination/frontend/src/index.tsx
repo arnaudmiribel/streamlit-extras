@@ -5,7 +5,10 @@ import {
 import { StrictMode } from "react";
 import { createRoot, Root } from "react-dom/client";
 
-import Pagination, { PaginationDataShape, PaginationStateShape } from "./Pagination";
+import Pagination, {
+  PaginationDataShape,
+  PaginationStateShape,
+} from "./Pagination";
 
 // Handle the possibility of multiple instances of the component to keep track
 // of the React roots for each component instance.

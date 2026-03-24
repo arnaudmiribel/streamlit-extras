@@ -151,16 +151,36 @@ def example_interactive() -> None:
 
 def example_responsive() -> None:
     """Responsive pagination that adapts to container width."""
-    st.write("### Responsive (stretch width)")
-    st.write("Resize the window to see the pagination adapt.")
+    st.write("### Responsive Behavior")
+    st.write(
+        "The pagination automatically adapts to container width with "
+        "progressive degradation: full → current-only → arrows-only."
+    )
 
-    page = pagination(
+    st.write("**Full width (stretch):**")
+    page1 = pagination(
         num_pages=20,
         max_visible_pages=9,
         width="stretch",
-        key="responsive_pagination",
+        key="responsive_stretch",
     )
-    st.write(f"**Current page:** `{page}`")
+    st.write(f"Page: `{page1}`")
+
+    st.write("**Fixed narrow width (150px) - shows current page only:**")
+    page2 = pagination(
+        num_pages=20,
+        width=150,
+        key="responsive_narrow",
+    )
+    st.write(f"Page: `{page2}`")
+
+    st.write("**Very narrow (80px) - shows arrows only:**")
+    page3 = pagination(
+        num_pages=20,
+        width=80,
+        key="responsive_very_narrow",
+    )
+    st.write(f"Page: `{page3}`")
 
 
 def example_with_data() -> None:
