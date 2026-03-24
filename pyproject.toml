@@ -2,7 +2,7 @@
 name = "streamlit-extras"
 version = "1.0.0"
 license = "Apache-2.0"
-description = "A library to discover, try, install and share Streamlit extras"
+description = "A community-driven collection of useful Streamlit components and utilities that extend Streamlit's functionality."
 authors = [
   { name = "Arnaud Miribel", email = "arnaudmiribel@gmail.com" },
   { name = "Zachary Blackwood", email = "zachary@streamlit.io" },
