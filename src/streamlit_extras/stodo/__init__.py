@@ -75,11 +75,11 @@ def to_do(st_commands: Sequence[Sequence[Any]], checkbox_id: str) -> bool:
 
 
 def example() -> None:
-    _to_do("Take a coffee boy", "coffee")
+    _to_do("Take a coffee boy", "coffee_simple")
 
     to_do(
         [(st.write, "☕ Take my coffee")],
-        "coffee",
+        "coffee_styled",
     )
     to_do(
         [(st.write, "🥞 Have a nice breakfast")],
