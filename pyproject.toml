@@ -1,11 +1,12 @@
 [project]
 name = "streamlit-extras"
-version = "0.7.8"
+version = "1.0.0"
 license = "Apache-2.0"
 description = "A library to discover, try, install and share Streamlit extras"
 authors = [
   { name = "Arnaud Miribel", email = "arnaudmiribel@gmail.com" },
   { name = "Zachary Blackwood", email = "zachary@streamlit.io" },
+  { name = "Lukas Masuch", email = "lukas.masuch@gmail.com" },
 ]
 readme = "README.md"
 #packages = [{ include = "streamlit_extras", from = "src" }]
