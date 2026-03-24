@@ -22,7 +22,7 @@ repos:
 
   # Ruff linting and formatting
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.6
+    rev: v0.15.7
     hooks:
       - id: ruff
         args: [--fix, --unsafe-fixes]
