@@ -81,11 +81,7 @@ extras_unsuited_to_demos = {
     "customize_running",  # Content overlaps
 }
 
-extra_options = {
-    name: f"{info['icon']} {info['title']}"
-    for name, info in extras.items()
-    if not info["deprecated"] and name not in extras_unsuited_to_demos
-}
+extra_options = {name: f"{info['icon']} {info['title']}" for name, info in extras.items() if not info["deprecated"]}
 
 left, right = st.columns((2.5, 3))
 
@@ -132,8 +128,13 @@ with right:
                     function_code = textwrap.dedent("\n".join(function_code.splitlines()[1:]))
                     code = f"from streamlit_extras.{selected_extra} import *\n\n{function_code}"
                     st.code(code, language="python")
-                with st.expander("Example output", expanded=True):
-                    example_func()
+                if selected_extra in extras_unsuited_to_demos:
+                    st.info(
+                        "Live output preview is not available for this extra. Please refer to the example code above."
+                    )
+                else:
+                    with st.expander("Example output", expanded=True):
+                        example_func()
             except Exception as e:
                 st.error(f"Error running example: {e}")
         else:
