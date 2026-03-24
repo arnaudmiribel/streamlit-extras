@@ -4,18 +4,18 @@ import itertools
 from typing import Literal
 
 import streamlit as st
+from streamlit.deprecation_util import show_deprecation_warning
 
 from .. import extra
 
 
-def color(name):
+def color(name: str) -> str:
     """Returns a color from the streamlit color palette, e.g. red-100, as hex."""
     try:
         hue, intensity = name.rsplit("-", 1)
     except (ValueError, KeyError):
         st.error(
-            "Input color_name must contain a name (red, orange, ...) and"
-            " intensity (10, 20, ... 100) e.g. 'red-70'"
+            "Input color_name must contain a name (red, orange, ...) and intensity (10, 20, ... 100) e.g. 'red-70'"
         )
         st.stop()
     return ST_COLOR_PALETTE[hue][intensity]
@@ -163,30 +163,40 @@ def colored_header(
     label: str = "Nice title",
     description: str = "Cool description",
     color_name: _SUPPORTED_COLORS = "red-70",
-):
-    """
-    Shows a header with a colored underline and an optional description.
+) -> None:
+    """Shows a header with a colored underline and an optional description.
 
     Args:
         label (str, optional): Header label. Defaults to "Nice title".
-        description (str, optional): Description shown under the header. Defaults to "Cool description".
+        description (str, optional): Description shown under the header.
+            Defaults to "Cool description".
         color_name (_SUPPORTED_COLORS, optional): Color of the underline. Defaults to "red-70".
-            Supported colors are "light-blue-70", "orange-70", "blue-green-70", "blue-70", "violet-70",
-            "red-70", "green-70", "yellow-80".
+            Supported colors are "light-blue-70", "orange-70", "blue-green-70", "blue-70",
+            "violet-70", "red-70", "green-70", "yellow-80".
+
+    !!! warning "Deprecated"
+        This function is deprecated. Use the
+        [`divider`](https://docs.streamlit.io/develop/api-reference/text/st.header)
+        parameter in `st.header`, `st.title`, or `st.subheader` instead.
     """
+    show_deprecation_warning(
+        "colored_header is deprecated. Use the `divider` parameter in `st.header`, "
+        "`st.title`, or `st.subheader` instead. "
+        "See https://docs.streamlit.io/develop/api-reference/text/st.header",
+        show_once=True,
+    )
     if color_name is None:
         color_name = next(HEADER_COLOR_CYCLE)
     st.subheader(label)
-    st.write(
+    st.html(
         f'<hr style="background-color: {color(color_name)}; margin-top: 0;'
-        ' margin-bottom: 0; height: 3px; border: none; border-radius: 3px;">',
-        unsafe_allow_html=True,
+        ' margin-bottom: 0; height: 3px; border: none; border-radius: 3px;">'
     )
     if description:
         st.caption(description)
 
 
-def example():
+def example() -> None:
     colored_header(
         label="My New Pretty Colored Header",
         description="This is a description",

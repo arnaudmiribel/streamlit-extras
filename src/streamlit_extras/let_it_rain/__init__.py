@@ -10,8 +10,8 @@ def rain(
     emoji: str,
     font_size: int = 64,
     falling_speed: int = 5,
-    animation_length: Union[int, str] = "infinite",
-):
+    animation_length: int | str = "infinite",
+) -> None:
     """
     Creates a CSS animation where input emoji falls from top to bottom of the screen.
 
@@ -25,7 +25,7 @@ def rain(
     if isinstance(animation_length, int):
         animation_length = f"{animation_length}"
 
-    st.write(
+    st.html(
         f"""
     <style>
 
@@ -163,11 +163,10 @@ def rain(
     }}
 
     </style>
-    """,
-        unsafe_allow_html=True,
+    """
     )
 
-    st.write(
+    st.html(
         f"""
     <!--get emojis from https://getemoji.com-->
     <div class="emojis">
@@ -205,12 +204,11 @@ def rain(
             {emoji}
         </div>
     </div>
-    """,
-        unsafe_allow_html=True,
+    """
     )
 
 
-def example():
+def example() -> None:
     rain(
         emoji="🎈",
         font_size=54,

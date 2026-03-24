@@ -11,9 +11,7 @@ if TYPE_CHECKING:
 
 
 @extra
-def great_tables(
-    table: "GT", width: int | Literal["stretch", "content"] = "stretch"
-) -> None:
+def great_tables(table: GT, width: int | Literal["stretch", "content"] = "stretch") -> None:
     """
     Render a Great Tables object in Streamlit.
 
@@ -29,16 +27,14 @@ def great_tables(
         # Do nothing -> uses content as default.
         pass
     else:
-        table = table.tab_options(
-            container_width=f"{width}px", table_width=f"{width}px"
-        )
+        table = table.tab_options(container_width=f"{width}px", table_width=f"{width}px")
 
     # TODO(lukasmasuch): Apply more modifications to make it look better with Streamlit.
     # https://posit-dev.github.io/great-tables/reference/GT.tab_options.html#great_tables.GT.tab_options
     st.html(table.as_raw_html())
 
 
-def example():
+def example() -> None:
     try:
         from great_tables import GT
         from great_tables.data import sp500
@@ -62,10 +58,7 @@ def example():
 
         great_tables(table, width="stretch")
     except ImportError:
-        st.warning(
-            "This example requires the `great_tables` package. "
-            "Install it with `pip install great-tables`."
-        )
+        st.warning("This example requires the `great_tables` package. Install it with `pip install great-tables`.")
 
 
 __title__ = "Great Tables"

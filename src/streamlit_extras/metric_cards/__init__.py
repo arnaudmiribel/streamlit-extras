@@ -1,9 +1,6 @@
 import streamlit as st
 
 from streamlit_extras import extra
-from streamlit_extras.theme import st_theme
-
-theme = st_theme()
 
 DEFAULT_BACKGROUND_COLOR_LIGHT = "#FFF"
 DEFAULT_BORDER_COLOR_LIGHT = "#CCC"
@@ -11,28 +8,27 @@ DEFAULT_BORDER_COLOR_LIGHT = "#CCC"
 DEFAULT_BACKGROUND_COLOR_DARK = "#1B1C24"
 DEFAULT_BORDER_COLOR_DARK = "#292D34"
 
-if theme:
-    DEFAULT_BACKGROUND_COLOR = (
-        DEFAULT_BACKGROUND_COLOR_DARK
-        if theme.get("base") == "dark"
-        else DEFAULT_BACKGROUND_COLOR_LIGHT
-    )
-    DEFAULT_BORDER_COLOR = (
-        DEFAULT_BORDER_COLOR_DARK
-        if theme.get("base") == "dark"
-        else DEFAULT_BORDER_COLOR_LIGHT
-    )
 
-else:
-    DEFAULT_BACKGROUND_COLOR = DEFAULT_BACKGROUND_COLOR_LIGHT
-    DEFAULT_BORDER_COLOR = DEFAULT_BORDER_COLOR_LIGHT
+def _get_theme_colors() -> tuple[str, str]:
+    """Get default colors based on the current theme.
+
+    Returns:
+        tuple[str, str]: A tuple of (background_color, border_color).
+    """
+    try:
+        theme = st.context.theme
+        if theme and theme.get("base") == "dark":
+            return DEFAULT_BACKGROUND_COLOR_DARK, DEFAULT_BORDER_COLOR_DARK
+    except Exception:
+        pass
+    return DEFAULT_BACKGROUND_COLOR_LIGHT, DEFAULT_BORDER_COLOR_LIGHT
 
 
 @extra
 def style_metric_cards(
-    background_color: str = DEFAULT_BACKGROUND_COLOR,
+    background_color: str | None = None,
     border_size_px: int = 1,
-    border_color: str = DEFAULT_BORDER_COLOR,
+    border_color: str | None = None,
     border_radius_px: int = 5,
     border_left_color: str = "#9AD8E1",
     box_shadow: bool = True,
@@ -41,20 +37,25 @@ def style_metric_cards(
     Applies a custom style to st.metrics in the page
 
     Args:
-        background_color (str, optional): Background color. Defaults to "#FFF" or "#292D34" in dark mode.
+        background_color (str, optional): Background color. Defaults to "#FFF" or "#1B1C24" in dark mode.
         border_size_px (int, optional): Border size in pixels. Defaults to 1.
         border_color (str, optional): Border color. Defaults to "#CCC" or "#292D34" in dark mode.
         border_radius_px (int, optional): Border radius in pixels. Defaults to 5.
-        border_left_color (str, optional): Borfer left color. Defaults to "#9AD8E1".
+        border_left_color (str, optional): Border left color. Defaults to "#9AD8E1".
         box_shadow (bool, optional): Whether a box shadow is applied. Defaults to True.
     """
+    default_bg, default_border = _get_theme_colors()
+    if background_color is None:
+        background_color = default_bg
+    if border_color is None:
+        border_color = default_border
 
     box_shadow_str = (
         "box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;"
         if box_shadow
         else "box-shadow: none !important;"
     )
-    st.markdown(
+    st.html(
         f"""
         <style>
             div[data-testid="stMetric"],
@@ -67,12 +68,11 @@ def style_metric_cards(
                 {box_shadow_str}
             }}
         </style>
-        """,
-        unsafe_allow_html=True,
+        """
     )
 
 
-def example():
+def example() -> None:
     col1, col2, col3 = st.columns(3)
 
     col1.metric(label="Gain", value=5000, delta=1000)
@@ -82,7 +82,7 @@ def example():
     style_metric_cards()
 
 
-def _add_metric_card_cards():
+def _add_metric_card_cards() -> None:
     """For playground"""
     col1, col2, col3 = st.columns(3)
 

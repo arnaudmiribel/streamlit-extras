@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from io import BytesIO
-from typing import Literal
+from typing import TYPE_CHECKING, Any, Literal, cast
 
 import numpy as np
 import plotly.graph_objects as go
@@ -11,25 +11,25 @@ from PIL import Image, ImageDraw
 
 from streamlit_extras import extra
 
+if TYPE_CHECKING:
+    from streamlit.elements.plotly_chart import PlotlyState
+
 
 def convert_to_pil_image(image: str | np.ndarray | Image.Image) -> Image.Image:
-    """
-    Converts an image from various sources (URL, local path, numpy array, or PIL.Image) to a PIL.Image object.
+    """Convert an image from various sources to a PIL.Image object.
 
-    Parameters:
-    - image: Union[str, np.ndarray, Image.Image]
-        The input image which can be:
-        - URL (str) pointing to the image
-        - Local file path (str)
-        - Numpy array (np.ndarray)
-        - PIL.Image.Image object
+    Args:
+        image (str | np.ndarray | Image.Image): The input image which can be a URL (str)
+            pointing to the image, a local file path (str), a NumPy array (np.ndarray),
+            or a PIL.Image.Image object.
 
     Returns:
-    - Image.Image: The converted PIL.Image object.
+        Image.Image: The converted PIL.Image object.
 
     Raises:
-    - ValueError: If the input type is not supported or the image cannot be opened.
+        ValueError: If the input type is not supported or the image cannot be opened.
     """
+    pil_image: Image.Image
     if isinstance(image, str):
         if image.startswith(("http://", "https://")):
             response = requests.get(image)
@@ -56,7 +56,7 @@ def image_selector(
     key: str = "image-selector",
     width: int = 300,
     height: int = 300,
-) -> dict:
+) -> PlotlyState:
     """Show the image, and enable the user to select an area in
     the image using the provided selection type.
 
@@ -106,7 +106,7 @@ def image_selector(
 @extra
 def show_selection(
     image: Image.Image | str | np.ndarray,
-    selection: dict,
+    selection: PlotlyState,
 ) -> None:
     """Shows the image selection
 
@@ -114,7 +114,7 @@ def show_selection(
         image (Image.Image | str | np.ndarray):
             Original image. Can be a PIL object,
             or path to local file, or URL, or NumPy array
-        selection (dict): Selection coordinates, output of `image_selector`
+        selection (PlotlyState): Selection coordinates, output of `image_selector`
     """
 
     pil_image = convert_to_pil_image(image)
@@ -124,9 +124,7 @@ def show_selection(
         x_min, x_max = coordinates[0]["x"]
         y_min, y_max = coordinates[0]["y"]
 
-        selection_img_array = image_array[
-            int(y_min) : int(y_max), int(x_min) : int(x_max)
-        ]
+        selection_img_array = image_array[int(y_min) : int(y_max), int(x_min) : int(x_max)]
         st.image(selection_img_array)
 
     elif coordinates := selection["selection"].get("lasso"):
@@ -139,7 +137,7 @@ def show_selection(
         img_pil = Image.fromarray((image_array).astype(np.uint8))
         mask = Image.new("L", (image_array.shape[1], image_array.shape[0]), 0)
         draw = ImageDraw.Draw(mask)
-        polygon = list(zip(lasso_x, lasso_y))
+        polygon = list(zip(lasso_x, lasso_y, strict=False))
         draw.polygon(polygon, outline=1, fill=1)
         mask_array = np.array(mask)
 
@@ -150,26 +148,22 @@ def show_selection(
         # Extract the bounding box of the polygon
         min_x, min_y = int(min(lasso_x)), int(min(lasso_y))
         max_x, max_y = int(max(lasso_x)), int(max(lasso_y))
-        selection_img = Image.fromarray(
-            white_background.astype(np.uint8)[min_y:max_y, min_x:max_x]
-        )
+        selection_img = Image.fromarray(white_background.astype(np.uint8)[min_y:max_y, min_x:max_x])
 
         # Display the result using Streamlit
         st.image(selection_img)
 
 
-def example():
+def example() -> None:
     response = requests.get(
         "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
     )
 
     image = Image.open(BytesIO(response.content))
 
-    selection_type = st.radio(
-        "Selection type", ["lasso", "box"], index=0, horizontal=True
-    )
+    selection_type = st.radio("Selection type", ["lasso", "box"], index=0, horizontal=True)
 
-    selection = image_selector(image=image, selection_type=selection_type)
+    selection = image_selector(image=image, selection_type=cast("Literal['lasso', 'box']", selection_type))
     if selection:
         st.json(selection, expanded=False)
         show_selection(image, selection)

@@ -1,12 +1,12 @@
+import html
+
 import streamlit as st
-from htbuilder import details, div, p, styles
-from htbuilder import summary as smry
 
 from .. import extra
 
 
 @extra
-def stoggle(summary: str, content: str):
+def stoggle(summary: str, content: str) -> None:
     """
     Displays a toggle widget in Streamlit
 
@@ -15,19 +15,13 @@ def stoggle(summary: str, content: str):
         content (str): Content shown after toggling
     """
 
-    st.write(
-        str(
-            div(
-                style=styles(
-                    line_height=1.8,
-                )
-            )(details(smry(summary), p(content)))
-        ),
-        unsafe_allow_html=True,
-    )
+    summary_escaped = html.escape(summary)
+    content_escaped = html.escape(content)
+    html_str = f'<div style="line-height:1.8"><details><summary>{summary_escaped}</summary><p>{content_escaped}</p></details></div>'
+    st.html(html_str)
 
 
-def example():
+def example() -> None:
     stoggle(
         "Click me!",
         """🥷 Surprise! Here's some additional content""",

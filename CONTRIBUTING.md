@@ -77,5 +77,3 @@ __experimental_playground__ = False  # Optional
 ## Help
 
 If you are having troubles, create an issue or [DM me on Twitter](https://twitter.com/arnaudmiribel)!
-
-

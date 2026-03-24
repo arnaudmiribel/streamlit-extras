@@ -1,11 +1,10 @@
 import streamlit as st
-from htbuilder import span
 
 from .. import extra
 
 
-def load_key_css():
-    st.write(
+def load_key_css() -> None:
+    st.html(
         """<style>
         .keyx {
         background-color: #eee;
@@ -20,37 +19,38 @@ def load_key_css():
         padding: 2px 4px;
         white-space: nowrap;
     }
-    </style>""",
-        unsafe_allow_html=True,
+    </style>"""
     )
 
 
 @extra
 def key(text: str, write: bool = True) -> str:
     """Applies a custom CSS to input text which makes it look like a keyboard key.
+
     To be used after running load_key_css() at least once in the app!
 
     Args:
         text (str): Text that will be styled as a key
         write (bool): If True, this will st.write() the key
+
     Returns:
         str: HTML of the text, styled as a key
     """
 
-    key_html = str(span(_class="keyx")(text))
+    key_html = f'<span class="keyx">{text}</span>'
 
     if write:
-        st.write(key_html, unsafe_allow_html=True)
+        st.html(key_html)
 
     return key_html
 
 
-def example_default():
+def example_default() -> None:
     load_key_css()
     key("⌘+K")
 
 
-def example_inline():
+def example_inline() -> None:
     load_key_css()
     st.write(
         f"Also works inline! Example: {key('⌘+K', write=False)}",

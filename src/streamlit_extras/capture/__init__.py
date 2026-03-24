@@ -2,32 +2,29 @@ from __future__ import annotations
 
 import logging
 import sys
-import unittest.mock as mock
 from contextlib import contextmanager
 from io import StringIO
-from typing import Callable, TextIO
+from typing import TYPE_CHECKING, Any, TextIO
+from unittest import mock
 
 import streamlit as st
-
-try:
-    from streamlit.runtime.scriptrunner.script_run_context import get_script_run_ctx
-except ModuleNotFoundError:  # from streamlit > 1.37
-    from streamlit.runtime.scriptrunner_utils.script_run_context import (
-        get_script_run_ctx,
-    )
+from streamlit.runtime.scriptrunner_utils.script_run_context import get_script_run_ctx
 
 from streamlit_extras import extra
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Generator
 
 __all__ = ["logcapture", "redirect", "stderr", "stdout"]
 
 
 @extra
 @contextmanager
-def redirect(src: TextIO, dst: Callable, terminator: str = "\n"):
+def redirect(src: TextIO, dst: Callable[..., Any], terminator: str = "\n") -> Generator[None, None, None]:
     """Redirect STDOUT and STDERR to streamlit functions."""
     with StringIO() as buffer:
 
-        def new_write(b):
+        def new_write(b: str) -> None:
             buffer.write(b + terminator)
             dst(buffer.getvalue())
 
@@ -45,7 +42,7 @@ def redirect(src: TextIO, dst: Callable, terminator: str = "\n"):
 
 @extra
 @contextmanager
-def stdout(dst: Callable, terminator: str = "\n"):
+def stdout(dst: Callable[..., Any], terminator: str = "\n") -> Generator[None, None, None]:
     """
     Capture STDOUT and redirect it to a callable `dst`
 
@@ -63,7 +60,7 @@ def stdout(dst: Callable, terminator: str = "\n"):
 
 @extra
 @contextmanager
-def stderr(dst: Callable, terminator="\n"):
+def stderr(dst: Callable[..., Any], terminator: str = "\n") -> Generator[None, None, None]:
     """
     Capture STDERR and redirect it to a callable `dst`.
 
@@ -82,12 +79,12 @@ def stderr(dst: Callable, terminator="\n"):
 class StreamlitLoggingHandler(logging.StreamHandler):
     """Extension of Stream Handler that passes the value of the stream IO buffer to a callback function on every log."""
 
-    def set_callback(self, func: Callable):
+    def set_callback(self, func: Callable[..., Any]) -> None:
         """Set the callback to be used on this record."""
         # pylint: disable=attribute-defined-outside-init
         self.callback = func
 
-    def emit(self, record: logging.LogRecord):
+    def emit(self, record: logging.LogRecord) -> None:
         """Emit a record but also call a function on the full buffer."""
         super().emit(record)
         self.callback(self.stream.getvalue())
@@ -96,11 +93,11 @@ class StreamlitLoggingHandler(logging.StreamHandler):
 @extra
 @contextmanager
 def logcapture(
-    dst: Callable,
+    dst: Callable[..., Any],
     terminator: str = "\n",
     from_logger: logging.Logger | None = None,
     formatter: logging.Formatter | None = None,
-):
+) -> Generator[None, None, None]:
     """
     Redirect logging to a streamlit function call `dst`.
 
@@ -121,9 +118,7 @@ def logcapture(
         from_logger = logging.getLogger()  # root logger
 
     # Special-case loguru
-    using_loguru = (
-        "loguru" in sys.modules and sys.modules["loguru"].logger is from_logger
-    )
+    using_loguru = "loguru" in sys.modules and sys.modules["loguru"].logger is from_logger
 
     with StringIO() as buffer:
         new_handler = StreamlitLoggingHandler(buffer)
@@ -142,20 +137,20 @@ def logcapture(
             )
         handler_id = None
         if using_loguru:
-            handler_id = from_logger.add(new_handler)  # type: ignore
+            handler_id = from_logger.add(new_handler)  # type: ignore[attr-defined]
         else:
             from_logger.addHandler(new_handler)
         try:
             yield
         finally:
             if using_loguru:
-                from_logger.remove(handler_id)  # type: ignore
+                from_logger.remove(handler_id)  # type: ignore[attr-defined]
             else:
                 from_logger.removeHandler(new_handler)
 
 
 # EXAMPLES ----------------------------------------------------------------------------------
-def example_stdout():
+def example_stdout() -> None:
     output = st.empty()
     with stdout(output.code, terminator=""):
         print("This is some captured stdout")
@@ -164,19 +159,17 @@ def example_stdout():
             print("You added another line!")
 
 
-def example_stderr():
+def example_stderr() -> None:
     output = st.empty()
     with stderr(output.code, terminator=""):
         print("This is some captured stderr", file=sys.stderr)
-        print(
-            "For this example, though, there aren't any problems...yet", file=sys.stderr
-        )
+        print("For this example, though, there aren't any problems...yet", file=sys.stderr)
         if st.button("Throw an error!"):
             print("ERROR: Task failed successfully", file=sys.stderr)
             print("Psst....stdout isn't captured here")
 
 
-def example_logcapture():
+def example_logcapture() -> None:
     logger = logging.getLogger("examplelogger")
     logger.setLevel("DEBUG")
     with logcapture(st.empty().code, from_logger=logger):
@@ -204,7 +197,7 @@ __playground__ = False
 
 # This patch makes the test _think_ it's running in stremalit
 @mock.patch("streamlit_extras.capture.get_script_run_ctx", return_value="not none")
-def test_st_stdout(_):
+def test_st_stdout(_: mock.MagicMock) -> None:
     fake_callback = mock.MagicMock()
     with stdout(fake_callback, terminator=""):
         print("Hello")
@@ -215,7 +208,7 @@ def test_st_stdout(_):
 
 # This patch makes the test _think_ it's running in stremalit
 @mock.patch("streamlit_extras.capture.get_script_run_ctx", return_value="not none")
-def test_st_stderr(_):
+def test_st_stderr(_: mock.MagicMock) -> None:
     fake_callback = mock.MagicMock()
     with stderr(fake_callback):
         print("olleH")
@@ -225,7 +218,7 @@ def test_st_stderr(_):
         fake_callback.assert_called_with("Hello\nWorld\n")
 
 
-def test_non_streamlit_no_patch():
+def test_non_streamlit_no_patch() -> None:
     # When we're not mocking the current thread, these functions shouldn't patch anything.
     fake_callback = mock.MagicMock()
     original_stdout_write = sys.stdout.write
@@ -236,7 +229,7 @@ def test_non_streamlit_no_patch():
         assert sys.stdout.write is original_stdout_write
 
 
-def test_st_logging():
+def test_st_logging() -> None:
     fake_callback = mock.MagicMock()
 
     # Test basic config
@@ -260,9 +253,7 @@ def test_st_logging():
         assert "WARNING test logfoo" in fake_callback.call_args[0][0]
 
     # Test formatter
-    with logcapture(
-        fake_callback, formatter=logging.Formatter("%(message)s %(levelname)s")
-    ):
+    with logcapture(fake_callback, formatter=logging.Formatter("%(message)s %(levelname)s")):
         logging.root.warning("test log")
         assert "test log WARNING" in fake_callback.call_args[0][0]
 

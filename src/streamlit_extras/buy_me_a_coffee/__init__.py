@@ -27,7 +27,7 @@ def button(
     font_color: str = "#000000",
     coffee_color: str = "#000000",
     width: int = 220,
-):
+) -> None:
     (
         """
     Display a button which links to your Buy Me a Coffee page.
@@ -63,7 +63,7 @@ def button(
     html(button, height=70, width=width)
 
     if floating:
-        st.markdown(
+        st.html(
             f"""
             <style>
                 iframe[width="{width}"] {{
@@ -72,12 +72,11 @@ def button(
                     right: 40px;
                 }}
             </style>
-            """,
-            unsafe_allow_html=True,
+            """
         )
 
 
-def example():
+def example() -> None:
     button(username="fake-username", floating=False, width=221)
 
 

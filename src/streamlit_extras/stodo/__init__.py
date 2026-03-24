@@ -1,10 +1,29 @@
+from collections.abc import Callable, Sequence
+from typing import Any, Literal
+
 import streamlit as st
 
 from .. import extra
 
 
 @extra
-def to_do(st_commands, checkbox_id):
+def _to_do(
+    label: str,
+    key: str,
+    bind: Literal["query-params"] | None = None,
+) -> bool:
+    with st.container(horizontal=True, vertical_alignment="top"):
+        return st.checkbox(
+            label=label,
+            label_visibility="collapsed",
+            width="stretch",
+            bind=bind,
+            key=key,
+        )
+
+
+@extra
+def to_do(st_commands: Sequence[Sequence[Any]], checkbox_id: str) -> bool:
     """Create a to_do item
 
     Args:
@@ -15,7 +34,7 @@ def to_do(st_commands, checkbox_id):
     Returns:
         None: Prints the to do list
     """
-    cols = st.columns((1, 20))
+    cols = st.columns((1, 20), vertical_alignment="bottom")
     done = cols[0].checkbox(" ", key=checkbox_id)
     if done:
         for cmd, *args in st_commands:
@@ -26,24 +45,23 @@ def to_do(st_commands, checkbox_id):
                         f"<s style='color: rgba(49, 51, 63, 0.4)'> {text} </s>",
                         unsafe_allow_html=True,
                     )
+                elif cmd in (
+                    st.slider,
+                    st.button,
+                    st.checkbox,
+                    st.time_input,
+                    st.color_picker,
+                    st.selectbox,
+                    st.camera_input,
+                    st.radio,
+                    st.date_input,
+                    st.multiselect,
+                    st.text_area,
+                    st.text_input,
+                ):
+                    cmd(*args, disabled=True)
                 else:
-                    if cmd in (
-                        st.slider,
-                        st.button,
-                        st.checkbox,
-                        st.time_input,
-                        st.color_picker,
-                        st.selectbox,
-                        st.camera_input,
-                        st.radio,
-                        st.date_input,
-                        st.multiselect,
-                        st.text_area,
-                        st.text_input,
-                    ):
-                        cmd(*args, disabled=True)
-                    else:
-                        cmd(*args)
+                    cmd(*args)
 
     else:
         for cmd, *args in st_commands:
@@ -56,10 +74,12 @@ def to_do(st_commands, checkbox_id):
     return done
 
 
-def example():
+def example() -> None:
+    _to_do("Take a coffee boy", "coffee_simple")
+
     to_do(
         [(st.write, "☕ Take my coffee")],
-        "coffee",
+        "coffee_styled",
     )
     to_do(
         [(st.write, "🥞 Have a nice breakfast")],
@@ -74,7 +94,9 @@ def example():
 __title__ = "To-do items"
 __desc__ = "Simple Python function to create to-do items in Streamlit!"
 __icon__ = "✔️"
-__examples__ = [example]
+__examples__ = {
+    example: [to_do],
+}
 __author__ = "Arnaud Miribel"
 __github_repo__ = "arnaudmiribel/stodo"
 __streamlit_cloud_url__ = "http://stodoo.streamlitapp.com"

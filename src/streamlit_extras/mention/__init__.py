@@ -1,8 +1,9 @@
+import html
+
 import streamlit as st
-from htbuilder import a, img, span
-from validators import url as validate_url
 
 from .. import extra
+from ..utils import is_url
 
 GITHUB_ICON = "https://cdn-icons-png.flaticon.com/512/25/25231.png"
 NOTION_ICON = "https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png"
@@ -19,7 +20,7 @@ a:hover {
 
 
 @extra
-def mention(label: str, url: str, icon: str = "🔗", write: bool = True):
+def mention(label: str, url: str, icon: str = "🔗", write: bool = True) -> str | None:
     """Mention a link with a label and icon.
 
     Args:
@@ -27,7 +28,10 @@ def mention(label: str, url: str, icon: str = "🔗", write: bool = True):
         icon (str): Icon to use. Can be an emoji or a URL. Default '🔗'
         url (str): Target URL of the mention
         write (bool): Writes the mention directly. If False, returns the raw HTML.
-                      Useful if mention is used inline.
+            Useful if mention is used inline.
+
+    Returns:
+        str | None: The HTML string if write is False, otherwise None.
     """
 
     if icon.lower() == "github":
@@ -39,40 +43,24 @@ def mention(label: str, url: str, icon: str = "🔗", write: bool = True):
     elif icon.lower() == "streamlit":
         icon = STREAMLIT_ICON
 
-    if validate_url(icon):
-        icon_html = img(
-            src=icon,
-            style="width:1em;height:1em;vertical-align:-0.15em;border-radius:3px;margin-right:0.3em",
-        )
+    if is_url(icon):
+        icon_escaped = html.escape(icon, quote=True)
+        icon_html = f'<img src="{icon_escaped}" style="width:1em;height:1em;vertical-align:-0.15em;border-radius:3px;margin-right:0.3em">'
     else:
-        icon_html = icon + "  "
+        icon_html = html.escape(icon) + "  "
 
-    mention_html = a(
-        contenteditable=False,
-        href=url,
-        rel="noopener noreferrer",
-        style="color:inherit;text-decoration:inherit; height:auto!important",
-        target="_blank",
-    )(
-        span(),
-        icon_html,
-        span(
-            style=(
-                "border-bottom:0.05em solid"
-                " rgba(55,53,47,0.25);font-weight:500;flex-shrink:0"
-            )
-        )(label),
-        span(),
-    )
+    url_escaped = html.escape(url, quote=True)
+    label_escaped = html.escape(label)
+    mention_html = f'<a contenteditable="false" href="{url_escaped}" rel="noopener noreferrer" style="color:inherit;text-decoration:inherit;height:auto!important" target="_blank"><span></span>{icon_html}<span style="border-bottom:0.05em solid rgba(55,53,47,0.25);font-weight:500;flex-shrink:0">{label_escaped}</span><span></span></a>'
 
-    html = STYLE_HTML + str(mention_html)
+    html_output = STYLE_HTML + mention_html
     if write:
-        st.write(html, unsafe_allow_html=True)
+        st.html(html_output)
         return None
-    return html
+    return html_output
 
 
-def example_1():
+def example_1() -> None:
     mention(
         label="An awesome Streamlit App",
         icon="streamlit",  # Some icons are available... like Streamlit!
@@ -80,7 +68,7 @@ def example_1():
     )
 
 
-def example_2():
+def example_2() -> None:
     mention(
         label="streamlit-extras",
         icon="🪢",  # You can also just use an emoji
@@ -88,7 +76,7 @@ def example_2():
     )
 
 
-def example_3():
+def example_3() -> None:
     mention(
         label="example-app-cv-model",
         icon="github",  # GitHub is also featured!
@@ -96,7 +84,7 @@ def example_3():
     )
 
 
-def example_4():
+def example_4() -> None:
     mention(
         label="That page somewhere in Notion",
         icon="notion",  # Notion is also featured!
@@ -104,7 +92,7 @@ def example_4():
     )
 
 
-def example_5():
+def example_5() -> None:
     inline_mention = mention(
         label="streamlit",
         icon="twitter",  # Twitter is also featured!

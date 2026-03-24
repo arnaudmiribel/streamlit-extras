@@ -1,29 +1,32 @@
+from collections.abc import Callable, Generator, Sequence
 from contextlib import contextmanager
-from typing import Generator, Sequence
+from typing import TypedDict
 
 import numpy as np
 import pandas as pd
 import streamlit as st
-
-try:
-    from streamlit import cache_data  # streamlit >= 1.18.0
-except ImportError:
-    from streamlit import experimental_memo as cache_data  # streamlit >= 0.89
+from streamlit import cache_data
 
 from .. import extra
 
 
+class ExportConfig(TypedDict, total=False):
+    function: Callable[[pd.DataFrame], bytes]
+    extension: str
+    mime: str
+
+
 @cache_data
-def _to_csv(data: pd.DataFrame):
+def _to_csv(data: pd.DataFrame) -> bytes:
     return data.to_csv().encode("utf-8")
 
 
 @cache_data
-def _to_parquet(data: pd.DataFrame):
+def _to_parquet(data: pd.DataFrame) -> bytes:
     return data.to_parquet()
 
 
-_SUPPORTED_EXPORTS = {
+_SUPPORTED_EXPORTS: dict[str, ExportConfig] = {
     "CSV": {
         "function": _to_csv,
         "extension": ".csv",
@@ -38,14 +41,14 @@ _SUPPORTED_EXPORTS = {
 _SUPPORTED_EXPORT_KEYS = list(_SUPPORTED_EXPORTS.keys())
 
 
-@extra  # type: ignore
+@extra
 @contextmanager
 def chart_container(
     data: pd.DataFrame,
     tabs: Sequence[str] = (
-        "Chart 📈",
-        "Dataframe 📄",
-        "Export 📁",
+        ":material/show_chart: Chart",
+        ":material/table: Dataframe",
+        ":material/download: Export",
     ),
     export_formats: Sequence[str] = _SUPPORTED_EXPORT_KEYS,
 ) -> Generator:
@@ -53,13 +56,11 @@ def chart_container(
 
     Args:
         data (pd.DataFrame): Dataframe used in the dataframe tab.
-        tabs (Sequence, optional): Tab labels. Defaults to ("Chart 📈", "Dataframe 📄", "Export 📁").
+        tabs (Sequence, optional): Tab labels. Defaults to (":material/show_chart: Chart", ":material/table: Dataframe", ":material/download: Export").
         export_formats (Sequence, optional): Export file formats. Defaults to ("CSV", "Parquet")
     """
 
-    assert all(
-        export_format in _SUPPORTED_EXPORTS for export_format in export_formats
-    ), (
+    assert all(export_format in _SUPPORTED_EXPORTS for export_format in export_formats), (
         f"Input format is not supported, please use one within {_SUPPORTED_EXPORTS.keys()}"
     )
 
@@ -76,7 +77,7 @@ def chart_container(
         yield
 
     with tab_2:
-        st.dataframe(data, use_container_width=True)
+        st.dataframe(data, width="stretch")
 
     with tab_3:
         st.caption("Export limited to 1 million rows.")
@@ -94,19 +95,19 @@ def chart_container(
             )
 
 
-def get_random_data():
+def get_random_data() -> pd.DataFrame:
     np.random.seed(42)
     return pd.DataFrame(np.random.randn(20, 3), columns=list("abc"))
 
 
-def example_one():
+def example_one() -> None:
     chart_data = get_random_data()
     with chart_container(chart_data):
         st.write("Here's a cool chart")
         st.area_chart(chart_data)
 
 
-def example_two():
+def example_two() -> None:
     chart_data = get_random_data()
     with chart_container(chart_data):
         st.write(

@@ -1,6 +1,8 @@
 import contextlib
 import textwrap
 import traceback
+from collections.abc import Generator
+from typing import Any
 
 import streamlit as st
 
@@ -13,7 +15,9 @@ from .. import extra
 
 @extra
 @contextlib.contextmanager
-def echo_expander(code_location="above", expander=True, label="Show code"):
+def echo_expander(
+    code_location: str = "above", expander: bool = True, label: str = "Show code"
+) -> Generator[None, None, None]:
     """
     Execute code, and show the code that was executed, but in an expander.
 
@@ -44,7 +48,7 @@ def echo_expander(code_location="above", expander=True, label="Show code"):
 
         ap_map = {}
 
-        def map_ast(a):
+        def map_ast(a: Any) -> None:
             if not hasattr(a, "body"):
                 return
             for b in a.body:
@@ -52,9 +56,7 @@ def echo_expander(code_location="above", expander=True, label="Show code"):
                 map_ast(b)
 
         map_ast(ap)
-        lines_to_display = source_lines[
-            ap_map[start_line].body[0].lineno - 1 : ap_map[start_line].end_lineno
-        ]
+        lines_to_display = source_lines[ap_map[start_line].body[0].lineno - 1 : ap_map[start_line].end_lineno]
         code_string = textwrap.dedent("".join(lines_to_display))
 
         # Run the echoed code...
@@ -67,10 +69,10 @@ def echo_expander(code_location="above", expander=True, label="Show code"):
             placeholder.code(code_string, "python")
 
     except FileNotFoundError as err:
-        placeholder.warning("Unable to display code. %s" % err)
+        placeholder.warning(f"Unable to display code. {err}")
 
 
-def example1():
+def example1() -> None:
     with echo_expander():
         import streamlit as st
 
@@ -83,7 +85,7 @@ def example1():
         )
 
 
-def example2():
+def example2() -> None:
     with echo_expander(code_location="below", label="Simple Dataframe example"):
         import pandas as pd
         import streamlit as st

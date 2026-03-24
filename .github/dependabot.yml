@@ -1,0 +1,56 @@
+# Dependabot configuration
+# https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  # Pre-commit hooks
+  - package-ecosystem: "pre-commit"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "pre-commit"
+
+  # Python dependencies (pyproject.toml / uv.lock)
+  - package-ecosystem: "uv"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    # Avoid updating dependencies too frequently to minimize supply chain risk
+    cooldown:
+      default-days: 5
+    labels:
+      - "dependencies"
+      - "python"
+    groups:
+      # Group minor/patch updates together to reduce PR noise
+      python-minor:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    # Avoid updating dependencies too frequently to minimize supply chain risk
+    cooldown:
+      default-days: 5
+    labels:
+      - "dependencies"
+      - "github-actions"
+    groups:
+      # Group all actions updates together
+      github-actions:
+        patterns:
+          - "*"

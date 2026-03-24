@@ -21,14 +21,14 @@ div[class*="StatusWidget"]{
 
 
 @extra
-def center_running():
+def center_running() -> None:
     """
     Have the "running man" animation in the center of the screen instead of the top right corner.
     """
-    st.markdown(center_css, unsafe_allow_html=True)
+    st.html(center_css)
 
 
-def example():
+def example() -> None:
     click = st.button("Observe where the 🏃‍♂️ running widget is now!")
     if click:
         center_running()
@@ -40,7 +40,5 @@ __desc__ = "Customize the running widget"
 __icon__ = "🏃‍♂️"
 __examples__ = [example]
 __author__ = "koninhoo"
-__forum_url__ = (
-    "https://discuss.streamlit.io/t/change-the-running-widget-position/30466"
-)
+__forum_url__ = "https://discuss.streamlit.io/t/change-the-running-widget-position/30466"
 __playground__ = False

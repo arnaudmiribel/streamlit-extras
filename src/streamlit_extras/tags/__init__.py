@@ -3,6 +3,7 @@ from __future__ import annotations
 from textwrap import dedent
 
 import streamlit as st
+from streamlit.deprecation_util import show_deprecation_warning
 
 from .. import extra
 
@@ -22,9 +23,7 @@ _DEFAULT_COLOR = "#808495"
 _DEFAULT_TEXT_COLOR = "white"
 
 
-def _get_color(
-    color_name: list[str] | str | None, index: int, default_color: str
-) -> str:
+def _get_color(color_name: list[str] | str | None, index: int, default_color: str) -> str:
     if color_name is None:
         return default_color
     if isinstance(color_name, list):
@@ -33,9 +32,7 @@ def _get_color(
         return TAGGER_COLOR_PALETTE.get(color_name[index], color_name[index])
     if isinstance(color_name, str):
         return TAGGER_COLOR_PALETTE.get(color_name, color_name)
-    raise ValueError(
-        f"color_name must be a list, a string, or None. Got {type(color_name)}"
-    )
+    raise ValueError(f"color_name must be a list, a string, or None. Got {type(color_name)}")
 
 
 def _get_html(
@@ -71,9 +68,8 @@ def tagger_component(
     tags: list[str],
     color_name: list[str] | str | None = None,
     text_color_name: list[str] | str | None = None,
-):
-    """
-    Displays tags next to your text.
+) -> None:
+    """Displays tags next to your text.
 
     Args:
         content (str): Content to be tagged
@@ -81,11 +77,23 @@ def tagger_component(
         color_name: A list or a string that indicates the color of tags.
             Choose from lightblue, orange, bluegreen, blue, violet, red, green, yellow
         text_color_name: A list or a string that indicates the text color of tags.
+
+    Raises:
+        ValueError: If the length of color_name or text_color_name lists don't match tags.
+
+    !!! warning "Deprecated"
+        This function is deprecated. Use
+        [`st.badge`](https://docs.streamlit.io/develop/api-reference/text/st.badge)
+        or badges in markdown syntax instead.
     """
+    show_deprecation_warning(
+        "tagger_component is deprecated. Use `st.badge` or badges in markdown syntax "
+        "instead. See https://docs.streamlit.io/develop/api-reference/text/st.badge",
+        show_once=True,
+    )
     if isinstance(color_name, list) and len(color_name) != len(tags):
         raise ValueError(
-            f"color_name must be the same length as tags. "
-            f"len(color_name) = {len(color_name)}, len(tags) = {len(tags)}"
+            f"color_name must be the same length as tags. len(color_name) = {len(color_name)}, len(tags) = {len(tags)}"
         )
     if isinstance(text_color_name, list) and len(text_color_name) != len(tags):
         raise ValueError(
@@ -94,10 +102,10 @@ def tagger_component(
         )
     tags_html = _get_html(content, tags, color_name, text_color_name)
 
-    st.write(tags_html, unsafe_allow_html=True)
+    st.html(tags_html)
 
 
-def example():
+def example() -> None:
     tagger_component("Here is a feature request", ["p2", "🚩triaged", "backlog"])
     tagger_component(
         "Here are colored tags",
@@ -111,7 +119,7 @@ def example():
     )
 
 
-def test_invalid_color_length():
+def test_invalid_color_length() -> None:
     import pytest
 
     with pytest.raises(ValueError):
@@ -122,7 +130,7 @@ def test_invalid_color_length():
         )
 
 
-def test_color_html_list_in_palette():
+def test_color_html_list_in_palette() -> None:
     output = _get_html("foo", ["bar"], color_name=["blue"])
     assert (
         output
@@ -141,7 +149,7 @@ def test_color_html_list_in_palette():
     )
 
 
-def test_color_html_list_not_in_palette():
+def test_color_html_list_not_in_palette() -> None:
     output = _get_html("foo", ["bar"], color_name=["pink"])
     assert (
         output
@@ -160,7 +168,7 @@ def test_color_html_list_not_in_palette():
     )
 
 
-def test_color_html_str():
+def test_color_html_str() -> None:
     output = _get_html("foo", ["bar"], color_name="blue")
 
     assert (
@@ -180,7 +188,7 @@ def test_color_html_str():
     )
 
 
-def test_color_html_str_multiple_tags():
+def test_color_html_str_multiple_tags() -> None:
     output = _get_html("foo", ["bar", "foo"], color_name="blue")
     print(output)
     assert (
@@ -207,7 +215,7 @@ def test_color_html_str_multiple_tags():
     )
 
 
-def test_no_color_html():
+def test_no_color_html() -> None:
     output = _get_html("foo", ["bar"])
 
     assert (
@@ -233,6 +241,7 @@ __icon__ = "🔖"
 __examples__ = [example]
 __author__ = "Maggie Liu"
 __playground__ = True
+__deprecated__ = True
 __tests__ = [
     test_invalid_color_length,
     test_color_html_list_in_palette,

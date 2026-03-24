@@ -1,5 +1,3 @@
-"""Add concurrency_limiter decorator to your Streamlit app."""
-
 from __future__ import annotations
 
 import hashlib
@@ -7,15 +5,17 @@ import inspect
 import sys
 import time
 from collections import Counter
+from collections.abc import Callable
 from dataclasses import dataclass
 from functools import partial, wraps
 from threading import Condition, Lock, Semaphore
-from types import FunctionType
-from typing import Any
+from typing import Any, TypeVar
 
 import streamlit as st
 
 from .. import extra
+
+F = TypeVar("F", bound=Callable[..., Any])
 
 
 @dataclass
@@ -30,15 +30,17 @@ CONCURRENCY_MAP: dict[str, FuncConcurrencyInfo] = {}
 COUNTERS: Counter = Counter()
 
 
-def _make_function_key(func: FunctionType, max_concurrency: int) -> str:
+def _make_function_key(func: Callable[..., Any], max_concurrency: int) -> str:
     """Create the unique key for a function's cache.
+
     A function's key is stable across reruns of the app, and changes when
     the function's source code changes.
+
+    Returns:
+        str: A hex digest uniquely identifying the function.
     """
 
-    hashlib_kwargs: dict[str, Any] = (
-        {"usedforsecurity": False} if sys.version_info >= (3, 9) else {}
-    )
+    hashlib_kwargs: dict[str, Any] = {"usedforsecurity": False} if sys.version_info >= (3, 9) else {}
     func_hasher = hashlib.new("md5", **hashlib_kwargs)
 
     func_hasher.update(func.__module__.encode("utf-8"))
@@ -56,17 +58,23 @@ def _make_function_key(func: FunctionType, max_concurrency: int) -> str:
 
 
 @extra
-def concurrency_limiter(func=None, max_concurrency: int = 1, show_spinner: bool = True):
+def concurrency_limiter(
+    func: F | None = None, max_concurrency: int = 1, show_spinner: bool = True
+) -> F | Callable[[F], F]:
     """Decorator that limits function concurrent execution in Stremalit app.
 
     Args:
-        max_concurrency (int): The number of allowed instances of the decorated function to be run simultaneously
-             Defaults to 1.
-        show_spinner (bool): If True, a spinner will be shown while waiting for the function to be executed.
+        max_concurrency (int): The number of allowed instances of the decorated function
+            to be run simultaneously. Defaults to 1.
+        show_spinner (bool): If True, a spinner will be shown while waiting for the
+            function to be executed.
+
+    Returns:
+        Callable: The decorated function with concurrency limiting applied.
     """
 
     if func is None:
-        return partial(
+        return partial(  # type: ignore[return-value]
             concurrency_limiter,
             max_concurrency=max_concurrency,
             show_spinner=show_spinner,
@@ -82,7 +90,7 @@ def concurrency_limiter(func=None, max_concurrency: int = 1, show_spinner: bool 
             )
 
     @wraps(func)
-    def wrapper(*args, **kwargs):
+    def wrapper(*args: Any, **kwargs: Any) -> Any:
         func_info = CONCURRENCY_MAP[function_key]
         acquired = False
 
@@ -110,9 +118,9 @@ def concurrency_limiter(func=None, max_concurrency: int = 1, show_spinner: bool 
     return wrapper
 
 
-def example():
-    @concurrency_limiter(max_concurrency=1)
-    def heavy_computation():
+def example() -> None:
+    @concurrency_limiter(max_concurrency=1)  # type: ignore[arg-type]
+    def heavy_computation() -> int:
         st.write("Heavy computation")
         progress_text = "Operation in progress. Please wait."
         my_bar = st.progress(0, text=progress_text)

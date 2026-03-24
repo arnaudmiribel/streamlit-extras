@@ -1,40 +1,19 @@
 [project]
 name = "streamlit-extras"
-version = "0.7.8"
+version = "1.0.0"
 license = "Apache-2.0"
-description = "A library to discover, try, install and share Streamlit extras"
+description = "A community-driven collection of useful Streamlit components and utilities that extend Streamlit's functionality."
 authors = [
   { name = "Arnaud Miribel", email = "arnaudmiribel@gmail.com" },
   { name = "Zachary Blackwood", email = "zachary@streamlit.io" },
+  { name = "Lukas Masuch", email = "lukas.masuch@gmail.com" },
 ]
 readme = "README.md"
-#packages = [{ include = "streamlit_extras", from = "src" }]
-#exclude = ["gallery/"]
-requires-python = ">=3.9,<3.14"
+requires-python = ">=3.10"
 keywords = ["python", "streamlit", "ui", "data"]
 dependencies = [
-  "altex>=0.2.0",
-  "entrypoints >= 0.4",
-  "htbuilder >= 0.6.2",
-  "markdownlit >= 0.0.7",
   "plotly >= 5.23.0",
-  "prometheus-client >= 0.20.0",
-  "protobuf >= 5.27.3",
-  "snowflake-snowpark-python[pandas]>=1.30.0; sys.platform != 'emscripten'",
-  "st-annotated-text >= 4.0.1",
-  "st-theme >= 1.2.3",
-  "streamlit >= 1.37.0",
-  "streamlit-avatar >= 0.1.3",
-  "streamlit-camera-input-live >= 0.2.0",
-  "streamlit-card >= 1.0.2",
-  "streamlit-embedcode >= 0.1.2",
-  "streamlit-faker >= 0.0.3",
-  "streamlit-image-coordinates >= 0.1.9",
-  "streamlit-keyup >= 0.2.4",
-  "streamlit-toggle-switch >= 1.0.2",
-  "streamlit-vertical-slider >= 2.5.5",
-  "validators >= 0.33.0",
-  "streamlit-notify >= 0.3.1",
+  "streamlit >= 1.54.0",
 ]
 
 [project.packages]
@@ -46,17 +25,35 @@ exclude = ["gallery/"]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-[tool.uv]
-dev-dependencies = [
+# =============================================================================
+# Hatch build configuration
+# =============================================================================
+[tool.hatch.build.targets.wheel]
+# For react-based CCv2 extras: exclude everything under frontend/ except the build/ folder
+# This keeps only the compiled JS bundles, not the React/TypeScript source
+exclude = [
+  "src/streamlit_extras/*/frontend/*",
+  "!src/streamlit_extras/*/frontend/build",
+  "!src/streamlit_extras/*/frontend/build/**",
+]
+
+[tool.hatch.build.targets.wheel.hooks.custom]
+# Build React frontends automatically during wheel packaging
+path = "scripts/hatch_build.py"
+
+[dependency-groups]
+dev = [
   "pytest >= 7.4.4",
-  "mypy >= 0.971",
+  "mypy == 1.19.1",
+  "ty == 0.0.22",
   "pre-commit >= 3.0.0",
-  "ruff >= 0.1.0",
+  "ruff == 0.15.6",
   "types-requests",
   "types-python-dateutil",
   "types-pytz",
   "types-PyYAML",
   "types-toml",
+  "pandas-stubs>=2.3.3.260113",
 ]
 
 [project.urls]
@@ -64,47 +61,117 @@ dev-dependencies = [
 "Bug Tracker" = "https://github.com/arnaudmiribel/streamlit-extras/issues"
 
 
+# =============================================================================
+# Ruff configuration (linting + formatting)
+# =============================================================================
 [tool.ruff]
-exclude = [".git", ".vscode", ".pytest_cache", ".mypy_cache", ".env"]
-line-length = 88
+line-length = 120
 
 [tool.ruff.lint]
+preview = true
+select = ["ALL"]
+extend-safe-fixes = ["TC002", "TC003"]
 ignore = [
-  "B008",
-  "ISC001",
-  "E501",
-  "W191",
-  "SIM102",
-  "ERA001",
-  "B018",
-  "PT011",
-  "PT018",
-  "PT019",
-]
-select = [
-  "B",
-  "E",
-  "F",
-  "W",
-  "I",
-  "C4",
-  "EXE",
-  "ISC",
-  "ICN",
-  "PIE",
-  "PT",
-  "RET",
-  "SIM",
-  "ERA",
-  "PLC",
-  "ARG",
+  # === Rule sets to ignore ===
+  "D",      # Docstrings - existing docstrings don't follow strict convention
+  "DTZ",    # Datetime timezone
+  "C90",    # McCabe complexity
+  "SLF",    # Private member access
+  "BLE",    # Blind except
+  "CPY",    # Copyright
+  "FBT",    # Boolean positional args
+  "TID252", # Relative imports
+  "S101",   # Assert statements
+  "TRY",    # Try/except style
+  "EM",     # Exception message style
+  "NPY",    # NumPy legacy random
+  "PGH003", # Blanket type:ignore
+  # === Individual rules ===
+  "ANN401", # Any type - needed for decorators and generic wrappers
+  "COM812", "COM819",  # Trailing comma (conflicts with formatter)
+  "E501",   # Line too long
+  "ERA001", # Commented out code
+  "FIX002", # TODO comments
+  "FURB152",
+  "PLC0415", "PLC2701",
+  "PLR0904", "PLR0911", "PLR0912", "PLR0913", "PLR0914", "PLR0915", "PLR0916", "PLR0917", "PLR1702", "PLR2004", "PLR6301",
+  "RET504",
+  "RUF052",
+  "SIM117", "SIM102",
+  "T201",   # Print statements
+  "TD002", "TD003",
+  "TRY300",
+  "B008",   # Function call in default argument (common pattern in Streamlit)
+  "B018",   # Useless expression (used for examples)
+  "PT011", "PT018", "PT019",
+  "A002",   # Builtin argument shadowing (type, help - common in Streamlit APIs)
+  "S324",   # Insecure hash (md5 used for non-security purposes)
+  "S110",   # try-except-pass
+  "S113",   # requests without timeout (example code)
+  "PLR6201", # literal-membership (tuple vs set - minor)
+  "PLW2901", # redefined-loop-name
+  "RUF028",  # invalid-formatter-suppression-comment
+  "RUF067",  # __init__ module should only contain re-exports (project uses __init__.py for main code)
 ]
 
-# line-length = 88
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["ANN", "ARG", "D", "INP", "N", "PERF", "S", "TRY"]
+"gallery/**" = ["INP001", "PERF203"]  # Gallery is an app, not a package
+"docs/**" = ["INP001", "T201", "RUF001"]  # Docs scripts
+"**/__init__.py" = ["F401"]  # Allow re-exports
+"scripts/hatch_build.py" = ["INP001", "S404", "S603", "S607", "DOC201", "DOC501"]  # Build script needs subprocess
 
+[tool.ruff.lint.isort]
+known-first-party = ["streamlit_extras"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.flake8-unused-arguments]
+ignore-variadic-names = true
+
+[tool.ruff.lint.flake8-comprehensions]
+allow-dict-calls-with-keyword-arguments = true
+
+[tool.ruff.format]
+docstring-code-format = true
+
+# =============================================================================
+# mypy configuration (type checking)
+# =============================================================================
 [tool.mypy]
-files = ["**/*.py"]
-follow_imports = "silent"
-ignore_missing_imports = true
-scripts_are_modules = true
-python_version = "3.9"
+files = ["src", "gallery"]
+python_version = "3.10"
+cache_dir = ".mypy_cache"
+incremental = true
+warn_return_any = false                 # Don't warn when returning Any from typed function
+warn_unused_ignores = true              # Warn about unused # type: ignore comments
+check_untyped_defs = true               # Type check inside untyped functions
+ignore_missing_imports = true           # Silence errors for imports without stubs
+disallow_any_generics = false           # Allow generic types without type parameters
+disallow_untyped_defs = true            # Require type annotations on all functions
+disallow_incomplete_defs = true         # Require full signatures (no partial annotations)
+disable_error_code = ["import-untyped"] # Disable error code for imports without stubs
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = "docs.*"
+ignore_errors = true
+
+# =============================================================================
+# ty configuration (type checking)
+# =============================================================================
+[tool.ty.src]
+include = ["src", "gallery"]
+
+[tool.ty.rules]
+unused-type-ignore-comment = "ignore"  # Allow mypy-compatible type:ignore comments (ty doesn't need them)
+unresolved-import = "ignore"      # Optional dependencies may not be installed
+unresolved-attribute = "ignore"   # Dynamic attributes from decorators/modules
+# Ignore - these are false positives from incomplete pandas/numpy type stubs
+invalid-argument-type = "ignore"    # pandas DataFrame columns parameter
+invalid-assignment = "ignore"       # Complex type inference in example code
+no-matching-overload = "ignore"     # numpy random method overloads

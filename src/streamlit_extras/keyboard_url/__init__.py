@@ -12,15 +12,17 @@ def keyboard_to_url(
     key: str | None = None,
     key_code: int | None = None,
     url: str | None = None,
-):
-    """
-
-    Map a keyboard key to open a new tab with a given URL.
+) -> None:
+    """Map a keyboard key to open a new tab with a given URL.
 
     Args:
         key (str, optional): Key to trigger (example 'k'). Defaults to None.
-        key_code (int, optional): If key doesn't work, try hard-coding the key_code instead. Defaults to None.
+        key_code (int, optional): If key doesn't work, try hard-coding the key_code
+            instead. Defaults to None.
         url (str, optional): Opens the input URL in new tab. Defaults to None.
+
+    Raises:
+        ValueError: If neither key nor key_code is provided.
     """
 
     assert not (key and key_code), """You can not provide key and key_code.
@@ -61,7 +63,7 @@ doc.addEventListener('keydown', function(e) {{
     )
 
 
-def example():
+def example() -> None:
     # Main function
     keyboard_to_url(key="S", url="https://www.github.com/streamlit/streamlit")
 
@@ -73,9 +75,7 @@ def example():
 
 
 __title__ = "Keyboard to URL"
-__desc__ = (
-    "Create bindings so that hitting a key on your keyboard opens an URL in a new tab!"
-)
+__desc__ = "Create bindings so that hitting a key on your keyboard opens an URL in a new tab!"
 __icon__ = "🎯"
 __examples__ = [example]
 __author__ = "Arnaud Miribel"

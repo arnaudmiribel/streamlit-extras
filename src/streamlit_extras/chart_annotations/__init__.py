@@ -1,35 +1,28 @@
 from __future__ import annotations
 
 from functools import partial
-from typing import Iterable, Tuple
+from typing import TYPE_CHECKING
 
 import altair as alt
 import pandas as pd
 import streamlit as st
-
-try:
-    from streamlit import cache_data  # streamlit >= 1.18.0
-except ImportError:
-    from streamlit import experimental_memo as cache_data  # streamlit >= 0.89
+from altair.utils.plugin_registry import NoSuchEntryPoint
+from streamlit import cache_data
 
 from .. import extra
 
-try:
-    from altair.utils.plugin_registry import NoSuchEntryPoint
-except ImportError:
-    from entrypoints import NoSuchEntryPoint
+if TYPE_CHECKING:
+    from collections.abc import Iterable
 
 try:
     alt.themes.enable("streamlit")
 except NoSuchEntryPoint:
-    st.altair_chart = partial(st.altair_chart, theme="streamlit")
+    st.altair_chart = partial(st.altair_chart, theme="streamlit")  # type: ignore[assignment]
 
 
 @cache_data
 def get_data() -> pd.DataFrame:
-    source = pd.read_csv(
-        "https://raw.githubusercontent.com/vega/vega-datasets/next/data/stocks.csv"
-    )
+    source = pd.read_csv("https://raw.githubusercontent.com/vega/vega-datasets/next/data/stocks.csv")
     return source[source.date.gt("2004-01-01")]
 
 
@@ -76,7 +69,7 @@ def get_chart(data: pd.DataFrame) -> alt.Chart:
 
 @extra
 def get_annotations_chart(
-    annotations: Iterable[Tuple],
+    annotations: Iterable[tuple],
     y: float = 0,
     min_date: str | None = None,
     max_date: str | None = None,
@@ -112,12 +105,12 @@ def get_annotations_chart(
         columns=["date", "annotation"],
     )
 
-    annotations_df.date = pd.to_datetime(annotations_df.date)
+    annotations_df["date"] = pd.to_datetime(annotations_df["date"])
     annotations_df["y"] = y
     if min_date:
-        annotations_df = annotations_df[annotations_df.date.gt(min_date)]
+        annotations_df = annotations_df[annotations_df["date"].gt(min_date)]
     if max_date:
-        annotations_df = annotations_df[annotations_df.date.lt(max_date)]
+        annotations_df = annotations_df[annotations_df["date"].lt(max_date)]
 
     encode_params = {"x": "date:T", "y": alt.Y("y:Q"), "tooltip": "annotation"}
 
@@ -151,7 +144,7 @@ def example() -> None:
         ],
     )
 
-    st.altair_chart(chart, use_container_width=True)  # type: ignore
+    st.altair_chart(chart, width="stretch")
 
 
 __title__ = "Chart annotations"

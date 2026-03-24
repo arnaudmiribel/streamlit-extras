@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+from typing import Any
+
 import streamlit as st
 
 from .. import extra
 
 
-def toggle_state(key: str):
+def toggle_state(key: str) -> None:
     if key not in st.session_state:
         st.session_state[key] = False
 
@@ -13,12 +15,23 @@ def toggle_state(key: str):
 
 
 @extra
-def button(*args, key: str | None = None, **kwargs) -> bool:
-    """
+def button(*args: Any, key: str | None = None, **kwargs: Any) -> bool:
+    """Create a toggle button that remembers its state.
+
     Works just like a normal streamlit button, but it remembers its state, so that
     it works as a toggle button. If you click it, it will be pressed, and if you click
-    it again, it will be unpressed. Args and output are the same as for
-    [st.button](https://docs.streamlit.io/library/api-reference/widgets/st.button)
+    it again, it will be unpressed. Args and output are the same as for st.button.
+
+    Args:
+        *args: Positional arguments passed to st.button.
+        key (str | None): Required unique key for the button. Must not be None.
+        **kwargs: Keyword arguments passed to st.button.
+
+    Returns:
+        bool: True if the button is currently in pressed state, False otherwise.
+
+    Raises:
+        ValueError: If key is not provided.
     """
 
     if key is None:
@@ -34,19 +47,19 @@ def button(*args, key: str | None = None, **kwargs) -> bool:
 
     original_on_click = kwargs.get("on_click")
 
-    def callback():
+    def callback() -> None:
         if original_on_click is not None:
             original_on_click()
         toggle_state(key)
 
     kwargs["on_click"] = callback
 
-    st.button(*args, key=derived_key, **kwargs)
+    st.button(*args, key=derived_key, **kwargs)  # type: ignore[misc]
 
     return st.session_state[key]
 
 
-def example():
+def example() -> None:
     if button("Button 1", key="button1") and button("Button 2", key="button2"):
         if button("Button 3", key="button3"):
             st.write("All 3 buttons are pressed")

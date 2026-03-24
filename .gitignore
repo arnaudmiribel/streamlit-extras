@@ -162,3 +162,26 @@ cython_debug/
 .DS_Store
 
 .cursor
+
+# =============================================================================
+# CCv2 React component frontend artifacts
+# =============================================================================
+# Node.js dependencies (never commit)
+node_modules/
+
+# npm/yarn debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Vite cache
+.vite/
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Built frontend assets (built in CI before publishing to PyPI)
+src/streamlit_extras/*/frontend/build/
+
+# Temporary working directory for AI agents
+work-tmp/

@@ -1,10 +1,9 @@
 import contextlib
-from typing import Any, Dict
+from typing import Any
 
 import pandas as pd
 import streamlit as st
 from pandas.api.types import (
-    is_categorical_dtype,
     is_datetime64_any_dtype,
     is_numeric_dtype,
     is_object_dtype,
@@ -47,11 +46,11 @@ def dataframe_explorer(df: pd.DataFrame, case: bool = True) -> pd.DataFrame:
             df.columns,
             key=f"{random_key_base}_multiselect",
         )
-        filters: Dict[str, Any] = {}
+        filters: dict[str, Any] = {}
         for column in to_filter_columns:
             left, right = st.columns((1, 20))
             # Treat columns with < 10 unique values as categorical
-            if is_categorical_dtype(df[column]) or df[column].nunique() < 10:
+            if isinstance(df[column].dtype, pd.CategoricalDtype) or df[column].nunique() < 10:
                 left.write("↳")
                 filters[column] = right.multiselect(
                     f"Values for {column}",
@@ -100,7 +99,13 @@ def dataframe_explorer(df: pd.DataFrame, case: bool = True) -> pd.DataFrame:
     return df
 
 
-def generate_fake_dataframe(size, cols, col_names=None, intervals=None, seed=None):
+def generate_fake_dataframe(
+    size: int,
+    cols: str,
+    col_names: list[str] | tuple[str, ...] | None = None,
+    intervals: list[Any] | dict[str, Any] | None = None,
+    seed: int | None = None,
+) -> pd.DataFrame:
     from itertools import cycle
 
     import numpy as np
@@ -191,8 +196,7 @@ def generate_fake_dataframe(size, cols, col_names=None, intervals=None, seed=Non
 
     if isinstance(col_names, list):
         assert len(col_names) == len(cols), (
-            f"The fake DataFrame should have {len(cols)} columns but col_names"
-            f" is a list with {len(col_names)} elements"
+            f"The fake DataFrame should have {len(cols)} columns but col_names is a list with {len(col_names)} elements"
         )
     elif col_names is None:
         suffix = {"c": "cat", "i": "int", "f": "float", "d": "date"}
@@ -200,8 +204,7 @@ def generate_fake_dataframe(size, cols, col_names=None, intervals=None, seed=Non
 
     if isinstance(intervals, list):
         assert len(intervals) == len(cols), (
-            f"The fake DataFrame should have {len(cols)} columns but intervals"
-            f" is a list with {len(intervals)} elements"
+            f"The fake DataFrame should have {len(cols)} columns but intervals is a list with {len(intervals)} elements"
         )
     else:
         if isinstance(intervals, dict):
@@ -211,14 +214,11 @@ def generate_fake_dataframe(size, cols, col_names=None, intervals=None, seed=Non
             default_intervals.update(intervals)
         intervals = [default_intervals[col] for col in cols]
     df = pd.DataFrame()
-    for col, col_name, interval in zip(cols, col_names, intervals):
+    for col, col_name, interval in zip(cols, col_names, intervals, strict=False):
         if interval is None:
             interval = default_intervals[col]
-        assert (len(interval) == 2 and isinstance(interval, tuple)) or isinstance(
-            interval, list
-        ), (
-            f"This interval {interval} is neither a tuple of two elements nor"
-            " a list of strings."
+        assert (len(interval) == 2 and isinstance(interval, tuple)) or isinstance(interval, list), (
+            f"This interval {interval} is neither a tuple of two elements nor a list of strings."
         )
         if col in ("i", "f", "d"):
             start, end = interval
@@ -250,12 +250,10 @@ def generate_fake_dataframe(size, cols, col_names=None, intervals=None, seed=Non
     return df
 
 
-def example_one():
-    dataframe = generate_fake_dataframe(
-        size=500, cols="dfc", col_names=("date", "income", "person"), seed=1
-    )
+def example_one() -> None:
+    dataframe = generate_fake_dataframe(size=500, cols="dfc", col_names=("date", "income", "person"), seed=1)
     filtered_df = dataframe_explorer(dataframe, case=False)
-    st.dataframe(filtered_df, use_container_width=True)
+    st.dataframe(filtered_df, width="stretch")
 
 
 __title__ = "Dataframe explorer UI"

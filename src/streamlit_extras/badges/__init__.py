@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+import html
 from typing import Literal, get_args
 
 import streamlit as st
-from htbuilder import a, img
 
 from .. import extra
 
@@ -11,7 +11,7 @@ _SUPPORTED_TYPES = Literal["pypi", "streamlit", "github", "twitter", "buymeacoff
 
 
 @extra
-def badge(type: _SUPPORTED_TYPES, name: str | None = None, url: str | None = None):
+def badge(type: _SUPPORTED_TYPES, name: str | None = None, url: str | None = None) -> None:
     """Easily create a visual badge for PyPI, GitHub, Streamlit Cloud or other social platforms.
 
     Args:
@@ -24,84 +24,58 @@ def badge(type: _SUPPORTED_TYPES, name: str | None = None, url: str | None = Non
     assert type, "Type must be given!"
 
     assert type in get_args(_SUPPORTED_TYPES), (
-        f"Input type '{type}' is not supported! Supported types are"
-        f" {get_args(_SUPPORTED_TYPES)}"
+        f"Input type '{type}' is not supported! Supported types are {get_args(_SUPPORTED_TYPES)}"
     )
 
     badge_html = None
 
     if type == "pypi":
         assert name, "You must give a valid PyPI package name!"
-        badge_html = str(
-            a(href=f"https://pypi.org/project/{name}")(
-                img(src=f"https://badge.fury.io/py/{name}.svg")
-            )
-        )
+        name_escaped = html.escape(name, quote=True)
+        badge_html = f'<a href="https://pypi.org/project/{name_escaped}"><img src="https://badge.fury.io/py/{name_escaped}.svg"></a>'
 
     if type == "streamlit":
         assert url, "You must provide a valid URL for the Streamlit app"
-        badge_html = str(
-            a(href=url)(
-                img(
-                    src="https://static.streamlit.io/badges/streamlit_badge_black_white.svg"
-                )
-            )
-        )
+        url_escaped = html.escape(url, quote=True)
+        badge_html = f'<a href="{url_escaped}"><img src="https://static.streamlit.io/badges/streamlit_badge_black_white.svg"></a>'
 
     if type == "github":
-        assert name, (
-            "You must give a valid GitHub repository name! Something like 'author/name'"
-        )
-        badge_html = str(
-            a(href=f"https://github.com/{name}")(
-                img(
-                    src=f"https://img.shields.io/github/stars/{name}.svg?style=social&label=Star&maxAge=2592000"
-                )
-            )
-        )
+        assert name, "You must give a valid GitHub repository name! Something like 'author/name'"
+        name_escaped = html.escape(name, quote=True)
+        badge_html = f'<a href="https://github.com/{name_escaped}"><img src="https://img.shields.io/github/stars/{name_escaped}.svg?style=social&label=Star&maxAge=2592000"></a>'
 
     if type == "twitter":
         assert name, "You must provide a valid twitter username"
-        badge_html = str(
-            a(href=f"https://twitter.com/intent/follow?screen_name={name}")(
-                img(
-                    src=f"https://img.shields.io/twitter/follow/{name}?style=social&logo=twitter"
-                )
-            )
-        )
+        name_escaped = html.escape(name, quote=True)
+        badge_html = f'<a href="https://twitter.com/intent/follow?screen_name={name_escaped}"><img src="https://img.shields.io/twitter/follow/{name_escaped}?style=social&logo=twitter"></a>'
 
     if type == "buymeacoffee":
         assert name, "You must provide a valid Buy-Me-a-Coffee page username"
-        badge_html = str(
-            a(href=f"https://www.buymeacoffee.com/{name}")(
-                img(
-                    src="https://img.shields.io/badge/Buy%20me%20a%20coffee--yellow.svg?logo=buy-me-a-coffee&logoColor=orange&style=social"
-                )
-            )
-        )
+        name_escaped = html.escape(name, quote=True)
+        badge_html = f'<a href="https://www.buymeacoffee.com/{name_escaped}"><img src="https://img.shields.io/badge/Buy%20me%20a%20coffee--yellow.svg?logo=buy-me-a-coffee&logoColor=orange&style=social"></a>'
 
     if badge_html is not None:
-        st.write(badge_html, unsafe_allow_html=True)
+        st.html(badge_html)
 
 
-def example_pypi():
+def example_pypi() -> None:
     badge(type="pypi", name="plost")
     badge(type="pypi", name="streamlit")
 
 
-def example_streamlit():
+def example_streamlit() -> None:
     badge(type="streamlit", url="https://plost.streamlitapp.com")
 
 
-def example_github():
+def example_github() -> None:
     badge(type="github", name="streamlit/streamlit")
 
 
-def example_twitter():
+def example_twitter() -> None:
     badge(type="twitter", name="streamlit")
 
 
-def example_buymeacoffee():
+def example_buymeacoffee() -> None:
     badge(type="buymeacoffee", name="andfanilo")
 
 

@@ -1,0 +1,40 @@
+{
+  "name": "json_editor",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "npm run clean && npm run typecheck && npm run build:frontend:production",
+    "build:frontend:production": "cross-env NODE_ENV=production vite build",
+    "clean": "rimraf build",
+    "dev": "cross-env NODE_ENV=development vite build --watch",
+    "format": "prettier --write src/**/*.{ts,tsx} vite.config.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "prettier": {},
+  "dependencies": {
+    "@microlink/react-json-view": "^1.26.1",
+    "@streamlit/component-v2-lib": "^0.2.0",
+    "color": "^5.0.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/color": "^4.2.0",
+    "@types/node": "^22.14.1",
+    "@types/react": "^18.3.20",
+    "@types/react-dom": "^18.3.6",
+    "@vitejs/plugin-react": "^5.1.0",
+    "cross-env": "^10.1.0",
+    "prettier": "^3.6.2",
+    "rimraf": "^6.1.0",
+    "typescript": "^5.8.3",
+    "vite": "^7.1.12"
+  }
+}

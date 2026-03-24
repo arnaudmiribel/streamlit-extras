@@ -1,20 +1,16 @@
 import inspect
+from collections.abc import Callable
 from importlib import import_module
 from pathlib import Path
-from typing import Any, Callable, Optional, TypeVar, Union, overload
+from typing import Any, Optional, TypeVar, Union, overload
+
+from streamlit.runtime.metrics_util import gather_metrics as _gather_metrics
 
 from streamlit_extras.version import (
     STREAMLIT_EXTRAS_VERSION_STRING as _STREAMLIT_EXTRAS_VERSION_STRING,
 )
 
 __version__ = _STREAMLIT_EXTRAS_VERSION_STRING
-
-try:
-    from streamlit.runtime.metrics_util import gather_metrics as _gather_metrics
-except ImportError:
-
-    def _gather_metrics(name, func):  # type: ignore # noqa: ARG001
-        return func
 
 
 F = TypeVar("F", bound=Callable[..., Any])
@@ -38,8 +34,8 @@ def extra(
 
 
 def extra(
-    func: Optional[F] = None,
-) -> Union[Callable[[F], F], F]:
+    func: F | None = None,
+) -> Callable[[F], F] | F:
     if func:
         filename = inspect.stack()[1].filename
         submodule = Path(filename).parent.name
@@ -47,16 +43,12 @@ def extra(
         module = import_module(extra_name)
 
         if hasattr(module, "__funcs__"):
-            module.__funcs__ += [func]  # type: ignore
+            module.__funcs__ += [func]  # type: ignore[attr-defined]
         else:
-            module.__funcs__ = [func]  # type: ignore
+            module.__funcs__ = [func]  # type: ignore[attr-defined]
 
         profiling_name = f"{submodule}.{func.__name__}"
-        try:
-            return _gather_metrics(name=profiling_name, func=func)
-        except TypeError:
-            # Don't fail on streamlit==1.13.0, which only expects a callable
-            pass
+        return _gather_metrics(name=profiling_name, func=func)
 
     def wrapper(f: F) -> F:
         return f

@@ -2,18 +2,21 @@ from __future__ import annotations
 
 import inspect
 import textwrap
-from typing import Callable, List
+from typing import TYPE_CHECKING
 
 from streamlit.components.v1 import html
 
 from .. import extra
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 @extra
 def sandbox(
     code: str | Callable[[], None],
     stlite_version: str | None = None,
-    requirements: List[str] | None = None,
+    requirements: list[str] | None = None,
     height: int = 700,
     scrolling: bool = False,
 ) -> None:
@@ -49,12 +52,8 @@ def sandbox(
         Defaults to False.
     """
 
-    stlite_css_url = (
-        "https://cdn.jsdelivr.net/npm/@stlite/mountable@0.45.0/build/stlite.css"
-    )
-    stlite_js_url = (
-        "https://cdn.jsdelivr.net/npm/@stlite/mountable@0.45.0/build/stlite.js"
-    )
+    stlite_css_url = "https://cdn.jsdelivr.net/npm/@stlite/mountable@0.45.0/build/stlite.css"
+    stlite_js_url = "https://cdn.jsdelivr.net/npm/@stlite/mountable@0.45.0/build/stlite.js"
 
     if stlite_version is not None:
         stlite_css_url = f"https://cdn.jsdelivr.net/npm/@stlite/mountable@{stlite_version}/build/stlite.css"
@@ -121,26 +120,28 @@ st.markdown('<style>[data-baseweb~="modal"]{{visibility: hidden;}}</style>', uns
     )
 
 
-def example():
-    def embedded_app():
+def example() -> None:
+    def embedded_app() -> None:
         import numpy as np
         import pandas as pd
         import plotly.express as px
         import streamlit as st
 
         @st.cache_data
-        def get_data():
+        def get_data() -> pd.DataFrame:
             dates = pd.date_range(start="01-01-2020", end="01-01-2023")
             data = np.random.randn(len(dates), 1).cumsum(axis=0)
             return pd.DataFrame(data, index=dates, columns=["Value"])
 
         data = get_data()
 
+        min_val = int(data["Value"].min())
+        max_val = int(data["Value"].max())
         value = st.slider(
             "Select a range of values",
-            int(data.min()),
-            int(data.max()),
-            (int(data.min()), int(data.max())),
+            min_val,
+            max_val,
+            (min_val, max_val),
         )
         filtered_data = data[(data["Value"] >= value[0]) & (data["Value"] <= value[1])]
         st.plotly_chart(px.line(filtered_data, y="Value"))

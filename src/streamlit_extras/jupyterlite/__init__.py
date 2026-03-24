@@ -4,7 +4,7 @@ from .. import extra
 
 
 @extra
-def jupyterlite(height: int = 600, width: int = 800):
+def jupyterlite(height: int = 600, width: int = 800) -> None:
     """
     Add a Jupyterlite sandbox to your Streamlit app
 
@@ -20,7 +20,7 @@ def jupyterlite(height: int = 600, width: int = 800):
     )
 
 
-def example():
+def example() -> None:
     jupyterlite(1500, 1600)
 
 
