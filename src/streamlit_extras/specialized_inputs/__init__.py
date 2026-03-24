@@ -604,7 +604,7 @@ def _mount(
         "error": error,
         "input_type": input_type,
         "is_password": is_password,
-        "trailing_icon_svg": _ADORNMENT_ICONS.get(trailing_icon) if trailing_icon else None,
+        "trailing_icon_svg": (_ADORNMENT_ICONS.get(trailing_icon) if trailing_icon else None),
         "icon_visibility": _ADORNMENT_ICONS["visibility"],
         "icon_visibility_off": _ADORNMENT_ICONS["visibility_off"],
     }
@@ -1062,5 +1062,5 @@ __desc__ = (
 )
 __icon__ = "✏️"
 __examples__ = [example]
-__author__ = "streamlit-extras"
+__author__ = "Arnaud Miribel"
 __experimental_playground__ = False
