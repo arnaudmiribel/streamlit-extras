@@ -257,7 +257,7 @@ def example_with_options() -> None:
 __title__ = "Three.js 3D Viewer"
 __desc__ = "Display 3D models (GLTF, GLB, OBJ, STL, PLY, FBX) with interactive orbit controls using Three.js."
 __icon__ = "🎮"
-__author__ = "streamlit-extras"
+__author__ = "Lukas Masuch"
 __examples__ = [example_basic, example_with_options]
 __streamlit_min_version__ = "1.46.0"
 
