@@ -53,20 +53,33 @@ function disposeObject(object: THREE.Object3D): void {
  * Dispose of a material and its textures.
  */
 function disposeMaterial(material: THREE.Material): void {
-  // Dispose textures if present
-  const mat = material as THREE.MeshStandardMaterial;
-  if (mat.map) mat.map.dispose();
-  if (mat.lightMap) mat.lightMap.dispose();
-  if (mat.bumpMap) mat.bumpMap.dispose();
-  if (mat.normalMap) mat.normalMap.dispose();
-  if (mat.specularMap) mat.specularMap.dispose();
-  if (mat.envMap) mat.envMap.dispose();
-  if (mat.alphaMap) mat.alphaMap.dispose();
-  if (mat.aoMap) mat.aoMap.dispose();
-  if (mat.displacementMap) mat.displacementMap.dispose();
-  if (mat.emissiveMap) mat.emissiveMap.dispose();
-  if (mat.metalnessMap) mat.metalnessMap.dispose();
-  if (mat.roughnessMap) mat.roughnessMap.dispose();
+  // Dispose textures if present - use type guard to handle various material types
+  const mat = material as unknown as Record<string, unknown>;
+
+  // Common texture maps across material types
+  const textureProps = [
+    "map",
+    "lightMap",
+    "bumpMap",
+    "normalMap",
+    "envMap",
+    "alphaMap",
+    "aoMap",
+    "displacementMap",
+    "emissiveMap",
+    "metalnessMap",
+    "roughnessMap",
+    "specularMap", // MeshPhongMaterial
+    "gradientMap", // MeshToonMaterial
+  ];
+
+  for (const prop of textureProps) {
+    const texture = mat[prop];
+    if (texture && texture instanceof THREE.Texture) {
+      texture.dispose();
+    }
+  }
+
   material.dispose();
 }
 
