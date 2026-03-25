@@ -455,19 +455,25 @@ def cookie_manager(*, key: str = "cookie_manager") -> CookieManager:
         - After setting/deleting cookies, call ``st.rerun()`` to see changes
 
     Example:
-        >>> manager = cookie_manager()
-        >>> if not manager.ready():
-        ...     st.stop()  # Wait for browser sync
-        >>> theme = manager.get("theme", "light")
-        >>> if st.button("Use dark theme"):
-        ...     manager["theme"] = "dark"
-        ...     st.rerun()
+
+        ```python
+        manager = cookie_manager()
+        if not manager.ready():
+            st.stop()  # Wait for browser sync
+        theme = manager.get("theme", "light")
+        if st.button("Use dark theme"):
+            manager["theme"] = "dark"
+            st.rerun()
+        ```
 
     Example with custom cookie options:
-        >>> manager = cookie_manager()
-        >>> if manager.ready():
-        ...     # Set cookie with 1-hour expiration
-        ...     manager.set("session", "abc123", max_age=3600, secure=True)
+
+        ```python
+        manager = cookie_manager()
+        if manager.ready():
+            # Set cookie with 1-hour expiration
+            manager.set("session", "abc123", max_age=3600, secure=True)
+        ```
     """
     return CookieManager(key=key)
 

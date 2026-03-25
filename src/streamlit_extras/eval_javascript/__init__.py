@@ -211,9 +211,12 @@ def eval_javascript(expression: str, *, key: str) -> Any | None:
         - Errors are captured and can be accessed via session state
 
     Example:
-        >>> user_agent = eval_javascript("window.navigator.userAgent", key="ua")
-        >>> if user_agent:
-        ...     st.write(f"Your browser: {user_agent}")
+
+        ```python
+        user_agent = eval_javascript("window.navigator.userAgent", key="ua")
+        if user_agent:
+            st.write(f"Your browser: {user_agent}")
+        ```
     """
     component_state = st.session_state.get(key, {})
     request_state_key = f"{key}__eval_javascript_request"

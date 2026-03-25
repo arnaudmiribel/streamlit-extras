@@ -74,8 +74,11 @@ def pagination(
             or max_visible_pages < 0.
 
     Example:
-        >>> page = pagination(num_pages=10)
-        >>> st.write(f"Showing page {page}")
+
+        ```python
+        page = pagination(num_pages=10)
+        st.write(f"Showing page {page}")
+        ```
     """
     # Validate inputs
     if num_pages < 1:

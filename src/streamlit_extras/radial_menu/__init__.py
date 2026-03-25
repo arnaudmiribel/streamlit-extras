@@ -41,8 +41,11 @@ def radial_menu(
         A TypedDict with a "selection" key containing the currently selected option value.
 
     Example:
-        >>> result = radial_menu({"home": "🏠", "search": "🔍", "settings": "⚙️"})
-        >>> st.write(f"Selected: {result['selection']}")
+
+        ```python
+        result = radial_menu({"home": "🏠", "search": "🔍", "settings": "⚙️"})
+        st.write(f"Selected: {result['selection']}")
+        ```
     """
     if default is None:
         default = next(iter(options.keys()), None)
