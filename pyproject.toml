@@ -125,7 +125,6 @@ ignore = [
 "docs/**" = ["INP001", "T201", "RUF001"]  # Docs scripts
 "**/__init__.py" = ["F401", "DOC201", "DOC501"]  # Allow re-exports, skip docstring return/raises for internal funcs
 "scripts/hatch_build.py" = ["INP001", "S404", "S603", "S607", "DOC201", "DOC501"]  # Build script needs subprocess
-"**/example_app.py" = ["E402", "INP001"]  # Streamlit apps need imports after page config
 
 [tool.ruff.lint.isort]
 known-first-party = ["streamlit_extras"]
