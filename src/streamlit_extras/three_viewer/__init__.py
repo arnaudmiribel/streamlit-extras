@@ -192,12 +192,9 @@ def three_viewer(
         The Streamlit DeltaGenerator for this component.
 
     Example:
-
-        ```python
-        three_viewer("model.glb")
-        three_viewer("https://example.com/model.gltf", height=600)
-        three_viewer(stl_bytes, file_format=".stl")
-        ```
+        >>> three_viewer("model.glb")
+        >>> three_viewer("https://example.com/model.gltf", height=600)
+        >>> three_viewer(stl_bytes, file_format=".stl")
     """
     # Normalize format if provided
     normalized_format = None
