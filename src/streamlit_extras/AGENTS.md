@@ -35,6 +35,7 @@ Use this guide to select the appropriate implementation approach:
 | Extra | Description | Component Type |
 |-------|-------------|----------------|
 | `add_vertical_space` | Add vertical spacing to your app | pure python |
+| `anywidget` | Render anywidget-compatible widgets with full bidirectional interactivity | components v2: inline |
 | `app_logo` | Add a logo on top of the navigation bar | st.html |
 | `badges` | Create custom badges (PyPI, GitHub, etc.) | st.html |
 | `bottom_container` | A container that sticks to the bottom of the app | pure python |

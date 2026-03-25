@@ -60,6 +60,11 @@ dev = [
 "Homepage" = "https://github.com/arnaudmiribel/streamlit-extras"
 "Bug Tracker" = "https://github.com/arnaudmiribel/streamlit-extras/issues"
 
+[project.optional-dependencies]
+anywidget = [
+  "anywidget >= 0.9.0",
+  "traitlets >= 5.0.0",
+]
 
 # =============================================================================
 # Ruff configuration (linting + formatting)
@@ -118,8 +123,9 @@ ignore = [
 "tests/**" = ["ANN", "ARG", "D", "INP", "N", "PERF", "S", "TRY"]
 "gallery/**" = ["INP001", "PERF203"]  # Gallery is an app, not a package
 "docs/**" = ["INP001", "T201", "RUF001"]  # Docs scripts
-"**/__init__.py" = ["F401"]  # Allow re-exports
+"**/__init__.py" = ["F401", "DOC201", "DOC501"]  # Allow re-exports, skip docstring return/raises for internal funcs
 "scripts/hatch_build.py" = ["INP001", "S404", "S603", "S607", "DOC201", "DOC501"]  # Build script needs subprocess
+"**/example_app.py" = ["E402", "INP001"]  # Streamlit apps need imports after page config
 
 [tool.ruff.lint.isort]
 known-first-party = ["streamlit_extras"]
