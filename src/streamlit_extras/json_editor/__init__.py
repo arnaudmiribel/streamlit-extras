@@ -84,8 +84,11 @@ def json_editor(
         A TypedDict with a "data" key containing the current (possibly edited) JSON.
 
     Example:
-        >>> result = json_editor({"name": "John", "age": 30}, key="my_editor")
-        >>> st.write("Current data:", result["data"])
+
+        ```python
+        result = json_editor({"name": "John", "age": 30}, key="my_editor")
+        st.write("Current data:", result["data"])
+        ```
     """
     # Parse JSON string if provided
     parsed_data: Any

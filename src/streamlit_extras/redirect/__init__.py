@@ -127,8 +127,11 @@ def redirect(
             Only applies when target is "_self". Default is False.
 
     Example:
-        >>> if st.button("Go to GitHub"):
-        ...     redirect("https://github.com/streamlit/streamlit")
+
+        ```python
+        if st.button("Go to GitHub"):
+            redirect("https://github.com/streamlit/streamlit")
+        ```
 
     Note:
         - For same-tab redirects (_self), the Streamlit app will be replaced

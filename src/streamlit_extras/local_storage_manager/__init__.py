@@ -405,21 +405,28 @@ def local_storage_manager(*, key: str = "local_storage_manager") -> LocalStorage
         - Expired values return ``None`` (via ``.get()``) or raise ``KeyError``
 
     Example:
-        >>> manager = local_storage_manager()
-        >>> if not manager.ready():
-        ...     st.stop()  # Wait for browser sync
-        >>> settings = manager.get("settings", {"theme": "light"})
-        >>> if st.button("Use dark theme"):
-        ...     settings["theme"] = "dark"
-        ...     manager["settings"] = settings
-        ...     st.rerun()
+
+        ```python
+        manager = local_storage_manager()
+        if not manager.ready():
+            st.stop()  # Wait for browser sync
+        settings = manager.get("settings", {"theme": "light"})
+        if st.button("Use dark theme"):
+            settings["theme"] = "dark"
+            manager["settings"] = settings
+            st.rerun()
+        ```
 
     Example with expiration:
-        >>> from datetime import timedelta
-        >>> manager = local_storage_manager()
-        >>> if manager.ready():
-        ...     # Cache data for 1 hour
-        ...     manager.set("cache", expensive_data, expires_in=timedelta(hours=1))
+
+        ```python
+        from datetime import timedelta
+
+        manager = local_storage_manager()
+        if manager.ready():
+            # Cache data for 1 hour
+            manager.set("cache", expensive_data, expires_in=timedelta(hours=1))
+        ```
     """
     return LocalStorageManager(key=key)
 
