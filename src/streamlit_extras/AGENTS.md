@@ -78,6 +78,7 @@ Use this guide to select the appropriate implementation approach:
 | `stoggle` | Notion-style toggle button | st.html |
 | `stylable_container` | Container with custom CSS styling | pure python |
 | `tags` | Display GitHub-style tags | st.html |
+| `three_viewer` | 3D model viewer using Three.js | components v2: react |
 | `word_importances` | Highlight words based on importance scores | st.html |
 
 ## Development Tips

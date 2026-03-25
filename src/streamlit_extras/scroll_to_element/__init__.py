@@ -112,9 +112,12 @@ def scroll_to_element(
             bottom, "nearest" scrolls the minimum distance. Default is "center".
 
     Example:
-        >>> st.text_input("Name", key="name_field")
-        >>> if st.button("Jump to name field"):
-        ...     scroll_to_element("name_field")
+
+        ```python
+        st.text_input("Name", key="name_field")
+        if st.button("Jump to name field"):
+            scroll_to_element("name_field")
+        ```
 
     Note:
         - The target element must have a `key` parameter set in its Streamlit call

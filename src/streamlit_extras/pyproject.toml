@@ -6,11 +6,14 @@ name = "streamlit-extras"
 version = "0.0.1"
 
 [[tool.streamlit.component.components]]
+name = "anywidget"
+asset_dir = "anywidget/frontend/build"
+[[tool.streamlit.component.components]]
 name = "json_editor"
 asset_dir = "json_editor/frontend/build"
 [[tool.streamlit.component.components]]
 name = "pagination"
 asset_dir = "pagination/frontend/build"
 [[tool.streamlit.component.components]]
-name = "anywidget"
-asset_dir = "anywidget/frontend/build"
+name = "three_viewer"
+asset_dir = "three_viewer/frontend/build"
