@@ -17,13 +17,18 @@ declare global {
  * Get the Streamlit base URL from the window object or current location.
  */
 export function getStreamlitUrl(): string | null {
+  // Ensure we're running in a browser-like environment
+  if (typeof window === "undefined") {
+    return null;
+  }
+
   // Check for explicitly configured download assets base URL
   if (window.__streamlit?.DOWNLOAD_ASSETS_BASE_URL) {
     return window.__streamlit.DOWNLOAD_ASSETS_BASE_URL;
   }
 
   // Fall back to current window location
-  if (typeof window !== "undefined" && window.location) {
+  if (window.location) {
     return window.location.origin + window.location.pathname;
   }
 
@@ -64,10 +69,20 @@ export function mergeFileUrlWithStreamlitUrl(
     const origin = url.origin;
     let basePath = url.pathname;
 
-    // If the path doesn't end with /, remove the last segment (likely the app file)
+    // If the path doesn't end with /, we need to determine the base path.
+    // We remove the last segment only if there are multiple segments,
+    // otherwise we preserve it (for single-segment subpaths like /foo).
     if (!basePath.endsWith("/")) {
       const lastSlash = basePath.lastIndexOf("/");
-      basePath = lastSlash > 0 ? basePath.substring(0, lastSlash) : "";
+      // Only strip the last segment if it's not the root
+      // and there's more than one segment (lastSlash > 0)
+      if (lastSlash > 0) {
+        basePath = basePath.substring(0, lastSlash);
+      } else {
+        // Single segment like "/foo" - keep the full path as base
+        // (the file is served at the root of that subpath)
+        basePath = "";
+      }
     } else {
       // Remove trailing slash
       basePath = basePath.slice(0, -1);

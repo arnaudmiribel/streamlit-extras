@@ -1,6 +1,6 @@
 """3D model viewer for Streamlit using Three.js.
 
-Display 3D models (GLTF, GLB, OBJ, STL, PLY) with interactive orbit controls.
+Display 3D models (GLTF, GLB, OBJ, STL, PLY, FBX) with interactive orbit controls.
 """
 
 from __future__ import annotations
@@ -31,15 +31,21 @@ _MIME_TYPES: dict[str, str] = {
 }
 
 
+# Supported file extensions (must match frontend loaders)
+_SUPPORTED_FORMATS: frozenset[str] = frozenset(_MIME_TYPES.keys())
+
+
 def _get_file_extension(filename: str) -> str:
     """Extract the file extension from a filename or URL.
 
     Returns:
         The lowercase file extension including the leading dot.
     """
-    # Handle URLs by extracting the path
+    # Handle URLs by extracting the path - strip query params and fragments
     if "?" in filename:
         filename = filename.split("?", maxsplit=1)[0]
+    if "#" in filename:
+        filename = filename.split("#", maxsplit=1)[0]
     return Path(filename).suffix.lower()
 
 
@@ -52,13 +58,39 @@ def _add_to_media_file_manager(data: bytes, mime_type: str) -> str:
 
     Returns:
         The URL to access the file.
+
+    Raises:
+        RuntimeError: If the Streamlit version is incompatible.
     """
-    coordinates = st._main._get_delta_path_str()
-    return runtime.get_instance().media_file_mgr.add(data, mime_type, coordinates)
+    rt = runtime.get_instance()
+
+    # Prefer the current behavior using Streamlit's internal delta path API.
+    # This relies on a private attribute and may break in future versions,
+    # so we wrap it in a try/except and provide a compatibility fallback.
+    try:
+        coordinates = st._main._get_delta_path_str()
+    except Exception:
+        media_mgr = rt.media_file_mgr
+        # Fallback: try calling without explicit coordinates (if supported).
+        try:
+            return media_mgr.add(data, mime_type)  # type: ignore[call-arg]
+        except TypeError as exc:
+            msg = (
+                "Incompatible Streamlit version detected: unable to access "
+                "internal API 'st._main._get_delta_path_str', and "
+                "media_file_mgr.add(...) requires explicit coordinates. "
+                "Please upgrade/downgrade Streamlit to a compatible version "
+                "or report this issue to the maintainers of "
+                "streamlit-extras.three_viewer."
+            )
+            raise RuntimeError(msg) from exc
+    else:
+        return rt.media_file_mgr.add(data, mime_type, coordinates)
 
 
 def _process_source(
     source: str | Path | bytes | BytesIO | RawIOBase | BufferedReader,
+    file_format: str | None = None,
 ) -> tuple[str, str]:
     """Process the source and return (url, format).
 
@@ -67,6 +99,8 @@ def _process_source(
 
     Args:
         source: The 3D model source.
+        file_format: Explicit format override (e.g., ".glb", ".stl").
+            Required for bytes/BytesIO inputs with non-GLB formats.
 
     Returns:
         Tuple of (url, format_extension).
@@ -77,7 +111,7 @@ def _process_source(
     # Handle URL strings
     if isinstance(source, str):
         if source.startswith(("http://", "https://")):
-            ext = _get_file_extension(source)
+            ext = file_format or _get_file_extension(source)
             return source, ext
 
         # Treat as file path
@@ -85,7 +119,7 @@ def _process_source(
 
     # Handle Path objects
     if isinstance(source, Path):
-        ext = source.suffix.lower()
+        ext = file_format or source.suffix.lower()
         data = Path(source).read_bytes()
         mime_type = _MIME_TYPES.get(ext, "application/octet-stream")
         url = _add_to_media_file_manager(data, mime_type)
@@ -98,16 +132,16 @@ def _process_source(
             data = source.getvalue()
         else:
             data = source.read()
-        # Default to GLB for binary data without extension info
-        ext = ".glb"
+        # Use explicit format or default to GLB for binary data
+        ext = file_format or ".glb"
         mime_type = _MIME_TYPES.get(ext, "application/octet-stream")
         url = _add_to_media_file_manager(data, mime_type)
         return url, ext
 
     # Handle raw bytes
     if isinstance(source, bytes):
-        # Default to GLB for raw bytes
-        ext = ".glb"
+        # Use explicit format or default to GLB for raw bytes
+        ext = file_format or ".glb"
         mime_type = _MIME_TYPES.get(ext, "application/octet-stream")
         url = _add_to_media_file_manager(source, mime_type)
         return url, ext
@@ -134,6 +168,7 @@ def _get_component() -> Any:
 def three_viewer(
     source: str | Path | bytes | BytesIO | RawIOBase | BufferedReader,
     *,
+    file_format: str | None = None,
     height: int = 400,
     key: str | None = None,
 ) -> DeltaGenerator:
@@ -147,6 +182,9 @@ def three_viewer(
             - A local file path (str or Path)
             - Binary data (bytes)
             - A BytesIO or file-like object
+        file_format: Explicit format override (e.g., ".glb", ".stl", ".obj").
+            Required for bytes/BytesIO inputs with non-GLB formats.
+            If not provided, the format is inferred from the source.
         height: Height of the viewer in pixels.
         key: Unique key for this component instance.
 
@@ -156,15 +194,33 @@ def three_viewer(
     Example:
         >>> three_viewer("model.glb")
         >>> three_viewer("https://example.com/model.gltf", height=600)
+        >>> three_viewer(stl_bytes, file_format=".stl")
     """
-    url, file_format = _process_source(source)
+    # Normalize format if provided
+    normalized_format = None
+    if file_format is not None:
+        normalized_format = file_format.lower()
+        if not normalized_format.startswith("."):
+            normalized_format = "." + normalized_format
+
+    url, detected_format = _process_source(source, normalized_format)
+
+    # Use normalized format if provided, otherwise use detected format
+    final_format = normalized_format or detected_format
+
+    # Validate the format
+    if final_format and final_format not in _SUPPORTED_FORMATS:
+        supported = ", ".join(sorted(_SUPPORTED_FORMATS))
+        st.exception(ValueError(f"Unsupported 3D model format: '{final_format}'. Supported formats are: {supported}"))
+        # Return empty component to avoid frontend crash
+        return st.empty()
 
     component = _get_component()
     return component(
         key=key,
         data={
             "url": url,
-            "format": file_format,
+            "format": final_format,
             "height": height,
         },
     )
@@ -196,8 +252,48 @@ def example_with_options() -> None:
 
 
 __title__ = "Three.js 3D Viewer"
-__desc__ = "Display 3D models (GLTF, GLB, OBJ, STL, PLY) with interactive orbit controls using Three.js."
+__desc__ = "Display 3D models (GLTF, GLB, OBJ, STL, PLY, FBX) with interactive orbit controls using Three.js."
 __icon__ = "🎮"
 __author__ = "streamlit-extras"
 __examples__ = [example_basic, example_with_options]
 __streamlit_min_version__ = "1.46.0"
+
+
+# Unit tests for helper functions
+def _test_get_file_extension_basic() -> None:
+    """Test basic extension extraction."""
+    assert _get_file_extension("model.glb") == ".glb"
+    assert _get_file_extension("path/to/model.GLTF") == ".gltf"
+    assert _get_file_extension("model.stl") == ".stl"
+
+
+def _test_get_file_extension_urls() -> None:
+    """Test extension extraction from URLs with query params and fragments."""
+    assert _get_file_extension("https://example.com/model.glb?v=1") == ".glb"
+    assert _get_file_extension("https://example.com/model.glb#section") == ".glb"
+    assert _get_file_extension("https://example.com/model.glb?v=1#section") == ".glb"
+    assert _get_file_extension("https://example.com/model.obj?token=abc&v=2") == ".obj"
+
+
+def _test_get_file_extension_no_extension() -> None:
+    """Test files without extensions."""
+    assert not _get_file_extension("model")
+    assert not _get_file_extension("https://example.com/model")
+
+
+def _test_supported_formats() -> None:
+    """Test that all MIME types have corresponding supported formats."""
+    assert ".glb" in _SUPPORTED_FORMATS
+    assert ".gltf" in _SUPPORTED_FORMATS
+    assert ".obj" in _SUPPORTED_FORMATS
+    assert ".stl" in _SUPPORTED_FORMATS
+    assert ".ply" in _SUPPORTED_FORMATS
+    assert ".fbx" in _SUPPORTED_FORMATS
+
+
+__tests__ = [
+    _test_get_file_extension_basic,
+    _test_get_file_extension_urls,
+    _test_get_file_extension_no_extension,
+    _test_supported_formats,
+]

@@ -28,6 +28,49 @@ export type ThreeViewerProps = {
 type LoadingState = "loading" | "loaded" | "error";
 
 /**
+ * Dispose of a Three.js object and all its children, releasing GPU resources.
+ */
+function disposeObject(object: THREE.Object3D): void {
+  object.traverse((child) => {
+    if (child instanceof THREE.Mesh) {
+      // Dispose geometry
+      if (child.geometry) {
+        child.geometry.dispose();
+      }
+      // Dispose material(s)
+      if (child.material) {
+        if (Array.isArray(child.material)) {
+          child.material.forEach((mat) => disposeMaterial(mat));
+        } else {
+          disposeMaterial(child.material);
+        }
+      }
+    }
+  });
+}
+
+/**
+ * Dispose of a material and its textures.
+ */
+function disposeMaterial(material: THREE.Material): void {
+  // Dispose textures if present
+  const mat = material as THREE.MeshStandardMaterial;
+  if (mat.map) mat.map.dispose();
+  if (mat.lightMap) mat.lightMap.dispose();
+  if (mat.bumpMap) mat.bumpMap.dispose();
+  if (mat.normalMap) mat.normalMap.dispose();
+  if (mat.specularMap) mat.specularMap.dispose();
+  if (mat.envMap) mat.envMap.dispose();
+  if (mat.alphaMap) mat.alphaMap.dispose();
+  if (mat.aoMap) mat.aoMap.dispose();
+  if (mat.displacementMap) mat.displacementMap.dispose();
+  if (mat.emissiveMap) mat.emissiveMap.dispose();
+  if (mat.metalnessMap) mat.metalnessMap.dispose();
+  if (mat.roughnessMap) mat.roughnessMap.dispose();
+  material.dispose();
+}
+
+/**
  * Load a 3D model based on its format.
  */
 async function loadModel(
@@ -214,6 +257,11 @@ const ThreeViewer: FC<ThreeViewerProps> = ({
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
+      // Dispose current model before cleanup
+      if (modelRef.current) {
+        disposeObject(modelRef.current);
+        modelRef.current = null;
+      }
       if (rendererRef.current && container.contains(rendererRef.current.domElement)) {
         container.removeChild(rendererRef.current.domElement);
       }
@@ -242,12 +290,16 @@ const ThreeViewer: FC<ThreeViewerProps> = ({
     const scene = sceneRef.current;
     if (!scene || !sceneReady) return;
 
+    // Track whether this effect has been superseded
+    let cancelled = false;
+
     setLoadingState("loading");
     setErrorMessage("");
 
-    // Remove previous model
+    // Remove and dispose previous model
     if (modelRef.current) {
       scene.remove(modelRef.current);
+      disposeObject(modelRef.current);
       modelRef.current = null;
     }
 
@@ -256,6 +308,17 @@ const ThreeViewer: FC<ThreeViewerProps> = ({
 
     loadModel(processedUrl, format)
       .then((result) => {
+        // Ignore if this load was superseded by a newer one
+        if (cancelled) {
+          // Dispose the loaded result since we won't use it
+          if (result instanceof THREE.BufferGeometry) {
+            result.dispose();
+          } else if (result instanceof THREE.Object3D) {
+            disposeObject(result);
+          }
+          return;
+        }
+
         // Check if scene still exists (component might have unmounted)
         if (!sceneRef.current) return;
 
@@ -281,12 +344,20 @@ const ThreeViewer: FC<ThreeViewerProps> = ({
         setLoadingState("loaded");
       })
       .catch((error) => {
+        // Ignore errors from superseded loads
+        if (cancelled) return;
+
         console.error("Failed to load 3D model:", error);
         setLoadingState("error");
         setErrorMessage(
           error instanceof Error ? error.message : "Failed to load 3D model",
         );
       });
+
+    // Cleanup: mark this effect as cancelled so late-resolving promises are ignored
+    return () => {
+      cancelled = true;
+    };
   }, [url, format, sceneReady]);
 
   const containerStyle: CSSProperties = {
