@@ -450,6 +450,7 @@ def example() -> None:
         avatar("https://avatars.githubusercontent.com/u/1673013?v=4", height=40, border=True)
         avatar("https://avatars.githubusercontent.com/u/690814?v=4", height=40, border=True)
         avatar("https://avatars.githubusercontent.com/u/47222480?v=4", height=40, border=True)
+        avatar("https://avatars.githubusercontent.com/u/12345", height=40, border=True)
 
 
 __title__ = "Avatar"
