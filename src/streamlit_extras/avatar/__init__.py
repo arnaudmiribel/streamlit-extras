@@ -190,11 +190,10 @@ _AVATAR_COMPONENT = st.components.v2.component(
             container.appendChild(textDiv);
         }
 
-        // Handle click - increment counter for each click
+        // Handle click - use timestamp for unique click detection
         const handleClick = () => {
             if (clickable) {
-                const currentCount = component.getStateValue("click_count") ?? 0;
-                setStateValue("click_count", currentCount + 1);
+                setStateValue("clicked_at", Date.now());
             }
         };
 
@@ -340,20 +339,20 @@ def avatar(
     }
 
     if clickable:
-        component_kwargs["default"] = {"click_count": 0}
-        component_kwargs["on_click_count_change"] = callback
+        component_kwargs["default"] = {"clicked_at": 0}
+        component_kwargs["on_clicked_at_change"] = callback
 
     # Render component
     result = _AVATAR_COMPONENT(**component_kwargs)
 
-    # Detect if clicked this run by checking if click_count increased
+    # Detect if clicked this run by checking if clicked_at changed
     if clickable:
-        click_count = result.click_count if result.click_count is not None else 0
-        # Store previous click count in session state to detect new clicks
-        state_key = f"_avatar_click_count_{key or id(result)}"
-        prev_count = st.session_state.get(state_key, 0)
-        st.session_state[state_key] = click_count
-        return click_count > prev_count
+        clicked_at = result.clicked_at if result.clicked_at is not None else 0
+        # Store timestamp in session state to detect new clicks
+        state_key = f"_avatar_clicked_at_{key}" if key else f"_avatar_clicked_at_{id(result)}"
+        prev_clicked_at = st.session_state.get(state_key, 0)
+        st.session_state[state_key] = clicked_at
+        return clicked_at > prev_clicked_at
     return False
 
 
