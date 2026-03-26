@@ -55,6 +55,9 @@ _AVATAR_COMPONENT = st.components.v2.component(
             margin: 0;
             padding: 0;
         }
+        .avatar-image.bordered {
+            border: 2px solid var(--st-secondary-background-color, #e5e7eb);
+        }
         .avatar-text {
             display: flex;
             flex-direction: column;
@@ -134,6 +137,7 @@ _AVATAR_COMPONENT = st.components.v2.component(
         const label = data?.label ?? "";
         const caption = data?.caption ?? "";
         const clickable = data?.clickable ?? false;
+        const bordered = data?.border ?? false;
 
         const container = parentElement.querySelector("#avatar-root");
         if (!container) return () => {};
@@ -165,7 +169,7 @@ _AVATAR_COMPONENT = st.components.v2.component(
 
         // Create image element
         const img = document.createElement("img");
-        img.className = "avatar-image";
+        img.className = bordered ? "avatar-image bordered" : "avatar-image";
         img.src = resolveMediaUrl(imageUrl);
         img.alt = label || "Avatar";
         img.width = height;
@@ -250,6 +254,7 @@ def avatar(
     caption: str | None = None,
     height: int = 48,
     width: Literal["stretch", "content"] | int = "content",
+    border: bool = False,
     on_click: Literal["ignore", "rerun"] | Callable[[], None] = "ignore",
     key: str | None = None,
 ) -> bool:
@@ -269,6 +274,8 @@ def avatar(
         height: Avatar height (and width) in pixels. Defaults to 48.
         width: Component width. "content" (default) sizes to fit the content.
             "stretch" fills the container width. An integer sets a fixed pixel width.
+        border: If True, adds a subtle border around the avatar image.
+            Defaults to False.
         on_click: Click behavior. "ignore" (default) disables click interactions.
             "rerun" triggers an app rerun when clicked. Pass a callable to execute
             a custom callback when clicked.
@@ -347,6 +354,7 @@ def avatar(
             "image_url": image_url,
             "height": height,
             "width": width,
+            "border": border,
             "label": label or "",
             "caption": caption or "",
             "clickable": clickable,
@@ -435,6 +443,13 @@ def example() -> None:
         avatar("https://avatars.githubusercontent.com/u/690814?v=4", height=40)
         avatar("https://avatars.githubusercontent.com/u/47222480?v=4", height=40)
         avatar("https://avatars.githubusercontent.com/u/12345", height=40)
+
+    st.subheader("Avatars with border")
+
+    with st.container(horizontal=True):
+        avatar("https://avatars.githubusercontent.com/u/1673013?v=4", height=40, border=True)
+        avatar("https://avatars.githubusercontent.com/u/690814?v=4", height=40, border=True)
+        avatar("https://avatars.githubusercontent.com/u/47222480?v=4", height=40, border=True)
 
 
 __title__ = "Avatar"
