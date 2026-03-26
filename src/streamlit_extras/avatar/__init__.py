@@ -56,7 +56,7 @@ _AVATAR_COMPONENT = st.components.v2.component(
             padding: 0;
         }
         .avatar-image.bordered {
-            border: 2px solid var(--st-secondary-background-color, #e5e7eb);
+            border: 1px solid var(--st-border-color, #d1d5db);
         }
         .avatar-text {
             display: flex;
