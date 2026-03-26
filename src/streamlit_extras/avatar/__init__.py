@@ -128,7 +128,7 @@ _AVATAR_COMPONENT = st.components.v2.component(
     }
 
     export default function(component) {
-        const { data, setStateValue, parentElement } = component;
+        const { data, setTriggerValue, parentElement } = component;
 
         const imageUrl = data?.image_url ?? "";
         const height = data?.height ?? 48;
@@ -190,10 +190,10 @@ _AVATAR_COMPONENT = st.components.v2.component(
             container.appendChild(textDiv);
         }
 
-        // Handle click - use timestamp so each click triggers callback
+        // Handle click - trigger resets after each rerun
         const handleClick = () => {
             if (clickable) {
-                setStateValue("clicked", Date.now());
+                setTriggerValue("clicked", true);
             }
         };
 
@@ -318,13 +318,10 @@ def avatar(
     # Avatar height + padding (0.25rem * 2 = 0.5rem ≈ 8px) + small buffer
     component_height = height + 10
 
-    # Track clicks via session_state - callback sets flag, we read and clear it
-    click_flag_key = f"_avatar_clicked_{key or id(avatar)}"
-
-    def on_click_callback() -> None:
-        st.session_state[click_flag_key] = True
-        if callable(on_click):
-            on_click()
+    # Prepare callback for clickable avatars
+    callback: Callable[[], None] | None = None
+    if clickable:
+        callback = on_click if callable(on_click) else lambda: None
 
     # Build component kwargs
     component_kwargs: dict[str, Any] = {
@@ -340,14 +337,13 @@ def avatar(
     }
 
     if clickable:
-        component_kwargs["default"] = {"clicked": 0}
-        component_kwargs["on_clicked_change"] = on_click_callback
+        component_kwargs["on_clicked_change"] = callback
 
     # Render component
-    _AVATAR_COMPONENT(**component_kwargs)
+    result = _AVATAR_COMPONENT(**component_kwargs)
 
-    # Return True if clicked this run (and clear the flag)
-    return st.session_state.pop(click_flag_key, False)
+    # Triggers reset after each rerun, so result.clicked is True only when clicked
+    return bool(result.clicked) if clickable else False
 
 
 def example() -> None:
