@@ -411,14 +411,10 @@ def example() -> None:
 
     st.subheader("Avatar only (no text)")
 
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
+    with st.container(horizontal=True):
         avatar("https://avatars.githubusercontent.com/u/1673013?v=4", height=40)
-    with col2:
         avatar("https://avatars.githubusercontent.com/u/690814?v=4", height=40)
-    with col3:
         avatar("https://avatars.githubusercontent.com/u/47222480?v=4", height=40)
-    with col4:
         avatar("https://avatars.githubusercontent.com/u/12345", height=40)
 
 
