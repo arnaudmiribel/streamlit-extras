@@ -36,8 +36,12 @@ _SCROLL_COMPONENT = st.components.v2.component(
 
         processedRequests.set(parentElement, requestId);
 
+        // Only "auto" and "smooth" are valid for scrollIntoView behavior.
+        // Map any other value (including "instant") to "auto" to avoid TypeError.
+        const behavior = scrollMode === "smooth" ? "smooth" : "auto";
+
         const scrollOptions = {
-            behavior: scrollMode,
+            behavior: behavior,
             block: alignment,
             inline: "nearest"
         };
@@ -75,7 +79,7 @@ _SCROLL_COMPONENT = st.components.v2.component(
         try {
             findAndScroll(document);
         } catch (e) {
-            console.warn("Scroll to element: could not access any document with target element");
+            console.warn("Scroll to element: unexpected error while attempting to scroll in current document", e);
         }
 
         return () => {};
