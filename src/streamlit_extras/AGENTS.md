@@ -67,6 +67,7 @@ Use this guide to select the appropriate implementation approach:
 | `metric_cards` | Restyle metrics as styled cards | st.html |
 | `radial_menu` | Circular menu around a central button | components v2: static assets |
 | `redirect` | Programmatically redirect users to external or internal URLs | components v2: inline |
+| `resizable_columns` | Drag-to-resize columns, a drop-in replacement for st.columns | components v2: react |
 | `row` | Place elements in a horizontal row | pure python |
 | `sandbox` | Execute untrusted Streamlit code safely | components v1: html |
 | `scroll_to_element` | Programmatically scroll to any element by its key | components v2: inline |
