@@ -39,7 +39,6 @@ _AVATAR_COMPONENT = st.components.v2.component(
             display: inline-flex;
             align-items: center;
             gap: 0.75rem;
-            padding: 0.25rem;
             border-radius: 0.5rem;
             box-sizing: border-box;
             width: fit-content;
