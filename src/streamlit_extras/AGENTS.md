@@ -36,6 +36,7 @@ Use this guide to select the appropriate implementation approach:
 |-------|-------------|----------------|
 | `add_vertical_space` | Add vertical spacing to your app | pure python |
 | `app_logo` | Add a logo on top of the navigation bar | st.html |
+| `avatar` | Display a circular avatar image with optional label and caption | components v2: inline |
 | `badges` | Create custom badges (PyPI, GitHub, etc.) | st.html |
 | `bottom_container` | A container that sticks to the bottom of the app | pure python |
 | `buy_me_a_coffee` | Floating button linking to Buy Me a Coffee | components v1: html |
