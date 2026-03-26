@@ -335,6 +335,15 @@ def avatar(
     # Avatar height + padding (0.25rem * 2 = 0.5rem ≈ 8px) + small buffer
     component_height = height + 10
 
+    # Calculate component width
+    component_width: str | int
+    if width == "content":
+        component_width = "fit-content"
+    elif width == "stretch":
+        component_width = "100%"
+    else:
+        component_width = width  # int pixel value
+
     # Prepare callback for clickable avatars
     callback: Callable[[], None] | None = None
     if clickable:
@@ -352,6 +361,7 @@ def avatar(
             "clickable": clickable,
         },
         "height": component_height,
+        "width": component_width,
     }
 
     if clickable:
