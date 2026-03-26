@@ -36,13 +36,13 @@ _AVATAR_COMPONENT = st.components.v2.component(
             overflow: hidden;
         }
         .avatar-container {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 0.75rem;
             padding: 0.25rem;
             border-radius: 0.5rem;
             box-sizing: border-box;
-            width: 100%;
+            width: fit-content;
             max-width: 100%;
             overflow: hidden;
         }
