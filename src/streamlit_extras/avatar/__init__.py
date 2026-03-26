@@ -85,6 +85,47 @@ _AVATAR_COMPONENT = st.components.v2.component(
     <div class="avatar-container" id="avatar-root"></div>
     """,
     js="""
+    // Resolve media URLs to absolute URLs
+    function resolveMediaUrl(url) {
+        if (!url) return url;
+
+        // Already absolute URL
+        if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("data:")) {
+            return url;
+        }
+
+        // Handle /media/ paths
+        if (url.startsWith("/media/") || url.startsWith("media/")) {
+            const normalizedUrl = url.startsWith("/") ? url : "/" + url;
+
+            // Try to get base URL from Streamlit config or window location
+            let baseUrl = "";
+            if (window.__streamlit?.DOWNLOAD_ASSETS_BASE_URL) {
+                baseUrl = window.__streamlit.DOWNLOAD_ASSETS_BASE_URL;
+            } else if (window.location) {
+                baseUrl = window.location.origin + window.location.pathname;
+            }
+
+            if (baseUrl) {
+                try {
+                    const parsed = new URL(baseUrl);
+                    let basePath = parsed.pathname;
+                    if (!basePath.endsWith("/")) {
+                        const lastSlash = basePath.lastIndexOf("/");
+                        basePath = lastSlash > 0 ? basePath.substring(0, lastSlash) : "";
+                    } else {
+                        basePath = basePath.slice(0, -1);
+                    }
+                    return parsed.origin + (basePath + normalizedUrl).replace(/\\/+/g, "/");
+                } catch (e) {
+                    return url;
+                }
+            }
+        }
+
+        return url;
+    }
+
     export default function(component) {
         const { data, setStateValue, parentElement } = component;
 
@@ -110,7 +151,7 @@ _AVATAR_COMPONENT = st.components.v2.component(
         // Create image element
         const img = document.createElement("img");
         img.className = "avatar-image";
-        img.src = imageUrl;
+        img.src = resolveMediaUrl(imageUrl);
         img.alt = label || "Avatar";
         img.width = height;
         img.height = height;
