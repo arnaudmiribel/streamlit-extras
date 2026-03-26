@@ -14,6 +14,7 @@ import streamlit as st
 import streamlit.components.v2
 from streamlit.elements.lib.image_utils import image_to_url
 from streamlit.elements.lib.layout_utils import LayoutConfig
+from streamlit.errors import StreamlitAPIException
 
 from streamlit_extras import extra
 
@@ -141,11 +142,17 @@ _AVATAR_COMPONENT = st.components.v2.component(
         // Clear previous content
         container.innerHTML = "";
 
-        // Set clickable class
+        // Set clickable class and accessibility attributes
         if (clickable) {
             container.classList.add("clickable");
+            container.setAttribute("role", "button");
+            container.setAttribute("tabindex", "0");
+            container.setAttribute("aria-label", label || "Avatar");
         } else {
             container.classList.remove("clickable");
+            container.removeAttribute("role");
+            container.removeAttribute("tabindex");
+            container.removeAttribute("aria-label");
         }
 
         // Create image element
@@ -183,17 +190,28 @@ _AVATAR_COMPONENT = st.components.v2.component(
             container.appendChild(textDiv);
         }
 
-        // Handle click
+        // Handle click - increment counter for each click
         const handleClick = () => {
             if (clickable) {
-                setStateValue("clicked", true);
+                const currentCount = component.getStateValue("click_count") ?? 0;
+                setStateValue("click_count", currentCount + 1);
+            }
+        };
+
+        // Handle keyboard activation (Enter/Space)
+        const handleKeyDown = (e) => {
+            if (clickable && (e.key === "Enter" || e.key === " ")) {
+                e.preventDefault();
+                handleClick();
             }
         };
 
         container.addEventListener("click", handleClick);
+        container.addEventListener("keydown", handleKeyDown);
 
         return () => {
             container.removeEventListener("click", handleClick);
+            container.removeEventListener("keydown", handleKeyDown);
         };
     }
     """,
@@ -251,6 +269,10 @@ def avatar(
         True if the avatar was clicked on this run (when on_click != "ignore"),
         False otherwise. Always returns False when on_click is "ignore".
 
+    Raises:
+        StreamlitAPIException: If height is less than 1 or on_click has an
+            invalid value.
+
     Example:
         Simple avatar:
 
@@ -279,6 +301,14 @@ def avatar(
             st.write("Profile clicked!")
         ```
     """
+    # Validate height
+    if height < 1:
+        raise StreamlitAPIException(f"Avatar height must be at least 1 pixel, got {height}.")
+
+    # Validate on_click
+    if not callable(on_click) and on_click not in ("ignore", "rerun"):
+        raise StreamlitAPIException(f"on_click must be 'ignore', 'rerun', or a callable, got {on_click!r}.")
+
     # Convert image to URL
     image_url = _convert_image_to_url(image)
 
@@ -310,14 +340,21 @@ def avatar(
     }
 
     if clickable:
-        component_kwargs["default"] = {"clicked": False}
-        component_kwargs["on_clicked_change"] = callback
+        component_kwargs["default"] = {"click_count": 0}
+        component_kwargs["on_click_count_change"] = callback
 
     # Render component
     result = _AVATAR_COMPONENT(**component_kwargs)
 
-    clicked = bool(result.clicked) if clickable else False
-    return clicked
+    # Detect if clicked this run by checking if click_count increased
+    if clickable:
+        click_count = result.click_count if result.click_count is not None else 0
+        # Store previous click count in session state to detect new clicks
+        state_key = f"_avatar_click_count_{key or id(result)}"
+        prev_count = st.session_state.get(state_key, 0)
+        st.session_state[state_key] = click_count
+        return click_count > prev_count
+    return False
 
 
 def example() -> None:
