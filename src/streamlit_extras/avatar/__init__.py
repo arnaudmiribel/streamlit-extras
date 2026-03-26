@@ -190,10 +190,10 @@ _AVATAR_COMPONENT = st.components.v2.component(
             container.appendChild(textDiv);
         }
 
-        // Handle click - use timestamp for unique click detection
+        // Handle click - use timestamp so each click triggers callback
         const handleClick = () => {
             if (clickable) {
-                setStateValue("clicked_at", Date.now());
+                setStateValue("clicked", Date.now());
             }
         };
 
@@ -314,18 +314,19 @@ def avatar(
     # Determine if clickable
     clickable = on_click != "ignore"
 
-    # Prepare callback if needed
-    callback: Callable[[], None] | None = None
-    if callable(on_click):
-        callback = on_click
-    elif on_click == "rerun":
-        callback = lambda: None  # noqa: E731 - Just triggers rerun via component
-
     # Calculate component height based on avatar height
     # Avatar height + padding (0.25rem * 2 = 0.5rem ≈ 8px) + small buffer
     component_height = height + 10
 
-    # Build component kwargs - only include click state when clickable
+    # Track clicks via session_state - callback sets flag, we read and clear it
+    click_flag_key = f"_avatar_clicked_{key or id(avatar)}"
+
+    def on_click_callback() -> None:
+        st.session_state[click_flag_key] = True
+        if callable(on_click):
+            on_click()
+
+    # Build component kwargs
     component_kwargs: dict[str, Any] = {
         "key": key,
         "data": {
@@ -339,21 +340,14 @@ def avatar(
     }
 
     if clickable:
-        component_kwargs["default"] = {"clicked_at": 0}
-        component_kwargs["on_clicked_at_change"] = callback
+        component_kwargs["default"] = {"clicked": 0}
+        component_kwargs["on_clicked_change"] = on_click_callback
 
     # Render component
-    result = _AVATAR_COMPONENT(**component_kwargs)
+    _AVATAR_COMPONENT(**component_kwargs)
 
-    # Detect if clicked this run by checking if clicked_at changed
-    if clickable:
-        clicked_at = result.clicked_at if result.clicked_at is not None else 0
-        # Store timestamp in session state to detect new clicks
-        state_key = f"_avatar_clicked_at_{key}" if key else f"_avatar_clicked_at_{id(result)}"
-        prev_clicked_at = st.session_state.get(state_key, 0)
-        st.session_state[state_key] = clicked_at
-        return clicked_at > prev_clicked_at
-    return False
+    # Return True if clicked this run (and clear the flag)
+    return st.session_state.pop(click_flag_key, False)
 
 
 def example() -> None:
