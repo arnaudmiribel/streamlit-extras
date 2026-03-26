@@ -36,34 +36,50 @@ _SCROLL_COMPONENT = st.components.v2.component(
 
         processedRequests.set(parentElement, requestId);
 
-        try {
-            // Find the element with the specified class in the top-level document
-            const targetWindow = window.top || window.parent || window;
-            const targetDocument = targetWindow.document;
-            const element = targetDocument.querySelector("." + CSS.escape(className));
+        // Only "auto" and "smooth" are valid for scrollIntoView behavior.
+        // Map any other value (including "instant") to "auto" to avoid TypeError.
+        const behavior = scrollMode === "smooth" ? "smooth" : "auto";
 
+        const scrollOptions = {
+            behavior: behavior,
+            block: alignment,
+            inline: "nearest"
+        };
+
+        // Helper to find and scroll to element in a document
+        const findAndScroll = (doc) => {
+            const element = doc.querySelector("." + CSS.escape(className));
             if (element) {
-                element.scrollIntoView({
-                    behavior: scrollMode,
-                    block: alignment,
-                    inline: "nearest"
-                });
+                element.scrollIntoView(scrollOptions);
+                return true;
             }
-        } catch (error) {
-            // Fallback if top/parent access is blocked by same-origin policy
-            console.warn("Scroll to element failed, trying fallback:", error);
-            try {
-                const element = document.querySelector("." + CSS.escape(className));
-                if (element) {
-                    element.scrollIntoView({
-                        behavior: scrollMode,
-                        block: alignment,
-                        inline: "nearest"
-                    });
-                }
-            } catch (fallbackError) {
-                console.warn("Scroll to element fallback also failed:", fallbackError);
+            return false;
+        };
+
+        // Try window.parent first (Streamlit app's document when component is iframed)
+        // This is the most common case and works on Community Cloud when the app is iframed
+        try {
+            if (window.parent && window.parent !== window && findAndScroll(window.parent.document)) {
+                return () => {};
             }
+        } catch (e) {
+            // Cross-origin or sandbox restriction - continue to next option
+        }
+
+        // Try window.top (when Streamlit app is the top-level window)
+        try {
+            if (window.top && findAndScroll(window.top.document)) {
+                return () => {};
+            }
+        } catch (e) {
+            // Cross-origin or sandbox restriction - continue to fallback
+        }
+
+        // Final fallback: current document (unlikely to have the element, but try anyway)
+        try {
+            findAndScroll(document);
+        } catch (e) {
+            console.warn("Scroll to element: unexpected error while attempting to scroll in current document", e);
         }
 
         return () => {};
