@@ -41,7 +41,6 @@ _AVATAR_COMPONENT = st.components.v2.component(
             gap: 0.75rem;
             border-radius: 0.5rem;
             box-sizing: border-box;
-            width: fit-content;
             max-width: 100%;
             overflow: hidden;
         }
@@ -131,6 +130,7 @@ _AVATAR_COMPONENT = st.components.v2.component(
 
         const imageUrl = data?.image_url ?? "";
         const height = data?.height ?? 48;
+        const width = data?.width ?? "content";
         const label = data?.label ?? "";
         const caption = data?.caption ?? "";
         const clickable = data?.clickable ?? false;
@@ -140,6 +140,15 @@ _AVATAR_COMPONENT = st.components.v2.component(
 
         // Clear previous content
         container.innerHTML = "";
+
+        // Apply width
+        if (width === "stretch") {
+            container.style.width = "100%";
+        } else if (width === "content") {
+            container.style.width = "fit-content";
+        } else {
+            container.style.width = width + "px";
+        }
 
         // Set clickable class and accessibility attributes
         if (clickable) {
@@ -240,6 +249,7 @@ def avatar(
     label: str | None = None,
     caption: str | None = None,
     height: int = 48,
+    width: Literal["stretch", "content"] | int = "content",
     on_click: Literal["ignore", "rerun"] | Callable[[], None] = "ignore",
     key: str | None = None,
 ) -> bool:
@@ -257,6 +267,8 @@ def avatar(
         caption: Optional secondary text displayed below the label.
             Typically used for roles, status, or descriptions.
         height: Avatar height (and width) in pixels. Defaults to 48.
+        width: Component width. "content" (default) sizes to fit the content.
+            "stretch" fills the container width. An integer sets a fixed pixel width.
         on_click: Click behavior. "ignore" (default) disables click interactions.
             "rerun" triggers an app rerun when clicked. Pass a callable to execute
             a custom callback when clicked.
@@ -303,6 +315,12 @@ def avatar(
     if height < 1:
         raise StreamlitAPIException(f"Avatar height must be at least 1 pixel, got {height}.")
 
+    # Validate width
+    if isinstance(width, int) and width < 1:
+        raise StreamlitAPIException(f"Avatar width must be at least 1 pixel, got {width}.")
+    if not isinstance(width, int) and width not in ("stretch", "content"):
+        raise StreamlitAPIException(f"width must be 'stretch', 'content', or an integer, got {width!r}.")
+
     # Validate on_click
     if not callable(on_click) and on_click not in ("ignore", "rerun"):
         raise StreamlitAPIException(f"on_click must be 'ignore', 'rerun', or a callable, got {on_click!r}.")
@@ -328,6 +346,7 @@ def avatar(
         "data": {
             "image_url": image_url,
             "height": height,
+            "width": width,
             "label": label or "",
             "caption": caption or "",
             "clickable": clickable,
