@@ -74,6 +74,7 @@ Use this guide to select the appropriate implementation approach:
 | `skeleton` | Display skeleton placeholder while loading | pure python |
 | `star_rating` | Read-only star rating display | st.html |
 | `stateful_button` | Toggle button that keeps track of its state | pure python |
+| `stepper` | Progress-steps indicator for multi-step workflows | components v2: inline |
 | `stateful_chat` | Chat container with automatic history tracking | pure python |
 | `stodo` | Create simple to-do items | st.markdown(unsafe_allow_html) |
 | `stoggle` | Notion-style toggle button | st.html |
