@@ -13,10 +13,6 @@ if TYPE_CHECKING:
 _CSS = """
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20,400,0,0');
 
-:host {
-    overflow: hidden;
-}
-
 .card-selector-root {
     font-family: var(--st-font, sans-serif);
     color: var(--st-text-color, #333);
@@ -239,10 +235,6 @@ def card_selector(
     else:
         selected = []
 
-    has_icon = any(item.get("icon") for item in items)
-    has_desc = any(item.get("description") for item in items)
-    height = 32 + (30 if has_icon else 0) + 20 + (22 if has_desc else 0) + 16
-
     _CARD_SELECTOR_COMPONENT(
         data={
             "items": [dict(i) for i in items],
@@ -252,7 +244,6 @@ def card_selector(
         key=resolved_key,
         default={"selected": selected},
         on_selected_change=lambda: None,
-        height=height,
     )
 
     component_state = st.session_state.get(resolved_key, {})
@@ -305,14 +296,32 @@ def example_multi_select() -> None:
 def example_minimal() -> None:
     selected = card_selector(
         [
-            dict(title="Starter"),
-            dict(title="Pro"),
-            dict(title="Enterprise"),
+            dict(icon=":material/rocket_launch:", title="Starter"),
+            dict(icon=":material/star:", title="Pro"),
+            dict(icon=":material/diamond:", title="Enterprise"),
         ],
         key="demo_minimal",
     )
     if selected is not None:
         st.write(f"Plan: **{['Starter', 'Pro', 'Enterprise'][selected]}**")
+
+
+def example_long_text() -> None:
+    selected = card_selector(
+        [
+            dict(
+                icon="📊",
+                title="Analytics",
+                description="Usage dashboards for anything related to what users are using you know.",
+            ),
+            dict(icon="🔔", title="Alerts", description="Email & Slack notifications"),
+            dict(icon="🔒", title="Security", description="SSO & audit logs"),
+            dict(icon="🚀", title="Performance", description="Caching & CDN"),
+        ],
+        selection_mode="multi",
+        key="demo_long_text",
+    )
+    st.write(f"Selected: **{selected}**")
 
 
 __title__ = "Card Selector"
@@ -322,6 +331,7 @@ __examples__ = {
     example_basic: [card_selector],
     example_multi_select: [card_selector],
     example_minimal: [card_selector],
+    example_long_text: [card_selector],
 }
 __author__ = "Arnaud Miribel"
 __streamlit_min_version__ = "1.46.0"
