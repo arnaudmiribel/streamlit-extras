@@ -128,7 +128,7 @@ def _is_dark_mode() -> bool:
 
 def _swap_colors(text: str) -> str:
     for old, new in _DARK_COLOR_MAP.items():
-        text = text.replace(old, new)
+        text = re.sub(re.escape(old), new, text, flags=re.IGNORECASE)
     return text
 
 
@@ -214,6 +214,8 @@ def st_diagram(
         return
 
     svg_str = raw.decode("utf-8")
+    if dark:
+        svg_str = _swap_colors(svg_str)
     svg_str = _inline_images(svg_str)
 
     component_width = width if isinstance(width, str) else "content"
