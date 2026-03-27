@@ -1,2 +1,3 @@
 nodejs
 npm
+graphviz

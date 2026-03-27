@@ -46,6 +46,7 @@ Use this guide to select the appropriate implementation approach:
 | `colored_header` | Create colorful, styled headers | st.html |
 | `concurrency_limiter` | Limit function execution concurrency | pure python |
 | `cookie_manager` | Read/write browser cookies from Python | components v2: inline |
+| `diagrams` | Render architecture diagrams with SVG output | components v2: inline |
 | `customize_running` | Customize the running widget appearance | st.html |
 | `dataframe_explorer` | Interactive dataframe filtering UI | pure python |
 | `echo_expander` | Show executed code in an expander | pure python |
