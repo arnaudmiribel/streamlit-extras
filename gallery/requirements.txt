@@ -1,4 +1,5 @@
 streamlit
 diagrams
+graphviz
 # Local install of streamlit-extras:
 -e ./
