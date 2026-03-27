@@ -113,6 +113,13 @@ uv build
 ls src/streamlit_extras/<extra_name>/frontend/build/
 ```
 
+**CRITICAL: Never commit build artifacts or lock files.** The following are gitignored and must NOT be `git add`-ed:
+- `frontend/build/` — built by CI before publishing; never commit locally-built JS bundles
+- `frontend/package-lock.json` — lock files are not needed in the repo
+- `frontend/node_modules/` — never commit dependencies
+
+If you accidentally staged them, remove with `git rm --cached <path>`.
+
 ## References
 
 - **Spec template**: [references/spec-template.md](references/spec-template.md)

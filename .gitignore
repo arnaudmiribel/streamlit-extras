@@ -180,6 +180,9 @@ yarn-error.log*
 # TypeScript build info
 *.tsbuildinfo
 
+# Lock files from frontend builds
+src/streamlit_extras/*/frontend/package-lock.json
+
 # Built frontend assets (built in CI before publishing to PyPI)
 src/streamlit_extras/*/frontend/build/
 

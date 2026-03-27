@@ -12,5 +12,8 @@ asset_dir = "json_editor/frontend/build"
 name = "pagination"
 asset_dir = "pagination/frontend/build"
 [[tool.streamlit.component.components]]
+name = "resizable_columns"
+asset_dir = "resizable_columns/frontend/build"
+[[tool.streamlit.component.components]]
 name = "three_viewer"
 asset_dir = "three_viewer/frontend/build"
