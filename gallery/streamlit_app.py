@@ -1,6 +1,5 @@
 import inspect
 import pkgutil
-import textwrap
 from importlib import import_module
 from typing import TypedDict
 
@@ -124,8 +123,14 @@ with right:
                 with st.expander("Example code"):
                     function_code = inspect.getsource(example_func)
 
-                    # Drop function wrapper in function code
-                    function_code = textwrap.dedent("\n".join(function_code.splitlines()[1:]))
+                    lines = function_code.splitlines()[1:]
+                    indent = 0
+                    for line in lines:
+                        stripped = line.lstrip()
+                        if stripped:
+                            indent = len(line) - len(stripped)
+                            break
+                    function_code = "\n".join(line[indent:] if not line[:indent].strip() else line for line in lines)
                     code = f"from streamlit_extras.{selected_extra} import *\n\n{function_code}"
                     st.code(code, language="python")
                 if selected_extra in extras_unsuited_to_demos:
