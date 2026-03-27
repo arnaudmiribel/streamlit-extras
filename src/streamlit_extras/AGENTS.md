@@ -40,6 +40,7 @@ Use this guide to select the appropriate implementation approach:
 | `badges` | Create custom badges (PyPI, GitHub, etc.) | st.html |
 | `bottom_container` | A container that sticks to the bottom of the app | pure python |
 | `buy_me_a_coffee` | Floating button linking to Buy Me a Coffee | components v1: html |
+| `card_selector` | Card-based option picker with icons, titles, and descriptions | components v2: inline |
 | `capture` | Capture utility extensions for Streamlit | pure python |
 | `chart_annotations` | Add annotations to Altair time series charts | pure python |
 | `chart_container` | Embed charts in tabs with data exploration | pure python |
