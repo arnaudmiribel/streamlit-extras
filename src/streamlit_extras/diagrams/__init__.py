@@ -92,6 +92,19 @@ _DIAGRAM_COMPONENT = st.components.v2.component(
 
         container.innerHTML = html;
 
+        const svg = container.querySelector("svg");
+        if (svg) {
+            svg.querySelectorAll("text, text *").forEach(function(el) {
+                el.style.fill = "var(--st-text-color)";
+            });
+            svg.querySelectorAll("path[stroke]").forEach(function(el) {
+                const s = el.getAttribute("stroke");
+                if (s && s.toLowerCase() === "#7b8894") {
+                    el.style.stroke = "var(--st-secondary-text-color, #A3ABB5)";
+                }
+            });
+        }
+
         return () => {};
     }
     """,
@@ -214,8 +227,6 @@ def st_diagram(
         return
 
     svg_str = raw.decode("utf-8")
-    if dark:
-        svg_str = _swap_colors(svg_str)
     svg_str = _inline_images(svg_str)
 
     component_width = width if isinstance(width, str) else "content"
