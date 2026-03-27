@@ -81,7 +81,11 @@ extras_unsuited_to_demos = {
     "customize_running",  # Content overlaps
 }
 
-extra_options = {name: f"{info['icon']} {info['title']}" for name, info in extras.items() if not info["deprecated"]}
+extra_options = {
+    name: f"{info['icon']} {info['title']}"
+    for name, info in extras.items()
+    if not info["deprecated"] and name not in extras_unsuited_to_demos
+}
 
 left, right = st.columns((2.5, 3))
 
