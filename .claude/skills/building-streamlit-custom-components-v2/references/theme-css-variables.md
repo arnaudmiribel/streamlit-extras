@@ -46,6 +46,28 @@ These variables originate from Streamlit’s theme object and are serialized int
   - If you need individual items in JS, split on `","`.
 - **Missing values (`null` / `undefined`)**: become `unset` so consumers fall back to initial/inherited CSS behavior.
 
+### Live theme switching: CSS variables vs server-side color swaps
+
+When users toggle the theme at runtime (light → dark or vice versa), Streamlit updates `--st-*` CSS custom properties **in place**. This means:
+
+- **CSS `var(--st-…)` references update automatically** — no re-render needed. This is the preferred approach.
+- **Server-side color swaps (e.g. Python string replacement on SVG/HTML before sending to the component) will NOT update** until the next full re-render from the server. If the user toggles the theme in the browser, the component keeps the old colors.
+
+**Best practice:** For any colors that should respond to theme changes, apply them via CSS custom properties in the DOM rather than baking hex values into markup server-side.
+
+Example — applying theme text color to SVG elements in JS:
+
+```js
+const svg = container.querySelector("svg");
+if (svg) {
+    svg.querySelectorAll("text, text *").forEach(function(el) {
+        el.style.fill = "var(--st-text-color)";
+    });
+}
+```
+
+This works because inline `style` attributes with `var()` references resolve against the current CSS custom property values, which Streamlit updates when the theme changes.
+
 ### Cheat sheet: the 90% variables (intent → `--st-*`)
 
 Use this section as your starting point. It covers what most components need most of the time.

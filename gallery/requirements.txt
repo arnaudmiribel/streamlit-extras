@@ -1,3 +1,4 @@
 streamlit
+diagrams
 # Local install of streamlit-extras:
 -e ./

@@ -37,6 +37,7 @@ Use this guide to select the appropriate implementation approach:
 | `add_vertical_space` | Add vertical spacing to your app | pure python |
 | `anywidget` | Render anywidget-compatible widgets with full bidirectional interactivity | components v2: inline |
 | `app_logo` | Add a logo on top of the navigation bar | st.html |
+| `avatar` | Display a circular avatar image with optional label and caption | components v2: inline |
 | `badges` | Create custom badges (PyPI, GitHub, etc.) | st.html |
 | `bottom_container` | A container that sticks to the bottom of the app | pure python |
 | `buy_me_a_coffee` | Floating button linking to Buy Me a Coffee | components v1: html |
@@ -46,6 +47,7 @@ Use this guide to select the appropriate implementation approach:
 | `colored_header` | Create colorful, styled headers | st.html |
 | `concurrency_limiter` | Limit function execution concurrency | pure python |
 | `cookie_manager` | Read/write browser cookies from Python | components v2: inline |
+| `diagrams` | Render architecture diagrams with SVG output | components v2: inline |
 | `customize_running` | Customize the running widget appearance | st.html |
 | `dataframe_explorer` | Interactive dataframe filtering UI | pure python |
 | `echo_expander` | Show executed code in an expander | pure python |
@@ -67,6 +69,7 @@ Use this guide to select the appropriate implementation approach:
 | `metric_cards` | Restyle metrics as styled cards | st.html |
 | `radial_menu` | Circular menu around a central button | components v2: static assets |
 | `redirect` | Programmatically redirect users to external or internal URLs | components v2: inline |
+| `resizable_columns` | Drag-to-resize columns, a drop-in replacement for st.columns | components v2: react |
 | `row` | Place elements in a horizontal row | pure python |
 | `sandbox` | Execute untrusted Streamlit code safely | components v1: html |
 | `scroll_to_element` | Programmatically scroll to any element by its key | components v2: inline |
