@@ -127,7 +127,7 @@ _COMPONENT_JS = """
 export default function(component) {
     const { data, parentElement } = component;
     const container = parentElement.querySelector("#gt-container");
-    if (!container) return;
+    if (!container) return () => {};
 
     const html = data?.html ?? "";
     const width = data?.width ?? "stretch";
