@@ -75,7 +75,6 @@ extras_unsuited_to_demos = {
     "bottom_container",  # Out of context
     "concurrency_limiter",  # Nothing visual
     "floating_button",  # Out of context
-    "great_tables",  # Requires extra package
     "jupyterlite",  # Doesn't look great
     "customize_running",  # Content overlaps
 }
