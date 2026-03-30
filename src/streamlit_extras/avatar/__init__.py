@@ -458,4 +458,3 @@ __desc__ = "Display a circular avatar image with optional label and caption."
 __icon__ = "👤"
 __examples__ = [example]
 __author__ = "Lukas Masuch"
-__streamlit_min_version__ = "1.46.0"

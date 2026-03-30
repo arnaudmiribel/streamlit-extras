@@ -83,4 +83,3 @@ __desc__ = "A circular menu component that displays options in a ring around a c
 __icon__ = "🎯"
 __examples__ = [example]
 __author__ = "Debbie Matthews"
-__streamlit_min_version__ = "1.46.0"

@@ -1,4 +1,5 @@
 streamlit
 diagrams
+great_tables
 # Local install of streamlit-extras:
 -e ./

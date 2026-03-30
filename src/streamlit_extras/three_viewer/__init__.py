@@ -259,7 +259,6 @@ __desc__ = "Display 3D models (GLTF, GLB, OBJ, STL, PLY, FBX) with interactive o
 __icon__ = "🎮"
 __author__ = "Lukas Masuch"
 __examples__ = [example_basic, example_with_options]
-__streamlit_min_version__ = "1.46.0"
 
 
 # Unit tests for helper functions
