@@ -691,4 +691,3 @@ __examples__ = {
     example_jump_to_step: [stepper],
 }
 __author__ = "Arnaud Miribel"
-__streamlit_min_version__ = "1.46.0"
