@@ -1,8 +1,7 @@
-from datetime import date
-
 """Add colorful headers to your Streamlit app."""
 
 import itertools
+from datetime import date
 from typing import Literal
 
 import streamlit as st

@@ -1,11 +1,10 @@
-from datetime import date
-
 """JSON Editor component for Streamlit.
 
 An interactive JSON viewer/editor built with React and CCv2.
 Uses @microlink/react-json-view for rendering and editing JSON data.
 """
 
+from datetime import date
 from functools import cache
 from typing import Any, TypedDict, cast
 

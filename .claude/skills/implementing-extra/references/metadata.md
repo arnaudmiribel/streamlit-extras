@@ -26,7 +26,6 @@ All extras must define these module-level attributes in `__init__.py`.
 | `__package_name__` | `str` | Import name for external package |
 | `__twitter_username__` | `str` | Author's Twitter handle |
 | `__buymeacoffee_username__` | `str` | Buy Me a Coffee username |
-| `__created_at__` | `datetime.date` | Date when the extra was first added (e.g. `date(2024, 3, 15)`) |
 
 ## Auto-populated
 

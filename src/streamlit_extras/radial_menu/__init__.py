@@ -1,11 +1,10 @@
-from datetime import date
-
 """Radial menu component for Streamlit.
 
 A circular menu that displays options in a ring around a central button.
 This is an example of a Type D CCv2 extra (with dedicated asset files).
 """
 
+from datetime import date
 from pathlib import Path
 from typing import TypedDict
 

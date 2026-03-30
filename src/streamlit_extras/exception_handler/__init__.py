@@ -54,7 +54,7 @@ def _custom_exception_handler(exception: Exception) -> None:
     cause issues when replacing the code object of Streamlit's handler.
     """
     import traceback
-    from datetime import date, datetime
+    from datetime import datetime
 
     import streamlit as st
 

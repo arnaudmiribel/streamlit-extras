@@ -1,11 +1,10 @@
-from datetime import date
-
 """Evaluate JavaScript expressions in the browser and return results to Python.
 
 A Streamlit Custom Component v2 (CCv2) that evaluates a JavaScript expression
 in the browser and returns the result to Python. The component itself is hidden.
 """
 
+from datetime import date
 from typing import Any
 
 import streamlit as st

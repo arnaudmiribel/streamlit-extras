@@ -1,5 +1,3 @@
-from datetime import date
-
 """Resizable columns for Streamlit.
 
 A drop-in replacement for st.columns that lets users drag dividers to resize columns interactively.
@@ -7,6 +5,7 @@ Column widths persist across reruns via component state.
 """
 
 from collections.abc import Sequence
+from datetime import date
 from functools import cache
 from typing import Any
 

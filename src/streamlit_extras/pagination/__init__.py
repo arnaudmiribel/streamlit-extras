@@ -1,5 +1,3 @@
-from datetime import date
-
 """Pagination widget for Streamlit.
 
 A pagination widget for navigating through pages of content with numbered page buttons,
@@ -7,6 +5,7 @@ prev/next arrows, and intelligent truncation for large page counts.
 """
 
 from collections.abc import Callable
+from datetime import date
 from functools import cache
 from typing import Any, Literal
 
