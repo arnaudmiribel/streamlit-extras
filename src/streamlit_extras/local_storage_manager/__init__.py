@@ -519,4 +519,3 @@ __desc__ = "Read and write browser localStorage from Python with automatic JSON 
 __icon__ = "💾"
 __examples__ = [example]
 __author__ = "Lukas Masuch"
-__streamlit_min_version__ = "1.46.0"

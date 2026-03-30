@@ -235,4 +235,3 @@ __desc__ = "Programmatically scroll to any element by its key."
 __icon__ = "📜"
 __examples__ = [example_basic, example_smooth_vs_instant]
 __author__ = "Lukas Masuch"
-__streamlit_min_version__ = "1.46.0"

@@ -155,4 +155,3 @@ __desc__ = "An interactive JSON viewer/editor component built with React and CCv
 __icon__ = "📝"
 __examples__ = [example]
 __author__ = "Lukas Masuch"
-__streamlit_min_version__ = "1.46.0"

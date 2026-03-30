@@ -359,4 +359,3 @@ __icon__ = "🧮"
 __examples__ = [example, example_column_spanners, example_data_coloring, example_row_groups]
 __author__ = "Lukas Masuch"
 __playground__ = False
-__streamlit_min_version__ = "1.46.0"

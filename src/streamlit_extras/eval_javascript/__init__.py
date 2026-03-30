@@ -313,4 +313,3 @@ __desc__ = "Evaluate JavaScript expressions in the browser and return results to
 __icon__ = "🌐"
 __examples__ = [example]
 __author__ = "Lukas Masuch"
-__streamlit_min_version__ = "1.46.0"

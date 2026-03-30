@@ -213,4 +213,3 @@ __examples__ = [
     example_with_data,
 ]
 __author__ = "streamlit-extras"
-__streamlit_min_version__ = "1.46.0"
