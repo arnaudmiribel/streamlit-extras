@@ -111,27 +111,38 @@ with right:
         expanded=True,
         icon=info["icon"],
     ):
-        with st.container(horizontal=True, vertical_alignment="center"):
-            if info["desc"]:
-                st.markdown(info["desc"], width="content")
-            st.space("stretch")
-            st.link_button(
-                "Open extra docs",
-                f"https://arnaudmiribel.github.io/streamlit-extras/extras/{selected_extra}",
-                width="content",
-                icon=":material/book_2:",
-                type="secondary",
-            )
+        if info["desc"]:
+            st.markdown(info["desc"], width="content")
+
+        container = st.container(
+            horizontal=True,
+            horizontal_alignment="distribute",
+            vertical_alignment="bottom",
+        )
 
         # Run examples
         examples = getattr(mod, "__examples__", [])
         if examples:
             if len(examples) > 1:
-                example_func = st.selectbox("Choose example", examples, format_func=lambda f: f.__name__)
+                example_func = container.selectbox(
+                    "Demo",
+                    examples,
+                    format_func=lambda f: f.__name__,
+                )
             else:
                 example_func = next(iter(examples))
+
+            docs_link = f"https://arnaudmiribel.github.io/streamlit-extras/extras/{selected_extra}"
+            container.link_button(
+                "Open extra docs",
+                docs_link,
+                width="content",
+                icon=":material/book_2:",
+                type="secondary",
+            )
+
             try:
-                with st.expander("Example code"):
+                with st.expander("Code"):
                     function_code = inspect.getsource(example_func)
 
                     lines = function_code.splitlines()[1:]
@@ -146,10 +157,10 @@ with right:
                     st.code(code, language="python")
                 if selected_extra in extras_unsuited_to_demos:
                     st.info(
-                        "Live output preview is not available for this extra. Please refer to the example code above."
+                        f"Live output preview is not available for this extra. Please refer to the example code above and visit [the docs]({docs_link})!"
                     )
                 else:
-                    with st.expander("Example output", expanded=True):
+                    with st.expander("Output", expanded=True):
                         example_func()
             except Exception as e:
                 st.error(f"Error running example: {e}")
