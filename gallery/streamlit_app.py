@@ -107,10 +107,21 @@ with right:
 
     # Show metadata
     with st.expander(
-        f"**{info['title']}** demo by :material/person: {info['author']}", expanded=True, icon=info["icon"]
+        f"**{info['title']}** demo by :material/person: {info['author']}",
+        expanded=True,
+        icon=info["icon"],
     ):
-        if info["desc"]:
-            st.markdown(info["desc"])
+        with st.container(horizontal=True, vertical_alignment="center"):
+            if info["desc"]:
+                st.markdown(info["desc"], width="content")
+            st.space("stretch")
+            st.link_button(
+                "Open extra docs",
+                f"https://arnaudmiribel.github.io/streamlit-extras/extras/{selected_extra}",
+                width="content",
+                icon=":material/book_2:",
+                type="secondary",
+            )
 
         # Run examples
         examples = getattr(mod, "__examples__", [])
