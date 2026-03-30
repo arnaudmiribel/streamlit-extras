@@ -339,14 +339,14 @@ export default function(component) {
 }
 """
 
-_STEPPER_COMPONENT = st.components.v2.component(
-    name="streamlit_extras.stepper",
+_STEPS_COMPONENT = st.components.v2.component(
+    name="streamlit_extras.steps",
     html='<div id="stepper-root"></div>',
     css=_CSS,
     js=_JS,
 )
 
-_STATE_KEY_PREFIX = "_stepper_state_"
+_STATE_KEY_PREFIX = "_steps_state_"
 
 
 @contextmanager
@@ -360,8 +360,8 @@ def _step_context(*, visible: bool) -> Generator[None]:
         empty.empty()
 
 
-class StepperState:
-    """Return value of :func:`stepper`.
+class StepsState:
+    """Return value of :func:`steps`.
 
     Provides context managers for each step via indexing (``steps[i]``)
     and navigation helpers that update the internal step counter and
@@ -407,7 +407,7 @@ class StepperState:
 
 
 @extra
-def stepper(
+def steps(
     labels: Sequence[str],
     *,
     current: int = 0,
@@ -416,11 +416,11 @@ def stepper(
     height: int | None = None,
     width: Literal["stretch", "content"] = "stretch",
     key: str | None = None,
-) -> StepperState:
-    """Display a progress-steps indicator and return a :class:`StepperState`.
+) -> StepsState:
+    """Display a progress-steps indicator and return a :class:`StepsState`.
 
-    Renders a visual stepper (progress indicator) and returns a
-    :class:`StepperState` object. Index it to get context managers for
+    Renders a visual steps (progress indicator) and returns a
+    :class:`StepsState` object. Index it to get context managers for
     each step, or call its navigation methods (``.next()``,
     ``.previous()``, ``.set(n)``, ``.reset()``) to change the active
     step and rerun.
@@ -445,20 +445,20 @@ def stepper(
             sizes to fit the content.
         key: Unique key for this component instance. Required when using
             navigation methods (``.next()``, etc.) or when placing
-            multiple steppers.
+            multiple steps components.
 
     Returns:
-        A :class:`StepperState` object. Use ``steps[i]`` as a context
+        A :class:`StepsState` object. Use ``steps[i]`` as a context
         manager to place content for step *i*. Call ``steps.next()``,
         ``steps.previous()``, ``steps.set(n)``, or ``steps.reset()``
         to navigate.
 
     Example:
-        >>> steps = stepper(["Step 1", "Step 2"], key="s")
-        >>> with steps[0]:
+        >>> s = steps(["Step 1", "Step 2"], key="s")
+        >>> with s[0]:
         ...     if st.button("Next"):
-        ...         steps.next()
-        >>> with steps[1]:
+        ...         s.next()
+        >>> with s[1]:
         ...     st.write("Done!")
     """
     session_key = _STATE_KEY_PREFIX + (key or "default")
@@ -473,7 +473,7 @@ def stepper(
 
     computed_height = (64 if horizontal else 8 + 48 * len(labels)) if height is None else height
 
-    _STEPPER_COMPONENT(
+    _STEPS_COMPONENT(
         data={
             "labels": list(labels),
             "current": active,
@@ -485,7 +485,7 @@ def stepper(
         width=width,
     )
 
-    return StepperState(
+    return StepsState(
         n_steps=len(labels),
         current=active,
         session_key=session_key,
@@ -497,34 +497,34 @@ def example_vertical_numbered() -> None:
     left, right = st.columns((1, 3))
 
     with left:
-        steps = stepper(
+        s = steps(
             ["Account Setup", "Preferences", "Confirmation"],
             icons=range(1, 4),
             key="demo_vn",
         )
 
     with right:
-        with steps[0]:
+        with s[0]:
             st.text_input("Your name", key="name_input")
             if st.button("Next", key="vn_next_0"):
-                steps.next()
+                s.next()
 
-        with steps[1]:
+        with s[1]:
             st.selectbox("Theme", ["Light", "Dark"], key="theme_select")
             with st.container(horizontal=True):
                 if st.button("Back", key="vn_back_1"):
-                    steps.previous()
+                    s.previous()
                 if st.button("Next", key="vn_next_1"):
-                    steps.next()
+                    s.next()
 
-        with steps[2]:
+        with s[2]:
             st.success("All done! You're all set.")
             if st.button("Reset", key="vn_reset"):
-                steps.reset()
+                s.reset()
 
 
 def example_horizontal_numbered() -> None:
-    h_steps = stepper(
+    h_steps = steps(
         ["Upload", "Review", "Submit"],
         horizontal=True,
         icons=range(1, 4),
@@ -553,35 +553,35 @@ def example_horizontal_numbered() -> None:
 
 
 def example_vertical_dots() -> None:
-    steps = stepper(
+    s = steps(
         ["Connect", "Configure", "Deploy", "Monitor"],
         key="demo_vd",
     )
 
-    with steps[0]:
+    with s[0]:
         st.write("Connect to your data source.")
         if st.button("Next", key="vd_next_0"):
-            steps.next()
+            s.next()
 
-    with steps[1]:
+    with s[1]:
         st.write("Set up your pipeline configuration.")
         if st.button("Next", key="vd_next_1"):
-            steps.next()
+            s.next()
 
-    with steps[2]:
+    with s[2]:
         st.write("Deploy to production.")
         if st.button("Next", key="vd_next_2"):
-            steps.next()
+            s.next()
 
-    with steps[3]:
+    with s[3]:
         st.write("Monitor your deployment.")
         if st.button("Reset", key="vd_reset"):
-            steps.reset()
+            s.reset()
 
 
 def example_material_icons() -> None:
     _labels = ["Cart", "Shipping", "Payment", "Done"]
-    h_steps = stepper(
+    h_steps = steps(
         _labels,
         horizontal=True,
         icons=[
@@ -616,78 +616,78 @@ def example_material_icons() -> None:
 
 
 def example_emoji_icons() -> None:
-    steps = stepper(
+    s = steps(
         ["Idea", "Build", "Test", "Ship"],
         icons=["💡", "🔨", "🧪", "🚀"],
         key="demo_emoji",
     )
 
-    with steps[0]:
+    with s[0]:
         st.write("Brainstorm your idea.")
         if st.button("Next", key="em_next_0"):
-            steps.next()
+            s.next()
 
-    with steps[1]:
+    with s[1]:
         st.write("Build the prototype.")
         if st.button("Next", key="em_next_1"):
-            steps.next()
+            s.next()
 
-    with steps[2]:
+    with s[2]:
         st.write("Run your tests.")
         if st.button("Next", key="em_next_2"):
-            steps.next()
+            s.next()
 
-    with steps[3]:
+    with s[3]:
         st.success("Shipped!")
         if st.button("Start over", key="em_reset"):
-            steps.reset()
+            s.reset()
 
 
 def example_jump_to_step() -> None:
-    steps = stepper(
+    s = steps(
         ["Intro", "Details", "Review", "Submit"],
         icons=range(1, 5),
         key="demo_jump",
     )
 
-    with steps[0]:
+    with s[0]:
         st.write("Welcome! Jump to any step:")
         c1, c2, c3 = st.columns(3)
         with c1:
             if st.button("Go to Details", key="j_1"):
-                steps.set(1)
+                s.set(1)
         with c2:
             if st.button("Go to Review", key="j_2"):
-                steps.set(2)
+                s.set(2)
         with c3:
             if st.button("Go to Submit", key="j_3"):
-                steps.set(3)
+                s.set(3)
 
-    with steps[1]:
+    with s[1]:
         st.write("Fill in your details.")
         if st.button("Back", key="j_back_1"):
-            steps.previous()
+            s.previous()
 
-    with steps[2]:
+    with s[2]:
         st.write("Review everything.")
         if st.button("Back", key="j_back_2"):
-            steps.previous()
+            s.previous()
 
-    with steps[3]:
+    with s[3]:
         st.write("Ready to submit!")
         if st.button("Reset", key="j_reset"):
-            steps.reset()
+            s.reset()
 
 
-__title__ = "Stepper"
+__title__ = "Steps"
 __desc__ = "Progress-steps indicator for multi-step workflows, with vertical/horizontal orientation and numbered or dotted styles."
 __icon__ = "🪜"
 __examples__ = {
-    example_vertical_numbered: [stepper],
-    example_horizontal_numbered: [stepper],
-    example_vertical_dots: [stepper],
-    example_material_icons: [stepper],
-    example_emoji_icons: [stepper],
-    example_jump_to_step: [stepper],
+    example_vertical_numbered: [steps],
+    example_horizontal_numbered: [steps],
+    example_vertical_dots: [steps],
+    example_material_icons: [steps],
+    example_emoji_icons: [steps],
+    example_jump_to_step: [steps],
 }
 __author__ = "Arnaud Miribel"
