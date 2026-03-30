@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import inspect
 import textwrap
+from datetime import date
 from typing import TYPE_CHECKING
 
 from streamlit.components.v1 import html
@@ -154,4 +155,5 @@ __desc__ = "Execute untrusted Streamlit code in a sandboxed environment."
 __icon__ = "📦"
 __examples__ = [example]
 __author__ = "Lukas Masuch"
+__created_at__ = date(2023, 8, 1)
 __playground__ = True

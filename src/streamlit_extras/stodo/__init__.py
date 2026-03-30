@@ -1,4 +1,5 @@
 from collections.abc import Callable, Sequence
+from datetime import date
 from typing import Any, Literal
 
 import streamlit as st
@@ -98,6 +99,7 @@ __examples__ = {
     example: [to_do],
 }
 __author__ = "Arnaud Miribel"
+__created_at__ = date(2022, 8, 10)
 __github_repo__ = "arnaudmiribel/stodo"
 __streamlit_cloud_url__ = "http://stodoo.streamlitapp.com"
 __playground__ = True

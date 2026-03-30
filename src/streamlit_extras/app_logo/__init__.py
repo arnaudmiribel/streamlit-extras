@@ -1,4 +1,5 @@
 import base64
+from datetime import date
 from pathlib import Path
 
 import streamlit as st
@@ -62,5 +63,6 @@ __desc__ = """Add a logo on top of the navigation bar of a multipage app.
 __icon__ = "🐱"
 __examples__ = [example]
 __author__ = "Zachary Blackwood"
+__created_at__ = date(2022, 8, 18)
 __playground__ = False
 __deprecated__ = True

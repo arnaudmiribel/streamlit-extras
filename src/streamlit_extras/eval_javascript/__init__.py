@@ -1,3 +1,5 @@
+from datetime import date
+
 """Evaluate JavaScript expressions in the browser and return results to Python.
 
 A Streamlit Custom Component v2 (CCv2) that evaluates a JavaScript expression
@@ -313,3 +315,5 @@ __desc__ = "Evaluate JavaScript expressions in the browser and return results to
 __icon__ = "🌐"
 __examples__ = [example]
 __author__ = "Lukas Masuch"
+__created_at__ = date(2026, 3, 24)
+__streamlit_min_version__ = "1.46.0"

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+from datetime import date
 from typing import TYPE_CHECKING
 
 import streamlit as st
@@ -110,5 +111,6 @@ gets added as class name to the container. This is the preferred way to apply CS
 __icon__ = "🎨"
 __examples__ = [example]
 __author__ = "Lukas Masuch"
+__created_at__ = date(2023, 8, 1)
 __playground__ = False
 __deprecated__ = True

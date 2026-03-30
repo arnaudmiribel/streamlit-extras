@@ -1,4 +1,5 @@
 import html
+from datetime import date
 
 import streamlit as st
 
@@ -33,6 +34,7 @@ __desc__ = "Toggle button just like in Notion!"
 __icon__ = "➡️"
 __examples__ = [example]
 __author__ = "Arnaud Miribel"
+__created_at__ = date(2022, 8, 10)
 __github_repo__ = "arnaudmiribel/stoggle"
 __streamlit_cloud_url__ = "http://stoggle.streamlitapp.com"
 __playground__ = True

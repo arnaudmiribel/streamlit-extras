@@ -1,3 +1,5 @@
+from datetime import date
+
 import streamlit as st
 
 from streamlit_extras import extra
@@ -97,5 +99,6 @@ use the native st.container(border=True) to make nice cards with a border.**"""
 __icon__ = "♠️"
 __examples__ = [example]
 __author__ = "Chanin Nantasenamat"
+__created_at__ = date(2022, 11, 18)
 __playground__ = True
 __experimental_playground_funcs__ = [_add_metric_card_cards]

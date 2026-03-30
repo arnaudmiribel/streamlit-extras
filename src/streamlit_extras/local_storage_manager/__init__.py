@@ -10,7 +10,10 @@ from __future__ import annotations
 import json
 import time
 from collections.abc import Iterator, MutableMapping
-from datetime import timedelta  # noqa: TC003 - used at runtime
+from datetime import (
+    date,
+    timedelta,
+)
 from typing import Any
 
 import streamlit as st
@@ -519,3 +522,5 @@ __desc__ = "Read and write browser localStorage from Python with automatic JSON 
 __icon__ = "💾"
 __examples__ = [example]
 __author__ = "Lukas Masuch"
+__created_at__ = date(2026, 3, 24)
+__streamlit_min_version__ = "1.46.0"

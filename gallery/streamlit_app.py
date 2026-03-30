@@ -1,5 +1,6 @@
 import inspect
 import pkgutil
+from datetime import date
 from importlib import import_module
 from typing import TypedDict
 
@@ -14,6 +15,7 @@ class ExtraInfo(TypedDict):
     desc: str
     author: str
     deprecated: bool
+    created_at: date | None
 
 
 st.set_page_config(layout="wide", page_icon=":material/extension:", page_title="streamlit-extras")
@@ -54,6 +56,7 @@ def get_extras_info() -> dict[str, ExtraInfo]:
                     "desc": getattr(mod, "__desc__", ""),
                     "author": getattr(mod, "__author__", "Unknown"),
                     "deprecated": getattr(mod, "__deprecated__", False),
+                    "created_at": getattr(mod, "__created_at__", None),
                 }
             except Exception:
                 pass
@@ -108,8 +111,11 @@ with right:
     with st.expander(
         f"**{info['title']}** demo by :material/person: {info['author']}", expanded=True, icon=info["icon"]
     ):
-        if info["desc"]:
-            st.markdown(info["desc"])
+        with st.container(horizontal=True, vertical_alignment="center"):
+            if info["desc"]:
+                st.markdown(info["desc"], width="content")
+            if info["created_at"]:
+                st.badge(f"Since {info['created_at'].strftime('%b %Y')}", icon=":material/calendar_month:")
 
         # Run examples
         examples = getattr(mod, "__examples__", [])

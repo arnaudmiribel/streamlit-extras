@@ -8,6 +8,7 @@ directing user attention, and form workflows.
 from __future__ import annotations
 
 import re
+from datetime import date
 from typing import Literal
 
 import streamlit as st
@@ -235,3 +236,5 @@ __desc__ = "Programmatically scroll to any element by its key."
 __icon__ = "📜"
 __examples__ = [example_basic, example_smooth_vs_instant]
 __author__ = "Lukas Masuch"
+__created_at__ = date(2026, 3, 24)
+__streamlit_min_version__ = "1.46.0"

@@ -1,3 +1,5 @@
+from datetime import date
+
 """Radial menu component for Streamlit.
 
 A circular menu that displays options in a ring around a central button.
@@ -83,3 +85,5 @@ __desc__ = "A circular menu component that displays options in a ring around a c
 __icon__ = "🎯"
 __examples__ = [example]
 __author__ = "Debbie Matthews"
+__created_at__ = date(2026, 3, 24)
+__streamlit_min_version__ = "1.46.0"

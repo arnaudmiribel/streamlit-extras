@@ -5,6 +5,7 @@ Display 3D models (GLTF, GLB, OBJ, STL, PLY, FBX) with interactive orbit control
 
 from __future__ import annotations
 
+from datetime import date
 from functools import cache
 from io import BufferedReader, BytesIO, RawIOBase
 from pathlib import Path
@@ -258,6 +259,7 @@ __title__ = "Three.js 3D Viewer"
 __desc__ = "Display 3D models (GLTF, GLB, OBJ, STL, PLY, FBX) with interactive orbit controls using Three.js."
 __icon__ = "🎮"
 __author__ = "Lukas Masuch"
+__created_at__ = date(2026, 3, 25)
 __examples__ = [example_basic, example_with_options]
 
 

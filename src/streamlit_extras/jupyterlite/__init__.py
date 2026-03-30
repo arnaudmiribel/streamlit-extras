@@ -1,3 +1,5 @@
+from datetime import date
+
 from streamlit.components.v1 import iframe
 
 from .. import extra
@@ -29,4 +31,5 @@ __desc__ = "Add a Jupyterlite sandbox to your Streamlit app in one command"
 __icon__ = "💡"
 __examples__ = [example]
 __author__ = "Rahul Chauhan"
+__created_at__ = date(2023, 10, 23)
 __playground__ = False

@@ -1,3 +1,5 @@
+from datetime import date
+
 """Pagination widget for Streamlit.
 
 A pagination widget for navigating through pages of content with numbered page buttons,
@@ -213,3 +215,5 @@ __examples__ = [
     example_with_data,
 ]
 __author__ = "streamlit-extras"
+__created_at__ = date(2026, 3, 24)
+__streamlit_min_version__ = "1.46.0"

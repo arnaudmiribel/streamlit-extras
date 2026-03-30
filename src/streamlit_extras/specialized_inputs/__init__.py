@@ -35,6 +35,7 @@ Requirements: streamlit >= 1.45
 from __future__ import annotations
 
 import re
+from datetime import date
 from typing import TYPE_CHECKING, Any, Literal
 
 import streamlit as st
@@ -1063,4 +1064,5 @@ __desc__ = (
 __icon__ = "✏️"
 __examples__ = [example]
 __author__ = "Arnaud Miribel"
+__created_at__ = date(2026, 3, 24)
 __experimental_playground__ = False

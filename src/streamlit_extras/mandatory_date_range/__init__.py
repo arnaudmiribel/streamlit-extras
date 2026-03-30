@@ -80,4 +80,5 @@ selects both dates, the app will not run.
 __icon__ = "📅"
 __examples__ = [example]
 __author__ = "Mohammad Junaid"
+__created_at__ = date(2022, 11, 18)
 __playground__ = True

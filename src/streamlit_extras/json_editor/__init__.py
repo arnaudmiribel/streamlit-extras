@@ -1,3 +1,5 @@
+from datetime import date
+
 """JSON Editor component for Streamlit.
 
 An interactive JSON viewer/editor built with React and CCv2.
@@ -155,3 +157,5 @@ __desc__ = "An interactive JSON viewer/editor component built with React and CCv
 __icon__ = "📝"
 __examples__ = [example]
 __author__ = "Lukas Masuch"
+__created_at__ = date(2026, 3, 24)
+__streamlit_min_version__ = "1.46.0"

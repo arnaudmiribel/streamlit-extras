@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import date
 from io import BytesIO
 from typing import TYPE_CHECKING, Any, Literal, cast
 
@@ -176,5 +177,6 @@ box."""
 __icon__ = "🤠"
 __examples__ = {example: [image_selector, show_selection]}
 __author__ = "Arnaud Miribel"
+__created_at__ = date(2024, 8, 1)
 __experimental_playground__ = False
 __stlite__ = True

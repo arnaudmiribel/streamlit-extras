@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import date
 from textwrap import dedent
 
 import streamlit as st
@@ -240,6 +241,7 @@ __desc__ = "Display tags like github issues!"
 __icon__ = "🔖"
 __examples__ = [example]
 __author__ = "Maggie Liu"
+__created_at__ = date(2023, 8, 28)
 __playground__ = True
 __deprecated__ = True
 __tests__ = [

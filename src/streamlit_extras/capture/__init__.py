@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 import sys
 from contextlib import contextmanager
+from datetime import date
 from io import StringIO
 from typing import TYPE_CHECKING, Any, TextIO
 from unittest import mock
@@ -189,6 +190,7 @@ __examples__ = {
     example_logcapture: [logcapture],
 }
 __author__ = "Alexander Martin"
+__created_at__ = date(2023, 6, 5)
 __playground__ = False
 
 

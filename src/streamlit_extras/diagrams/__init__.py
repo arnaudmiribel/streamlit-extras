@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import base64
 import re
+from datetime import date
 from io import BytesIO
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal
@@ -267,4 +268,5 @@ __desc__ = (
 __icon__ = "📐"
 __examples__ = [example]
 __author__ = "Arnaud Miribel"
+__created_at__ = date(2026, 3, 27)
 __github_repo__ = "https://github.com/mingrammer/diagrams"

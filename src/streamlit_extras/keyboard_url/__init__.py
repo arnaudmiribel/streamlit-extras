@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from datetime import date
+
 import streamlit as st
 import streamlit.components.v1 as components
 
@@ -79,4 +81,5 @@ __desc__ = "Create bindings so that hitting a key on your keyboard opens an URL 
 __icon__ = "🎯"
 __examples__ = [example]
 __author__ = "Arnaud Miribel"
+__created_at__ = date(2022, 8, 19)
 __playground__ = True

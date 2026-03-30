@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import date
 from typing import TYPE_CHECKING, Literal, TypedDict, overload
 
 import streamlit as st
@@ -334,4 +335,5 @@ __examples__ = {
     example_long_text: [card_selector],
 }
 __author__ = "Arnaud Miribel"
+__created_at__ = date(2026, 3, 27)
 __streamlit_min_version__ = "1.46.0"

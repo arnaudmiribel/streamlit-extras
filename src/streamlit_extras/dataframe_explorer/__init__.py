@@ -1,4 +1,5 @@
 import contextlib
+from datetime import date
 from typing import Any
 
 import pandas as pd
@@ -265,6 +266,7 @@ __desc__ = (
 __icon__ = "🔭"
 __examples__ = [example_one]
 __author__ = "Streamlit Data Team!"
+__created_at__ = date(2022, 8, 10)
 __streamlit_cloud_url__ = "https://st-filter-dataframe.streamlitapp.com/"
 __github_repo__ = "tylerjrichards/st-filter-dataframe"
 __playground__ = True

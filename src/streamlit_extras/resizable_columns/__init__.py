@@ -1,3 +1,5 @@
+from datetime import date
+
 """Resizable columns for Streamlit.
 
 A drop-in replacement for st.columns that lets users drag dividers to resize columns interactively.
@@ -156,4 +158,5 @@ __title__ = "Resizable Columns"
 __desc__ = "Drag-to-resize columns, a drop-in replacement for st.columns with interactive dividers."
 __icon__ = "↔️"
 __author__ = "streamlit-extras"
+__created_at__ = date(2026, 3, 26)
 __examples__ = [example_with_border, example_basic, example_with_ratios, example_two_panel]

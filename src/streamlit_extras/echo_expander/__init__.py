@@ -2,6 +2,7 @@ import contextlib
 import textwrap
 import traceback
 from collections.abc import Generator
+from datetime import date
 from typing import Any
 
 import streamlit as st
@@ -101,5 +102,6 @@ __title__ = "Echo Expander"
 __desc__ = "Execute code, and show the code that was executed, but in an expander."
 __icon__ = "🆒"
 __author__ = "Brian Hess"
+__created_at__ = date(2022, 9, 16)
 __examples__ = [example1, example2]
 __playground__ = True

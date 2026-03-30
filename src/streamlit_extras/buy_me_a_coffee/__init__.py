@@ -1,3 +1,4 @@
+from datetime import date
 from typing import Literal
 
 import streamlit as st
@@ -85,5 +86,6 @@ __desc__ = "Adds a floating button which links to your Buy Me a Coffee page"  # 
 __icon__ = "☕"  # give your extra an icon!
 __examples__ = [example]  # create some examples to show how cool your extra is!
 __author__ = "Zachary Blackwood"
+__created_at__ = date(2022, 11, 10)
 __forum_url__ = "https://discuss.streamlit.io/t/how-to-add-a-floating-widget-in-streamlit-app/33165/2?u=blackary"
 __playground__ = True  # Optional

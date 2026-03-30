@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
+from datetime import date
 from typing import TYPE_CHECKING, Literal
 
 import numpy as np
@@ -85,5 +86,6 @@ __desc__ = "A multi-element horizontal container that places elements in a row."
 __icon__ = "🟰"
 __examples__ = [example]
 __author__ = "Lukas Masuch"
+__created_at__ = date(2023, 8, 1)
 __playground__ = True
 __deprecated__ = True
