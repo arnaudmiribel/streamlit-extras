@@ -215,4 +215,3 @@ __examples__ = [
 ]
 __author__ = "streamlit-extras"
 __created_at__ = date(2026, 3, 24)
-__streamlit_min_version__ = "1.46.0"

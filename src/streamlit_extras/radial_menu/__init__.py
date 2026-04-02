@@ -85,4 +85,3 @@ __icon__ = "🎯"
 __examples__ = [example]
 __author__ = "Debbie Matthews"
 __created_at__ = date(2026, 3, 24)
-__streamlit_min_version__ = "1.46.0"

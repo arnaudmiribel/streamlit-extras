@@ -460,4 +460,3 @@ __icon__ = "👤"
 __examples__ = [example]
 __author__ = "Lukas Masuch"
 __created_at__ = date(2025, 3, 11)
-__streamlit_min_version__ = "1.46.0"
