@@ -1,4 +1,5 @@
 from collections.abc import Sequence
+from datetime import date
 
 import streamlit as st
 
@@ -92,4 +93,5 @@ __desc__ = "Highlight words based on their importances. Inspired from captum lib
 __icon__ = "❗"
 __examples__ = [example]
 __author__ = "Arnaud Miribel"
+__created_at__ = date(2022, 9, 20)
 __playground__ = True

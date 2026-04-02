@@ -1,6 +1,7 @@
 """Add colorful headers to your Streamlit app."""
 
 import itertools
+from datetime import date
 from typing import Literal
 
 import streamlit as st
@@ -211,5 +212,6 @@ __desc__ = """This function makes headers much prettier in Streamlit.
 __icon__ = "🖌️"
 __examples__ = [example]
 __author__ = "Johannes Rieke / Tyler Richards"
+__created_at__ = date(2022, 8, 19)
 __playground__ = True
 __deprecated__ = True

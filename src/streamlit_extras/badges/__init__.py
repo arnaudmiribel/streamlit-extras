@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import html
+from datetime import date
 from typing import Literal, get_args
 
 import streamlit as st
@@ -90,4 +91,5 @@ __examples__ = [
     example_buymeacoffee,
 ]
 __author__ = "Arnaud Miribel, ShruAgarwal"
+__created_at__ = date(2022, 8, 18)
 __playground__ = True

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import date
 from typing import TYPE_CHECKING, Literal
 
 import streamlit as st
@@ -358,4 +359,5 @@ The table automatically adapts to Streamlit's theme (light/dark) and updates liv
 __icon__ = "🧮"
 __examples__ = [example, example_column_spanners, example_data_coloring, example_row_groups]
 __author__ = "Lukas Masuch"
+__created_at__ = date(2025, 3, 10)
 __playground__ = False

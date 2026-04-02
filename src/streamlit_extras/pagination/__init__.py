@@ -5,6 +5,7 @@ prev/next arrows, and intelligent truncation for large page counts.
 """
 
 from collections.abc import Callable
+from datetime import date
 from functools import cache
 from typing import Any, Literal
 
@@ -213,3 +214,4 @@ __examples__ = [
     example_with_data,
 ]
 __author__ = "streamlit-extras"
+__created_at__ = date(2026, 3, 24)

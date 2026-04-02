@@ -1,5 +1,6 @@
 from collections.abc import Callable, Generator, Sequence
 from contextlib import contextmanager
+from datetime import date
 from typing import TypedDict
 
 import numpy as np
@@ -126,4 +127,5 @@ __examples__ = [
     example_two,
 ]
 __author__ = "Arnaud Miribel"
+__created_at__ = date(2022, 11, 18)
 __playground__ = True

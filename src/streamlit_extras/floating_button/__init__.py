@@ -1,4 +1,5 @@
 from collections.abc import Callable
+from datetime import date
 from typing import Any, Literal
 
 import streamlit as st
@@ -148,4 +149,5 @@ interfaces."""
 __icon__ = "🔘"
 __examples__ = [example]
 __author__ = "Johannes Rieke"
+__created_at__ = date(2025, 3, 10)
 __experimental_playground__ = True

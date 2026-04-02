@@ -7,6 +7,7 @@ import time
 from collections import Counter
 from collections.abc import Callable
 from dataclasses import dataclass
+from datetime import date
 from functools import partial, wraps
 from threading import Condition, Lock, Semaphore
 from typing import Any, TypeVar
@@ -142,4 +143,5 @@ __desc__ = """This decorator limit function execution concurrency with max_concu
 __icon__ = "🚦"
 __examples__ = [example]
 __author__ = "Karen Javadyan"
+__created_at__ = date(2024, 3, 22)
 __experimental_playground__ = False

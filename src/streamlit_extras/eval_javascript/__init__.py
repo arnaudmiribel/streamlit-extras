@@ -4,6 +4,7 @@ A Streamlit Custom Component v2 (CCv2) that evaluates a JavaScript expression
 in the browser and returns the result to Python. The component itself is hidden.
 """
 
+from datetime import date
 from typing import Any
 
 import streamlit as st
@@ -313,3 +314,4 @@ __desc__ = "Evaluate JavaScript expressions in the browser and return results to
 __icon__ = "🌐"
 __examples__ = [example]
 __author__ = "Lukas Masuch"
+__created_at__ = date(2026, 3, 24)

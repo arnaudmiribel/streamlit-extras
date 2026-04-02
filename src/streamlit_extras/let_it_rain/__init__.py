@@ -1,3 +1,4 @@
+from datetime import date
 from typing import Union
 
 import streamlit as st
@@ -222,4 +223,5 @@ __desc__ = "Use this to create more animations like st.balloons() and st.snow()"
 __icon__ = "🌧️"
 __examples__ = [example]
 __author__ = "Arnaud Miribel"
+__created_at__ = date(2022, 8, 10)
 __playground__ = True

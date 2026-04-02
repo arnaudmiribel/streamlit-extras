@@ -1,3 +1,5 @@
+from datetime import date
+
 import streamlit as st
 
 from .. import extra
@@ -63,4 +65,5 @@ __desc__ = "Create a keyboard styled text"
 __icon__ = "⌨️"
 __examples__ = [example_default, example_inline]
 __author__ = "Arnaud Miribel"
+__created_at__ = date(2022, 8, 18)
 __playground__ = True

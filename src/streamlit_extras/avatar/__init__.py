@@ -7,6 +7,7 @@ interactions for profile-like UI patterns.
 
 from __future__ import annotations
 
+from datetime import date
 from typing import TYPE_CHECKING, Any, Literal
 from uuid import uuid4
 
@@ -458,3 +459,4 @@ __desc__ = "Display a circular avatar image with optional label and caption."
 __icon__ = "👤"
 __examples__ = [example]
 __author__ = "Lukas Masuch"
+__created_at__ = date(2025, 3, 11)

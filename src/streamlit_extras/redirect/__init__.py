@@ -7,6 +7,7 @@ useful for OAuth flows, conditional navigation, and user routing.
 from __future__ import annotations
 
 import html
+from datetime import date
 from typing import Literal
 
 import streamlit as st
@@ -202,3 +203,4 @@ __desc__ = "Programmatically redirect users to external or internal URLs."
 __icon__ = "🔀"
 __examples__ = [example_same_tab, example_new_tab, example_oauth_flow, example_conditional]
 __author__ = "Lukas Masuch"
+__created_at__ = date(2026, 3, 24)

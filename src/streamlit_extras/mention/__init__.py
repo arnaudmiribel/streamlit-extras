@@ -1,4 +1,5 @@
 import html
+from datetime import date
 
 import streamlit as st
 
@@ -119,4 +120,5 @@ __examples__ = [
     example_5,
 ]
 __author__ = "Arnaud Miribel"
+__created_at__ = date(2022, 9, 22)
 __playground__ = True

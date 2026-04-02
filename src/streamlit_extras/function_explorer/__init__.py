@@ -1,5 +1,6 @@
 import inspect
 from collections.abc import Callable
+from datetime import date
 from typing import Any, get_args
 
 import pandas as pd
@@ -123,3 +124,4 @@ __desc__ = "Give a UI to any Python function! Very alpha though"
 __icon__ = "👩‍🚀"
 __examples__ = [example]
 __author__ = "Arnaud Miribel"
+__created_at__ = date(2022, 8, 24)

@@ -4,6 +4,7 @@ An interactive JSON viewer/editor built with React and CCv2.
 Uses @microlink/react-json-view for rendering and editing JSON data.
 """
 
+from datetime import date
 from functools import cache
 from typing import Any, TypedDict, cast
 
@@ -155,3 +156,4 @@ __desc__ = "An interactive JSON viewer/editor component built with React and CCv
 __icon__ = "📝"
 __examples__ = [example]
 __author__ = "Lukas Masuch"
+__created_at__ = date(2026, 3, 24)

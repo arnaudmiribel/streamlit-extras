@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import date
 from typing import TYPE_CHECKING
 
 import streamlit as st
@@ -58,4 +59,5 @@ __desc__ = "A single-element container which displays a skeleton placeholder."
 __icon__ = "🦴"
 __examples__ = [example]
 __author__ = "Lukas Masuch"
+__created_at__ = date(2025, 3, 10)
 __playground__ = True

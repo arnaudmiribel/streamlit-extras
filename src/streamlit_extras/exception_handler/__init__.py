@@ -9,6 +9,7 @@ Streamlit versions before and after 1.39.0, where the handler location changed.
 from __future__ import annotations
 
 import sys
+from datetime import date
 from typing import TYPE_CHECKING
 
 import streamlit as st
@@ -97,4 +98,5 @@ __desc__ = "Override Streamlit's uncaught exception handler to customize error d
 __icon__ = "🛡️"
 __examples__ = [example]
 __author__ = "Arnaud Miribel"
+__created_at__ = date(2025, 8, 12)
 __playground__ = False

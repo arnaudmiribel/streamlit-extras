@@ -5,6 +5,7 @@ Column widths persist across reruns via component state.
 """
 
 from collections.abc import Sequence
+from datetime import date
 from functools import cache
 from typing import Any
 
@@ -156,4 +157,5 @@ __title__ = "Resizable Columns"
 __desc__ = "Drag-to-resize columns, a drop-in replacement for st.columns with interactive dividers."
 __icon__ = "↔️"
 __author__ = "streamlit-extras"
+__created_at__ = date(2026, 3, 26)
 __examples__ = [example_with_border, example_basic, example_with_ratios, example_two_panel]

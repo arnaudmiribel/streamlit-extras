@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import json
 from collections.abc import Iterator, MutableMapping
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from typing import Literal, cast
 from urllib.parse import quote
 
@@ -567,3 +567,4 @@ __desc__ = "Read and write browser cookies from Python using a dict-like interfa
 __icon__ = "🍪"
 __examples__ = [example]
 __author__ = "Lukas Masuch"
+__created_at__ = date(2026, 3, 24)

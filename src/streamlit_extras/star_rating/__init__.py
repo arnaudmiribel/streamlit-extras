@@ -1,3 +1,5 @@
+from datetime import date
+
 import streamlit as st
 
 from .. import extra
@@ -54,4 +56,5 @@ __desc__ = "A read-only Star rating component for Streamlit."
 __icon__ = "⭐"
 __examples__ = [example]
 __author__ = "Gabriel Vidal"
+__created_at__ = date(2024, 10, 5)
 __experimental_playground__ = True

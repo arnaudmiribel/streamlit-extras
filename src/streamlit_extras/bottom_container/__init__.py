@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import date
 from typing import TYPE_CHECKING
 
 import streamlit as st
@@ -41,4 +42,5 @@ __desc__ = "A multi-element container that sticks to the bottom of the app."
 __icon__ = "⬇️"
 __examples__ = [example]
 __author__ = "Lukas Masuch"
+__created_at__ = date(2024, 2, 27)
 __experimental_playground__ = False

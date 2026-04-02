@@ -5,6 +5,7 @@ import time
 from collections.abc import Generator, Sequence
 from contextlib import contextmanager
 from contextvars import ContextVar
+from datetime import date
 from typing import TYPE_CHECKING, Any, Literal
 
 import streamlit as st
@@ -230,4 +231,5 @@ __examples__ = {
     example: [chat, add_message],
 }
 __author__ = "Lukas Masuch"
+__created_at__ = date(2023, 8, 1)
 __playground__ = False
