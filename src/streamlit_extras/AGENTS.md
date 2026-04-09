@@ -73,6 +73,7 @@ Use this guide to select the appropriate implementation approach:
 | `row` | Place elements in a horizontal row | pure python |
 | `sandbox` | Execute untrusted Streamlit code safely | components v1: html |
 | `scroll_to_element` | Programmatically scroll to any element by its key | components v2: inline |
+| `sigma_graph` | Interactive network graph visualization using sigma.js | components v2: react |
 | `skeleton` | Display skeleton placeholder while loading | pure python |
 | `star_rating` | Read-only star rating display | st.html |
 | `stateful_button` | Toggle button that keeps track of its state | pure python |

@@ -1,5 +1,7 @@
 streamlit
 diagrams
 great_tables
+networkx
+scipy
 # Local install of streamlit-extras:
 -e ./

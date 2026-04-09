@@ -15,5 +15,8 @@ asset_dir = "pagination/frontend/build"
 name = "resizable_columns"
 asset_dir = "resizable_columns/frontend/build"
 [[tool.streamlit.component.components]]
+name = "sigma_graph"
+asset_dir = "sigma_graph/frontend/build"
+[[tool.streamlit.component.components]]
 name = "three_viewer"
 asset_dir = "three_viewer/frontend/build"
