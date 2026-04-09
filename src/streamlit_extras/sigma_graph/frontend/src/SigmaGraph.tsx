@@ -1,5 +1,4 @@
 import { FrontendRendererArgs } from "@streamlit/component-v2-lib";
-import Color from "color";
 import Graph from "graphology";
 import FA2Layout from "graphology-layout-forceatlas2/worker";
 import { FC, ReactElement, useCallback, useEffect, useMemo, useRef, useState } from "react";

@@ -20,7 +20,6 @@
   "prettier": {},
   "dependencies": {
     "@streamlit/component-v2-lib": "^0.2.0",
-    "color": "^4.2.3",
     "graphology": "^0.25.4",
     "graphology-layout-forceatlas2": "^0.10.1",
     "react": "^18.3.1",
@@ -28,7 +27,6 @@
     "sigma": "^3.0.0"
   },
   "devDependencies": {
-    "@types/color": "^4.2.1",
     "@types/node": "^22.14.1",
     "@types/react": "^18.3.20",
     "@types/react-dom": "^18.3.6",
