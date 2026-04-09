@@ -148,6 +148,11 @@ const ImageCompareSlider: FC<ImageCompareSliderProps> = ({
     [image2Url],
   );
 
+  // Sync position when initialPosition changes (e.g., when position param changes on rerun)
+  useEffect(() => {
+    setPosition(initialPosition);
+  }, [initialPosition]);
+
   // Calculate height based on image aspect ratio if height is "content"
   useEffect(() => {
     if (typeof height === "number") {
