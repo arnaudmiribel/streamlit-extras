@@ -467,7 +467,7 @@ def example_networkx() -> None:
     st.write("Explore different graph datasets and generators from NetworkX.")
 
     # Graph options - mix of classic graphs and parameterized generators
-    graph_options: dict[str, object] = {
+    graph_options: dict[str, Callable[[], nx.Graph]] = {
         "Karate Club (34 nodes)": nx.karate_club_graph,
         "Les Misérables (77 nodes)": nx.les_miserables_graph,
         "Florentine Families (15 nodes)": nx.florentine_families_graph,
@@ -513,7 +513,7 @@ def example_networkx() -> None:
 
     # Load the selected graph
     graph_fn = graph_options[selected_graph]
-    graph = graph_fn()  # type: ignore[operator]
+    graph = graph_fn()
     layout = layout_options[selected_layout]
     node_size = size_options[selected_size]
 
