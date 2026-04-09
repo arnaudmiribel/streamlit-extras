@@ -112,12 +112,18 @@ def _compute_layout(
         The graph data with x and y attributes set on nodes.
 
     Raises:
+        StreamlitAPIException: If NetworkX is not installed.
         ValueError: If an unknown layout algorithm is specified.
     """
-    import networkx as nx
+    try:
+        import networkx as nx
+    except ImportError as e:
+        raise streamlit.errors.StreamlitAPIException(
+            f"NetworkX is required for the '{layout}' layout algorithm. Install it with: pip install networkx"
+        ) from e
 
     # Reconstruct a NetworkX graph for layout computation
-    # NetworkX 3.6+ uses "edges" key by default, so we pass our edges under that key
+    # Pass link='edges' explicitly for compatibility across NetworkX versions
     nx_graph = nx.node_link_graph(
         {
             "nodes": graph_data["nodes"],
@@ -126,6 +132,7 @@ def _compute_layout(
             "multigraph": graph_data.get("multigraph", False),
             "graph": graph_data.get("graph", {}),
         },
+        link="edges",
     )
 
     # Compute layout
@@ -278,9 +285,11 @@ def sigma_graph(
         graph_data = _networkx_to_node_link(data)
     else:
         # Assume it's already a dict in SigmaGraphData format
+        # Accept both "edges" and "links" keys (NetworkX uses "links" by default)
+        edges = data.get("edges", data.get("links", []))
         graph_data = SigmaGraphData(
             nodes=data.get("nodes", []),
-            edges=data.get("edges", []),
+            edges=edges,
             directed=data.get("directed", False),
             multigraph=data.get("multigraph", False),
             graph=data.get("graph", {}),
@@ -305,11 +314,34 @@ def sigma_graph(
     callback_fn = _on_select
     selection_enabled = on_select != "ignore"
 
+    # Track the last processed selection to avoid repeated callback invocations
+    last_selection_key = f"_sigma_graph_last_selection_{key}"
+
     if callable(on_select):
 
         def wrapped_callback() -> None:
-            # The selection data will be retrieved from the result
-            pass
+            if key is None:
+                return
+
+            component_state = st.session_state.get(key, {})
+            selection_state = component_state.get("selection")
+            if selection_state is None:
+                return
+
+            # Create a hashable representation of the current selection
+            current_sel_id = (selection_state.get("type"), selection_state.get("id"))
+            last_sel_id = st.session_state.get(last_selection_key)
+
+            # Only invoke callback if the selection actually changed
+            if current_sel_id != last_sel_id:
+                st.session_state[last_selection_key] = current_sel_id
+                on_select(
+                    SigmaGraphSelection(
+                        type=selection_state.get("type", "node"),
+                        id=selection_state.get("id", ""),
+                        attributes=selection_state.get("attributes", {}),
+                    )
+                )
 
         callback_fn = wrapped_callback
 
@@ -367,9 +399,9 @@ def sigma_graph(
             attributes=selection_data.get("attributes", {}),
         )
 
-        # Call user callback if provided
+        # For callable on_select, the callback is invoked in wrapped_callback
+        # via on_selection_change, so we just return None here
         if callable(on_select):
-            on_select(selection)
             return None
 
         return selection

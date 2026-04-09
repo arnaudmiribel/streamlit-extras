@@ -362,9 +362,11 @@ const SigmaGraph: FC<SigmaGraphProps> = ({
     }
 
     // Add edges
-    for (const edge of stableGraphData.edges) {
+    for (let i = 0; i < stableGraphData.edges.length; i++) {
+      const edge = stableGraphData.edges[i];
       const { source, target, key, ...attrs } = edge;
-      const edgeKey = key ?? `${source}-${target}`;
+      // Generate unique key for multigraphs: use provided key, or include index
+      const edgeKey = key ?? (stableGraphData.multigraph ? `${source}-${target}-${i}` : `${source}-${target}`);
       const hasExplicitColor = !!attrs.color;
       const edgeAttrs: Record<string, unknown> = {
         label: attrs.label,
@@ -429,6 +431,7 @@ const SigmaGraph: FC<SigmaGraphProps> = ({
 
     // Start animated ForceAtlas2 layout if requested
     let fa2Layout: FA2Layout | null = null;
+    let autoStopTimeoutId: ReturnType<typeof setTimeout> | null = null;
     if (useForceLayout) {
       const nodeCount = graph.order;
 
@@ -455,7 +458,7 @@ const SigmaGraph: FC<SigmaGraphProps> = ({
 
       // Auto-stop after some time based on graph size
       const duration = Math.min(15000, Math.max(3000, nodeCount * 10));
-      setTimeout(() => {
+      autoStopTimeoutId = setTimeout(() => {
         if (fa2Layout && fa2Layout.isRunning()) {
           fa2Layout.stop();
         }
@@ -481,6 +484,9 @@ const SigmaGraph: FC<SigmaGraphProps> = ({
 
     // Cleanup
     return () => {
+      if (autoStopTimeoutId) {
+        clearTimeout(autoStopTimeoutId);
+      }
       if (fa2Layout) {
         fa2Layout.kill();
       }
@@ -541,14 +547,17 @@ const SigmaGraph: FC<SigmaGraphProps> = ({
     const selectedNodeId = currentSelection?.type === "node" ? currentSelection.id : null;
     const selectedEdgeId = currentSelection?.type === "edge" ? currentSelection.id : null;
 
+    // The "focus" node is either the hovered or selected node
+    const focusNode = hoveredNode || selectedNodeId;
+
+    // Pre-compute neighbor set once to avoid O(N * degree) computation in reducers
+    const neighborSet = focusNode ? new Set(graph.neighbors(focusNode)) : null;
+
     // Node reducer: apply theme colors and handle hover/selection
     sigma.setSetting("nodeReducer", (node, data): Partial<NodeDisplayData> => {
       const res: Partial<NodeDisplayData> = { ...data };
       const isSelected = node === selectedNodeId;
       const isHovered = node === hoveredNode;
-
-      // The "focus" node is either the hovered or selected node
-      const focusNode = hoveredNode || selectedNodeId;
 
       // Apply theme color if node doesn't have an explicit color
       const nodeColor = data.color || defaultNodeColor;
@@ -568,9 +577,8 @@ const SigmaGraph: FC<SigmaGraphProps> = ({
       }
 
       // Handle focus state (hover or selection) for all nodes
-      if (focusNode && !isHovered && !isSelected) {
-        const neighbors = graph.neighbors(focusNode);
-        if (neighbors.includes(node)) {
+      if (focusNode && neighborSet && !isHovered && !isSelected) {
+        if (neighborSet.has(node)) {
           // Neighbor nodes: bring to front
           res.zIndex = 1;
           res.forceLabel = true;
@@ -589,9 +597,6 @@ const SigmaGraph: FC<SigmaGraphProps> = ({
     sigma.setSetting("edgeReducer", (edge, data): Partial<EdgeDisplayData> => {
       const res: Partial<EdgeDisplayData> = { ...data };
       const isSelectedEdge = edge === selectedEdgeId;
-
-      // The "focus" node is either the hovered or selected node
-      const focusNode = hoveredNode || selectedNodeId;
 
       // Apply theme color if edge doesn't have an explicit color
       const edgeColor = data.color || defaultEdgeColor;
