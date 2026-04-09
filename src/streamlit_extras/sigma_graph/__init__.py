@@ -123,16 +123,18 @@ def _compute_layout(
         ) from e
 
     # Reconstruct a NetworkX graph for layout computation
-    # Pass link='edges' explicitly for compatibility across NetworkX versions
+    # Provide both "links" and "edges" keys for compatibility across NetworkX versions
+    # (NX 2.x uses "links", NX 3.x uses "edges" by default)
+    edges = graph_data["edges"]
     nx_graph = nx.node_link_graph(
         {
             "nodes": graph_data["nodes"],
-            "edges": graph_data["edges"],
+            "links": edges,  # For NetworkX 2.x
+            "edges": edges,  # For NetworkX 3.x
             "directed": graph_data.get("directed", False),
             "multigraph": graph_data.get("multigraph", False),
             "graph": graph_data.get("graph", {}),
         },
-        link="edges",
     )
 
     # Compute layout
