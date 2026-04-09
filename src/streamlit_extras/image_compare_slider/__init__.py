@@ -223,7 +223,6 @@ def example_custom_position() -> None:
         label1="Normal",
         label2="High Contrast",
         position=start_pos,
-        key="custom_pos_compare",
     )
 
 
