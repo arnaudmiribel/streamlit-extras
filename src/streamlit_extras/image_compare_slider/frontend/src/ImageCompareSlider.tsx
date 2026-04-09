@@ -43,6 +43,15 @@ export type ImageCompareSliderProps = Pick<
   width: "content" | "stretch" | number;
 };
 
+// Typed global Window interface for Streamlit
+declare global {
+  interface Window {
+    __streamlit?: {
+      DOWNLOAD_ASSETS_BASE_URL?: string;
+    };
+  }
+}
+
 /**
  * Resolve media URLs to absolute URLs.
  * Handles /media/ paths from Streamlit's media file storage.
@@ -65,9 +74,8 @@ function resolveMediaUrl(url: string): string {
 
     // Try to get base URL from Streamlit config or window location
     let baseUrl = "";
-    const streamlit = (window as unknown as { __streamlit?: { DOWNLOAD_ASSETS_BASE_URL?: string } }).__streamlit;
-    if (streamlit?.DOWNLOAD_ASSETS_BASE_URL) {
-      baseUrl = streamlit.DOWNLOAD_ASSETS_BASE_URL;
+    if (window.__streamlit?.DOWNLOAD_ASSETS_BASE_URL) {
+      baseUrl = window.__streamlit.DOWNLOAD_ASSETS_BASE_URL;
     } else if (window.location) {
       baseUrl = window.location.origin + window.location.pathname;
     }
@@ -138,6 +146,11 @@ const ImageCompareSlider: FC<ImageCompareSliderProps> = ({
   );
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Refs for throttled position updates
+  const pendingPositionRef = useRef<number | null>(null);
+  const positionFrameRef = useRef<number | null>(null);
+  const lastCommittedPositionRef = useRef<number>(position);
+
   // Resolve media URLs
   const resolvedImage1Url = useMemo(
     () => resolveMediaUrl(image1Url),
@@ -151,33 +164,91 @@ const ImageCompareSlider: FC<ImageCompareSliderProps> = ({
   // Sync position when initialPosition changes (e.g., when position param changes on rerun)
   useEffect(() => {
     setPosition(initialPosition);
+    lastCommittedPositionRef.current = initialPosition;
   }, [initialPosition]);
 
+  // Cleanup for position frame on unmount
+  useEffect(() => {
+    return () => {
+      if (positionFrameRef.current !== null) {
+        cancelAnimationFrame(positionFrameRef.current);
+      }
+    };
+  }, []);
+
   // Calculate height based on image aspect ratio if height is "content"
+  // Uses ResizeObserver to handle container width changes
   useEffect(() => {
     if (typeof height === "number") {
       setImageHeight(height);
       return;
     }
 
+    let isMounted = true;
+    let aspectRatio: number | null = null;
+    const container = containerRef.current;
+
+    const updateImageHeight = () => {
+      if (!isMounted || !containerRef.current || aspectRatio === null) {
+        return;
+      }
+      const containerWidth = containerRef.current.clientWidth;
+      setImageHeight(Math.round(containerWidth * aspectRatio));
+    };
+
     // Load image to get dimensions
     const img = new Image();
     img.onload = () => {
-      if (containerRef.current) {
-        const containerWidth = containerRef.current.clientWidth;
-        const aspectRatio = img.height / img.width;
-        setImageHeight(Math.round(containerWidth * aspectRatio));
+      if (!isMounted || img.width === 0) {
+        return;
       }
+      aspectRatio = img.height / img.width;
+      updateImageHeight();
     };
     img.src = resolvedImage1Url;
+
+    // Observe container resize to update height
+    let resizeObserver: ResizeObserver | null = null;
+    if (container) {
+      resizeObserver = new ResizeObserver(() => {
+        updateImageHeight();
+      });
+      resizeObserver.observe(container);
+    }
+
+    return () => {
+      isMounted = false;
+      img.onload = null;
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
+    };
   }, [height, resolvedImage1Url]);
 
-  // Handle position change
+  // Handle position change with throttling via requestAnimationFrame
   const handlePositionChange = useCallback(
     (newPosition: number) => {
-      const roundedPosition = Math.round(newPosition);
-      setPosition(roundedPosition);
-      setStateValue("position", roundedPosition);
+      // Clamp position to [0, 100] without rounding for smooth dragging
+      const clampedPosition = Math.min(100, Math.max(0, newPosition));
+      setPosition(clampedPosition);
+      pendingPositionRef.current = clampedPosition;
+
+      // Throttle state updates to avoid excessive reruns
+      if (positionFrameRef.current !== null) {
+        return;
+      }
+
+      positionFrameRef.current = requestAnimationFrame(() => {
+        positionFrameRef.current = null;
+
+        if (
+          pendingPositionRef.current !== null &&
+          pendingPositionRef.current !== lastCommittedPositionRef.current
+        ) {
+          lastCommittedPositionRef.current = pendingPositionRef.current;
+          setStateValue("position", pendingPositionRef.current);
+        }
+      });
     },
     [setStateValue],
   );
