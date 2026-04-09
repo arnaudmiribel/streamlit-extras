@@ -7,21 +7,6 @@ import Sigma from "sigma";
 import { Settings } from "sigma/settings";
 import { NodeDisplayData, EdgeDisplayData } from "sigma/types";
 
-/**
- * Determine if a background color is "light" based on luminosity.
- * Uses the Color library which handles any CSS color format.
- */
-function hasLightBackgroundColor(backgroundColor: string): boolean {
-  try {
-    const color = Color(backgroundColor);
-    // luminosity() returns 0-1 scale using WCAG relative luminance
-    return color.luminosity() > 0.5;
-  } catch {
-    // Default to light if we can't parse the color
-    return true;
-  }
-}
-
 export type SigmaGraphStateShape = {
   selection: {
     type: "node" | "edge";
@@ -210,8 +195,8 @@ const SigmaGraph: FC<SigmaGraphProps> = ({
   const graphRef = useRef<Graph | null>(null);
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
 
-  // Light and dark theme color palettes
-  const lightTheme = {
+  // Fallback colors (used when CSS variables aren't available)
+  const fallbackColors = {
     primaryColor: "#ff4b4b",
     textColor: "#262730",
     backgroundColor: "#ffffff",
@@ -219,17 +204,9 @@ const SigmaGraph: FC<SigmaGraphProps> = ({
     borderColor: "#d3d3d3",
   };
 
-  const darkTheme = {
-    primaryColor: "#ff4b4b",
-    textColor: "#fafafa",
-    backgroundColor: "#0e1117",
-    secondaryBackgroundColor: "#262730",
-    borderColor: "#555555",
-  };
-
-  // Auto-detect theme based on background color (same as json_editor)
-  const [isLightMode, setIsLightMode] = useState(true);
-  const lastBackgroundColor = useRef<string>("");
+  // Read theme colors from Streamlit's CSS variables
+  const [themeColors, setThemeColors] = useState(fallbackColors);
+  const lastThemeHash = useRef<string>("");
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -238,26 +215,36 @@ const SigmaGraph: FC<SigmaGraphProps> = ({
     const root = containerRef.current.getRootNode() as ShadowRoot;
     const host = root?.host ?? containerRef.current;
 
-    // Function to detect and update theme based on background color
-    const updateThemeFromBackground = () => {
-      const backgroundColor = getComputedStyle(host)
-        .getPropertyValue("--st-background-color")
-        .trim();
+    // Helper to read a CSS variable with fallback
+    const getCssVar = (name: string, fallback: string): string => {
+      const value = getComputedStyle(host).getPropertyValue(name).trim();
+      return value || fallback;
+    };
 
-      // Only update if the background color actually changed
-      if (backgroundColor && backgroundColor !== lastBackgroundColor.current) {
-        lastBackgroundColor.current = backgroundColor;
-        const isLight = hasLightBackgroundColor(backgroundColor);
-        setIsLightMode(isLight);
+    // Function to read all theme colors from CSS variables
+    const updateThemeFromCssVars = () => {
+      const colors = {
+        primaryColor: getCssVar("--st-primary-color", fallbackColors.primaryColor),
+        textColor: getCssVar("--st-text-color", fallbackColors.textColor),
+        backgroundColor: getCssVar("--st-background-color", fallbackColors.backgroundColor),
+        secondaryBackgroundColor: getCssVar("--st-secondary-background-color", fallbackColors.secondaryBackgroundColor),
+        borderColor: getCssVar("--st-border-color", fallbackColors.borderColor),
+      };
+
+      // Only update if colors actually changed (avoid unnecessary re-renders)
+      const hash = JSON.stringify(colors);
+      if (hash !== lastThemeHash.current) {
+        lastThemeHash.current = hash;
+        setThemeColors(colors);
       }
     };
 
     // Initial detection
-    updateThemeFromBackground();
+    updateThemeFromCssVars();
 
     // Poll for CSS variable changes since MutationObserver doesn't catch
     // inherited/cascading CSS custom property changes
-    const intervalId = setInterval(updateThemeFromBackground, 100);
+    const intervalId = setInterval(updateThemeFromCssVars, 100);
 
     return () => clearInterval(intervalId);
   }, []);
@@ -265,9 +252,6 @@ const SigmaGraph: FC<SigmaGraphProps> = ({
   // Refs to store latest handler functions (avoids recreating sigma on selection change)
   const handleNodeClickRef = useRef<(nodeId: string) => void>(() => {});
   const handleEdgeClickRef = useRef<(edgeKey: string) => void>(() => {});
-
-  // Get current theme colors based on detected mode
-  const themeColors = isLightMode ? lightTheme : darkTheme;
 
   // Compute default colors from theme
   const defaultNodeColor = nodeColor || themeColors.primaryColor;
