@@ -6,6 +6,9 @@ name = "streamlit-extras"
 version = "0.0.1"
 
 [[tool.streamlit.component.components]]
+name = "image_compare_slider"
+asset_dir = "image_compare_slider/frontend/build"
+[[tool.streamlit.component.components]]
 name = "json_editor"
 asset_dir = "json_editor/frontend/build"
 [[tool.streamlit.component.components]]

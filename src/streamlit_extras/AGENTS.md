@@ -57,6 +57,7 @@ Use this guide to select the appropriate implementation approach:
 | `function_explorer` | Generate UI for any Python function | pure python |
 | `great_tables` | Render Great Tables objects in Streamlit | st.html |
 | `grid` | Place elements on a specified grid layout | pure python |
+| `image_compare_slider` | Compare two images with an interactive slider overlay | components v2: react |
 | `image_selector` | Select images from a gallery | pure python |
 | `json_editor` | Interactive JSON viewer/editor built with React | components v2: react |
 | `jupyterlite` | Add a Jupyterlite sandbox to your app | components v1: iframe |
