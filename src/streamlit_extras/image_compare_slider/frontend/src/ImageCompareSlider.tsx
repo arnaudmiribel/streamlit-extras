@@ -27,6 +27,7 @@ export type ImageCompareSliderDataShape = {
   height: "content" | number;
   width: "content" | "stretch" | number;
   initial_position: number;
+  track_position: boolean;
 };
 
 export type ImageCompareSliderProps = Pick<
@@ -41,6 +42,7 @@ export type ImageCompareSliderProps = Pick<
   portrait: boolean;
   height: "content" | number;
   width: "content" | "stretch" | number;
+  trackPosition: boolean;
 };
 
 // Typed global Window interface for Streamlit
@@ -138,6 +140,7 @@ const ImageCompareSlider: FC<ImageCompareSliderProps> = ({
   portrait,
   height,
   width,
+  trackPosition,
   setStateValue,
 }): ReactElement => {
   const [position, setPosition] = useState(initialPosition);
@@ -146,10 +149,13 @@ const ImageCompareSlider: FC<ImageCompareSliderProps> = ({
   );
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Refs for throttled position updates
+  // Refs for debounced position updates
   const pendingPositionRef = useRef<number | null>(null);
-  const positionFrameRef = useRef<number | null>(null);
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastCommittedPositionRef = useRef<number>(position);
+
+  // Debounce delay in milliseconds
+  const DEBOUNCE_DELAY = 150;
 
   // Resolve media URLs
   const resolvedImage1Url = useMemo(
@@ -167,14 +173,22 @@ const ImageCompareSlider: FC<ImageCompareSliderProps> = ({
     lastCommittedPositionRef.current = initialPosition;
   }, [initialPosition]);
 
-  // Cleanup for position frame on unmount
+  // Cleanup for debounce timer on unmount
   useEffect(() => {
     return () => {
-      if (positionFrameRef.current !== null) {
-        cancelAnimationFrame(positionFrameRef.current);
+      if (debounceTimerRef.current !== null) {
+        clearTimeout(debounceTimerRef.current);
       }
     };
   }, []);
+
+  // Clear pending debounce timer when tracking is disabled
+  useEffect(() => {
+    if (!trackPosition && debounceTimerRef.current !== null) {
+      clearTimeout(debounceTimerRef.current);
+      debounceTimerRef.current = null;
+    }
+  }, [trackPosition]);
 
   // Calculate height based on image aspect ratio if height is "content"
   // Uses ResizeObserver to handle container width changes
@@ -225,21 +239,27 @@ const ImageCompareSlider: FC<ImageCompareSliderProps> = ({
     };
   }, [height, resolvedImage1Url]);
 
-  // Handle position change with throttling via requestAnimationFrame
+  // Handle position change with debouncing to prevent rapid reruns
   const handlePositionChange = useCallback(
     (newPosition: number) => {
       // Clamp position to [0, 100] without rounding for smooth dragging
       const clampedPosition = Math.min(100, Math.max(0, newPosition));
       setPosition(clampedPosition);
-      pendingPositionRef.current = clampedPosition;
 
-      // Throttle state updates to avoid excessive reruns
-      if (positionFrameRef.current !== null) {
+      // Only send state updates if tracking is enabled
+      if (!trackPosition) {
         return;
       }
 
-      positionFrameRef.current = requestAnimationFrame(() => {
-        positionFrameRef.current = null;
+      pendingPositionRef.current = clampedPosition;
+
+      // Debounce state updates to avoid excessive reruns
+      if (debounceTimerRef.current !== null) {
+        clearTimeout(debounceTimerRef.current);
+      }
+
+      debounceTimerRef.current = setTimeout(() => {
+        debounceTimerRef.current = null;
 
         if (
           pendingPositionRef.current !== null &&
@@ -248,9 +268,9 @@ const ImageCompareSlider: FC<ImageCompareSliderProps> = ({
           lastCommittedPositionRef.current = pendingPositionRef.current;
           setStateValue("position", pendingPositionRef.current);
         }
-      });
+      }, DEBOUNCE_DELAY);
     },
-    [setStateValue],
+    [setStateValue, trackPosition],
   );
 
   // Container styles

@@ -49,6 +49,7 @@ const ImageCompareSliderRoot: FrontendRenderer<
     height,
     width,
     initial_position,
+    track_position,
   } = data;
 
   // Render/re-render the React application into the root using the React DOM
@@ -65,6 +66,7 @@ const ImageCompareSliderRoot: FrontendRenderer<
         portrait={portrait}
         height={height}
         width={width}
+        trackPosition={track_position}
       />
     </StrictMode>,
   );
