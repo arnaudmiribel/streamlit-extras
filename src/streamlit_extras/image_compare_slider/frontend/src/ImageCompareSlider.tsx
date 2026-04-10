@@ -182,6 +182,14 @@ const ImageCompareSlider: FC<ImageCompareSliderProps> = ({
     };
   }, []);
 
+  // Clear pending debounce timer when tracking is disabled
+  useEffect(() => {
+    if (!trackPosition && debounceTimerRef.current !== null) {
+      clearTimeout(debounceTimerRef.current);
+      debounceTimerRef.current = null;
+    }
+  }, [trackPosition]);
+
   // Calculate height based on image aspect ratio if height is "content"
   // Uses ResizeObserver to handle container width changes
   useEffect(() => {

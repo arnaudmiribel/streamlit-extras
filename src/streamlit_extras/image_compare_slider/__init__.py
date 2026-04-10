@@ -162,6 +162,10 @@ def image_compare_slider(
     # Convert position to percentage (0-100) for the frontend
     position_percent = position * 100
 
+    # Validate on_change parameter
+    if on_change not in ("ignore", "rerun") and not callable(on_change):
+        raise StreamlitAPIException(f"on_change must be 'ignore', 'rerun', or a callable, got {on_change!r}.")
+
     # Determine if we should track position changes
     track_position = on_change != "ignore"
 
@@ -264,6 +268,7 @@ def example_track_position() -> None:
         on_change="rerun",
         key="track_position",
     )
+    assert position is not None
     st.write(f"Slider position: **{position:.2f}**")
 
 
