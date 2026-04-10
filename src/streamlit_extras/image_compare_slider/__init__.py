@@ -21,6 +21,7 @@ from streamlit.errors import StreamlitAPIException
 from streamlit_extras import extra
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
     from io import BytesIO
     from pathlib import Path
 
@@ -76,8 +77,9 @@ def image_compare_slider(
     portrait: bool = False,
     height: Literal["content"] | int = "content",
     width: Literal["stretch", "content"] | int = "stretch",
+    on_change: Literal["ignore", "rerun"] | Callable[[], None] = "ignore",
     key: str | None = None,
-) -> float:
+) -> float | None:
     """Display an interactive image comparison slider.
 
     Overlays two images with a draggable divider that reveals portions of each.
@@ -96,10 +98,15 @@ def image_compare_slider(
             aspect ratio. Integer sets fixed pixel height.
         width: Component width. "stretch" (default) fills container width.
             "content" sizes to fit content. Integer sets fixed pixel width.
+        on_change: Controls behavior when the slider position changes.
+            "ignore" (default): No rerun, returns None.
+            "rerun": Triggers a script rerun, returns the current position.
+            Callable: Calls the provided callback function, returns the current position.
         key: Unique key for this component instance.
 
     Returns:
-        Current slider position as a value between 0 and 1.
+        Current slider position as a value between 0 and 1 when on_change is
+        "rerun" or a callable. Returns None when on_change is "ignore".
 
     Raises:
         StreamlitAPIException: If position is not between 0 and 1.
@@ -155,10 +162,13 @@ def image_compare_slider(
     # Convert position to percentage (0-100) for the frontend
     position_percent = position * 100
 
-    component = _get_component()
-    result = component(
-        key=key,
-        data={
+    # Determine if we should track position changes
+    track_position = on_change != "ignore"
+
+    # Build component kwargs
+    component_kwargs: dict[str, Any] = {
+        "key": key,
+        "data": {
             "image1_url": image1_url,
             "image2_url": image2_url,
             "label1": label1 or "",
@@ -167,12 +177,26 @@ def image_compare_slider(
             "height": height,
             "width": width,
             "initial_position": position_percent,
+            "track_position": track_position,
         },
-        default={"position": position_percent},
-        on_position_change=_on_position_change,
-        height=height,
-        width=width,
-    )
+        "height": height,
+        "width": width,
+    }
+
+    # Only add callback and default if tracking position
+    if track_position:
+        component_kwargs["default"] = {"position": position_percent}
+        if callable(on_change):
+            component_kwargs["on_position_change"] = on_change
+        else:  # on_change == "rerun"
+            component_kwargs["on_position_change"] = _on_position_change
+
+    component = _get_component()
+    result = component(**component_kwargs)
+
+    # Return None when ignoring changes, otherwise return the position
+    if on_change == "ignore":
+        return None
 
     # Get the current position from the result (in percentage) and convert to 0-1
     current_position_percent: float = result.get("position", position_percent)
@@ -186,14 +210,14 @@ def example_basic() -> None:
     st.write("### Basic Comparison")
     st.write("Drag the slider to compare the two images.")
 
-    position = image_compare_slider(
+    image_compare_slider(
         "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
         "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&sat=-100",
         label1="Color",
         label2="Grayscale",
         key="basic_compare",
     )
-    st.write(f"Slider position: **{position:.2f}**")
+    st.write("By default, the slider doesn't trigger reruns.")
 
 
 def example_portrait() -> None:
@@ -223,7 +247,24 @@ def example_custom_position() -> None:
         label1="Normal",
         label2="High Contrast",
         position=start_pos,
+        key="custom_position",
     )
+
+
+def example_track_position() -> None:
+    """Track slider position with on_change."""
+    st.write("### Track Position")
+    st.write("Use `on_change='rerun'` to get the current slider position.")
+
+    position = image_compare_slider(
+        "https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?w=600",
+        "https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?w=600&blur=10",
+        label1="Sharp",
+        label2="Blurred",
+        on_change="rerun",
+        key="track_position",
+    )
+    st.write(f"Slider position: **{position:.2f}**")
 
 
 __title__ = "Image Compare Slider"
@@ -233,6 +274,7 @@ __examples__ = [
     example_basic,
     example_portrait,
     example_custom_position,
+    example_track_position,
 ]
 __author__ = "Lukas Masuch"
 __created_at__ = date(2026, 4, 9)
