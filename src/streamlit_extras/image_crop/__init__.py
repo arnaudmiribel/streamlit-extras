@@ -162,8 +162,36 @@ def image_crop(
             if field not in initial_crop:
                 raise StreamlitAPIException(f"initial_crop must contain '{field}' key.")
             value = initial_crop[field]
-            if not isinstance(value, (int, float)):
+            # Reject bools (which are technically ints in Python)
+            if isinstance(value, bool) or not isinstance(value, (int, float)):
                 raise StreamlitAPIException(f"initial_crop['{field}'] must be a number, got {type(value).__name__}.")
+
+        # Validate ranges (0-1 normalized values)
+        x = initial_crop["x"]
+        y = initial_crop["y"]
+        crop_width = initial_crop["width"]
+        crop_height = initial_crop["height"]
+
+        if not 0 <= x <= 1:
+            raise StreamlitAPIException(f"initial_crop['x'] must be between 0 and 1, got {x}.")
+        if not 0 <= y <= 1:
+            raise StreamlitAPIException(f"initial_crop['y'] must be between 0 and 1, got {y}.")
+        if not 0 < crop_width <= 1:
+            raise StreamlitAPIException(
+                f"initial_crop['width'] must be greater than 0 and at most 1, got {crop_width}."
+            )
+        if not 0 < crop_height <= 1:
+            raise StreamlitAPIException(
+                f"initial_crop['height'] must be greater than 0 and at most 1, got {crop_height}."
+            )
+        if x + crop_width > 1:
+            raise StreamlitAPIException(
+                f"initial_crop['x'] + initial_crop['width'] must be at most 1, got {x + crop_width}."
+            )
+        if y + crop_height > 1:
+            raise StreamlitAPIException(
+                f"initial_crop['y'] + initial_crop['height'] must be at most 1, got {y + crop_height}."
+            )
 
     # Validate height
     if isinstance(height, int) and height < 1:
@@ -237,12 +265,20 @@ def image_crop(
     if current_crop is None:
         return None
 
+    # Helper to safely get and normalize a crop value
+    def get_normalized(key: str) -> float:
+        value = current_crop.get(key)
+        if value is None or not isinstance(value, (int, float)):
+            return 0.0
+        # Convert from 0-100 (frontend) to 0-1 (API) and clamp
+        return max(0.0, min(1.0, float(value) / 100))
+
     # Convert from 0-100 (frontend) to 0-1 (API) and return as CropBounds
     return CropBounds(
-        x=current_crop.get("x", 0) / 100,
-        y=current_crop.get("y", 0) / 100,
-        width=current_crop.get("width", 0) / 100,
-        height=current_crop.get("height", 0) / 100,
+        x=get_normalized("x"),
+        y=get_normalized("y"),
+        width=get_normalized("width"),
+        height=get_normalized("height"),
     )
 
 

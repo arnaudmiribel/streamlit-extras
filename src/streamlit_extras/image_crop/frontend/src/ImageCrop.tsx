@@ -42,6 +42,8 @@ const CUSTOM_STYLES = `
 // Combined styles to render inline
 const ALL_STYLES = reactCropStyles + "\n" + CUSTOM_STYLES;
 
+// CropBounds in the frontend represents react-image-crop percent values (0-100).
+// Note: Python API uses normalized 0-1 values; conversion happens at the boundary.
 export type CropBounds = {
   x: number;
   y: number;
@@ -153,14 +155,23 @@ function cropBoundsToPercentCrop(bounds: CropBounds): PercentCrop {
 }
 
 /**
- * Convert react-image-crop's PercentCrop to CropBounds.
+ * Normalize a percent crop value to ensure it's a valid number in [0, 100].
+ */
+function normalizePercentValue(value: number | undefined): number {
+  const normalized =
+    typeof value === "number" && Number.isFinite(value) ? value : 0;
+  return Math.min(100, Math.max(0, normalized));
+}
+
+/**
+ * Convert react-image-crop's PercentCrop to CropBounds with normalization.
  */
 function percentCropToCropBounds(crop: PercentCrop): CropBounds {
   return {
-    x: crop.x,
-    y: crop.y,
-    width: crop.width,
-    height: crop.height,
+    x: normalizePercentValue(crop.x),
+    y: normalizePercentValue(crop.y),
+    width: normalizePercentValue(crop.width),
+    height: normalizePercentValue(crop.height),
   };
 }
 
@@ -335,6 +346,21 @@ const ImageCrop: FC<ImageCropProps> = ({
       }
 
       const cropBounds = percentCropToCropBounds(percentCrop);
+      const last = lastCommittedCropRef.current;
+
+      // Skip if crop hasn't changed or has zero dimensions
+      if (
+        cropBounds.width === 0 ||
+        cropBounds.height === 0 ||
+        (last &&
+          cropBounds.x === last.x &&
+          cropBounds.y === last.y &&
+          cropBounds.width === last.width &&
+          cropBounds.height === last.height)
+      ) {
+        return;
+      }
+
       lastCommittedCropRef.current = cropBounds;
       setStateValue("crop", cropBounds);
     },
