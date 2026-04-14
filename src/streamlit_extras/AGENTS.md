@@ -44,6 +44,7 @@ Use this guide to select the appropriate implementation approach:
 | `capture` | Capture utility extensions for Streamlit | pure python |
 | `chart_annotations` | Add annotations to Altair time series charts | pure python |
 | `chart_container` | Embed charts in tabs with data exploration | pure python |
+| `chartjs_chart` | Display charts using the Chart.js library | components v2: react |
 | `colored_header` | Create colorful, styled headers | st.html |
 | `concurrency_limiter` | Limit function execution concurrency | pure python |
 | `cookie_manager` | Read/write browser cookies from Python | components v2: inline |
