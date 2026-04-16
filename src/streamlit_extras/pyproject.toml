@@ -6,6 +6,9 @@ name = "streamlit-extras"
 version = "0.0.1"
 
 [[tool.streamlit.component.components]]
+name = "chartjs_chart"
+asset_dir = "chartjs_chart/frontend/build"
+[[tool.streamlit.component.components]]
 name = "image_compare_slider"
 asset_dir = "image_compare_slider/frontend/build"
 [[tool.streamlit.component.components]]
