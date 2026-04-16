@@ -214,91 +214,77 @@ const ImageCrop: FC<ImageCropProps> = ({
     [imageUrl],
   );
 
-  // Sync crop when initialCrop changes (e.g., when props change on rerun)
+  // Sync crop when initialCrop or aspect changes, adjusting for aspect ratio if needed
   useEffect(() => {
-    if (initialCrop) {
-      setCrop(cropBoundsToPercentCrop(initialCrop));
-      lastCommittedCropRef.current = initialCrop;
-    } else {
+    if (!initialCrop) {
       setCrop(undefined);
       lastCommittedCropRef.current = null;
+      return;
     }
-  }, [initialCrop]);
 
-  // Adjust existing crop when aspect ratio changes
-  useEffect(() => {
-    setCrop((prevCrop) => {
-      if (!prevCrop || prevCrop.unit !== "%" || !aspect) {
-        // No existing crop or no aspect constraint - nothing to adjust
-        return prevCrop;
+    let cropToSet = cropBoundsToPercentCrop(initialCrop);
+
+    // If there's an aspect constraint, adjust the crop to match
+    if (aspect) {
+      const currentWidth = cropToSet.width ?? 0;
+      const currentHeight = cropToSet.height ?? 0;
+      const currentX = cropToSet.x ?? 0;
+      const currentY = cropToSet.y ?? 0;
+
+      if (currentWidth > 0 && currentHeight > 0) {
+        const currentAspect = currentWidth / currentHeight;
+
+        // Only adjust if aspect doesn't match
+        if (Math.abs(currentAspect - aspect) >= 0.01) {
+          let newWidth = currentWidth;
+          let newHeight = currentHeight;
+
+          if (currentAspect > aspect) {
+            // Current crop is wider than target - reduce width
+            newWidth = currentHeight * aspect;
+          } else {
+            // Current crop is taller than target - reduce height
+            newHeight = currentWidth / aspect;
+          }
+
+          // Adjust position to keep the crop centered
+          const centerX = currentX + currentWidth / 2;
+          const centerY = currentY + currentHeight / 2;
+          let newX = centerX - newWidth / 2;
+          let newY = centerY - newHeight / 2;
+
+          // Clamp to image bounds (0-100%)
+          if (newX < 0) {
+            newX = 0;
+          } else if (newX + newWidth > 100) {
+            newX = 100 - newWidth;
+          }
+          if (newY < 0) {
+            newY = 0;
+          } else if (newY + newHeight > 100) {
+            newY = 100 - newHeight;
+          }
+
+          cropToSet = {
+            unit: "%",
+            x: newX,
+            y: newY,
+            width: newWidth,
+            height: newHeight,
+          };
+        }
       }
+    }
 
-      const currentWidth = prevCrop.width ?? 0;
-      const currentHeight = prevCrop.height ?? 0;
-      const currentX = prevCrop.x ?? 0;
-      const currentY = prevCrop.y ?? 0;
+    setCrop(cropToSet);
+    const cropBounds = percentCropToCropBounds(cropToSet);
+    lastCommittedCropRef.current = cropBounds;
 
-      if (currentWidth === 0 || currentHeight === 0) {
-        return prevCrop;
-      }
-
-      // Calculate current aspect ratio (width/height in percent space)
-      // Note: aspect prop is width/height ratio
-      const currentAspect = currentWidth / currentHeight;
-
-      // If aspect is already close enough, don't adjust
-      if (Math.abs(currentAspect - aspect) < 0.01) {
-        return prevCrop;
-      }
-
-      // Adjust crop to match new aspect ratio, keeping center point
-      let newWidth = currentWidth;
-      let newHeight = currentHeight;
-
-      if (currentAspect > aspect) {
-        // Current crop is wider than target - reduce width
-        newWidth = currentHeight * aspect;
-      } else {
-        // Current crop is taller than target - reduce height
-        newHeight = currentWidth / aspect;
-      }
-
-      // Adjust position to keep the crop centered
-      const centerX = currentX + currentWidth / 2;
-      const centerY = currentY + currentHeight / 2;
-      let newX = centerX - newWidth / 2;
-      let newY = centerY - newHeight / 2;
-
-      // Clamp to image bounds (0-100%)
-      if (newX < 0) {
-        newX = 0;
-      } else if (newX + newWidth > 100) {
-        newX = 100 - newWidth;
-      }
-      if (newY < 0) {
-        newY = 0;
-      } else if (newY + newHeight > 100) {
-        newY = 100 - newHeight;
-      }
-
-      const adjustedCrop: PercentCrop = {
-        unit: "%",
-        x: newX,
-        y: newY,
-        width: newWidth,
-        height: newHeight,
-      };
-
-      // Update the committed crop ref and notify Streamlit
-      if (trackCrop) {
-        const cropBounds = percentCropToCropBounds(adjustedCrop);
-        lastCommittedCropRef.current = cropBounds;
-        setStateValue("crop", cropBounds);
-      }
-
-      return adjustedCrop;
-    });
-  }, [aspect, trackCrop, setStateValue]);
+    // Notify Streamlit of the adjusted crop
+    if (trackCrop) {
+      setStateValue("crop", cropBounds);
+    }
+  }, [initialCrop, aspect, trackCrop, setStateValue]);
 
   // Cleanup for debounce timer on unmount
   useEffect(() => {
