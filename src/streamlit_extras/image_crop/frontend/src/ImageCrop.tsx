@@ -205,6 +205,9 @@ const ImageCrop: FC<ImageCropProps> = ({
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastCommittedCropRef = useRef<CropBounds | null>(initialCrop);
 
+  // Track image aspect ratio for crop adjustments
+  const [imageAspectRatio, setImageAspectRatio] = useState<number | null>(null);
+
   // Debounce delay in milliseconds
   const DEBOUNCE_DELAY = 150;
 
@@ -214,7 +217,21 @@ const ImageCrop: FC<ImageCropProps> = ({
     [imageUrl],
   );
 
-  // Sync crop when initialCrop or aspect changes, adjusting for aspect ratio if needed
+  // Load image to get its aspect ratio
+  useEffect(() => {
+    const img = new Image();
+    img.onload = () => {
+      if (img.width > 0 && img.height > 0) {
+        setImageAspectRatio(img.width / img.height);
+      }
+    };
+    img.src = resolvedImageUrl;
+    return () => {
+      img.onload = null;
+    };
+  }, [resolvedImageUrl]);
+
+  // Sync crop when initialCrop, aspect, or image dimensions change
   useEffect(() => {
     if (!initialCrop) {
       setCrop(undefined);
@@ -224,27 +241,31 @@ const ImageCrop: FC<ImageCropProps> = ({
 
     let cropToSet = cropBoundsToPercentCrop(initialCrop);
 
-    // If there's an aspect constraint, adjust the crop to match
-    if (aspect) {
+    // If there's an aspect constraint and we know the image dimensions, adjust the crop
+    if (aspect && imageAspectRatio) {
       const currentWidth = cropToSet.width ?? 0;
       const currentHeight = cropToSet.height ?? 0;
       const currentX = cropToSet.x ?? 0;
       const currentY = cropToSet.y ?? 0;
 
       if (currentWidth > 0 && currentHeight > 0) {
-        const currentAspect = currentWidth / currentHeight;
+        // In percent space, the aspect ratio that produces a visually correct
+        // crop is: desiredAspect / imageAspect
+        // For a square (aspect=1) on a 2:1 image, we need width%/height% = 0.5
+        const targetPercentAspect = aspect / imageAspectRatio;
+        const currentPercentAspect = currentWidth / currentHeight;
 
-        // Only adjust if aspect doesn't match
-        if (Math.abs(currentAspect - aspect) >= 0.01) {
+        // Only adjust if aspect doesn't match (with tolerance)
+        if (Math.abs(currentPercentAspect - targetPercentAspect) >= 0.01) {
           let newWidth = currentWidth;
           let newHeight = currentHeight;
 
-          if (currentAspect > aspect) {
+          if (currentPercentAspect > targetPercentAspect) {
             // Current crop is wider than target - reduce width
-            newWidth = currentHeight * aspect;
+            newWidth = currentHeight * targetPercentAspect;
           } else {
             // Current crop is taller than target - reduce height
-            newHeight = currentWidth / aspect;
+            newHeight = currentWidth / targetPercentAspect;
           }
 
           // Adjust position to keep the crop centered
@@ -284,7 +305,7 @@ const ImageCrop: FC<ImageCropProps> = ({
     if (trackCrop) {
       setStateValue("crop", cropBounds);
     }
-  }, [initialCrop, aspect, trackCrop, setStateValue]);
+  }, [initialCrop, aspect, imageAspectRatio, trackCrop, setStateValue]);
 
   // Cleanup for debounce timer on unmount
   useEffect(() => {
