@@ -205,8 +205,14 @@ const ImageCrop: FC<ImageCropProps> = ({
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastCommittedCropRef = useRef<CropBounds | null>(initialCrop);
 
+  // Track previous initialCrop values to detect actual changes (not just reference changes)
+  const prevInitialCropRef = useRef<CropBounds | null>(initialCrop);
+
   // Track image aspect ratio for crop adjustments
   const [imageAspectRatio, setImageAspectRatio] = useState<number | null>(null);
+
+  // Track if initial crop adjustment has been applied (to avoid re-applying on re-renders)
+  const initialCropAppliedRef = useRef(false);
 
   // Debounce delay in milliseconds
   const DEBOUNCE_DELAY = 150;
@@ -216,6 +222,13 @@ const ImageCrop: FC<ImageCropProps> = ({
     () => resolveMediaUrl(imageUrl),
     [imageUrl],
   );
+
+  // Helper to compare crop bounds by value
+  const cropBoundsEqual = (a: CropBounds | null, b: CropBounds | null): boolean => {
+    if (a === b) return true;
+    if (!a || !b) return false;
+    return a.x === b.x && a.y === b.y && a.width === b.width && a.height === b.height;
+  };
 
   // Load image to get its aspect ratio
   useEffect(() => {
@@ -231,11 +244,28 @@ const ImageCrop: FC<ImageCropProps> = ({
     };
   }, [resolvedImageUrl]);
 
-  // Sync crop when initialCrop, aspect, or image dimensions change
+  // Sync crop when initialCrop values actually change or aspect/imageAspectRatio change
   useEffect(() => {
+    // Check if initialCrop values actually changed (not just reference)
+    const initialCropChanged = !cropBoundsEqual(initialCrop, prevInitialCropRef.current);
+    prevInitialCropRef.current = initialCrop;
+
+    // Skip if initialCrop hasn't changed, we've already applied the initial adjustment,
+    // and we have the image dimensions (so aspect adjustment was already done)
+    if (!initialCropChanged && initialCropAppliedRef.current && imageAspectRatio !== null) {
+      return;
+    }
+
     if (!initialCrop) {
       setCrop(undefined);
       lastCommittedCropRef.current = null;
+      initialCropAppliedRef.current = true;
+      return;
+    }
+
+    // If we don't have image dimensions yet and there's an aspect constraint,
+    // wait for the image to load before applying the crop
+    if (aspect && imageAspectRatio === null) {
       return;
     }
 
@@ -300,6 +330,7 @@ const ImageCrop: FC<ImageCropProps> = ({
     setCrop(cropToSet);
     const cropBounds = percentCropToCropBounds(cropToSet);
     lastCommittedCropRef.current = cropBounds;
+    initialCropAppliedRef.current = true;
 
     // Notify Streamlit of the adjusted crop
     if (trackCrop) {
