@@ -12,6 +12,9 @@ asset_dir = "chartjs_chart/frontend/build"
 name = "image_compare_slider"
 asset_dir = "image_compare_slider/frontend/build"
 [[tool.streamlit.component.components]]
+name = "image_crop"
+asset_dir = "image_crop/frontend/build"
+[[tool.streamlit.component.components]]
 name = "json_editor"
 asset_dir = "json_editor/frontend/build"
 [[tool.streamlit.component.components]]
