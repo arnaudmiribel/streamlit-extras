@@ -44,10 +44,10 @@ path = "scripts/hatch_build.py"
 [dependency-groups]
 dev = [
   "pytest >= 7.4.4",
-  "mypy==1.20.1",
-  "ty==0.0.31",
+  "mypy==1.20.2",
+  "ty==0.0.32",
   "pre-commit >= 3.0.0",
-  "ruff==0.15.10",
+  "ruff==0.15.11",
   "types-requests",
   "types-python-dateutil",
   "types-pytz",
