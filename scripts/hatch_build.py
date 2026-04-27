@@ -25,7 +25,7 @@ class FrontendBuildHook(BuildHookInterface):
 
     PLUGIN_NAME = "frontend-build"
 
-    def initialize(self, _version: str, _build_data: dict[str, Any]) -> None:
+    def initialize(self, _version: str, build_data: dict[str, Any]) -> None:
         """Build all React CCv2 frontends before the wheel is packaged."""
         extras = self._find_react_extras()
 
@@ -38,6 +38,13 @@ class FrontendBuildHook(BuildHookInterface):
             self._build_frontend(extra_dir)
 
         self._update_shared_manifest(extras)
+
+        # Explicitly mark the generated build artifacts so hatchling includes
+        # them in the wheel even though they are listed in .gitignore.
+        for extra_dir in extras:
+            build_data["artifacts"].append(
+                f"{EXTRAS_DIR}/{extra_dir.name}/frontend/build/**"
+            )
 
     def _find_react_extras(self) -> list[Path]:
         """Find all React-based CCv2 extras."""

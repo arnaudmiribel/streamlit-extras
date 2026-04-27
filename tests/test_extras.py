@@ -1,9 +1,14 @@
 import pkgutil
 from importlib import import_module
+from pathlib import Path
 
 import pytest
+import toml
 
 import streamlit_extras
+
+EXTRAS_DIR = Path(__file__).parent.parent / "src" / "streamlit_extras"
+CCv2_MANIFEST = EXTRAS_DIR / "pyproject.toml"
 
 
 def get_extras() -> list[str]:
@@ -63,3 +68,49 @@ def test_extra_tests(extra: str):
     if hasattr(mod, "__tests__"):
         for test in mod.__tests__:
             test()
+
+
+def test_ccv2_manifest_contains_all_react_extras() -> None:
+    """Verify the CCv2 pyproject.toml manifest is in sync with React-based extras.
+
+    Every extra that ships a frontend/package.json must be declared in
+    src/streamlit_extras/pyproject.toml with an asset_dir entry.  If this
+    test fails it means a new React extra was added (or removed) without
+    updating the manifest - which would cause a StreamlitAPIException at
+    runtime for any user of that component.
+    """
+    # Extras that have a frontend/package.json (i.e. React-based CCv2 extras)
+    react_extras = sorted(
+        p.parent.parent.name
+        for p in EXTRAS_DIR.glob("*/frontend/package.json")
+    )
+
+    assert CCv2_MANIFEST.exists(), (
+        f"CCv2 manifest not found at {CCv2_MANIFEST}. "
+        "Run `uv build` to regenerate it."
+    )
+
+    manifest_data = toml.loads(CCv2_MANIFEST.read_text())
+    declared_components: list[dict[str, str]] = (
+        manifest_data.get("tool", {})
+        .get("streamlit", {})
+        .get("component", {})
+        .get("components", [])
+    )
+    declared_names = {c["name"] for c in declared_components if "name" in c}
+
+    missing = sorted(set(react_extras) - declared_names)
+    assert not missing, (
+        f"The following React extras have a frontend/package.json but are NOT "
+        f"declared in {CCv2_MANIFEST.relative_to(EXTRAS_DIR.parent.parent)}:\n"
+        + "\n".join(f"  - {name}" for name in missing)
+        + "\nUpdate the manifest by running `uv build` and committing the result."
+    )
+
+    extra_entries = sorted(declared_names - set(react_extras))
+    assert not extra_entries, (
+        "The following names are declared in the CCv2 manifest but have no "
+        "corresponding frontend/package.json:\n"
+        + "\n".join(f"  - {name}" for name in extra_entries)
+        + "\nRemove stale entries from the manifest."
+    )
