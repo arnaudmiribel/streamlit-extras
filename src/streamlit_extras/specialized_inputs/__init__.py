@@ -23,7 +23,8 @@ Public API (mirrors ``st.text_input``)
                            key=None, on_change=None, args=None, kwargs=None,
                            disabled=False, label_visibility="visible",
                            icon=None, prefix=None, suffix=None,
-                           help=None, error=None)
+                           help=None, error=None,
+                           keyup=False, debounce=0)
 
 Convenience wrappers:
     phone_input, email_input, url_input, money_input,
@@ -458,6 +459,7 @@ export default function (component) {
     if (data.icon_svg) {
         leading.innerHTML = data.icon_svg;
         leading.classList.add('si-visible', 'si-icon-adornment');
+        input.style.paddingLeft = '0';
     } else if (data.prefix) {
         leading.textContent = data.prefix;
         leading.classList.add('si-visible', 'si-prefix-text');
@@ -527,6 +529,7 @@ export default function (component) {
     } else if (data.trailing_icon_svg) {
         trailing.innerHTML = data.trailing_icon_svg;
         trailing.classList.add('si-visible', 'si-icon-adornment');
+        input.style.paddingRight = '0';
     } else {
         input.style.paddingRight = '';
     }
@@ -543,6 +546,20 @@ export default function (component) {
     /* ── Event wiring ───────────────────────────────────────────────── */
     input.onblur = () => setStateValue('value', input.value);
     input.onkeydown = (e) => { if (e.key === 'Enter') setStateValue('value', input.value); };
+
+    if (data.keyup) {
+        const ms = data.debounce ?? 0;
+        input.oninput = () => {
+            if (ms > 0) {
+                clearTimeout(input._keyupTimer);
+                input._keyupTimer = setTimeout(() => setStateValue('value', input.value), ms);
+            } else {
+                setStateValue('value', input.value);
+            }
+        };
+    } else {
+        input.oninput = null;
+    }
 }
 """
 
@@ -584,6 +601,8 @@ def _mount(
     input_type: str,
     is_password: bool,
     trailing_icon: str | None,
+    keyup: bool,
+    debounce: int,
 ) -> str:
     # Resolve value from session state
     current_value = value
@@ -608,6 +627,8 @@ def _mount(
         "trailing_icon_svg": (_ADORNMENT_ICONS.get(trailing_icon) if trailing_icon else None),
         "icon_visibility": _ADORNMENT_ICONS["visibility"],
         "icon_visibility_off": _ADORNMENT_ICONS["visibility_off"],
+        "keyup": keyup,
+        "debounce": debounce,
     }
 
     cb: Callable | None = None
@@ -650,6 +671,8 @@ def specialized_text_input(
     help: str | None = None,
     error: str | bool | None = None,
     input_type: str = "text",
+    keyup: bool = False,
+    debounce: int = 0,
 ) -> str:
     """
     A polished, specialized text input that matches native Streamlit styling.
@@ -672,6 +695,12 @@ def specialized_text_input(
         ``True`` → red border. ``str`` → red border + inline message.
     input_type : str
         HTML ``<input type>`` attribute.
+    keyup : bool
+        When ``True`` the widget reruns on every keystroke instead of only on
+        blur / Enter. Combine with ``debounce`` to avoid excessive reruns.
+    debounce : int
+        Milliseconds to debounce keyup events (only relevant when
+        ``keyup=True``). ``0`` means no debounce.
 
     Returns
     -------
@@ -697,6 +726,8 @@ def specialized_text_input(
         input_type=input_type,
         is_password=False,
         trailing_icon=None,
+        keyup=keyup,
+        debounce=debounce,
     )
 
 
@@ -713,6 +744,8 @@ def phone_input(
     label_visibility: Literal["visible", "hidden", "collapsed"] = "visible",
     help: str | None = None,
     error: str | bool | None = None,
+    keyup: bool = False,
+    debounce: int = 0,
 ) -> str:
     """
     Phone number input.
@@ -748,6 +781,8 @@ def phone_input(
         input_type="tel",
         is_password=False,
         trailing_icon=None,
+        keyup=keyup,
+        debounce=debounce,
     )
 
 
@@ -764,6 +799,8 @@ def email_input(
     label_visibility: Literal["visible", "hidden", "collapsed"] = "visible",
     help: str | None = None,
     error: str | bool | None = None,
+    keyup: bool = False,
+    debounce: int = 0,
 ) -> str:
     """
     E-mail address input.
@@ -796,6 +833,8 @@ def email_input(
         input_type="email",
         is_password=False,
         trailing_icon=None,
+        keyup=keyup,
+        debounce=debounce,
     )
 
 
@@ -813,6 +852,8 @@ def url_input(
     help: str | None = None,
     error: str | bool | None = None,
     show_prefix: bool = True,
+    keyup: bool = False,
+    debounce: int = 0,
 ) -> str:
     """
     Website / URL input.
@@ -850,6 +891,8 @@ def url_input(
         input_type="url",
         is_password=False,
         trailing_icon=None,
+        keyup=keyup,
+        debounce=debounce,
     )
 
 
@@ -867,6 +910,8 @@ def money_input(
     label_visibility: Literal["visible", "hidden", "collapsed"] = "visible",
     help: str | None = None,
     error: str | bool | None = None,
+    keyup: bool = False,
+    debounce: int = 0,
 ) -> float | None:
     """
     Monetary / currency input.
@@ -905,6 +950,8 @@ def money_input(
         input_type="number",
         is_password=False,
         trailing_icon=None,
+        keyup=keyup,
+        debounce=debounce,
     )
     if not raw:
         return None
@@ -927,6 +974,8 @@ def search_input(
     label_visibility: Literal["visible", "hidden", "collapsed"] = "visible",
     help: str | None = None,
     error: str | bool | None = None,
+    keyup: bool = False,
+    debounce: int = 0,
 ) -> str:
     """
     Search input.
@@ -959,6 +1008,8 @@ def search_input(
         input_type="search",
         is_password=False,
         trailing_icon=None,
+        keyup=keyup,
+        debounce=debounce,
     )
 
 
@@ -975,6 +1026,8 @@ def password_input(
     label_visibility: Literal["visible", "hidden", "collapsed"] = "visible",
     help: str | None = None,
     error: str | bool | None = None,
+    keyup: bool = False,
+    debounce: int = 0,
 ) -> str:
     """
     Password input with inline visibility toggle (no page rerun).
@@ -1007,6 +1060,8 @@ def password_input(
         input_type="password",
         is_password=True,
         trailing_icon=None,
+        keyup=keyup,
+        debounce=debounce,
     )
 
 
@@ -1046,6 +1101,16 @@ def example() -> None:
     q = search_input("Search", label_visibility="collapsed", key="ex_search")
     if q:
         st.caption(f"Query: {q!r}")
+
+    live = search_input(
+        "Live search",
+        placeholder="Type to filter…",
+        key="ex_search_keyup",
+        keyup=True,
+        debounce=300,
+    )
+    if live:
+        st.caption(f"Live value: {live!r}")
 
     specialized_text_input(
         "Bluesky handle",
