@@ -34,54 +34,6 @@ def style_metric_cards(
     border_radius_px: int = 5,
     border_left_color: str = "#9AD8E1",
     box_shadow: bool = True,
-    hover_effect: bool = True,  # ✅ added
-) -> None:
-    default_bg, default_border = _get_theme_colors()
-    if background_color is None:
-        background_color = default_bg
-    if border_color is None:
-        border_color = default_border
-
-    box_shadow_str = (
-        "box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;"
-        if box_shadow
-        else "box-shadow: none !important;"
-    )
-
-    hover_css = ""
-    if hover_effect:
-        hover_css = """
-        div[data-testid="stMetric"]:hover {
-            transform: translateY(-6px);
-            transition: all 0.2s ease-in-out;
-        }
-        """
-
-    st.html(
-        f"""
-        <style>
-            div[data-testid="stMetric"],
-            div[data-testid="metric-container"] {{
-                background-color: {background_color};
-                border: {border_size_px}px solid {border_color};
-                padding: 5% 5% 5% 10%;
-                border-radius: {border_radius_px}px;
-                border-left: 0.5rem solid {border_left_color} !important;
-                {box_shadow_str}
-            }}
-
-            {hover_css}
-        </style>
-        """
-    )
-
-def style_metric_cards(
-    background_color: str | None = None,
-    border_size_px: int = 1,
-    border_color: str | None = None,
-    border_radius_px: int = 5,
-    border_left_color: str = "#9AD8E1",
-    box_shadow: bool = True,
     hover_effect: bool = True,
 ) -> None:
     """
@@ -108,13 +60,16 @@ def style_metric_cards(
         else "box-shadow: none !important;"
     )
 
-    hover_css = """
+    hover_css = ""
+    if hover_effect:
+        hover_css = """
         div[data-testid="stMetric"]:hover,
         div[data-testid="metric-container"]:hover {
             transform: translateY(-4px);
             transition: all 0.2s ease-in-out;
-    }
-""" if hover_effect else ""
+        }
+"""
+
     st.html(
         f"""
         <style>
@@ -127,6 +82,7 @@ def style_metric_cards(
                 border-left: 0.5rem solid {border_left_color} !important;
                 {box_shadow_str}
             }}
+
             {hover_css}
         </style>
         """
