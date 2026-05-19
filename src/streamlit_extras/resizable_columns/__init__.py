@@ -93,7 +93,7 @@ def resizable_columns(
         },
         default={"widths": initial_widths},
         on_widths_change=_on_widths_change,
-        height=1,
+        height=0,
     )
 
     result_state = st.session_state.get(effective_key, {})

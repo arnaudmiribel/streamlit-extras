@@ -32,6 +32,7 @@ def _get_component() -> Any:
         "streamlit-extras.directory_tree",
         js="index-*.js",
         html='<div class="react-root"></div>',
+        isolate_styles=False,
     )
 
 

@@ -38,7 +38,7 @@ const containerStyle = (
   fontFamily: "var(--st-font, sans-serif)",
   fontSize: "var(--st-base-font-size, 14px)",
   color: "var(--st-text-color, #262730)",
-  padding: "8px 4px",
+  padding: "0 4px",
   overflow: "hidden",
   ...(showBorder && {
     border: "1px solid var(--st-border-color, #e6e6e9)",
