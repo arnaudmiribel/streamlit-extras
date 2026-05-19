@@ -26,6 +26,33 @@ function forceOverflowVisible(startEl: Element): void {
   }
 }
 
+/**
+ * Collapse the component's element wrapper so it doesn't contribute to the
+ * vertical block's flex gap. Walks up from the component mount point to find
+ * the element container (direct child of stVerticalBlock) and hides it from
+ * the layout flow.
+ */
+function collapseElementWrapper(startEl: Element): void {
+  let el: HTMLElement | null = startEl as HTMLElement;
+  for (let i = 0; i < 6 && el; i++) {
+    const parent: HTMLElement | null = el.parentElement;
+    if (!parent) break;
+    const testId = parent.getAttribute("data-testid");
+    if (
+      testId === "stVerticalBlock" ||
+      testId === "stMainBlockContainer" ||
+      testId === "stMain"
+    ) {
+      // `el` is the direct child of the vertical block — collapse it
+      el.style.marginBottom = "-1rem";
+      el.style.height = "0";
+      el.style.minHeight = "0";
+      break;
+    }
+    el = parent;
+  }
+}
+
 const ResizableColumnsRoot: FrontendRenderer<
   ResizableColumnsStateShape,
   ResizableColumnsDataShape
@@ -39,6 +66,7 @@ const ResizableColumnsRoot: FrontendRenderer<
   }
 
   forceOverflowVisible(parentElement as unknown as Element);
+  collapseElementWrapper(parentElement as unknown as Element);
 
   let reactRoot = reactRoots.get(parentElement);
   if (!reactRoot) {
