@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useMemo, useState } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
 import { TreeData } from "./DirectoryTree";
 
 type TreeNodeProps = {
@@ -11,60 +11,6 @@ type TreeNodeProps = {
   selectable: boolean;
   onSelect: (path: string) => void;
 };
-
-// Track font loading state globally (shared across all TreeNode instances)
-let fontLoaded = false;
-const fontLoadedListeners: Array<() => void> = [];
-
-function notifyFontLoaded() {
-  fontLoaded = true;
-  for (const listener of fontLoadedListeners) {
-    listener();
-  }
-  fontLoadedListeners.length = 0;
-}
-
-// Inject Material Symbols font and track when it's ready
-const FONT_ID = "material-symbols-directory-tree";
-if (typeof document !== "undefined" && !document.getElementById(FONT_ID)) {
-  const link = document.createElement("link");
-  link.id = FONT_ID;
-  link.rel = "stylesheet";
-  link.href =
-    "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap";
-  document.head.appendChild(link);
-
-  // Wait for the font to actually load
-  document.fonts.ready.then(() => {
-    document.fonts
-      .load("18px 'Material Symbols Outlined'")
-      .then(() => notifyFontLoaded())
-      .catch(() => notifyFontLoaded());
-  });
-} else {
-  // Font link already exists, check if it's loaded
-  document.fonts
-    .check("18px 'Material Symbols Outlined'")
-    ? (fontLoaded = true)
-    : document.fonts.ready.then(() => notifyFontLoaded());
-}
-
-function useFontLoaded(): boolean {
-  const [loaded, setLoaded] = useState(fontLoaded);
-  useEffect(() => {
-    if (fontLoaded) {
-      setLoaded(true);
-      return;
-    }
-    const listener = () => setLoaded(true);
-    fontLoadedListeners.push(listener);
-    return () => {
-      const idx = fontLoadedListeners.indexOf(listener);
-      if (idx >= 0) fontLoadedListeners.splice(idx, 1);
-    };
-  }, []);
-  return loaded;
-}
 
 /**
  * Get a Material Symbols icon name based on file extension.
@@ -136,7 +82,7 @@ function getFileIcon(filename: string): string {
 }
 
 const iconStyle: React.CSSProperties = {
-  fontFamily: "'Material Symbols Outlined'",
+  fontFamily: "'Material Symbols Rounded'",
   fontWeight: "normal",
   fontStyle: "normal",
   fontSize: "18px",
@@ -195,7 +141,6 @@ const TreeNode: FC<TreeNodeProps> = ({
   const isDirectory = value !== null;
   const [isExpanded, setIsExpanded] = useState(depth < expandDepth);
   const [isHovered, setIsHovered] = useState(false);
-  const isFontReady = useFontLoaded();
 
   const handleClick = useCallback(() => {
     if (isDirectory) {
@@ -289,12 +234,11 @@ const TreeNode: FC<TreeNodeProps> = ({
           <span style={{ width: "16px", flexShrink: 0 }} />
         )}
 
-        {/* File/folder icon — hidden until font loads to avoid FOUT */}
+        {/* File/folder icon */}
         <span
           style={{
             ...iconStyle,
             color: iconColor,
-            visibility: isFontReady ? "visible" : "hidden",
           }}
         >
           {icon}
