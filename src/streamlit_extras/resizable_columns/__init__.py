@@ -10,6 +10,7 @@ from typing import Any
 
 import streamlit as st
 import streamlit.components.v2
+import streamlit.errors
 from streamlit.delta_generator import DeltaGenerator
 
 from streamlit_extras import extra
