@@ -1,0 +1,8 @@
+mkdocs>=1.6.1
+mkdocs-gen-files
+mkdocs-literate-nav
+mkdocs-material>=9.7.6
+mkdocstrings[python]
+pymdown-extensions
+
+-e ./

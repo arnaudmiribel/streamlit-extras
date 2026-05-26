@@ -1,0 +1,5 @@
+#announce {
+    background-color: rgb(240, 255, 106) !important;  /* Replace with your desired background color */
+    color: #000000 !important; /* Optionally, set the text color to white or another contrasting color */
+    padding: 10px !important; /* Add some padding to make it visually appealing */
+}
