@@ -56,9 +56,10 @@ class FrontendBuildHook(BuildHookInterface):
             shutil.rmtree(build_dir)
 
         lock_file = frontend_dir / "package-lock.json"
-        install_cmd = ["npm", "ci"] if lock_file.exists() else ["npm", "install"]
+        npm_cmd = shutil.which("npm") or "npm"
+        install_cmd = [npm_cmd, "ci"] if lock_file.exists() else [npm_cmd, "install"]
         subprocess.run(install_cmd, cwd=frontend_dir, check=True, capture_output=True)
-        subprocess.run(["npm", "run", "build"], cwd=frontend_dir, check=True, capture_output=True)
+        subprocess.run([npm_cmd, "run", "build"], cwd=frontend_dir, check=True, capture_output=True)
 
         js_files = list(build_dir.glob("index-*.js"))
         if len(js_files) != 1:
