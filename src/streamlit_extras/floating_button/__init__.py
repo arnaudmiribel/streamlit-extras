@@ -71,7 +71,7 @@ def floating_button(
         <style>
             .st-key-{key} button {{
                 position: fixed;
-                bottom: 3.5rem;
+                bottom: 7.5rem;
                 right: 3.5rem;
                 min-width: 3.5rem;
                 min-height: 3.5rem;
