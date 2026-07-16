@@ -122,8 +122,8 @@ def show_selection(
     image_array = np.array(pil_image)
 
     if coordinates := selection["selection"].get("box"):
-        x_min, x_max = coordinates[0]["x"]
-        y_min, y_max = coordinates[0]["y"]
+        x_min, x_max = sorted(coordinates[0]["x"])
+        y_min, y_max = sorted(coordinates[0]["y"])
 
         selection_img_array = image_array[int(y_min) : int(y_max), int(x_min) : int(x_max)]
         st.image(selection_img_array)
