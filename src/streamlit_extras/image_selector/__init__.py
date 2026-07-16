@@ -3,6 +3,7 @@ from __future__ import annotations
 from datetime import date
 from io import BytesIO
 from typing import TYPE_CHECKING, Any, Literal, cast
+from unittest import mock
 
 import numpy as np
 import plotly.graph_objects as go
@@ -170,6 +171,44 @@ def example() -> None:
         show_selection(image, selection)
 
 
+def _get_box_crop_shape(x: list[float], y: list[float]) -> tuple[int, ...]:
+    """Build a fake box-selection PlotlyState and return the shape of the
+    crop that `show_selection` would pass to `st.image`.
+
+    Returns:
+        tuple[int, ...]: Shape of the array that would be displayed.
+    """
+    image_array = np.zeros((100, 100, 3), dtype=np.uint8)
+    selection: PlotlyState = {
+        "selection": {
+            "points": [],
+            "point_indices": [],
+            "box": [{"x": x, "y": y}],
+            "lasso": [],
+        }
+    }
+
+    with mock.patch("streamlit_extras.image_selector.st.image") as mock_st_image:
+        show_selection(image_array, selection)
+
+    displayed_array = mock_st_image.call_args[0][0]
+    return cast("tuple[int, ...]", displayed_array.shape)
+
+
+def test_box_selection_forward_drag() -> None:
+    # Dragging top-left -> bottom-right already yields (min, max) order.
+    assert _get_box_crop_shape(x=[10, 90], y=[20, 80]) == (60, 80, 3)
+
+
+def test_box_selection_reversed_drag() -> None:
+    # Dragging bottom-right -> top-left yields (max, min) order. Regression
+    # test for https://github.com/arnaudmiribel/streamlit-extras/issues/269:
+    # the crop shape must match the forward-drag equivalent instead of
+    # raising "zero-size array to reduction operation minimum which has no
+    # identity".
+    assert _get_box_crop_shape(x=[90, 10], y=[80, 20]) == (60, 80, 3)
+
+
 __title__ = "Image Selector"
 __desc__ = """
 Allows users to select an area within an image, using a lasso or a bounding
@@ -180,3 +219,4 @@ __author__ = "Arnaud Miribel"
 __created_at__ = date(2024, 8, 1)
 __experimental_playground__ = False
 __stlite__ = True
+__tests__ = [test_box_selection_forward_drag, test_box_selection_reversed_drag]
