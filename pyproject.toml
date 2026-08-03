@@ -45,9 +45,9 @@ path = "scripts/hatch_build.py"
 dev = [
   "pytest >= 7.4.4",
   "mypy==1.20.2",
-  "ty==0.0.38",
+  "ty==0.0.65",
   "pre-commit >= 3.0.0",
-  "ruff==0.15.13",
+  "ruff==0.16.0",
   "types-requests",
   "types-python-dateutil",
   "types-pytz",
