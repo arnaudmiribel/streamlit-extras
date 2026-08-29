@@ -924,7 +924,7 @@ def money_input(
     Returns
     -------
     float | None
-        Parsed numeric value, or ``None`` when empty / unparseable.
+        Parsed numeric value, or ``None`` when empty / unparsable.
 
     Examples
     --------
