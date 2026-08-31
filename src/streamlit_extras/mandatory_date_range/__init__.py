@@ -17,7 +17,7 @@ def date_range_picker(
     **kwargs: Any,
 ) -> tuple[date, date]:
     """
-    Working with date_input with a date range is frustrating becuase if you're
+    Working with date_input with a date range is frustrating because if you're
     assuming you will get a start and end date out of it, your code can break (not
     to mention your type hints), because if a user clicks on just one date, the app
     will go ahead and run with a single output. This widget enforces a start and

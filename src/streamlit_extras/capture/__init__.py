@@ -66,7 +66,7 @@ def stderr(dst: Callable[..., Any], terminator: str = "\n") -> Generator[None, N
     Capture STDERR and redirect it to a callable `dst`.
 
     Args:
-        dst (callable[str]): A funciton callable with a single string argument. The entire captured contents will be
+        dst (callable[str]): A function callable with a single string argument. The entire captured contents will be
             passed to this function every time a new string is written. It is designed to be compatible with
             st.empty().* functions as callbacks.
         terminator (optional, str): If a `terminator` is specified, it is added onto each call to stdout.write/print.
