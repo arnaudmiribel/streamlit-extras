@@ -31,7 +31,7 @@ const DirectoryTreeRoot: FrontendRenderer<
     reactRoots.set(parentElement, reactRoot);
   }
 
-  const { tree, expand_depth, border, color, selectable, height } = data;
+  const { tree, expand_depth, border, color, selectable, height, sort } = data;
 
   reactRoot.render(
     <StrictMode>
@@ -42,6 +42,7 @@ const DirectoryTreeRoot: FrontendRenderer<
         color={color}
         selectable={selectable}
         height={height}
+        sort={sort}
         setStateValue={setStateValue}
       />
     </StrictMode>,

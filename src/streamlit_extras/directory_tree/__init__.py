@@ -45,6 +45,7 @@ def directory_tree(
     color: str | None = "primary",
     on_select: Literal["rerun", "ignore"] = "ignore",
     height: int | None = None,
+    sort: bool = True,
     key: str | None = None,
 ) -> str | None:
     """Display a collapsible directory tree.
@@ -71,6 +72,9 @@ def directory_tree(
             back to Python and triggers a rerun.
         height: Optional max height in pixels. If set, the tree scrolls
             when content exceeds this height.
+        sort: Whether to sort entries with directories first and alphabetical
+            within each group. Defaults to ``True``. When ``False``, preserves
+            the original insertion order from the ``tree`` dictionary.
         key: Unique key for this widget instance.
 
     Returns:
@@ -112,6 +116,7 @@ def directory_tree(
         "color": color,
         "selectable": on_select == "rerun",
         "height": height,
+        "sort": sort,
     }
 
     if on_select == "rerun":
@@ -396,9 +401,69 @@ def example_interactive() -> None:
         st.success(f"Selected: `{selected}`")
 
 
+def example_custom_order() -> None:
+    """Custom node ordering without sorting."""
+    st.write("### Custom Ordering (sort=False)")
+    st.write("Preserves raw insertion order instead of sorting directories first and alphabetically.")
+    directory_tree(
+        {
+            "Step 3: Verification": {"audit.log": None},
+            "Step 1: Setup": {"init.sql": None, "config.yaml": None},
+            "Step 2: Processing": {"transform.py": None},
+            "summary.txt": None,
+            "00_overview.md": None,
+        },
+        expanded=True,
+        sort=False,
+        border=True,
+        key="custom_order_tree",
+    )
+
+
+def test_directory_tree_validation() -> None:
+    from streamlit.errors import StreamlitAPIException
+
+    try:
+        directory_tree(["not", "a", "dict"])  # type: ignore[arg-type]
+    except StreamlitAPIException:
+        pass
+    else:
+        raise AssertionError("Expected StreamlitAPIException for non-dict tree")
+
+
+def test_directory_tree_sort_parameter() -> None:
+    from unittest.mock import MagicMock, patch
+
+    mock_comp = MagicMock()
+    with patch("streamlit_extras.directory_tree._get_component", return_value=mock_comp):
+        sample_tree = {"b": None, "a": None}
+
+        # Default sort should be True
+        directory_tree(sample_tree)
+        assert mock_comp.call_args.kwargs["data"]["sort"] is True
+
+        # Explicit sort=False
+        directory_tree(sample_tree, sort=False)
+        assert mock_comp.call_args.kwargs["data"]["sort"] is False
+
+        # Explicit sort=True
+        directory_tree(sample_tree, sort=True)
+        assert mock_comp.call_args.kwargs["data"]["sort"] is True
+
+
 __title__ = "Directory Tree"
 __desc__ = "Collapsible directory tree with Material icons and optional click-to-select."
 __icon__ = "🌲"
-__examples__ = [example_basic, example_colors, example_height, example_interactive]
+__examples__ = [
+    example_basic,
+    example_colors,
+    example_height,
+    example_interactive,
+    example_custom_order,
+]
 __author__ = "streamlit-extras"
 __created_at__ = date(2026, 5, 15)
+__tests__ = [
+    test_directory_tree_validation,
+    test_directory_tree_sort_parameter,
+]

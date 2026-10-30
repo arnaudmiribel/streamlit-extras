@@ -17,6 +17,7 @@ export type DirectoryTreeDataShape = {
   color: string | null;
   selectable: boolean;
   height: number | null;
+  sort?: boolean;
 };
 
 export type DirectoryTreeProps = Pick<
@@ -29,6 +30,7 @@ export type DirectoryTreeProps = Pick<
   color: string | null;
   selectable: boolean;
   height: number | null;
+  sort?: boolean;
 };
 
 const containerStyle = (
@@ -58,6 +60,7 @@ const DirectoryTree: FC<DirectoryTreeProps> = ({
   color,
   selectable,
   height,
+  sort = true,
   setStateValue,
 }) => {
   const style = useMemo(() => containerStyle(border, height), [border, height]);
@@ -68,16 +71,21 @@ const DirectoryTree: FC<DirectoryTreeProps> = ({
     }
   };
 
-  // Sort entries: directories first, then files, alphabetical within each group
+  // Sort entries: if sort is enabled, directories first, then files, alphabetical within each group.
+  // Otherwise, preserve raw insertion order from the tree object.
   const sortedEntries = useMemo(() => {
-    return Object.entries(tree).sort(([aName, aVal], [bName, bVal]) => {
+    const entries = Object.entries(tree);
+    if (!sort) {
+      return entries;
+    }
+    return entries.sort(([aName, aVal], [bName, bVal]) => {
       const aIsDir = aVal !== null;
       const bIsDir = bVal !== null;
       if (aIsDir && !bIsDir) return -1;
       if (!aIsDir && bIsDir) return 1;
       return aName.localeCompare(bName);
     });
-  }, [tree]);
+  }, [tree, sort]);
 
   return (
     <div style={style}>
@@ -91,6 +99,7 @@ const DirectoryTree: FC<DirectoryTreeProps> = ({
           expandDepth={expandDepth}
           color={color}
           selectable={selectable}
+          sort={sort}
           onSelect={handleSelect}
         />
       ))}
