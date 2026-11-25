@@ -44,11 +44,11 @@ path = "scripts/hatch_build.py"
 [dependency-groups]
 dev = [
   "pytest >= 7.4.4",
-  "mypy==1.20.2",
-  "numpy<2.5",  # mypy 1.20 cannot parse numpy 2.5's Python 3.12-only stubs
-  "ty==0.0.38",
+  "mypy==2.1.0",
+  "numpy<2.5",  # Keep the existing stub compatibility constraint until numpy 2.5 is validated
+  "ty==0.0.74",
   "pre-commit >= 3.0.0",
-  "ruff==0.15.13",
+  "ruff==0.16.5",
   "types-requests",
   "types-python-dateutil",
   "types-pytz",
@@ -73,6 +73,9 @@ preview = true
 select = ["ALL"]
 extend-safe-fixes = ["TC002", "TC003"]
 ignore = [
+  "RUF201", # Keep existing rule-code selectors readable
+  "RUF105", # Keep existing noqa directives stable
+  "PLW0717", # Existing examples have intentionally broad try blocks
   # === Rule sets to ignore ===
   "D",      # Docstrings - existing docstrings don't follow strict convention
   "DTZ",    # Datetime timezone
