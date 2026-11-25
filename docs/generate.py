@@ -246,6 +246,7 @@ def generate_hash_for_playground_url(source_code: str) -> str:
 
 
 wheel_url = None
+browse_entries = []
 for extra_module_name in extra_modules_names:
     mod = import_module(f"streamlit_extras.{extra_module_name}")
     extra_metadata = get_extra_metadata(mod, extra_module_name)
@@ -253,6 +254,7 @@ for extra_module_name in extra_modules_names:
         full_doc_path = Path(f"extras_deprecated/{extra_module_name}.md")
     else:
         full_doc_path = Path(f"extras/{extra_module_name}.md")
+        browse_entries.append(extra_metadata)
 
     decorated_functions = extra_metadata.get("decorated_functions", [])
     extra_metadata["functions_docstrings"] = "\n\n".join(
@@ -318,3 +320,10 @@ for extra_module_name in extra_modules_names:
             print(auto_size_iframe_html, file=f)
 
     mkdocs_gen_files.set_edit_path(full_doc_path, "generate.py")
+
+# List every extra on the browse page, so it's usable without the sidebar (e.g. on mobile)
+with mkdocs_gen_files.open("extras/index.md", "a") as f:
+    print(f"\n## All extras ({len(browse_entries)}) {{#all-extras}}\n", file=f)
+    for entry in sorted(browse_entries, key=lambda e: e["title"].lower()):
+        description = " ".join(entry["description"].split())
+        print(f"- {entry['icon']} [{entry['title']}]({entry['module_name']}.md): {description}", file=f)
