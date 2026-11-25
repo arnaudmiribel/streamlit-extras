@@ -1,7 +1,84 @@
-{% extends "base.html" %}
-
-{% block announce %}
-  <div id="announce">
-    <p>Learn more about the latest 🛡️ <strong>Exception Handler</strong> extra in <a style="color: #39b8ec;" target="_blank" href="https://www.snowflake.com/en/engineering-blog/streamlit-error-handling-production/">this blog post</a> by Snowflake.</p>
-  </div>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="{{ config.theme.locale or 'en' }}">
+<head>
+    <script>
+        const base_url = (new URL("{{ '.' | url }}", window.location)).href.replace(/\/+$/, "");
+    </script>
+    {% include "templates/dark.html" %}
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    {% if page %}{% include "templates/seo.html" %}{% endif %}
+    {% if config.theme.favicon %}
+    <link href="{{ config.theme.favicon | url }}" rel="icon" />
+    {% elif config.theme.icon %}
+    <link href="{{ config.theme.icon | url }}" rel="icon" />
+    {% else %}
+    <link href="{{ 'img/favicon.ico' | url }}" rel="icon" />
+    {% endif %}
+    <link href="{{ 'css/base.css' | url }}" rel="stylesheet" />
+    <link href="{{ 'css/geist.css' | url }}" rel="stylesheet" />
+    {% if "codehilite" in config.markdown_extensions or "pymdownx.highlight" in config.markdown_extensions %}{% include "templates/external/pygments.html" %}{% endif %}
+    <style>:root { --theme-accent: {{ config.theme.accent or "oklch(62.3% 0.214 259.815)" }}; }</style>
+    {% for path in config.extra_css %}<link href="{{ path | url }}" rel="stylesheet" />{% endfor %}
+    {% if page and page.meta.extra_css %}
+    {% for path in page.meta.extra_css %}<link href="{{ path | url }}" rel="stylesheet" />{% endfor %}
+    {% endif %}
+    <script integrity="sha384-2hn3q9jeDV70Gb3DuyWPKgeRxkowIjEpcHeOXSvWCEq2uHJHvXiVer7rbM8HYzYz" src="{{ 'js/callbacks.js' | url }}"></script>
+    <script defer integrity="sha384-ljmRPFWw/c4kKFaKY5DIe8bgppHI9VBBrg7WZa8UPd23U9dEFesxZ1Ng8Hzjq2WB" src="{{ 'js/toc.js' | url }}"></script>
+    {% if "pymdownx.arithmatex" in config.markdown_extensions %}{% include "templates/external/katex.html" %}{% endif %}
+    {% if "shadcn.extensions.echarts.alpha" in config.markdown_extensions %}{% include "templates/external/echarts.html" %}{% endif %}
+    {% if "shadcn/excalidraw" in config.plugins and is_dev_server %}{% include "templates/external/excalidraw.html" %}{% endif %}
+    {% if "toc" in config.markdown_extensions %}{% include "templates/permalink.html" %}{% endif %}
+    {% include "templates/extra_head.html" %}
+</head>
+<body class="text-foreground group/body overscroll-none font-sans antialiased [--footer-height:calc(var(--spacing)*14)] [--header-height:calc(var(--spacing)*14)] lg:[--header-height:calc(var(--spacing)*16)] xl:[--footer-height:calc(var(--spacing)*24)] theme-default">
+    <div class="bg-background relative z-10 flex min-h-svh flex-col" id="inner-body">
+        {% include "templates/header.html" %}
+        <main class="flex flex-1 flex-col">
+            <div class="container-wrapper flex flex-1 flex-col px-2">
+                <div class="group/sidebar-wrapper has-data-[variant=inset]:bg-sidebar flex w-full 3xl:fixed:container 3xl:fixed:px-3 min-h-min flex-1 items-start px-0 [--sidebar-width:220px] [--top-spacing:0] lg:grid lg:grid-cols-[var(--sidebar-width)_minmax(0,1fr)] lg:[--sidebar-width:240px] lg:[--top-spacing:calc(var(--spacing)*4)]" data-slot="sidebar-wrapper" style="--sidebar-width:calc(var(--spacing) * 72);--sidebar-width-icon:3rem;">
+                    <div class="w-(--sidebar-width) flex-col text-sidebar-foreground sticky top-[calc(var(--header-height)+0.6rem)] z-30 hidden max-h-[calc(100svh-10rem)] overscroll-none bg-transparent [--sidebar-menu-width:--spacing(56)] lg:flex" data-slot="sidebar">
+                        <div class="h-9"></div>
+                        <div class="absolute top-8 z-10 h-8 w-(--sidebar-menu-width) shrink-0 bg-gradient-to-b from-background via-background/80 to-background/50 blur-xs"></div>
+                        <div class="absolute top-12 right-2 bottom-0 hidden h-full w-px bg-gradient-to-b from-transparent via-border to-transparent lg:flex"></div>
+                        <div class="flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden mx-auto no-scrollbar w-(--sidebar-menu-width) overflow-x-hidden px-2" data-sidebar="content" data-slot="sidebar-content" view-transition-name="sidebar">
+                            {% if not (page and page.meta.hide_sidebar == true) %}{% include "templates/sidebar.html" %}{% endif %}
+                        </div>
+                    </div>
+                    <div class="h-full w-full">
+                        <div class="flex items-stretch text-[1.05rem] sm:text-[15px] xl:w-full" data-slot="docs">
+                            <div class="flex min-w-0 flex-1 flex-col">
+                                <div class="h-(--top-spacing) shrink-0"></div>
+                                {% block page %}
+                                {% if page %}
+                                {% include "templates/page.html" %}
+                                {% include "templates/bottom_navigation.html" %}
+                                {% endif %}
+                                {% endblock page %}
+                            </div>
+                            {% include "templates/bottom_sidebar.html" %}
+                            <div class="sticky top-[calc(var(--header-height)+1px)] ml-auto hidden h-[calc(100svh-var(--header-height)-var(--footer-height))] w-72 flex-col gap-4 overflow-hidden overscroll-none pb-8 xl:flex">
+                                <div class="h-(--top-spacing) shrink-0"></div>
+                                {% block toc %}{% if page %}{% include "templates/toc.html" %}{% endif %}{% endblock toc %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        {% include "templates/footer.html" %}
+    </div>
+    {% for script in config.extra_javascript %}{% include "templates/script.html" %}{% endfor %}
+    {% if page and page.meta.extra_javascript %}
+    {% for script in page.meta.extra_javascript %}{% include "templates/script.html" %}{% endfor %}
+    {% endif %}
+    <script integrity="sha384-JLNLRFGzvOp0up707XKgSnAjjt1w5BF/+lbeLQvlf6mNwf0m89IXFdpNAk4t6Hcs" src="{{ 'js/copy-button.js' | url }}"></script>
+    <script integrity="sha384-JBx6cBEiyhK1KPwZgBHiI6GDaAmvlOxMQFyWAZTEpW5Ifo5XQ2LBcJ61GVOumwF1" src="{{ 'js/sidebar.js' | url }}"></script>
+    <script integrity="sha384-fNURFMRt0p/HqXnQnV4+CT9dX1GiU5F0fC3pFbg7gfoANytoUMErSW7suWSBkSuF" src="{{ 'js/slider.js' | url }}"></script>
+    <script>updatePygmentsStylesheet();</script>
+    {% if config.theme.show_stargazers %}<script>fetchStargazers("{{ config.repo_url }}");</script>{% endif %}
+    {% if "mkdocstrings" in config.plugins %}{% include "templates/external/mkdocstrings.html" %}{% endif %}
+    {% if "shadcn.extensions.codexec" in config.markdown_extensions %}{% include "templates/external/codexec.html" %}{% endif %}
+    {% include "templates/speculation_rules.html" %}
+</body>
+</html>

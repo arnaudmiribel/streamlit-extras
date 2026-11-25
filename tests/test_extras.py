@@ -4,6 +4,7 @@ from importlib import import_module
 import pytest
 
 import streamlit_extras
+from streamlit_extras.concurrency_limiter import concurrency_limiter
 
 
 def get_extras() -> list[str]:
@@ -63,3 +64,28 @@ def test_extra_tests(extra: str):
     if hasattr(mod, "__tests__"):
         for test in mod.__tests__:
             test()
+
+
+def test_concurrency_limiter_direct_decorator() -> None:
+    @concurrency_limiter
+    def double(value: int) -> int:
+        return value * 2
+
+    assert double(3) == 6
+    assert double(4) == 8
+
+
+def test_concurrency_limiter_parameterized_decorator_releases_on_error() -> None:
+    calls = 0
+
+    @concurrency_limiter(max_concurrency=1, show_spinner=False)
+    def sometimes_fails() -> int:
+        nonlocal calls
+        calls += 1
+        if calls == 1:
+            raise ValueError("first call")
+        return calls
+
+    with pytest.raises(ValueError, match="first call"):
+        sometimes_fails()
+    assert sometimes_fails() == 2

@@ -8,7 +8,7 @@ from .. import extra
 
 def get_mode() -> str:
     if hasattr(st.context, "theme"):
-        return st.context.theme["type"]
+        return st.context.theme["type"] or "light"
     return "light"
 
 
