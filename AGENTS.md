@@ -90,12 +90,14 @@ Rules and context for AI coding agents working on streamlit-extras.
 ```python
 from .. import extra
 
+
 @extra
-def my_function():
-    ...
+def my_function(): ...
+
 
 def example():
     my_function()
+
 
 __title__ = "My Extra"
 __desc__ = "What it does"

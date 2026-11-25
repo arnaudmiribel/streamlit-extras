@@ -635,6 +635,7 @@ def _mount(
     if on_change is not None:
         _args = args or ()
         _kwargs = kwargs or {}
+
         cb = lambda: on_change(*_args, **_kwargs)  # noqa: E731
 
     result = _specialized_input_component(

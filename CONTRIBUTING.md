@@ -1,79 +1,53 @@
-# Contributing your own extra
+# Contributing
 
-In this guide, you'll learn how to publish a new Streamlit extra, either from a new function or an existing package. Let's get started!
+Have a small Streamlit improvement that others could reuse? Contributions can be a new Python function, a UI component, or an integration with an existing package. Keep the extra focused, self-contained, and easy to try.
 
-## Requirements
+## Choose an approach
 
-Set up linting to standardize your code by running `pre-commit install`, which will then check the formatting of the files you added.
+Use Streamlit's Python API for behavior that doesn't need custom frontend code. For markup and styles, prefer `st.html`; escape user-provided text with `html.escape`. For interactive frontend code, look at the existing [component approaches](https://arnaudmiribel.github.io/streamlit-extras/components/) and the repository's [CCv2 guidance](https://github.com/arnaudmiribel/streamlit-extras/blob/main/src/streamlit_extras/AGENTS.md). Avoid adding frontend complexity when the built-in Streamlit API will do.
 
-## Case 1: From a new function (not yet on PyPi)
+## Add an extra
 
-1. Create an empty directory for your extra in the `src/streamlit_extras` directory.
+1. Create `src/streamlit_extras/<name>/__init__.py`. Give your public function type hints and register it with `@extra` from `streamlit_extras`.
+2. Set `__title__`, `__desc__`, `__icon__`, `__author__`, and `__examples__`. Make the example runnable in the gallery. If there are multiple registered functions, `__examples__` must map examples to the functions they use.
+3. If you wrap an existing PyPI package, include `__pypi_name__` and `__package_name__`, and declare its dependency in `pyproject.toml`.
+4. Run the gallery and checks below. Open a pull request explaining the user-facing behavior, with a screenshot or short recording when the UI changes.
 
-2. Add a `__init__.py` file to provide metadata that will appear in our docs.
-
-```python
-# extras/<extra_name>/__init__.py
-from .. import extra
-
-@extra  # this will register your function's extra
-def my_main_function():
-    ...
-
-def example():
-    ...
-
-__title__ = "Great title!"  # title of your extra! 🏆
-__desc__ = "Great description"  # description of your extra! 💡
-__icon__ = "🔭"  # give your extra an icon! 🌠
-__examples__ = [example]  # create some examples to show how cool your extra is! 🚀
-__author__ = "Eva Jensen"
-__experimental_playground__ = False  # Optional
-
-```
-
-3. To test it out, run `uv sync --dev` in the `streamlit-extras` directory, and then `uv run streamlit run gallery/streamlit_app.py` app.
-
-4. Submit a PR and share your extra with the world! 🎉
-
-## Case 2: From an existing package (already in PyPi)
-
-Create an empty directory for your extra in the src/streamlit_extras directory.
-
-Add a __init__.py file and import your main function from your package.
+Here is a minimal starting point:
 
 ```python
-# extras/<extra_name>/__init__.py
-
-from my_package import my_main_function
 from .. import extra
 
-my_main_function = extra(my_main_function)
 
-def example():
-    ...
+@extra
+def greeting(name: str) -> None:
+    import streamlit as st
 
-__title__ = "Great title!"  # title of your extra! 🏆
-__desc__ = "Great description"  # description of your extra! 💡
-__icon__ = "🔭"  # give your extra an icon! 🌠
-__examples__ = [example]  # create some examples to show how cool your extra is! 🚀
-__author__ = "Eva Jensen"
-__pypi_name__ = "my-cool-package"
-__package_name__ = "my_package"
-__github_repo__ = "evajensen/my-repo"  # Optional
-__streamlit_cloud_url__ = "http://my-super-app.streamlitapp.com"  # Optional
-__experimental_playground__ = False  # Optional
+    st.write(f"Hello, {name}!")
 
+
+def example() -> None:
+    greeting("Streamlit")
+
+
+__title__ = "Greeting"
+__desc__ = "Show a friendly greeting."
+__icon__ = "👋"
+__author__ = "Your name"
+__examples__ = [example]
 ```
 
-1. Add your package to the list of dependencies in pyproject.toml.
+## Try it locally
 
-2. (Optional) You can add a "featured-extra" badge to your original README.md if you like!
+From the repository root:
 
-3. To check that your package has all the required fields, run `uv run pytest` from the repository.
+```bash
+uv sync
+uv run pytest
+uv run ruff check .
+uv run streamlit run gallery/streamlit_app.py
+```
 
-4. Submit a PR and share your extra with the world! 🎉
+For a React-based extra, build its frontend with `npm install && npm run build` from its `frontend/` directory. A wheel build (`uv build`) compiles React frontends and packages their built assets.
 
-## Help
-
-If you are having troubles, create an issue or [DM me on Twitter](https://twitter.com/arnaudmiribel)!
+For an existing-package integration, add its dependency to `pyproject.toml`. For agent-assisted work, see the [project guide](https://arnaudmiribel.github.io/streamlit-extras/agents/); review and test generated code before submitting.
