@@ -92,15 +92,22 @@ def test_docs_theme_has_compact_navigation_and_readable_accents() -> None:
     config = (ROOT / "mkdocs.yml").read_text(encoding="utf-8")
     css = (DOCS / "assets/custom.css").read_text(encoding="utf-8")
     home = (DOCS / "index.md").read_text(encoding="utf-8")
-    template = (ROOT / "overrides/main.html").read_text(encoding="utf-8")
+    template = (ROOT / "overrides/templates/page.html").read_text(encoding="utf-8")
 
     assert "name: shadcn" in config
+    assert "icon: assets/logo.png" in config
     assert "navigation.expand" not in config
     assert "- Browse extras: extras/index.md" in config
     assert "- Extras reference: extras/" in config
     assert config.index("- For AI agents: agents.md") < config.index("- Extras reference: extras/")
+    assert config.index("- Extras reference: extras/") < config.index("- Deprecated extras: extras_deprecated/")
     assert "extras-hero" in home
     assert "extras-copy-page" in template
+    assert (
+        template.index('id="page-header"')
+        < template.index('class="extras-page-tools"')
+        < template.index("{{ page.content }}")
+    )
     assert ".extras-copy-page" in css
     assert "dark" in css
 
@@ -119,7 +126,7 @@ def test_built_docs_copy_source_is_markdown(tmp_path: Path) -> None:
     for expected, rendered in (
         ((DOCS / "getting_started.md").read_text(encoding="utf-8"), site_dir / "getting_started/index.html"),
         ("# Small additions. Better apps.", site_dir / "index.html"),
-        ("# ", site_dir / "extras/stoggle/index.html"),
+        ("*Submitted by Arnaud Miribel*", site_dir / "extras/stoggle/index.html"),
     ):
         parser = MarkdownPayloadParser()
         html = rendered.read_text(encoding="utf-8")
@@ -131,17 +138,45 @@ def test_built_docs_copy_source_is_markdown(tmp_path: Path) -> None:
     assert (site_dir / "assets/copy-page.js").is_file()
 
     home_html = (site_dir / "index.html").read_text(encoding="utf-8")
+    getting_started_html = (site_dir / "getting_started/index.html").read_text(encoding="utf-8")
     reference_html = (site_dir / "extras/stoggle/index.html").read_text(encoding="utf-8")
     catalog_html = (site_dir / "extras/index.html").read_text(encoding="utf-8")
-    for page_html in (home_html, catalog_html, reference_html):
+    for page_html in (home_html, getting_started_html, catalog_html, reference_html):
         assert re.search(r'src="(?:\.\./)*js/dark\.js"', page_html)
         assert 'title="Toggle theme"' in page_html
+        assert re.search(r'<img[^>]+src="(?:\.\./)*assets/logo\.png"[^>]*>', page_html)
         assert "Browse extras" in page_html and "Extras reference" in page_html
         assert "Contributing" in page_html and "For AI agents" in page_html
+        assert page_html.index("Extras reference") < page_html.index("Deprecated extras")
+        assert (
+            page_html.index("<article")
+            < page_html.index('class="extras-page-tools"')
+            < page_html.index('class="typography')
+        )
     assert reference_html.index("For AI agents") < reference_html.index("Extras reference")
     assert "extras-eyebrow" not in home_html
-    assert "➡️\u00a0\u00a0\u00a0Toggle button" in reference_html
+    assert re.search(r'<h1 class="scroll-m-20[^>]*>\s*Stoggle\s*</h1>', reference_html)
     assert "streamlit_extras.stoggle import stoggle" in reference_html
+    for page_html in (getting_started_html, reference_html):
+        assert re.search(r'<link id="pygments-light"[^>]*href="[^"]*css/pygments/shadcn-light.css"', page_html)
+        assert re.search(r'<link id="pygments-dark"[^>]*href="[^"]*css/pygments/github-dark.css"', page_html)
+    assert (site_dir / "css/pygments/shadcn-light.css").is_file()
+    assert (site_dir / "css/pygments/github-dark.css").is_file()
+    assert ".codehilite .kn" in (site_dir / "css/pygments/shadcn-light.css").read_text(encoding="utf-8")
+    assert re.search(r'<div class="language-bash codehilite"><pre>.*?<code>', getting_started_html, re.DOTALL)
+    assert re.search(
+        r'<div class="language-python codehilite"><pre>.*?<code>.*?<span class="kn">',
+        getting_started_html,
+        re.DOTALL,
+    )
+    assert re.search(
+        r'<div class="language-python codehilite"><pre>.*?<code>.*?<span class="kn">', reference_html, re.DOTALL
+    )
+    assert '<h2 id="summary">' not in reference_html
+    assert reference_html.count('id="functions"') == 1
+    assert reference_html.count('class="scroll-m-20 text-4xl') == 1
+    assert not re.search(r'<div class="typography[^>]*>\s*<h1', reference_html)
+    assert reference_html.index("Submitted by Arnaud Miribel") < reference_html.index('id="functions"')
 
 
 def test_generated_reference_timestamp_uses_git_source_and_restores_virtual_path() -> None:
@@ -180,7 +215,7 @@ def test_generated_reference_timestamp_uses_git_source_and_restores_virtual_path
 
 def test_copy_payload_escapes_script_breakout() -> None:
     jinja2 = pytest.importorskip("jinja2")
-    template = (ROOT / "overrides/main.html").read_text(encoding="utf-8")
+    template = (ROOT / "overrides/templates/page.html").read_text(encoding="utf-8")
     payload_template = re.search(r'<script type="application/json" id="extras-page-markdown">(.*?)</script>', template)
     assert payload_template is not None
     markdown = '</script><script>alert("injected")</script> & <tag>'

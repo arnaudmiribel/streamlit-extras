@@ -17,7 +17,7 @@
     {% endif %}
     <link href="{{ 'css/base.css' | url }}" rel="stylesheet" />
     <link href="{{ 'css/geist.css' | url }}" rel="stylesheet" />
-    {% if "codehilite" in config.markdown_extensions %}{% include "templates/external/pygments.html" %}{% endif %}
+    {% if "codehilite" in config.markdown_extensions or "pymdownx.highlight" in config.markdown_extensions %}{% include "templates/external/pygments.html" %}{% endif %}
     <style>:root { --theme-accent: {{ config.theme.accent or "oklch(62.3% 0.214 259.815)" }}; }</style>
     {% for path in config.extra_css %}<link href="{{ path | url }}" rel="stylesheet" />{% endfor %}
     {% if page and page.meta.extra_css %}
@@ -51,11 +51,6 @@
                                 <div class="h-(--top-spacing) shrink-0"></div>
                                 {% block page %}
                                 {% if page %}
-                                <div class="extras-page-tools">
-                                  <button class="extras-copy-page" type="button" aria-describedby="extras-copy-status">Copy page as Markdown</button>
-                                  <span id="extras-copy-status" class="extras-copy-status" role="status" aria-live="polite"></span>
-                                </div>
-                                <script type="application/json" id="extras-page-markdown">{{ page.markdown | tojson }}</script>
                                 {% include "templates/page.html" %}
                                 {% include "templates/bottom_navigation.html" %}
                                 {% endif %}

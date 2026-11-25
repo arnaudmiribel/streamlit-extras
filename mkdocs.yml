@@ -13,9 +13,13 @@ theme:
   name: shadcn
   custom_dir: overrides
   favicon: assets/logo.png
+  icon: assets/logo.png
   show_stargazers: false
   hide_source_files: true
   show_datetime: false
+  pygments_style:
+    light: shadcn-light
+    dark: github-dark
   accent: "oklch(53% 0.17 258)"
 
 plugins:
@@ -45,14 +49,15 @@ nav:
   - Streamlit components: components.md
   - Contributing: contributing.md
   - For AI agents: agents.md
-  - Deprecated extras: extras_deprecated/
   - Extras reference: extras/
+  - Deprecated extras: extras_deprecated/
 
 markdown_extensions:
   - md_in_html
   - attr_list
   - pymdownx.emoji
   - pymdownx.highlight:
+      css_class: codehilite
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
