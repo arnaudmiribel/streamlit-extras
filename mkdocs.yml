@@ -1,17 +1,31 @@
 site_name: streamlit-extras
-site_url: https://github.com/arnaudmiribel/streamlit-extras
-repo_name: streamlit-extras
-repo_url: https://github.com/arnaudmiribel/streamlit-extras/releases/latest
+site_url: https://arnaudmiribel.github.io/streamlit-extras/
+repo_name: arnaudmiribel/streamlit-extras
+repo_url: https://github.com/arnaudmiribel/streamlit-extras
+
+extra_css:
+  - assets/custom.css
 
 theme:
   name: material
   custom_dir: overrides
-  css:
-    - overrides/custom.css
   logo: assets/logo.png
   favicon: assets/logo.png
   palette:
-    primary: gray
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: blue grey
+      accent: teal
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: blue grey
+      accent: teal
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
   icon:
     repo: fontawesome/brands/github
   features:
@@ -40,12 +54,16 @@ plugins:
 nav:
   - Home: index.md
   - Getting started: getting_started.md
-  - Streamlit Components: components.md
+  - Browse extras:
+      - Overview: extras/index.md
+      - Reference: extras/
+  - Streamlit components: components.md
   - Contributing: contributing.md
-  - Browse Extras: extras/
-  - Deprecated Extras: extras_deprecated/
+  - For AI agents: agents.md
+  - Deprecated extras: extras_deprecated/
 
 markdown_extensions:
+  - md_in_html
   - attr_list
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji

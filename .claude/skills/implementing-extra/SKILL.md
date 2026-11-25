@@ -65,6 +65,7 @@ Create `src/streamlit_extras/<extra_name>/__init__.py` with:
 ```python
 from streamlit_extras import extra
 
+
 @extra
 def my_extra(param: str, *, key: str | None = None) -> None:
     """One-line description.
@@ -75,9 +76,11 @@ def my_extra(param: str, *, key: str | None = None) -> None:
     """
     ...
 
+
 def example() -> None:
     """Example for gallery."""
     my_extra("demo")
+
 
 __title__ = "My Extra"
 __desc__ = "Short description of what it does."
@@ -113,12 +116,11 @@ uv build
 ls src/streamlit_extras/<extra_name>/frontend/build/
 ```
 
-**CRITICAL: Never commit build artifacts or lock files.** The following are gitignored and must NOT be `git add`-ed:
+**CRITICAL: Never commit generated build artifacts or installed dependencies.** The following are gitignored and must NOT be `git add`-ed:
 - `frontend/build/` — built by CI before publishing; never commit locally-built JS bundles
-- `frontend/package-lock.json` — lock files are not needed in the repo
 - `frontend/node_modules/` — never commit dependencies
 
-If you accidentally staged them, remove with `git rm --cached <path>`.
+Frontend `package-lock.json` files are tracked in this repository; commit changes to them alongside dependency updates so `npm ci` remains reproducible.
 
 ## References
 

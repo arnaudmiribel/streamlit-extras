@@ -38,13 +38,15 @@ All extras must define these module-level attributes in `__init__.py`.
 ```python
 from streamlit_extras import extra
 
+
 @extra
-def my_widget(label: str) -> str:
-    ...
+def my_widget(label: str) -> str: ...
+
 
 def example() -> None:
     result = my_widget("Click me")
     st.write(result)
+
 
 __title__ = "My Widget"
 __desc__ = "An interactive widget for user input."
@@ -62,11 +64,18 @@ If your module has multiple `@extra` decorated functions, use a dict for example
 @extra
 def foo(): ...
 
+
 @extra
 def bar(): ...
 
-def example_foo(): foo()
-def example_bar(): bar()
+
+def example_foo():
+    foo()
+
+
+def example_bar():
+    bar()
+
 
 __examples__ = {
     foo: [example_foo],

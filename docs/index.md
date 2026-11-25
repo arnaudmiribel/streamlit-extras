@@ -1,12 +1,71 @@
 ---
 title: Home
+hide:
+  - toc
 ---
-# A Python library with useful Streamlit extras
 
-Welcome to the **🪢 streamlit-extras** documentation. If you want to give a special touch to your Streamlit apps, you're at the right place!
+<div class="extras-hero" markdown="1">
 
-This library includes > 20 functional or visual additions to [Streamlit](https://github.com/streamlit/streamlit) that will make your life easier or your apps nicer. We call them _extras_ and anyone's welcome to add their owns. See our [contribution guide](contributing.md).
+<span class="extras-eyebrow">A community library for Streamlit</span>
 
-**👈 Browse Extras** in the left handside menu, and if you like them, go ahead and [get started](getting_started.md)!
+# Small additions. Better apps.
 
-Maintained by [@arnaudmiribel](https://twitter.com/arnaudmiribel) & [@blackary](https://twitter.com/blackaryz).
+Build with focused Python utilities and UI components that fit into your Streamlit app. Pick an extra, copy its import, and keep building.
+
+[Get started](getting_started.md){ .md-button .md-button--primary } [Browse extras](extras/index.md){ .md-button }
+
+</div>
+
+<div class="extras-paths" markdown="1">
+
+<div class="extras-path" markdown="1">
+
+### Install and try
+
+Add `streamlit-extras` to your environment and try a working example in minutes.
+
+[Installation and first app →](getting_started.md)
+
+</div>
+
+<div class="extras-path" markdown="1">
+
+### Find the right extra
+
+Browse generated reference pages with imports, function documentation, and example code.
+
+[Explore the catalog →](extras/index.md)
+
+</div>
+
+<div class="extras-path" markdown="1">
+
+### Share what you built
+
+Contribute a reusable, self-contained extra with a working gallery example.
+
+[Contribution guide →](contributing.md)
+
+</div>
+
+</div>
+
+## See it in an app
+
+A toggle is one example of an extra you can drop into an existing Streamlit script:
+
+```python
+import streamlit as st
+from streamlit_extras.stoggle import stoggle
+
+st.title("A little more context")
+stoggle("How does this work?", "Click to reveal the answer.")
+```
+
+Run the script with `streamlit run app.py`. See the [toggle reference](extras/stoggle.md) for its arguments and more examples.
+
+## Built to feel at home in Streamlit
+
+Extras cover small layout helpers, Python utilities, and interactive components. Each has its own import path and documented example, so you can choose only what your app needs. The [catalog](extras/index.md) is the best place to discover what's available now.
+
+Want to help another builder? Start with the [contribution guide](contributing.md) or the [agent-friendly project guide](agents.md).

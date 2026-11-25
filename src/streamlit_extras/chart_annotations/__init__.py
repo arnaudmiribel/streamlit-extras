@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import date
 from functools import partial
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 
 import altair as alt
 import pandas as pd
@@ -78,7 +78,7 @@ def get_annotations_chart(
     marker_size: float = 20,
     marker_offset_x: float = 0,
     market_offset_y: float = -10,
-    marker_align: str = "center",
+    marker_align: Literal["left", "center", "right"] = "center",
 ) -> alt.Chart:
     """
     Creates an Altair Chart with annotation markers on the horizontal axis.
