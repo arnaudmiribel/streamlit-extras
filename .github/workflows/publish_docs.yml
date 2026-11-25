@@ -9,16 +9,17 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-python@v6
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-python@v7.1.0
         with:
           python-version-file: ".python-version"
       - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
-      - uses: actions/cache@v5
+      - uses: actions/cache@v6.1.0
         with:
-          key: mkdocs-material-${{ env.cache_id }}
+          key: mkdocs-shadcn-${{ env.cache_id }}
           path: .cache
           restore-keys: |
-            mkdocs-material-
+            mkdocs-shadcn-
       - run: pip install -r docs/requirements.txt
+      - run: mkdocs build --strict
       - run: mkdocs gh-deploy --force

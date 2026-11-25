@@ -52,6 +52,7 @@ def chart_container(
         ":material/download: Export",
     ),
     export_formats: Sequence[str] = _SUPPORTED_EXPORT_KEYS,
+    filename: str = "data",
 ) -> Generator:
     """Embed chart in a (chart, data, export, explore) tabs container to let the viewer explore and export its underlying data.
 
@@ -59,6 +60,7 @@ def chart_container(
         data (pd.DataFrame): Dataframe used in the dataframe tab.
         tabs (Sequence, optional): Tab labels. Defaults to (":material/show_chart: Chart", ":material/table: Dataframe", ":material/download: Export").
         export_formats (Sequence, optional): Export file formats. Defaults to ("CSV", "Parquet")
+        filename (str, optional): Base filename for exported files, without the extension. Defaults to "data".
     """
 
     assert all(export_format in _SUPPORTED_EXPORTS for export_format in export_formats), (
@@ -90,7 +92,7 @@ def chart_container(
             st.download_button(
                 f"Download data as {extension}",
                 data=exporter(export_data),
-                file_name="data" + extension,
+                file_name=filename + extension,
                 mime=export_utils.get("mime"),
                 key=f"chart_container_download_{_get_random_widget_key()}",
             )

@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -55,10 +56,12 @@ class FrontendBuildHook(BuildHookInterface):
         if build_dir.exists():
             shutil.rmtree(build_dir)
 
+        npm = "npm.cmd" if sys.platform == "win32" else "npm"
+
         lock_file = frontend_dir / "package-lock.json"
-        install_cmd = ["npm", "ci"] if lock_file.exists() else ["npm", "install"]
+        install_cmd = [npm, "ci"] if lock_file.exists() else [npm, "install"]
         subprocess.run(install_cmd, cwd=frontend_dir, check=True, capture_output=True)
-        subprocess.run(["npm", "run", "build"], cwd=frontend_dir, check=True, capture_output=True)
+        subprocess.run([npm, "run", "build"], cwd=frontend_dir, check=True, capture_output=True)
 
         js_files = list(build_dir.glob("index-*.js"))
         if len(js_files) != 1:

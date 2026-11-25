@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from datetime import date
 from functools import partial, wraps
 from threading import Condition, Lock, Semaphore
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 import streamlit as st
 
@@ -75,10 +75,9 @@ def concurrency_limiter(
     """
 
     if func is None:
-        return partial(  # type: ignore[return-value]
-            concurrency_limiter,
-            max_concurrency=max_concurrency,
-            show_spinner=show_spinner,
+        return cast(
+            "Callable[[F], F]",
+            partial(concurrency_limiter, max_concurrency=max_concurrency, show_spinner=show_spinner),
         )
 
     function_key = _make_function_key(func, max_concurrency)

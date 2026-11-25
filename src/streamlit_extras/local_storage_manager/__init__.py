@@ -318,7 +318,7 @@ class LocalStorageManager(MutableMapping[str, Any]):
             raise KeyError(key)
         return value
 
-    def get(self, key: str, default: Any = None) -> Any:
+    def get(self, key: object, default: Any = None) -> Any:
         """Get a value from localStorage with an optional default.
 
         Args:
@@ -329,7 +329,7 @@ class LocalStorageManager(MutableMapping[str, Any]):
             The stored value, or default if not found or expired.
         """
         try:
-            return self[key]
+            return self[key] if isinstance(key, str) else default
         except KeyError:
             return default
 
