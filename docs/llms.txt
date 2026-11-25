@@ -1,0 +1,24 @@
+# streamlit-extras
+
+> A community-driven collection of focused Python utilities and UI components for Streamlit apps. Install the package and import each extra from its own `streamlit_extras.<name>` module.
+
+## Documentation
+
+- [Home](https://arnaudmiribel.github.io/streamlit-extras/): Overview and example.
+- [Getting started](https://arnaudmiribel.github.io/streamlit-extras/getting_started/): Install and run an app.
+- [Browse extras](https://arnaudmiribel.github.io/streamlit-extras/extras/): Generated API pages with imports and examples.
+- [Contributing](https://arnaudmiribel.github.io/streamlit-extras/contributing/): Add an extra and run checks.
+- [Agent guide](https://arnaudmiribel.github.io/streamlit-extras/agents/): Guidelines for agent-assisted contributions.
+- [Component approaches](https://arnaudmiribel.github.io/streamlit-extras/components/): Links to Streamlit component resources.
+
+## Repository references
+
+- [Project agent instructions](https://github.com/arnaudmiribel/streamlit-extras/blob/main/AGENTS.md): Metadata, tests, and project layout.
+- [Extra implementation guidance](https://github.com/arnaudmiribel/streamlit-extras/blob/main/src/streamlit_extras/AGENTS.md): Python, HTML, and component choices.
+- [Contribution notes](https://github.com/arnaudmiribel/streamlit-extras/blob/main/CONTRIBUTING.md): New functions and existing packages.
+
+## Quick start
+
+Install with `pip install streamlit-extras` (Python 3.10+). For example, use `from streamlit_extras.stoggle import stoggle` and call `stoggle("More", "Details")` in a Streamlit script. Run with `streamlit run app.py`.
+
+To contribute, add a self-contained module under `src/streamlit_extras/`, register a typed public function using `@extra`, and provide `__title__`, `__desc__`, `__icon__`, `__author__`, and `__examples__`. Run `uv run pytest` and `uv run ruff check .`; inspect behavior in the gallery. For React-based components, build the frontend and check the wheel with `uv build`. Treat agent-generated code as a draft requiring review, including accessibility, theme integration, and escaping of untrusted content.

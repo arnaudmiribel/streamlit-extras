@@ -1,7 +1,7 @@
 mkdocs>=1.6.1
 mkdocs-gen-files
 mkdocs-literate-nav
-mkdocs-material>=9.7.6
+mkdocs-shadcn==0.13.0
 mkdocstrings[python]
 pymdown-extensions
 

@@ -545,6 +545,9 @@ def example_networkx() -> None:
             key="networkx_size_selector",
         )
 
+    if selected_graph is None or selected_layout is None or selected_size is None:
+        return
+
     # Load the selected graph
     graph_fn = graph_options[selected_graph]
     graph = graph_fn()
@@ -557,7 +560,7 @@ def example_networkx() -> None:
             graph.nodes[node]["label"] = str(node)
 
     st.caption(f"**{graph.number_of_nodes()}** nodes, **{graph.number_of_edges()}** edges")
-    sigma_graph(graph, layout=layout, node_size=node_size, height=550)  # type: ignore[arg-type]
+    sigma_graph(graph, layout=layout, node_size=node_size, height=550)
 
 
 __title__ = "Sigma Graph"

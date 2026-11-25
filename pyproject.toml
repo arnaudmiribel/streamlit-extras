@@ -45,6 +45,7 @@ path = "scripts/hatch_build.py"
 dev = [
   "pytest >= 7.4.4",
   "mypy==1.20.2",
+  "numpy<2.5",  # mypy 1.20 cannot parse numpy 2.5's Python 3.12-only stubs
   "ty==0.0.38",
   "pre-commit >= 3.0.0",
   "ruff==0.15.13",

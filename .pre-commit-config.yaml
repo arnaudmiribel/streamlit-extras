@@ -16,13 +16,13 @@ repos:
 
   # UV - keep lockfile in sync
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.11.8
+    rev: 0.13.10
     hooks:
       - id: uv-lock
 
   # Ruff linting and formatting
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.12
+    rev: v0.15.13
     hooks:
       - id: ruff
         args: [--fix, --unsafe-fixes]
