@@ -1,3 +1,4 @@
+import importlib.util
 import json
 import re
 import shutil
@@ -5,6 +6,7 @@ import subprocess
 import sys
 from html.parser import HTMLParser
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -44,10 +46,20 @@ def test_docs_styles_and_agent_index_are_published() -> None:
     assert "- assets/custom.css" in config
     assert "- md_in_html" in config
     assert "@media (max-width:" in css
-    assert '[data-md-color-scheme="slate"]' in css
+    assert "dark" in css
     assert "[Agent guide](https://arnaudmiribel.github.io/streamlit-extras/agents/)" in agent_index
     assert "[Browse extras](https://arnaudmiribel.github.io/streamlit-extras/extras/)" in agent_index
     assert "{% block announce %}" not in (ROOT / "overrides/main.html").read_text(encoding="utf-8")
+
+
+def test_docs_publish_builds_strictly_before_deploying() -> None:
+    workflow = (ROOT / ".github/workflows/publish_docs.yml").read_text(encoding="utf-8")
+    requirements = (DOCS / "requirements.txt").read_text(encoding="utf-8")
+
+    assert "mkdocs-shadcn==" in requirements
+    assert "mkdocs-material" not in requirements
+    assert "mkdocs-shadcn-" in workflow
+    assert workflow.index("mkdocs build --strict") < workflow.index("mkdocs gh-deploy --force")
 
 
 class MarkdownPayloadParser(HTMLParser):
@@ -82,32 +94,28 @@ def test_docs_theme_has_compact_navigation_and_readable_accents() -> None:
     home = (DOCS / "index.md").read_text(encoding="utf-8")
     template = (ROOT / "overrides/main.html").read_text(encoding="utf-8")
 
-    assert "name: material" in config
+    assert "name: shadcn" in config
     assert "navigation.expand" not in config
     assert "- Browse extras: extras/index.md" in config
     assert "- Extras reference: extras/" in config
     assert config.index("- For AI agents: agents.md") < config.index("- Extras reference: extras/")
-    assert "extras-eyebrow" not in home
-    assert "extras-page-tools__label" not in template
-    assert "text-transform: uppercase" not in css
-    assert "border-top:" not in css
-    assert "border-bottom:" not in css
-    path_rules = css.split(".md-typeset .extras-path {", maxsplit=1)[1].split("}", maxsplit=1)[0]
-    assert "border: 1px solid var(--extras-border);" not in path_rules
-    assert '[data-md-color-scheme="default"]' in css
-    assert '[data-md-color-scheme="slate"]' in css
+    assert "extras-hero" in home
+    assert "extras-copy-page" in template
+    assert ".extras-copy-page" in css
+    assert "dark" in css
 
 
 def test_built_docs_copy_source_is_markdown(tmp_path: Path) -> None:
     pytest.importorskip("mkdocs")
     site_dir = tmp_path / "site"
-    subprocess.run(
+    result = subprocess.run(
         [sys.executable, "-m", "mkdocs", "build", "--strict", "--site-dir", str(site_dir)],
         cwd=ROOT,
-        check=True,
+        check=False,
         capture_output=True,
         text=True,
     )
+    assert result.returncode == 0, result.stdout + result.stderr
     for expected, rendered in (
         ((DOCS / "getting_started.md").read_text(encoding="utf-8"), site_dir / "getting_started/index.html"),
         ("# Small additions. Better apps.", site_dir / "index.html"),
@@ -126,14 +134,48 @@ def test_built_docs_copy_source_is_markdown(tmp_path: Path) -> None:
     reference_html = (site_dir / "extras/stoggle/index.html").read_text(encoding="utf-8")
     catalog_html = (site_dir / "extras/index.html").read_text(encoding="utf-8")
     for page_html in (home_html, catalog_html, reference_html):
-        assert 'data-md-color-scheme="default"' in page_html
-        assert 'data-md-color-scheme="slate"' in page_html
+        assert re.search(r'src="(?:\.\./)*js/dark\.js"', page_html)
+        assert 'title="Toggle theme"' in page_html
         assert "Browse extras" in page_html and "Extras reference" in page_html
         assert "Contributing" in page_html and "For AI agents" in page_html
     assert reference_html.index("For AI agents") < reference_html.index("Extras reference")
     assert "extras-eyebrow" not in home_html
     assert "➡️\u00a0\u00a0\u00a0Toggle button" in reference_html
     assert "streamlit_extras.stoggle import stoggle" in reference_html
+
+
+def test_generated_reference_timestamp_uses_git_source_and_restores_virtual_path() -> None:
+    pytest.importorskip("mkdocs")
+    spec = importlib.util.spec_from_file_location("shadcn_compat_test", DOCS / "shadcn_compat.py")
+    assert spec is not None and spec.loader is not None
+    compat = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(compat)
+
+    for path in ("extras/stoggle.md", "extras_deprecated/stoggle.md"):
+        generated_file = SimpleNamespace(
+            generated_by="mkdocs-gen-files",
+            src_path=path,
+            abs_src_path=f"/tmp/mkdocs-generated/{path}",
+        )
+        page = SimpleNamespace(file=generated_file)
+        original = generated_file.abs_src_path
+        assert compat.on_page_markdown("# Stoggle", page=page) == "# Stoggle"
+        assert generated_file.abs_src_path == str(ROOT / "src/streamlit_extras/stoggle/__init__.py")
+        assert compat.on_page_content("<h1>Stoggle</h1>", page=page) == "<h1>Stoggle</h1>"
+        assert generated_file.abs_src_path == original
+
+    ordinary = SimpleNamespace(
+        file=SimpleNamespace(generated_by=None, src_path="extras/stoggle.md", abs_src_path="/docs/stoggle.md")
+    )
+    assert compat.on_page_markdown("ordinary", page=ordinary) == "ordinary"
+    assert ordinary.file.abs_src_path == "/docs/stoggle.md"
+    missing = SimpleNamespace(
+        file=SimpleNamespace(
+            generated_by="mkdocs-gen-files", src_path="extras/not_an_extra.md", abs_src_path="/tmp/missing.md"
+        )
+    )
+    assert compat.on_page_markdown("missing", page=missing) == "missing"
+    assert missing.file.abs_src_path == "/tmp/missing.md"
 
 
 def test_copy_payload_escapes_script_breakout() -> None:

@@ -7,18 +7,7 @@
   --extras-button-text: #fff;
 }
 
-[data-md-color-scheme="default"] {
-  --md-primary-fg-color: #2454a5;
-  --md-primary-fg-color--light: #4775bf;
-  --md-primary-fg-color--dark: #193d80;
-  --md-accent-fg-color: #a33145;
-}
-
-[data-md-color-scheme="slate"] {
-  --md-primary-fg-color: #2454a5;
-  --md-primary-fg-color--light: #4775bf;
-  --md-primary-fg-color--dark: #193d80;
-  --md-accent-fg-color: #ff9ba9;
+.dark {
   --extras-accent: #92b9ff;
   --extras-accent-hover: #ff9ba9;
   --extras-border: #41536c;
@@ -27,93 +16,80 @@
   --extras-button-text: #101b30;
 }
 
-.md-typeset .extras-hero {
+.typography .extras-hero {
   margin: 0 0 2rem;
   padding: 0.6rem 0 0;
 }
 
-.md-typeset .extras-hero h1 {
+.typography .extras-hero h1 {
   margin: 0 0 0.5em;
   font-size: clamp(2rem, 3vw, 2.8rem);
   line-height: 1.2;
   letter-spacing: -0.025em;
-  color: var(--md-default-fg-color);
+  color: var(--foreground);
 }
 
-.md-typeset .extras-hero p {
+.typography .extras-hero p {
   max-width: 38rem;
   font-size: 1.05rem;
 }
 
-.md-typeset .extras-hero .md-button {
+.typography .extras-hero .md-button {
+  display: inline-block;
   margin: 0.4rem 0.6rem 0.2rem 0;
+  padding: 0.45rem 0.85rem;
+  border: 1px solid var(--extras-border);
+  border-radius: 0.4rem;
+  text-decoration: none;
 }
 
-.md-typeset .extras-paths {
+.typography .extras-paths {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
   margin: 1.5rem 0 2.5rem;
 }
 
-.md-typeset .extras-path {
+.typography .extras-path {
   min-width: 0;
   padding: 0.2rem 1.2rem 0.2rem 0;
 }
 
-.md-typeset .extras-path h3 {
+.typography .extras-path h3 {
   margin-top: 0;
-  color: var(--md-default-fg-color);
+  color: var(--foreground);
 }
 
-.md-typeset .extras-path a {
+.typography .extras-path a {
   color: var(--extras-accent);
   font-weight: 600;
 }
 
-.md-typeset .extras-path a:hover,
-.md-typeset .extras-path a:focus-visible {
+.typography .extras-path a:hover,
+.typography .extras-path a:focus-visible {
   color: var(--extras-accent-hover);
 }
 
-.md-typeset .extras-hero .md-button--primary {
+.typography .extras-hero .md-button--primary {
   border-color: var(--extras-accent);
   background: var(--extras-accent);
   color: var(--extras-button-text);
 }
 
-.md-typeset .extras-hero .md-button--primary:hover,
-.md-typeset .extras-hero .md-button--primary:focus-visible {
+.typography .extras-hero .md-button--primary:hover,
+.typography .extras-hero .md-button--primary:focus-visible {
   border-color: var(--extras-accent-hover);
   background: var(--extras-accent-hover);
   color: var(--extras-button-text);
 }
 
-.md-content__inner {
-  max-width: 58rem;
-}
-
-.md-typeset > h1,
-.md-typeset > h2 {
-  letter-spacing: -0.025em;
-}
-
-.md-typeset > h1 {
-  margin-bottom: 0.6em;
-  font-size: clamp(2rem, 3vw, 2.8rem);
-}
-
-.md-typeset > h2 {
-  margin-top: 2em;
-}
-
-.md-typeset > p,
-.md-typeset > ul,
-.md-typeset > ol {
+.typography > p,
+.typography > ul,
+.typography > ol {
   max-width: 72ch;
 }
 
-.md-typeset pre > code {
+.typography pre > code {
   border: 1px solid var(--extras-border);
   border-radius: 0.5rem;
 }
@@ -132,7 +108,7 @@
   border: 1px solid var(--extras-border);
   border-radius: 0.35rem;
   background: var(--extras-code-surface);
-  color: var(--md-default-fg-color);
+  color: var(--foreground);
   cursor: pointer;
   font: inherit;
   font-weight: 600;
@@ -153,7 +129,7 @@
 }
 
 @media (max-width: 50rem) {
-  .md-typeset .extras-paths {
+  .typography .extras-paths {
     grid-template-columns: 1fr;
   }
 }

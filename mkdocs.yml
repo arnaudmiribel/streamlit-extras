@@ -10,34 +10,16 @@ extra_javascript:
   - assets/copy-page.js
 
 theme:
-  name: material
+  name: shadcn
   custom_dir: overrides
-  logo: assets/logo.png
   favicon: assets/logo.png
-  palette:
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
-      primary: blue grey
-      accent: teal
-      toggle:
-        icon: material/weather-night
-        name: Switch to dark mode
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
-      primary: blue grey
-      accent: teal
-      toggle:
-        icon: material/weather-sunny
-        name: Switch to light mode
-  icon:
-    repo: fontawesome/brands/github
-  features:
-    - content.code.annotate
-    - content.code.select
-    - content.code.copy
+  show_stargazers: false
+  hide_source_files: true
+  show_datetime: false
+  accent: "oklch(53% 0.17 258)"
 
 plugins:
-  - search
+  - shadcn/search
   - mkdocstrings:
       default_handler: python
       handlers:
@@ -53,6 +35,9 @@ plugins:
       scripts:
         - docs/generate.py
 
+hooks:
+  - docs/shadcn_compat.py
+
 nav:
   - Home: index.md
   - Getting started: getting_started.md
@@ -66,9 +51,7 @@ nav:
 markdown_extensions:
   - md_in_html
   - attr_list
-  - pymdownx.emoji:
-      emoji_index: !!python/name:material.extensions.emoji.twemoji
-      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.emoji
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
