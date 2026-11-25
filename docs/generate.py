@@ -64,6 +64,7 @@ STLITE_HTML_TO_IFRAME = """
       }}
       stlite.mount(
   {{
+    sharedWorker: true,
     requirements: [{wheel_url}],
     entrypoint: "streamlit_app.py",
     files: {{
