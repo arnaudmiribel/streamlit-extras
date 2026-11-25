@@ -1,0 +1,48 @@
+<article class="w-full" view-transition-name="page">
+  <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-2">
+      <div id="page-header" class="flex items-start justify-between gap-3">
+        <h1 class="scroll-m-20 text-4xl font-semibold tracking-tight sm:text-3xl xl:text-4xl">
+          {% if page.meta.title %}{{ page.meta.title }}{% else %}{{ page.title }}{% endif %}
+        </h1>
+        <div class="flex shrink-0 items-start gap-2">
+          <div class="extras-page-tools">
+            <button class="extras-copy-page" type="button" aria-describedby="extras-copy-status">Copy page as Markdown</button>
+            <span id="extras-copy-status" class="extras-copy-status" role="status" aria-live="polite"></span>
+          </div>
+          <script type="application/json" id="extras-page-markdown">{{ page.markdown | tojson }}</script>
+          {% if not config.theme.hide_source_files %}
+          {% include "templates/copy_button.html" %}
+          {% endif %}
+          {% if page.previous_page %}
+          {% include "templates/partials/previous.html" %}
+          {% endif %}
+          {% if page.next_page %}
+          {% include "templates/partials/next.html" %}
+          {% endif %}
+        </div>
+      </div>
+      {% if page.meta.summary %}
+      <p id="summary" class="text-muted-foreground text-[1.05rem] text-balance sm:text-base">
+        {{ page.meta.summary }}
+      </p>
+      {% endif %}
+    </div>
+    <div class="flex justify-end items-center">
+      {% if page.meta.external_links %}
+      {% include "templates/external_links.html" %}
+      {% endif %}
+
+      {% if page.meta.show_datetime == True %}
+      {% include "templates/datetime.html" %}
+      {% elif page.meta.show_datetime == False %}
+      {# do nothing #}
+      {% elif config.theme.show_datetime == True %}
+      {% include "templates/datetime.html" %}
+      {% endif %}
+    </div>
+  </div>
+  <div class="typography w-full flex-1 *:data-[slot=alert]:first:mt-0">
+    {{ page.content }}
+  </div>
+</article>

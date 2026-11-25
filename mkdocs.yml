@@ -1,27 +1,29 @@
 site_name: streamlit-extras
-site_url: https://github.com/arnaudmiribel/streamlit-extras
-repo_name: streamlit-extras
-repo_url: https://github.com/arnaudmiribel/streamlit-extras/releases/latest
+site_url: https://arnaudmiribel.github.io/streamlit-extras/
+repo_name: arnaudmiribel/streamlit-extras
+repo_url: https://github.com/arnaudmiribel/streamlit-extras
+
+extra_css:
+  - assets/custom.css
+
+extra_javascript:
+  - assets/copy-page.js
 
 theme:
-  name: material
+  name: shadcn
   custom_dir: overrides
-  css:
-    - overrides/custom.css
-  logo: assets/logo.png
   favicon: assets/logo.png
-  palette:
-    primary: gray
-  icon:
-    repo: fontawesome/brands/github
-  features:
-    - navigation.expand
-    - content.code.annotate
-    - content.code.select
-    - content.code.copy
+  icon: assets/logo.png
+  show_stargazers: false
+  hide_source_files: true
+  show_datetime: false
+  pygments_style:
+    light: shadcn-light
+    dark: github-dark
+  accent: "oklch(53% 0.17 258)"
 
 plugins:
-  - search
+  - shadcn/search
   - mkdocstrings:
       default_handler: python
       handlers:
@@ -37,20 +39,25 @@ plugins:
       scripts:
         - docs/generate.py
 
+hooks:
+  - docs/shadcn_compat.py
+
 nav:
   - Home: index.md
   - Getting started: getting_started.md
-  - Streamlit Components: components.md
+  - Browse extras: extras/index.md
+  - Streamlit components: components.md
   - Contributing: contributing.md
-  - Browse Extras: extras/
-  - Deprecated Extras: extras_deprecated/
+  - For AI agents: agents.md
+  - Extras reference: extras/
+  - Deprecated extras: extras_deprecated/
 
 markdown_extensions:
+  - md_in_html
   - attr_list
-  - pymdownx.emoji:
-      emoji_index: !!python/name:material.extensions.emoji.twemoji
-      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.emoji
   - pymdownx.highlight:
+      css_class: codehilite
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
