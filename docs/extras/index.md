@@ -1,6 +1,6 @@
 # Browse extras
 
-Find a focused addition for your Streamlit app in the navigation on the left, or use the search bar to look up a feature by name. Each reference page includes its import path, function documentation, and example code.
+Find a focused addition for your Streamlit app in the [full list below](#all-extras), or use the search bar to look up a feature by name. Each reference page includes its import path, function documentation, and example code.
 
 A few places to start:
 
