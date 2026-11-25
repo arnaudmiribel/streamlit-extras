@@ -9,6 +9,7 @@ type TreeNodeProps = {
   expandDepth: number;
   color: string | null;
   selectable: boolean;
+  sort?: boolean;
   onSelect: (path: string) => void;
 };
 
@@ -136,6 +137,7 @@ const TreeNode: FC<TreeNodeProps> = ({
   expandDepth,
   color,
   selectable,
+  sort = true,
   onSelect,
 }) => {
   const isDirectory = value !== null;
@@ -171,17 +173,22 @@ const TreeNode: FC<TreeNodeProps> = ({
     return "var(--st-text-color, #262730)";
   }, [isDirectory, color]);
 
-  // Sort children: directories first, then files
+  // Sort children: if sort is enabled, directories first, then files, alphabetical.
+  // Otherwise, preserve raw insertion order.
   const sortedChildren = useMemo(() => {
     if (!isDirectory || value === null) return [];
-    return Object.entries(value).sort(([aName, aVal], [bName, bVal]) => {
+    const entries = Object.entries(value);
+    if (!sort) {
+      return entries;
+    }
+    return entries.sort(([aName, aVal], [bName, bVal]) => {
       const aIsDir = aVal !== null;
       const bIsDir = bVal !== null;
       if (aIsDir && !bIsDir) return -1;
       if (!aIsDir && bIsDir) return 1;
       return aName.localeCompare(bName);
     });
-  }, [isDirectory, value]);
+  }, [isDirectory, value, sort]);
 
   return (
     <div>
@@ -261,6 +268,7 @@ const TreeNode: FC<TreeNodeProps> = ({
               expandDepth={expandDepth}
               color={color}
               selectable={selectable}
+              sort={sort}
               onSelect={onSelect}
             />
           ))}
