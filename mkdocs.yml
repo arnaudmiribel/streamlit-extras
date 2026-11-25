@@ -6,6 +6,9 @@ repo_url: https://github.com/arnaudmiribel/streamlit-extras
 extra_css:
   - assets/custom.css
 
+extra_javascript:
+  - assets/copy-page.js
+
 theme:
   name: material
   custom_dir: overrides
