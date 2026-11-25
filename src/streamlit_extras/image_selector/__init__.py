@@ -179,14 +179,17 @@ def _get_box_crop_shape(x: list[float], y: list[float]) -> tuple[int, ...]:
         tuple[int, ...]: Shape of the array that would be displayed.
     """
     image_array = np.zeros((100, 100, 3), dtype=np.uint8)
-    selection: PlotlyState = {
-        "selection": {
-            "points": [],
-            "point_indices": [],
-            "box": [{"x": x, "y": y}],
-            "lasso": [],
-        }
-    }
+    selection = cast(
+        "PlotlyState",
+        {
+            "selection": {
+                "points": [],
+                "point_indices": [],
+                "box": [{"x": x, "y": y}],
+                "lasso": [],
+            }
+        },
+    )
 
     with mock.patch("streamlit_extras.image_selector.st.image") as mock_st_image:
         show_selection(image_array, selection)
