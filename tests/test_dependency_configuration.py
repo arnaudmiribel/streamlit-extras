@@ -47,9 +47,10 @@ def test_python_dev_dependencies_keep_toolchain_compatible() -> None:
     project = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
     dependencies = project["dependency-groups"]["dev"]
     assert "numpy<2.5" in dependencies
-    assert "mypy==1.20.2" in dependencies
-    assert "ruff==0.15.13" in dependencies
+    assert "mypy==2.1.0" in dependencies
+    assert "ty==0.0.74" in dependencies
+    assert "ruff==0.16.5" in dependencies
 
     precommit = yaml.safe_load((ROOT / ".pre-commit-config.yaml").read_text(encoding="utf-8"))
     ruff = next(repo for repo in precommit["repos"] if repo["repo"].endswith("/ruff-pre-commit"))
-    assert ruff["rev"] == "v0.15.13"
+    assert ruff["rev"] == "v0.16.5"
