@@ -6,11 +6,9 @@ hide:
 
 <div class="extras-hero" markdown="1">
 
-<span class="extras-eyebrow">A community library for Streamlit</span>
-
 # Small additions. Better apps.
 
-Build with focused Python utilities and UI components that fit into your Streamlit app. Pick an extra, copy its import, and keep building.
+Streamlit extras are focused Python utilities and UI components that fit into your app. Find the one you need, copy its import, and keep building.
 
 [Get started](getting_started.md){ .md-button .md-button--primary } [Browse extras](extras/index.md){ .md-button }
 

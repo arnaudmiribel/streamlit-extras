@@ -238,7 +238,7 @@ def get_extra_metadata(module: ModuleType, module_name: str) -> dict:
         "twitter_username": getattr(module, "__twitter_username__", None),
         "buymeacoffee_username": getattr(module, "__buymeacoffee_username__", None),
         "forum_url": getattr(module, "__forum_url__", None),
-        "pretty_title": module.__icon__ + "  " + module.__title__,
+        "pretty_title": module.__icon__ + "\u00a0" * 3 + module.__title__,
         "module_name": module_name,
         "decorated_functions": find_decorated_functions(f"streamlit_extras.{module_name}"),
         "playground": getattr(module, "__playground__", False),

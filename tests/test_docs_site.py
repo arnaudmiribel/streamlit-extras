@@ -76,6 +76,28 @@ class MarkdownPayloadParser(HTMLParser):
             self.in_payload = False
 
 
+def test_docs_theme_has_compact_navigation_and_readable_accents() -> None:
+    config = (ROOT / "mkdocs.yml").read_text(encoding="utf-8")
+    css = (DOCS / "assets/custom.css").read_text(encoding="utf-8")
+    home = (DOCS / "index.md").read_text(encoding="utf-8")
+    template = (ROOT / "overrides/main.html").read_text(encoding="utf-8")
+
+    assert "name: material" in config
+    assert "navigation.expand" not in config
+    assert "- Browse extras: extras/index.md" in config
+    assert "- Extras reference: extras/" in config
+    assert config.index("- For AI agents: agents.md") < config.index("- Extras reference: extras/")
+    assert "extras-eyebrow" not in home
+    assert "extras-page-tools__label" not in template
+    assert "text-transform: uppercase" not in css
+    assert "border-top:" not in css
+    assert "border-bottom:" not in css
+    path_rules = css.split(".md-typeset .extras-path {", maxsplit=1)[1].split("}", maxsplit=1)[0]
+    assert "border: 1px solid var(--extras-border);" not in path_rules
+    assert '[data-md-color-scheme="default"]' in css
+    assert '[data-md-color-scheme="slate"]' in css
+
+
 def test_built_docs_copy_source_is_markdown(tmp_path: Path) -> None:
     pytest.importorskip("mkdocs")
     site_dir = tmp_path / "site"
@@ -99,6 +121,19 @@ def test_built_docs_copy_source_is_markdown(tmp_path: Path) -> None:
         assert "Copy page as Markdown" in html
         assert parser.button_found and parser.status_found
     assert (site_dir / "assets/copy-page.js").is_file()
+
+    home_html = (site_dir / "index.html").read_text(encoding="utf-8")
+    reference_html = (site_dir / "extras/stoggle/index.html").read_text(encoding="utf-8")
+    catalog_html = (site_dir / "extras/index.html").read_text(encoding="utf-8")
+    for page_html in (home_html, catalog_html, reference_html):
+        assert 'data-md-color-scheme="default"' in page_html
+        assert 'data-md-color-scheme="slate"' in page_html
+        assert "Browse extras" in page_html and "Extras reference" in page_html
+        assert "Contributing" in page_html and "For AI agents" in page_html
+    assert reference_html.index("For AI agents") < reference_html.index("Extras reference")
+    assert "extras-eyebrow" not in home_html
+    assert "➡️\u00a0\u00a0\u00a0Toggle button" in reference_html
+    assert "streamlit_extras.stoggle import stoggle" in reference_html
 
 
 def test_copy_payload_escapes_script_breakout() -> None:
