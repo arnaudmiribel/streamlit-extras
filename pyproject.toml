@@ -14,6 +14,7 @@ keywords = ["python", "streamlit", "ui", "data"]
 dependencies = [
   "plotly >= 5.23.0",
   "streamlit >= 1.54.0",
+  "streamlit-listview >= 1.1.0",
 ]
 
 [project.packages]
