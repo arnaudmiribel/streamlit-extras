@@ -2467,6 +2467,8 @@ dependencies = [
     { name = "plotly" },
     { name = "streamlit", version = "1.65.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "streamlit", version = "1.67.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+    { name = "streamlit-listview", version = "1.1.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "streamlit-listview", version = "1.2.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
 ]
 
 [package.dev-dependencies]
@@ -2492,6 +2494,7 @@ dev = [
 requires-dist = [
     { name = "plotly", specifier = ">=5.23.0" },
     { name = "streamlit", specifier = ">=1.54.0" },
+    { name = "streamlit-listview", specifier = ">=1.1.0" },
 ]
 
 [package.metadata.requires-dev]
@@ -2508,6 +2511,47 @@ dev = [
     { name = "types-pyyaml" },
     { name = "types-requests" },
     { name = "types-toml" },
+]
+
+[[package]]
+name = "streamlit-listview"
+version = "1.1.0"
+source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version < '3.11'",
+]
+dependencies = [
+    { name = "streamlit", version = "1.65.0", source = { registry = "https://pypi.org/simple" } },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/08/23/75325bbf7e63c5f10a25a1ca794bb06c32b6e05bf4b645499909a70a2a01/streamlit_listview-1.1.0.tar.gz", hash = "sha256:0e9c0990f1c123cf24394ce03021fd38f1534a67d115390aa9cf9f57538e3dab", size = 344924, upload-time = "2026-10-14T09:03:58.052Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/57/ef/a94a7830145be2e1f677a3fa58f0c45afc267d9131c6b65f40bb54db705f/streamlit_listview-1.1.0-py3-none-any.whl", hash = "sha256:dd7f6a164aca68cb69b27b93b61acda432a3f88f9442938f272557f157556437", size = 241907, upload-time = "2026-10-14T09:03:56.456Z" },
+]
+
+[[package]]
+name = "streamlit-listview"
+version = "1.2.0"
+source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version >= '3.15' and sys_platform == 'win32'",
+    "python_full_version >= '3.15' and sys_platform == 'emscripten'",
+    "python_full_version >= '3.15' and sys_platform != 'emscripten' and sys_platform != 'win32'",
+    "python_full_version == '3.14.*' and sys_platform == 'win32'",
+    "python_full_version == '3.14.*' and sys_platform == 'emscripten'",
+    "python_full_version == '3.14.*' and sys_platform != 'emscripten' and sys_platform != 'win32'",
+    "python_full_version >= '3.12' and python_full_version < '3.14' and sys_platform == 'win32'",
+    "python_full_version >= '3.12' and python_full_version < '3.14' and sys_platform == 'emscripten'",
+    "python_full_version >= '3.12' and python_full_version < '3.14' and sys_platform != 'emscripten' and sys_platform != 'win32'",
+    "python_full_version == '3.11.*' and sys_platform == 'win32'",
+    "python_full_version == '3.11.*' and sys_platform == 'emscripten'",
+    "python_full_version == '3.11.*' and sys_platform != 'emscripten' and sys_platform != 'win32'",
+]
+dependencies = [
+    { name = "streamlit", version = "1.67.0", source = { registry = "https://pypi.org/simple" } },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/4f/35/279e1b9d91db793861475be3c459b4458209916ff649ea262d155e1cec35/streamlit_listview-1.2.0.tar.gz", hash = "sha256:e9b85f9ac0b802869700cae45e553444b42f0f71f243b7f9d1a5b7a1a73fe00c", size = 364360, upload-time = "2026-11-25T14:03:01.898Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/7c/be/94d418e495b2adc735bf3a1a21bc0752f02cbc2826cc1d91419cc3a527b8/streamlit_listview-1.2.0-py3-none-any.whl", hash = "sha256:7ece1e91c3b0a663e84176854d0e324bdeb21e3b33a9e50d947eaf4fed300adf", size = 254434, upload-time = "2026-11-25T14:03:00.493Z" },
 ]
 
 [[package]]
